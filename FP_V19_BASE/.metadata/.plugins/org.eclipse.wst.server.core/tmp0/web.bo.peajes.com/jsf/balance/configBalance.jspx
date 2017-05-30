@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Configuracion de Alarmas de Saldo Bajo</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+	<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="menuheader"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="../menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+<rich:spacer height="5"/>
+		
+	<rich:panel styleClass="richPanel">
+		<f:facet name="header">
+			<h:outputText value="Configuracion de alarma de saldo bajo" styleClass="bold"/>
+		</f:facet>	
+		<a4j:form>
+		<rich:messages style="color: red;" styleClass="bold"/>
+		<rich:panel>
+		<h:panelGrid style="width: 700px; margin: auto; padding:10px; " 
+			styleClass="tableBO" columns="1">
+			<h:outputText value="Cuando un dispositivo tipo " styleClass="bold"/>
+			<h:selectOneMenu id="tyd" value="#{configBalanceBean.tipodisp}" styleClass="normal" style="width: 153px">
+				<f:selectItems value="#{configBalanceBean.listaDisp}"/>
+			</h:selectOneMenu>
+			<h:outputText value=" tenga un saldo igual o menor a " styleClass="bold"/>
+			<h:inputText value="#{configBalanceBean.valmin}" maxlength="20" styleClass="normal"
+				label="Serial"/>
+			<h:outputText value=" Enviar un mensaje al cliente cada " styleClass="bold"/>
+			<h:inputText value="#{configBalanceBean.nummin}" maxlength="20" styleClass="normal"
+				label="Serial">
+			<h:outputText value=" minutos." styleClass="bold"/>
+			</h:inputText>
+		</h:panelGrid>		
+		</rich:panel>
+		</a4j:form>	
+	</rich:panel>
+	<rich:spacer height="20"/>
+	
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{enterDevice.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Configuración Alarmas de Saldo Bajo" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{enterDevice.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="../content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

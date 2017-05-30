@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Crear Producto Bancario a Cliente</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<a4j:form id="fomrcreate">
+	  <rich:panel styleClass="richPanel">
+	   <f:facet name="header">
+	     <h:outputText value="Crear Producto Bancario a Cliente - Módulo Administrador"/>
+	   </f:facet>
+	   <h:panelGrid columns="3" styleClass="tableBO" style="size 300px; margin: auto; padding:10px; ">
+	      <h:panelGroup>
+		      <h:outputText value="Seleccione Cliente: " styleClass="bold"/>
+		      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+	      </h:panelGroup>
+	      <h:selectOneMenu id="clients" value="#{createBankAccountAdmin.clientId}"  style="width: 300px;" >
+	     	 <f:selectItems value="#{createBankAccountAdmin.clients}" />
+	     	 <a4j:support event="onchange" action="#{createBankAccountAdmin.ocult}" reRender="panelData, cuentaFP, richPanel "/>
+	      	
+	      </h:selectOneMenu>
+	      <h:commandButton id="listar" value="Listar sus Productos"  action="#{createBankAccountAdmin.showlistAccount}"/>
+       
+      <h:panelGroup>
+        <h:outputText value="Entidad:" styleClass="bold"/>
+        <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+
+      <h:panelGroup>
+	    <h:selectOneMenu id="banks" value="#{createBankAccountAdmin.bankId}"
+	     valueChangeListener="#{createBankAccountAdmin.changeMenu}" onchange="submit()" style="width: 175px;">
+	      <f:selectItems value="#{createBankAccountAdmin.banks}"/>
+	     </h:selectOneMenu>
+	  </h:panelGroup>
+	  <rich:spacer height="20"/>
+	 
+	 <h:panelGroup rendered="#{createBankAccountAdmin.showOcultPSE}">
+	      <h:outputText value="Cuenta FacilPass: " rendered="#{createBankAccountAdmin.showOcultPSE}" styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" rendered="#{createBankAccountAdmin.showOcultPSE}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:panelGroup rendered="#{createBankAccountAdmin.showOcultPSE}">
+      	 <h:selectOneMenu id="cuentaFP" value="#{createBankAccountAdmin.accountId}" rendered="#{createBankAccountAdmin.showOcultPSE}" style="width: 175px;">
+				<f:selectItems value="#{createBankAccountAdmin.clientAccounts}" />
+			</h:selectOneMenu>	
+       </h:panelGroup>
+	 
+      <h:panelGroup rendered="#{createBankAccountAdmin.showOcult}">
+	      <h:outputText value="Tipo Producto: " rendered="#{createBankAccountAdmin.showOcult}" styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" rendered="#{createBankAccountAdmin.showOcult}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:panelGroup rendered="#{createBankAccountAdmin.showOcult}">
+      	 <h:selectOneMenu id="typeP" value="#{createBankAccountAdmin.typeProductsId}" rendered="#{createBankAccountAdmin.showOcult}" style="width: 175px;">
+		    	<f:selectItems value="#{createBankAccountAdmin.typeProducts}"/>
+		 </h:selectOneMenu>
+       </h:panelGroup>
+	   <rich:spacer height="20" rendered="#{createBankAccountAdmin.showOcult}"/>
+	  
+      <h:panelGroup>
+	      <h:outputText value="Digite 4 Últimos Dígitos del Producto Bancario: " rendered="#{createBankAccountAdmin.showOcult}" styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" rendered="#{createBankAccountAdmin.showOcult}" styleClass="asteriskMandatoryField" />
+      </h:panelGroup>
+      <h:inputText id="account" value="#{createBankAccountAdmin.accountNumber}" size="15" onkeypress="return numOnly(event)"  maxlength="4"
+	     	rendered="#{createBankAccountAdmin.showOcult}" style="width: 170px;">
+      </h:inputText>
+      <rich:spacer height="20" rendered="#{createBankAccountAdmin.showOcult}"/>
+
+      <!--<h:panelGroup>
+	      <h:outputText value="Valor Asignación de Recursos Inicial Después de Activación: " rendered="#{createBankAccountAdmin.showOcult}" styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" rendered="#{createBankAccountAdmin.showOcult}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:inputText id="init" value="#{createBankAccountAdmin.value}" onkeypress="return numOnly(event)"
+                   maxlength="15" onkeyup="separador(this,this.value.charAt(this.value.length-1),event)"
+                   rendered="#{createBankAccountAdmin.showOcult}" style="width: 170px;">
+      </h:inputText> 
+      <rich:spacer height="20"/> -->
+      
+      <h:panelGroup>
+		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+	  </h:panelGroup> 
+	
+      	<a4j:commandButton id="boton1" value="Crear Producto Bancario"  action="#{createBankAccountAdmin.addAssociateProductsAccountClient}" rendered="#{createBankAccountAdmin.showOcult}" style="width: 175px;" 
+      	onclick="this.disabled=true;document.getElementById('fomrcreate:clients').disabled = true;document.getElementById('fomrcreate:banks').disabled = true;document.getElementById('fomrcreate:typeP').disabled = true;document.getElementById('fomrcreate:listar').disabled = true;" 
+      	oncomplete="this.disabled=false;document.getElementById('fomrcreate:clients').disabled = false;document.getElementById('fomrcreate:banks').disabled = false;document.getElementById('fomrcreate:typeP').disabled = false;document.getElementById('fomrcreate:listar').disabled = false;" 
+      	reRender="panel,panelPSE"/>      
+      	<a4j:commandButton id="boton2" value="Crear Producto Bancario"  action="#{createBankAccountAdmin.addAssociateProductsAccountClientPSE}" rendered="#{createBankAccountAdmin.showOcultPSE}" style="width: 175px;"
+      	onclick="this.disabled=true;document.getElementById('fomrcreate:clients').disabled = true;document.getElementById('fomrcreate:banks').disabled = true;document.getElementById('fomrcreate:cuentaFP').disabled = true;document.getElementById('fomrcreate:listar').disabled = true;" 
+      	oncomplete="this.disabled=false;document.getElementById('fomrcreate:clients').disabled = false;document.getElementById('fomrcreate:banks').disabled = false;document.getElementById('fomrcreate:cuentaFP').disabled = false;document.getElementById('fomrcreate:listar').disabled = false;" 
+      	reRender="panel,panelPSE"/>
+    
+    </h:panelGrid>
+   </rich:panel>
+  
+  <rich:spacer height="20"/>
+  <a4j:outputPanel id="panelData" layout="inline">
+      <rich:panel id="r2" rendered="#{createBankAccountAdmin.showData2}" styleClass="richPanel" style="overflow: auto;">
+       <f:facet name="header"><h:outputText value="Cuentas del Cliente Seleccionado"/></f:facet>
+	         <rich:dataTable  id="dtable"  width="100%" value="#{createBankAccountAdmin.listBankAccount}" var="list" 
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'" rows="10" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+						rowClasses="white,grey">               
+	           <rich:column style="text-align:center;">
+	            <f:facet name="header">
+	              <h:outputText value="Fecha Creación"/>
+	            </f:facet>
+	            <h:outputText value="#{list.date}" style="font-size: 12px" converter="StringToStringDateConverter"/>
+	           </rich:column>   
+	            <rich:column style="text-align:center;">
+	            <f:facet name="header">
+	              <h:outputText value="Entidad"/>
+	            </f:facet>
+	            <h:outputText value="#{list.bank}"/>
+	           </rich:column> 
+	           <rich:column width="80px" style="text-align:center;">
+	            <f:facet name="header">
+	              <h:outputText value="Nro.Producto"/>
+	            </f:facet>
+	            <h:outputText value="#{list.account}" rendered="#{list.bankAval==1}"/>
+				<h:outputText value="" styleClass="normal" rendered="#{list.bankAval==0}"/>
+	           </rich:column>
+	           <rich:column style="text-align:center;">
+	            <f:facet name="header">
+	              <h:outputText value="Tipo Producto"/>
+	            </f:facet>
+	            <h:outputText value="#{list.typeProduct}"/>
+	           </rich:column> 
+	           <rich:column style="text-align:center;">
+	            <f:facet name="header">
+	              <h:outputText value="Creador Producto"/>
+	            </f:facet>
+	            <h:outputText value="#{list.desc}"/>
+	           </rich:column> 
+	           <rich:column style="text-align:center;">
+	            <f:facet name="header">
+	              <h:outputText value="Cuenta FacilPass Asociada"/>
+	            </f:facet>
+	            <h:outputText value="#{list.accountId}"/>
+	           </rich:column> 
+	           <f:facet name="footer">
+	            	<rich:datascroller for="dtable"/>
+	           	</f:facet>
+	         </rich:dataTable>
+      </rich:panel>
+    </a4j:outputPanel>   
+    <rich:spacer height="20"/> 	
+   </a4j:form>
+
+	<rich:modalPanel id="panel" width="350" height="125" showWhenRendered="#{createBankAccountAdmin.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Crear Producto Bancario" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<a4j:commandButton action="#{createBankAccountAdmin.hideModal}" image="/img/close.png" onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panel,fomrcreate"/>
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{createBankAccountAdmin.modalMessage}" styleClass="normal" />
+		<h:form>
+			<rich:spacer height="5"/>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"/>
+				</h:panelGroup>
+     			<h:panelGroup>
+		    		<a4j:commandButton value="Aceptar" action="#{createBankAccountAdmin.hideModal}" style="width: 80px" onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panel,fomrcreate"/>
+     			</h:panelGroup>	     	
+    		</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="panelPSE" width="350" height="125" showWhenRendered="#{createBankAccountAdmin.showModalValidate}" 
+					 onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Mensaje - Crear Producto Bancario" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup> 
+				<a4j:form>
+					<a4j:commandButton action="#{createBankAccountAdmin.hideModal2}" image="/img/close.png" onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelPSE,fomrcreate"/>
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{createBankAccountAdmin.modalMessage}" styleClass="normal"/>
+		<h:form>
+			<rich:spacer height="5"/>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"/>
+				</h:panelGroup>
+     			<h:panelGroup>
+	     			<a4j:commandButton value="Aceptar" action="#{createBankAccountAdmin.hideModal2}" style="width: 80px" onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelPSE,fomrcreate"/>
+     			</h:panelGroup>	     	
+    		</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>	
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

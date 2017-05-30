@@ -1,0 +1,50 @@
+package ejb.crud;
+
+import java.util.List;
+
+import javax.ejb.Remote;
+
+import util.BankTb;
+
+import jpa.TbBank;
+
+@Remote
+public interface Bank {
+	
+	public List<TbBank> getBanks();
+		
+	public List<BankTb> getBankTb();
+	
+	public List<TbBank> getBanksAval();
+	
+	public Long getOtherBanks(Long bankId);
+	
+	public String existBank(Long bankId, String bankName, String bankLetter, int operation);
+	
+	public String insertBank(Long bankCode, String bankName, String bankLetter,
+			Long bankAval, String ip, Long creationUser);
+	
+	public String editBank(Long bankId, String bankName, Long bankAval, String ip, Long creationUser);
+
+	public String haveBankName(Long bankId);
+	
+	public String checAval (Long bankId);
+	
+    //Recarga Online  -  Administrar Convenio
+	public List<BankTb> getListAllAgreement();
+	
+	public boolean insertAgreement(Long codeAgreement, String nameAgreement, Long paymentMethodId, 
+			String descriptionAgreement, Long bankId, Long active, Long rechargeValue, String ip, Long creationUser);
+
+	public boolean updateAgreement(Long idAgreement, Long idAgreementBank, Long codeAgreement, String nameAgreement, Long paymentMethodId, 
+		Long bankId, String descriptionAgreement, Long idState, Long active, Long rechargeValue, String ip, Long creationUser);
+
+	public boolean updateEstateAgreement(Long idAgreement, Long idAgreementBank, Long idState, String ip, Long creationUser);
+
+	public boolean deleteAgreement(Long idAgreement, Long idAgreementBank, String ip, Long userId);
+
+	public boolean validateRelationAgreementBank(Long idAgreement, Long codeAgreement, Long bankId);
+	
+	public Long existAgreement(Long idAgreementBank, Long codeAgreement, int i);
+	
+}

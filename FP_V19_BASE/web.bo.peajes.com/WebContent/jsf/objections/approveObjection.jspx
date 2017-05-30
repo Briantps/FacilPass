@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Listar Objeciones Pendietes de Aprobacion</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<rich:panel style="width:600 px;margin:auto;">
+						<f:facet name="header">
+							<h:outputText value="Listado de Objeciones Pendientes de Aprobación" styleClass="bold"/>
+						</f:facet>
+						<h:form>
+							<div id="scroll_horizontal">
+								<rich:dataTable value="#{approveObjection.listObjection}" var="item" id="lista" rows="15" width="800px">
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Fecha de Creación" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.date}" styleClass="normal">
+											<f:convertDateTime pattern="dd/MM/yyyy hh:mm aa" timeZone="GMT-5"/>
+										</h:outputText>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="#{msg.NumDoc}" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.accountId.tbSystemUser.userCode}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Nombre Cliente" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.accountId.tbSystemUser.userNames} #{item.accountId.tbSystemUser.userSecondNames}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Número de Cuenta" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.accountId.accountId}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Detalle de la Objeción" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink value="Ver Detalle" action="#{approveObjection.detailOpen}" styleClass="normal">
+								    		<f:setPropertyActionListener target="#{approveObjection.objectionId}" value="#{item.objectionId}"/>					
+										</h:commandLink>
+									</rich:column>			
+								</rich:dataTable>
+								<rich:datascroller align="center" for="lista" />
+							</div>
+						</h:form>
+					</rich:panel>					
+					<rich:spacer height="20"/>	
+			
+					<rich:modalPanel id="detailObjection" width="800" height="600" showWhenRendered="#{approveObjection.modalDetailObjection}"  style="overflow: scroll" onresize="return false;" moveable="false">
+						<f:facet name="header">
+								<h:outputText value="Detalle de Objeción" styleClass="bold"/>
+							</f:facet>
+                            <f:facet name="controls">
+							  <h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{approveObjection.cancelClose}" image="/img/close.png" />
+								</a4j:form>
+							  </h:panelGroup>
+						    </f:facet>
+						  	<h:form>
+						   		<rich:spacer height="5"/>
+						    	<h:panelGrid styleClass="tableBO" columns="1" style="size 300px; margin: auto; padding:10px; ">
+						    		<h:panelGroup>
+									  <h:outputText value="Objeción No.   "  styleClass="bold"/>
+                                      <h:outputText value="#{approveObjection.objectionId}" style="font-size:12px;"/>
+                                    </h:panelGroup>
+
+ 							        <h:panelGroup>
+						    		  <h:outputText value="Cuenta:   "  styleClass="bold"/>
+                                      <h:outputText value="#{approveObjection.accountId}" style="font-size:12px;"/>
+									</h:panelGroup>
+
+									<h:panelGroup>
+						    		  <h:outputText value="Cargo Objetado:   "  styleClass="bold"/>
+                                      <h:outputText value="#{approveObjection.charge}" 	style="font-size:12px;"/>
+                                    </h:panelGroup>
+
+						    		<rich:panel style="width:600 px;margin:auto;" rendered="#{approveObjection.detailTransaction}">
+						      			<f:facet name="header">
+						      				<h:outputText value="Detalle de la Transacción" styleClass="bold"/>
+						      			</f:facet>
+						      			<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+						       				<h:outputText value="Concesión: "  styleClass="bold"/>
+                                            <h:outputText value="#{approveObjection.conc}" />
+
+						       				<h:outputText value="Estación: "  styleClass="bold"/>
+                                            <h:outputText value="#{approveObjection.esta}" />
+
+						       				<h:outputText value="Carril: "  styleClass="bold"/>
+                                            <h:outputText value="#{approveObjection.carr}" />
+
+						       				<h:outputText value="Fecha de la Transacción: "  styleClass="bold"/>
+                                            <h:outputText value="#{approveObjection.dateTransaction}" converter="TimeStampToStringDateConverter" style="font-size:12px;"/>
+
+						       				<h:outputText value="Observaciones: "  styleClass="bold"/>
+						       				<h:inputTextarea id="note1" value="#{approveObjection.observ}" cols="30" rows="5" readonly="true" style="resize: none;">
+						        				<f:validateLength maximum="4000" />
+						      				</h:inputTextarea>
+						      			</h:panelGrid>
+						    		</rich:panel>
+						    		<rich:panel style="width:600 px;margin:auto;" rendered="#{!approveObjection.detailTransaction}">
+						      			<f:facet name="header">
+						      				<h:outputText value="Detalle de la Transacción" styleClass="bold"/>
+						      			</f:facet>
+						       			<h:panelGrid styleClass="tableBO" columns="1" style="size 300px; margin: auto; padding:10px; ">		       
+						       				<h:outputText value="Fecha de la Transacción: #{approveObjection.dateTransaction}"  styleClass="bold"/>
+						       				<h:outputText value="Observaciones:"  styleClass="bold"/>
+						       				<h:inputTextarea id="note2" value="#{approveObjection.observ}" cols="30" rows="5" readonly="true" style="resize: none;">
+						        				<f:validateLength maximum="4000" />
+						      				</h:inputTextarea>
+						      			</h:panelGrid>
+						    		</rich:panel>
+						    		<rich:panel style="width:600 px;margin:auto;">
+						      			<f:facet name="header">
+						      				<h:outputText value="Ajuste" styleClass="bold"/>
+						      			</f:facet>
+						      			<h:form>
+						        			<h:panelGrid styleClass="tableBO" columns="3" style="size 300px; margin: auto; padding:10px; ">
+						        				<h:panelGroup>
+						        					<h:outputText value="Valor a ajustar: " styleClass="bold"/>
+						        					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						        				</h:panelGroup>   
+						        				<h:inputText id="id_disp" value="#{approveObjection.valueAjustText}" styleClass="normal" 
+						        				  style="width:140px" 
+						        				  onkeypress="return numNoZero(event, this)" 
+						        				  maxlength="15" 
+						        				  onkeyup="separador(this,this.value.charAt(this.value.length-1),event)" 
+						        				  onfocus="return clearOnFocus(this)"/>
+						        				<h:panelGroup>
+						        					<h:selectOneRadio id="type2" value="#{approveObjection.typeOp}" style="font-weight: bold">
+				                 						<f:selectItem itemLabel="Reintegro" itemValue="1"></f:selectItem>
+				                 						<f:selectItem itemLabel="Descuento" itemValue="2"></f:selectItem>
+				                					</h:selectOneRadio>
+				                				</h:panelGroup> 
+						        				<h:commandButton value="Aceptar" action="#{approveObjection.msgSave}">
+							         				<a4j:support event="oncomplete" reRender="panelData"/>
+							    				</h:commandButton>	
+							    				<h:commandButton value="Rechazar" action="#{approveObjection.rejected}">
+							         				<a4j:support event="oncomplete" reRender="panelData"/>
+							    				</h:commandButton>
+							    				<h:commandButton value="Cancelar" action="#{approveObjection.cancelClose}">
+							         				<a4j:support event="oncomplete" reRender="panelData"/>
+							    				</h:commandButton>
+							    			</h:panelGrid>
+							    			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							   			</h:form>
+							  		</rich:panel>   
+						    	</h:panelGrid>
+						  	</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{approveObjection.showModal}" onresize="return false;" moveable="false" zindex="2000" >
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Aprobación de Objeción" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{approveObjection.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{approveObjection.modalMessage}" styleClass="normal"/>
+						 <rich:spacer height="10"/>
+					<h:form id="formAcept"> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{approveObjection.apply}" disabled="">
+					     			<a4j:support event="oncomplete" reRender="wait,confirmacion,panel,detailObjection"/>
+						           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <h:outputLabel value="" styleClass="bold"/>
+			                <h:commandButton value="Cancelar" action="#{approveObjection.hideModal}"/>
+				     	</h:panelGroup>   	 
+					</h:panelGrid>
+					</h:form>
+					</rich:modalPanel>					
+					<rich:modalPanel id="confirmacionRej" width="350" height="115" showWhenRendered="#{approveObjection.showModalRej}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación -  Rechazo de Objeción" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{approveObjection.hideModalRej}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{approveObjection.modalMessageRej}" styleClass="normal"/>
+						<h:form>
+							 <div align="center" >
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{approveObjection.rechazar}"/>
+					     		</h:panelGroup>
+					     		<rich:spacer width="20" />  	 	
+					     		<h:panelGroup>
+					     			<h:commandButton value="Cancelar" action="#{approveObjection.hideModalRej}"  />
+					     		</h:panelGroup>	     	
+					    	</div>
+					    </h:form>
+					</rich:modalPanel>				
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{approveObjection.showError}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Objeciones pendientes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{approveObjection.hideError}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{approveObjection.msgError}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{approveObjection.hideError}"  />
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </h:form>	
+						<br />		
+					</rich:modalPanel> 
+					<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false" zindex="3000">
+						<f:facet name="header">
+							<h:outputText value="Procesando" />
+						</f:facet>
+						<h:outputText value="Por favor espere..." style="font-size:12px;" />
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

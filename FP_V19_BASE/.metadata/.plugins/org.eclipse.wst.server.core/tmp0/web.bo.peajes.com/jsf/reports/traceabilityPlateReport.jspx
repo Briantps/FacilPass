@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Trazabilidad Por Placa</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+    <f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<a4j:form>
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header">
+				<h:outputText value="Trazabilidad Dispositivo por Placa" styleClass="bold"/>
+			</f:facet>
+			<h:panelGrid styleClass="tableBO" columns="2" 
+				style="size 300px; margin: auto; padding:10px; ">
+				<h:panelGroup>
+					<h:outputText value="#{msg.Placa}: " styleClass="bold"/>
+				</h:panelGroup>
+                <h:inputText value="#{allPlateReportBean.plate}" style="text-transform:uppercase" size="8" onkeypress="return alphaNumOnly(event)" maxlength="6">
+                  <a4j:support event="onkeyup" action="#{allPlateReportBean.ocult}" reRender="panelData,rich1"/>
+                </h:inputText>
+				<h:panelGroup>
+					<h:outputText value="#{msg.FechaI}: " styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<rich:calendar id="beg_date" value="#{allPlateReportBean.initDate}"                 		
+                     cellWidth="26px" cellHeight="22px" style="width:150px" 
+                     datePattern="dd/MM/yyyy" popup="true" styleClass="normal">
+                     <a4j:support event="onclick" action="#{allPlateReportBean.ocult}" reRender="panelData,rich1"/> 	
+                </rich:calendar>
+				<h:panelGroup>
+					<h:outputText value="#{msg.FechaF}: " styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<rich:calendar id="end_date" value="#{allPlateReportBean.endDate}"                 		
+                     cellWidth="26px" cellHeight="22px" style="width:150px" 
+                     datePattern="dd/MM/yyyy" popup="true" styleClass="normal"> 	
+                     <a4j:support event="onclick" action="#{allPlateReportBean.ocult}" reRender="panelData,rich1"/>
+                 </rich:calendar>
+                 <h:panelGroup>
+                 	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				 	<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				 </h:panelGroup>
+                 <h:commandButton value="#{msg.Buscar}" action="#{allPlateReportBean.searchAll}">
+                 	<a4j:support event="oncomplete" reRender="panelData"/>
+                 </h:commandButton>
+			</h:panelGrid>
+			<rich:spacer height="5"/>
+			
+			<a4j:outputPanel id="panelData">
+				<rich:panel id="rich1" rendered="#{allPlateReportBean.showData}">
+					<h:panelGrid style="vertical-align: middle; margin: auto;" columns="3">
+						<h:outputText value="Reporte de Trazabilidad" styleClass="normal" style="color: #008040; font-size: 18px"/>
+						<h:commandLink id="clinkpdf" target="_blank" value="" 
+							action="#{allPlateReportBean.printPdf}">
+							<img title="Imprimir" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+							style="cursor: pointer; border: 0px solid blue;" />
+                            <f:setPropertyActionListener target="#{allPlateReportBean.exportOption}" value="PDF"/>
+		           		</h:commandLink>
+                        <h:commandLink id="clinkexcel" target="_blank" value="" 
+							action="#{allPlateReportBean.printPdf}">
+							<img title="Imprimir" src="/web.bo.peajes.com/img/generar_xls_btn.gif" alt="Imprimir"
+							style="cursor: pointer; border: 0px solid blue;" />
+                            <f:setPropertyActionListener target="#{allPlateReportBean.exportOption}" value="EXCEL"/>
+		           		</h:commandLink>
+					</h:panelGrid>					
+				</rich:panel>
+			</a4j:outputPanel>
+		</rich:panel>
+	</a4j:form>
+	<rich:spacer height="20"/>
+	
+	<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{allPlateReportBean.showMessageError}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Trazabilidad Dispositivo por Placa" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{allPlateReportBean.init}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{allPlateReportBean.messageError}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup><div class="span-1"></div></h:panelGroup>
+		     	<h:panelGroup>
+		     		<h:commandButton value="Aceptar" action="#{allPlateReportBean.init}"  />
+		     	</h:panelGroup>	     	
+		    </h:panelGrid>
+		</h:form>		
+		<br />
+	</rich:modalPanel>
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

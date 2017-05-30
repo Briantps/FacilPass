@@ -1,0 +1,547 @@
+package process.account;
+
+import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
+import jpa.TbAccount;
+import jpa.TbFrequency;
+import security.UserLogged;
+import sessionVar.SessionUtil;
+import util.ClientRecharge;
+import constant.AccountStateType;
+import ejb.ElectronicRecharge;
+import ejb.SystemParameters;
+import ejb.User;
+
+/**
+ * Bean to manage Electronic Recharge Bean and products.
+ * @author psanchez
+ *
+ */
+
+public class ElectronicRechargeBean implements Serializable {
+	private static final long serialVersionUID = 8162813547847156020L;
+
+
+	@EJB(mappedName = "ejb/ElectronicRecharge")
+	private ElectronicRecharge electronicRecharge;
+
+	@EJB(mappedName="ejb/User")
+	private User userEJB;
+
+	@EJB(mappedName ="ejb/SystemParameters")
+	private SystemParameters parametros;
+	//*** Atributes **//
+	private List<SelectItem> clientAccounts;
+	private Long idClientAccount;
+
+	private List<SelectItem> frecuecyList;
+	private Long frecuencySelect;
+
+	private Long valueRecharge;	
+	private String valueRechText;
+	private Date dateRecharge;
+
+	private List<ClientRecharge> automaticRechargeList;
+	private Long automaticRechargeId;
+
+	// Control 
+	private boolean showModal;
+	private boolean showInsert;
+	private boolean showConfirmation;
+	private String corfirmMessage;
+	private String modalMessage;	
+	private long valmin;
+
+	private String valMinText;
+	private UserLogged usrs;
+
+	public ElectronicRechargeBean(){
+		usrs = (UserLogged) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+	}
+
+	@PostConstruct
+	public void init(){
+		this.initElectronicRechargeBean();
+		this.getAutomaticRechargeList();
+	}
+
+	/**
+	 * Init Add ElectronicRechargeBean
+	 */
+	public String initElectronicRechargeBean(){
+		this.setShowInsert(false);
+		this.setShowConfirmation(false);
+		this.setShowModal(false);
+		this.setIdClientAccount(0L);
+		this.setValueRecharge(null);
+		this.setValueRechText(null);
+		this.setFrecuencySelect(0L);
+		this.setDateRecharge(null);
+
+		return null;
+	}
+
+
+	public String showConfirmRemove(){
+		setShowInsert(false);
+		setShowConfirmation(true);
+		setCorfirmMessage("¿Está seguro que desea eliminar el Recurso Programado?");
+		return null;
+	}
+
+
+	// acciones -------------------------------------------------------------------------------------------
+	/**
+	 * Método para listar en un combo las cuentas facilpass asociadas a un cliente.
+	 * 
+	 */
+	public List<SelectItem> getClientAccounts(){
+		Long userId=userEJB.getSystemMasterById(usrs.getUserId());
+		if(clientAccounts == null){
+			clientAccounts = new ArrayList<SelectItem>();
+		}else{
+			clientAccounts.clear();
+		}
+		clientAccounts.add(new SelectItem(-1L, "--Seleccione Cuenta--"));
+
+		for(TbAccount su : userEJB.getClientAccountWithoutPSE(userId)){
+			System.out.println(su.getAccountState().longValue());
+			if((su.getAccountState().longValue()==AccountStateType.ACTIVE.getId()) ||
+					(su.getAccountState().longValue()==7L)){
+				clientAccounts.add(new SelectItem(su.getAccountId(), "Cuenta No. " + su.getAccountId()));
+			}			
+		}
+
+		/*for(ReElectronicRecharge rba: electronicRecharge.getAccountAsociatesByClient(userId)){
+				clientAccounts.add(new SelectItem(rba.getAccountId(), "Cuenta No. " + rba.getAccountId()));		
+		}*/
+		return clientAccounts;
+	}
+
+	/**
+	 * Método encargado de listar las recargas automáticas asociadas al cliente en session.
+	 * @return the automaticRechargeList
+	 * @author psanchez
+	 */
+	public List<ClientRecharge> getAutomaticRechargeList() {
+		Long userId=userEJB.getSystemMasterById(usrs.getUserId());
+		// String userCode=userEJB.getSystemUserCode(userId);	
+		if(automaticRechargeList == null) {
+			automaticRechargeList = new ArrayList<ClientRecharge>();
+		}else{
+			automaticRechargeList.clear();
+		}
+		automaticRechargeList = electronicRecharge.getAutomaticRechargebyClient(userId);
+		return automaticRechargeList;		
+	}
+
+
+	/**
+	 * Método encargado de anular recargas automáticas asociadas al cliente en session.
+	 * @author psanchez
+	 */
+	public String cancelElectronicRecharge(){
+		setShowConfirmation(false);
+		Long userId=userEJB.getSystemMasterById(usrs.getUserId());
+		//String userCode=userEJB.getSystemUserCode(userId);
+		if(userId!=null){
+			if (electronicRecharge.undoElectronicRecharge(automaticRechargeId,SessionUtil.ip(), SessionUtil
+					.sessionUser().getUserId())){
+				this.setModalMessage("El recurso programado ha sido eliminado.");
+				this.setAutomaticRechargeList(null);
+			}else{
+				this.setModalMessage("Error en Transacción.");
+				this.setAutomaticRechargeList(null);
+			}
+			this.setShowModal(true);
+		}else{
+			this.setAutomaticRechargeList(null);
+		}
+		return null;
+	}
+
+	/**
+	 * Método para listar frecuencia 
+	 */
+	public List<SelectItem> getFrecuecyList() {
+		if(frecuecyList == null){
+			frecuecyList = new ArrayList<SelectItem>();
+		}else{
+			frecuecyList.clear();
+		}
+		frecuecyList.add(new SelectItem(-1L, "--Seleccione Frecuencia--"));
+		for(TbFrequency fq : electronicRecharge.getListFrequency()){
+			frecuecyList.add(new SelectItem(fq.getFrequencyId(), fq.getFrequencyDescript()));
+		}
+		return frecuecyList;
+	}
+
+	/**
+	 * Método encargado de crear recargas automáticas asociadas al cliente en session.
+	 * @author psanchez
+	 */
+	public void addElectronicRecharge(){
+		try{		   
+			int diferenciaEnDias = 1;
+			Date fechaActual = Calendar.getInstance().getTime();
+			long tiempoActual = fechaActual.getTime();
+			long unDia = diferenciaEnDias * 24 * 60 * 60 * 1000;
+			Date fechaAnterior = new Date(tiempoActual - unDia);
+
+			if (postValidationNew()){ 
+				if(electronicRecharge.haveProductDissociation(idClientAccount)==false){
+					if (idClientAccount.longValue() != -1L) {
+						if((valueRechText.equals("")) || (valueRechText.equals(null))){
+							valueRecharge = 0L;
+						}else{
+							valueRecharge = Long.parseLong(valueRechText.replace(".", "").replace(",", ""));
+						}
+						if (valueRecharge.longValue() != 0) {
+							this.getValmin();
+							System.out.println("valmin3 "+valmin);
+							if(valueRecharge < valmin){
+								setModalMessage("El valor Ingresado es menor al valor mínimo para recarga.");
+								showConfirmation = false;
+								showModal = true;
+							}else{
+								if (frecuencySelect.longValue() != -1L) {
+									if (dateRecharge!=null) {
+										if(dateRecharge.getTime() >= fechaAnterior.getTime()){
+											if(electronicRecharge.haveProductDissociation(idClientAccount)==false){
+												setModalMessage("¿Está seguro que desea asignar el Recurso Programado?");
+												showModal = false;
+												showConfirmation = true;
+											}
+										}else{
+											setModalMessage("Error: La fecha inicial debe ser igual o mayor a la fecha actual. Verifique.");
+											showConfirmation = false;
+											showModal = true;
+										}
+									} else {
+										setModalMessage("Seleccione la Fecha Inicial del recurso programado.");
+										showConfirmation = false;
+										showModal = true;
+									}
+								} else {
+									setModalMessage("Seleccione la Frecuencia del recurso programado.");
+									showConfirmation = false;
+									showModal = true;
+								}
+							}
+						} else {
+							setModalMessage("El Valor a asignar debe ser mayor a cero.");
+							showConfirmation = false;
+							showModal = true;
+						}
+					}else {
+						setModalMessage("Seleccione la Cuenta FacilPass.");
+						showConfirmation = false;
+						showModal = true;
+					}
+				}else {
+					setModalMessage("Error: La Cuenta FacilPass esta en proceso de desvinculación del Producto Bancario. Verifique.");
+					showConfirmation = false;
+					showModal = true;
+				}
+			}
+		}catch(NumberFormatException nfe){
+			nfe.printStackTrace();
+			setModalMessage("El Valor a asignar tiene caracteres inválidos. Verifique.");
+			showConfirmation = false;
+			showModal = true;
+		}catch(NullPointerException nfe){
+			nfe.printStackTrace();
+			setModalMessage("El Valor a asignar tiene caracteres inválidos. Verifique.");
+			showConfirmation = false;
+			showModal = true;
+		}
+	}
+
+
+	private boolean postValidationNew(){
+		if(valueRechText!="" && (!valueRechText.matches("([0-9.])+"))){
+			this.setModalMessage("El Valor a asignar tiene caracteres inválidos. Verifique.");
+			this.setShowModal(true);
+			return false;
+		}
+		return true;		
+	}
+
+	public void onComplete() {  
+		FacesContext.getCurrentInstance().
+		addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 
+				"Transacción en proceso...", "Transacción en proceso..."));  
+	}
+
+
+	public void saveElectronicRecharge(){
+		showConfirmation =  false;
+		showModal = false;
+		this.setModalMessage(null);
+
+		try{
+			Long userId=userEJB.getSystemMasterById(usrs.getUserId());
+			Long result = electronicRecharge.insertElectronicRecharge(userId, idClientAccount, valueRecharge, 
+					frecuencySelect, SessionUtil.ip(), SessionUtil.sessionUser().getUserId(),dateRecharge);
+
+			if (result != null) {
+				if(result != -1L){
+					this.setModalMessage("Transacción Exitosa. ");
+					showConfirmation = false;
+					showModal = true;
+					this.setAutomaticRechargeList(null);
+					idClientAccount=0L;
+					valueRecharge = null;
+					valueRechText =	"";
+					frecuencySelect=0L;
+					dateRecharge=null;
+				} else{
+					setModalMessage("Error: La Cuenta FacilPass tiene recurso programado. Verifique.");
+					showConfirmation = false;
+					showModal = true;
+				}
+			}else{
+				setModalMessage("Error en Transacción.");
+				showConfirmation = false;
+				showModal = true;
+			} 
+		}catch(NullPointerException n){
+			setModalMessage("Error en la Transacción");
+			showConfirmation =  false;
+			showModal = true;
+		}
+	}
+
+
+	/**
+	 * Hides modal windows.
+	 */
+	public String hideModal(){
+		this.setShowInsert(false);
+		this.setShowModal(false);
+		this.setShowConfirmation(false);
+		this.setModalMessage(null);
+		return null;
+	}
+
+	// Getters and setters -------------- //
+
+	public void setFrecuecyList(List<SelectItem> frecuecyList) {
+		this.frecuecyList = frecuecyList;
+	}
+
+	public void setShowModal(boolean showModal) {
+		this.showModal = showModal;
+	}
+
+	public boolean isShowModal() {
+		return showModal;
+	}
+
+	public void setModalMessage(String modalMessage) {
+		this.modalMessage = modalMessage;
+	}
+
+	public String getModalMessage() {
+		return modalMessage;
+	}
+
+
+	/**
+	 * @param valueRecharge the valueRecharge to set
+	 */
+	public void setValueRecharge(Long valueRecharge) {
+		this.valueRecharge = valueRecharge;
+	}
+
+	/**
+	 * @return the valueRecharge
+	 */
+	public Long getValueRecharge() {
+		return valueRecharge;
+	}
+
+	/**
+	 * @param electronicRecharge the electronicRecharge to set
+	 */
+	public void setElectronicRecharge(ElectronicRecharge electronicRecharge) {
+		this.electronicRecharge = electronicRecharge;
+	}
+
+	/**
+	 * @return the electronicRecharge
+	 */
+	public ElectronicRecharge getElectronicRecharge() {
+		return electronicRecharge;
+	}
+
+	/**
+	 * @param dateRecharge the dateRecharge to set
+	 */
+	public void setDateRecharge(Date dateRecharge) {
+		this.dateRecharge = dateRecharge;
+	}
+
+	/**
+	 * @return the dateRecharge
+	 */
+	public Date getDateRecharge() {
+		return dateRecharge;
+	}
+
+	/**
+	 * @param frecuencySelect the frecuencySelect to set
+	 */
+	public void setFrecuencySelect(Long frecuencySelect) {
+		this.frecuencySelect = frecuencySelect;
+	}
+
+	/**
+	 * @return the frecuencySelect
+	 */
+	public Long getFrecuencySelect() {
+		return frecuencySelect;
+	}
+
+	/**
+	 * @param idClientAccount the idClientAccount to set
+	 */
+	public void setIdClientAccount(Long idClientAccount) {
+		this.idClientAccount = idClientAccount;
+	}
+
+	/**
+	 * @return the idClientAccount
+	 */
+	public Long getIdClientAccount() {
+		return idClientAccount;
+	}
+
+	/**
+	 * 
+	 * @param clientAccounts
+	 */
+	public void setClientAccounts(List<SelectItem> clientAccounts) {
+		this.clientAccounts = clientAccounts;
+	}
+
+	/**
+	 * @param valueRechText the valueRechText to set
+	 */
+	public void setValueRechText(String valueRechText) {
+		this.valueRechText = valueRechText;
+	}
+
+	/**
+	 * @return the valueRechText
+	 */
+	public String getValueRechText() {
+		return valueRechText;
+	}
+
+	/**
+	 * @param electronicRechargeId the electronicRechargeId to set
+	 */
+	public void setAutomaticRechargeId(Long automaticRechargeId) {
+		this.automaticRechargeId = automaticRechargeId;
+	}
+
+	/**
+	 * @return the electronicRechargeId
+	 */
+	public Long getAutomaticRechargeId() {
+		return automaticRechargeId;
+	}
+
+	/**
+	 * @param showInsert the showInsert to set
+	 */
+	public void setShowInsert(boolean showInsert) {
+		this.showInsert = showInsert;
+	}
+
+	/**
+	 * @return the showInsert
+	 */
+	public boolean isShowInsert() {
+		return showInsert;
+	}
+
+	/**
+	 * @param showConfirmation the showConfirmation to set
+	 */
+	public void setShowConfirmation(boolean showConfirmation) {
+		this.showConfirmation = showConfirmation;
+	}
+
+	/**
+	 * @return the showConfirmation
+	 */
+	public boolean isShowConfirmation() {
+		return showConfirmation;
+	}
+
+	/**
+	 * @param corfirmMessage the corfirmMessage to set
+	 */
+	public void setCorfirmMessage(String corfirmMessage) {
+		this.corfirmMessage = corfirmMessage;
+	}
+
+	/**
+	 * @return the corfirmMessage
+	 */
+	public String getCorfirmMessage() {
+		return corfirmMessage;
+	}
+
+	/**
+	 * @param automaticRechargeList the automaticRechargeList to set
+	 */
+	public void setAutomaticRechargeList(List<ClientRecharge> automaticRechargeList) {
+		this.automaticRechargeList = automaticRechargeList;
+	}
+
+	public void setValmin(long valmin) {
+		this.valmin = valmin;
+	}
+
+	public long getValmin() {
+		valMinText = parametros.getParameterValueById(30L);
+		if((valMinText.equals(null)) || (valMinText.equals(""))){
+			valmin = 0L;
+		}else{
+			valmin = Long.parseLong(valMinText);
+			DecimalFormat nf = new DecimalFormat("###,###,###");
+			valMinText = nf.format(valmin);
+		}
+		System.out.println("valmin "+valmin);
+		return valmin;
+	}
+
+	public void setValMinText(String valMinText) {
+		this.valMinText = valMinText;
+	}
+
+	public String getValMinText() {
+		valMinText = parametros.getParameterValueById(30L);
+		if((valMinText.equals(null)) || (valMinText.equals(""))){
+			valMinText = "0";
+		}else{
+			DecimalFormat nf = new DecimalFormat("###,###,###");
+			valMinText = nf.format(Long.parseLong(valMinText));
+		}
+		return valMinText;
+	}
+}

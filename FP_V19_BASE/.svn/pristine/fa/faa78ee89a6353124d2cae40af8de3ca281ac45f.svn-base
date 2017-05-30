@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">  
+<head>   
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />      
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />  
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" /> 
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Subir Documentos</title>
+</head>
+<style>
+	.top {
+	    vertical-align: top;    
+	}
+	.info {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #C3C3C3; border-collapse: collapse;    
+	}
+	.info2 {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #C3C3C3; border-collapse: collapse;    
+	}
+</style>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="/jsf/content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:panel style="width: 730px;">	
+		<f:facet name="header">
+			<h:outputText value="Subir Documentos" styleClass="bold"/>
+		</f:facet>
+		<h:form>
+		  
+		<rich:panel styleClass="richPanel"> 
+			<h:outputText value="Filtrar por:    "  styleClass="bold"/>	
+				<rich:spacer height="30"/>											
+				<h:selectOneMenu id="search" value="#{fileUploadAdminBean.filtroId}" style="width: 180px;">
+				    <f:selectItem itemLabel="--Seleccione Búsqueda--" itemValue="0" /> 
+					<f:selectItem itemLabel="Identificación" itemValue="1" /> 
+					<f:selectItem itemLabel="Nombre" itemValue="2" /> 
+					<f:selectItem itemLabel="Apellidos" itemValue="3" /> 
+					<f:selectItem itemLabel="Cuenta FacilPass" itemValue="4" />
+					<f:selectItem itemLabel="Placa" itemValue="5" /> 
+					<f:selectItem itemLabel="ID Tag" itemValue="6" /> 
+					<f:selectItem itemLabel="ID Facial" itemValue="7" />
+					<f:selectItem itemLabel="Adicional 1" itemValue="8" />
+					<f:selectItem itemLabel="Adicional 2" itemValue="9" /> 
+					<f:selectItem itemLabel="Adicional 3" itemValue="10" />   
+				</h:selectOneMenu> 
+		        <rich:spacer width="10"/>		
+				<h:inputText value="#{fileUploadAdminBean.filtroDescription}" styleClass="normal" 
+				style="width:250px; text-transform: uppercase"  
+				onkeypress="return especialCompany2(event)" maxlength="49" />
+				<rich:spacer width="15" />
+				<h:commandButton value="Buscar" action="#{fileUploadAdminBean.searchFilter}"/>
+				<rich:spacer width="15" />
+				<h:commandButton value="Limpiar" action="#{fileUploadAdminBean.clearFilter}"/>  						
+		</rich:panel>				 
+		<rich:spacer height="10"/>
+		<rich:panel id="panel" style="width:600 px;margin:auto;">
+			<f:facet name="header">  
+				<h:outputText value="Listado de Clientes" styleClass="bold"/>
+			</f:facet>
+			<div id="scroll_horizontal">   
+				<rich:dataTable value="#{fileUploadAdminBean.listAllInfoClients}" var="item" id="lista" rows="4" width="800px">      
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Identificación" styleClass="bold"/>
+						</f:facet> 
+						<h:commandLink  value="#{item.numberDocU}" action="#{fileUploadAdminBean.validateDocument}">	
+							<f:setPropertyActionListener value="#{item.numberDocU}" target="#{fileUploadAdminBean.numberDoc}"/>
+							<f:setPropertyActionListener value="#{item.userIdU}" target="#{fileUploadAdminBean.userId}"/>    						    						
+						</h:commandLink>						
+					</rich:column>        
+					<rich:column style="text-align:center;"> 
+						<f:facet name="header">  
+							<h:outputText value="Nombres" styleClass="bold"/>
+						</f:facet>	
+						<h:outputText value="#{item.nameU}" styleClass="normal2"/>
+					</rich:column>  
+					<rich:column style="text-align:center;">    
+						<f:facet name="header">  
+							<h:outputText value="Apellidos" styleClass="bold"/>
+						</f:facet>	
+						<h:outputText value="#{item.secondNameU}" styleClass="normal2"/>
+					</rich:column>
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Cuenta FacilPass" styleClass="bold"/>
+						</f:facet>
+						<h:outputText value="#{item.accountIdU}" styleClass="normal2"/>
+					</rich:column>  
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Placa" styleClass="bold"/>  
+						</f:facet>
+						<h:outputText value="#{item.placaU}" styleClass="normal2"/>    
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Tag" styleClass="bold"/>
+						</f:facet>
+						<h:outputText value="#{item.tagIdU}" styleClass="normal2"/>    
+					</rich:column>  
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Facial" styleClass="bold"/>  
+						</f:facet>
+						<h:outputText value="#{item.facialU}" styleClass="normal2"/>    
+					</rich:column>
+				</rich:dataTable>
+				<rich:dataTable id="ws"
+						value="#{fileUploadAdminBean.listaScroll}"							
+						var="item" rows="4">	
+				</rich:dataTable>									
+				<rich:datascroller for="ws" id="PTScroll" 
+					page="#{fileUploadAdminBean.page}"
+					reRender="lista, PTScroll"
+					actionListener="#{fileUploadAdminBean.dataScroller}">
+				</rich:datascroller>
+			</div>
+		</rich:panel>				
+		<rich:spacer height="5"/>		
+								
+
+		<rich:spacer height="10"/>
+		<rich:panel id="pd10" rendered="#{fileUploadAdminBean.showDataTypeDocument}">
+			<table width="100%">
+				<tr>
+					<td width="30%">
+						<h:outputLabel value="Tipo Documento: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="60%">
+						<h:selectOneMenu id="documento" value="#{fileUploadAdminBean.documentTypeId}" style="width: 215px;" >
+							<f:selectItems value="#{fileUploadAdminBean.documentList}"/> 
+			            	<a4j:support event="onchange" action="#{fileUploadAdminBean.chargeDocument}" reRender="panelData, panelData2"/>	
+						</h:selectOneMenu>  
+					</td>
+				</tr>
+			</table>
+			<h:panelGrid columns="2">
+				<h:panelGroup>
+				<h:outputText value="Contrato FacilPass:" 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+		        </h:panelGroup>
+	            <h:outputText value="Utilice está opción sólo para subir el contrato FacilPass, el sistema sólo acepta documentos" 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	            <rich:spacer/>
+	            <h:outputText value="con extensión PDF." 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>  
+	            <rich:spacer/>
+				<rich:spacer/>
+	            <h:outputText value="Tarjeta de Propiedad:" 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+		        <h:outputText value="Utilice está opción sólo para subir las tarjetas de propiedad de sus vehículos, el sistema" 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+				<rich:spacer/>
+		        <h:outputText value="sólo acepta documentos con extensión jpg, png, xls, xlsx, tif, pdf, doc o docx."
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>   
+	            <rich:spacer/>
+				<rich:spacer/>	    
+				<h:outputText value="Otros:" 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+		        <h:outputText value="Utilice está opción  para subir documentos relacionados con el sistema FacilPass, como" 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+				<rich:spacer/>
+	            <h:outputText value="por ejemplo relación de vehículos, el sistema sólo acepta documentos con extensión"
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/> 
+	            	<rich:spacer/>
+	            <h:outputText value="jpg, png, xls, xlsx, tif, pdf, doc o docx."
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>           	
+				<h:panelGroup> 
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>  
+				</h:panelGroup>
+				<rich:spacer/>
+			</h:panelGrid>
+		</rich:panel>								
+		<rich:spacer/>			
+			  
+		<a4j:outputPanel id="panelData" layout="inline">  
+		<rich:panel id="pd" rendered="#{fileUploadAdminBean.showChargeOtherDocument}"> 		
+		<h:panelGrid columns="2" columnClasses="top,top">	
+				<rich:fileUpload id="upload" fileUploadListener="#{fileUploadAdminBean.chargeOtherDocument}"  
+		              maxFilesQuantity="1" ontyperejected="javascript:Richfaces.showModalPanel('panelextension');"
+					  doneLabel="Documento Cargado Correctamente"         
+		              immediateUpload="#{fileUploadAdminBean.autoUpload}" listWidth="280px"
+		              acceptedTypes="JPG,jpg,PNG,png,XLS,xls,XLSX,xlsx,TIF,tif,PDF,pdf,DOC,doc,DOCX,docx" allowFlash="#{fileUploadAdminBean.useFlash}">
+					<a4j:support event="onclick">	           
+						<f:setPropertyActionListener value="#{fileUploadAdminBean.documentTypeId}" target="#{fileUploadAdminBean.documentTypeId}"/>  
+					</a4j:support>
+					<a4j:support event="onuploadcomplete" reRender="info,upload,panelm"/>	
+		        </rich:fileUpload>
+	  
+				<h:panelGroup id="info">
+					<rich:panel bodyClass="info" style="width: 360px;">
+	                    <f:facet name="header">
+	                        <h:outputText value="Información de Documentos Cargados" styleClass="bold"/>
+	                    </f:facet>
+						<h:outputText value="No se han subido Documentos."
+	                        rendered="#{fileUploadAdminBean.size==0}" styleClass="normal"/>
+	                    
+						<rich:dataGrid columns="1" value="#{fileUploadAdminBean.files}"     
+	                       var="file" rowKeyVar="row">
+							
+							<rich:panel>
+								<h:panelGrid columns="2">
+									<h:panelGrid columns="2">
+	                                    <h:outputText value="Nombre Documento:" />
+	                                    <h:outputText value="#{file.name}" />
+	                                    <h:outputText value="Tamaño del Documento(bytes):" />
+	                                    <h:outputText value="#{file.length}" />
+	                                </h:panelGrid>
+								</h:panelGrid>
+							</rich:panel>	
+						</rich:dataGrid>
+					</rich:panel>
+					<rich:spacer height="3"/>  
+	                <br />
+					<a4j:commandButton action="#{fileUploadAdminBean.clearUploadData}" 
+                   	 	reRender="info, upload" value="Limpiar Paneles"
+                    	rendered="#{fileUploadAdminBean.size>0}" />
+				</h:panelGroup>
+			</h:panelGrid>
+			<rich:spacer height="20"/>    
+			</rich:panel>		
+		</a4j:outputPanel>		
+		
+		<a4j:outputPanel id="panelData2" layout="inline">
+		<rich:panel id="pd2" rendered="#{fileUploadAdminBean.showChargeContractDocument}"> 		
+		<h:panelGrid columns="2" columnClasses="top,top">	
+				<rich:fileUpload id="upload2" fileUploadListener="#{fileUploadAdminBean.chargeContractDocument}"  
+		              maxFilesQuantity="1" ontyperejected="javascript:Richfaces.showModalPanel('panelextension2');"
+					  doneLabel="Documento Cargado Correctamente"         
+		              immediateUpload="#{fileUploadAdminBean.autoUpload}" listWidth="280px"
+		              acceptedTypes="PDF,pdf" allowFlash="#{fileUploadAdminBean.useFlash}">
+					<a4j:support event="onclick">	           
+						<f:setPropertyActionListener value="#{fileUploadAdminBean.documentTypeId}" target="#{fileUploadAdminBean.documentTypeId}"/>   
+					</a4j:support>
+					<a4j:support event="onuploadcomplete" reRender="info2,upload2,panelm"/>	
+		        </rich:fileUpload>
+	  
+				<h:panelGroup id="info2">
+					<rich:panel bodyClass="info2" style="width: 360px;">
+	                    <f:facet name="header">
+	                        <h:outputText value="Información de Documentos Cargados" styleClass="bold"/>
+	                    </f:facet>
+						<h:outputText value="No se han subido Documentos."
+	                        rendered="#{fileUploadAdminBean.size==0}" styleClass="normal"/>
+	                    
+						<rich:dataGrid columns="1" value="#{fileUploadAdminBean.files}"     
+	                       var="file" rowKeyVar="row">
+							
+							<rich:panel>
+								<h:panelGrid columns="2">
+									<h:panelGrid columns="2">
+	                                    <h:outputText value="Nombre Documento:" />
+	                                    <h:outputText value="#{file.name}" />
+	                                    <h:outputText value="Tamaño del Documento(bytes):" />
+	                                    <h:outputText value="#{file.length}" />
+	                                </h:panelGrid>
+								</h:panelGrid>
+							</rich:panel>	
+						</rich:dataGrid>
+					</rich:panel>
+					<rich:spacer height="3"/>  
+	                <br />
+					<a4j:commandButton action="#{fileUploadAdminBean.clearUploadData}" 
+                   	 	reRender="info2, upload2" value="Limpiar Paneles"
+                    	rendered="#{fileUploadAdminBean.size>0}" />
+				</h:panelGroup>
+			</h:panelGrid>			
+			<rich:spacer height="20"/>    
+		</rich:panel>
+	</a4j:outputPanel>										
+	</h:form>	
+	</rich:panel>
+	
+	
+	<rich:modalPanel id="panelextension" width="350" height="115" showWhenRendered="#{fileUploadAdminBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Subir Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">        
+			<h:panelGroup>    
+				<a4j:form>
+					<h:commandButton action="#{fileUploadAdminBean.hideModal}" image="/img/close.png" /> 
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="Revise que su documento tenga las extensiones jpg, png, xls, xlsx, tif, pdf, para poder subirlo." styleClass="normal"/> 
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{fileUploadAdminBean.hideModal}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+    	</h:form>		
+		<br />
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="panelextension2" width="350" height="115" showWhenRendered="#{fileUploadAdminBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Subir Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">        
+			<h:panelGroup>    
+				<a4j:form>
+					<h:commandButton action="#{fileUploadAdminBean.hideModal}" image="/img/close.png" /> 
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="Revise que su documento tenga la extensión PDF para poder subirlo." styleClass="normal"/> 
+			<h:form>
+				<h:panelGrid columns="3" styleClass="tableBO">
+					<h:panelGroup>
+						<div class="span-1"></div>
+					</h:panelGroup>
+		     		<h:panelGroup>
+		     			<h:commandButton value="Aceptar" action="#{fileUploadAdminBean.hideModal}" style="width: 80px"/>
+		     		</h:panelGroup>	     	
+		    	</h:panelGrid>
+	    	</h:form>		
+			<br />
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{fileUploadAdminBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Subir Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fileUploadAdminBean.hideModal}" image="/img/close.png" /> 
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fileUploadAdminBean.message}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{fileUploadAdminBean.hideModal}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+    	</h:form>		
+		<br />
+	</rich:modalPanel>
+	
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

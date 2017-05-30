@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pseVoucher" language="groovy" pageWidth="680" pageHeight="400" whenNoDataType="NoDataSection" columnWidth="660" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="876"/>
+	<parameter name="idTransaccion" class="java.lang.Long"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["E:\\DiscoJ\\WorkSpace\\FacilPass\\web.bo.peajes.com\\WebContent\\jasper\\design\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RAZONFP" class="java.lang.String"/>
+	<parameter name="NITFP" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select t.nombre_banco banco,decode(u.umbral_state,1,'Aprobada',2,'Rechazada','Pendiente') estado,
+to_char(u.umbral_time,'dd/mm/yyyy hh24:mi:ss') hora,1 autorizacion,t.transaction_id transaccion,s.user_code codigo,ct.code_type_abbreviation tipo_doc,
+decode(s.code_type_id,1,s.user_names||' '||s.user_second_names,s.user_names) nombres,u.umbral_value valor, a.account_id cta
+from tb_pse_transaction t,tb_umbral u,tb_account a,tb_system_user s, tb_code_type ct
+where t.umbral_id=u.umbral_id
+and u.account_id=a.account_id
+and a.user_id=s.user_id
+and s.code_type_id=ct.code_type_id
+and t.pse_transaction_id=$P{idTransaccion}]]>
+	</queryString>
+	<field name="BANCO" class="java.lang.String"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="HORA" class="java.lang.String"/>
+	<field name="AUTORIZACION" class="java.math.BigDecimal"/>
+	<field name="TRANSACCION" class="java.math.BigDecimal"/>
+	<field name="CODIGO" class="java.lang.String"/>
+	<field name="TIPO_DOC" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="VALOR" class="java.math.BigDecimal"/>
+	<field name="CTA" class="java.math.BigDecimal"/>
+	<background>
+		<band height="314">
+			<rectangle radius="30">
+				<reportElement x="0" y="0" width="660" height="311"/>
+				<graphicElement>
+					<pen lineWidth="3.5" lineColor="#C6C6E8"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle radius="30">
+				<reportElement x="0" y="265" width="660" height="46" backcolor="#C6C6E8"/>
+				<graphicElement>
+					<pen lineWidth="3.5" lineColor="#C6C6E8"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="263" width="660" height="20" forecolor="#C6C6E8" backcolor="#C6C6E8"/>
+			</rectangle>
+		</band>
+	</background>
+	<title>
+		<band height="102" splitType="Stretch">
+			<image>
+				<reportElement x="18" y="15" width="192" height="56"/>
+				<imageExpression class="java.lang.String"><![CDATA["facilpass-pse.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="212" y="15" width="237" height="56"/>
+				<box leftPadding="2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Ingreso Recibido Para Terceros\r"+$P{RAZONFP}+"\rNIT: "+$P{NITFP}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="660" height="20" forecolor="#C6C6E8" backcolor="#C6C6E8"/>
+			</rectangle>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="187" splitType="Stretch">
+			<staticText>
+				<reportElement x="42" y="31" width="119" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Documento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="55" width="119" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="80" width="119" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuenta FacilPass:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="6" width="119" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Documento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="341" y="31" width="158" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha y Hora Transacción:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="341" y="55" width="158" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entidad:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="341" y="80" width="158" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="341" y="6" width="158" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Transacción:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="341" y="103" width="158" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="161" y="6" width="168" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TIPO_DOC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="161" y="31" width="168" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="161" y="55" width="168" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="499" y="31" width="161" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{HORA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="499" y="80" width="161" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="499" y="55" width="161" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="499" y="6" width="161" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TRANSACCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="161" y="80" width="168" height="20"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CTA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤    #,##0">
+				<reportElement x="499" y="103" width="161" height="21"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{VALOR}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="141" width="660" height="46"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["subreport_psedis.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<noData>
+		<band height="308">
+			<image>
+				<reportElement x="18" y="15" width="192" height="56"/>
+				<imageExpression class="java.lang.String"><![CDATA["facilpass-pse.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="174" y="142" width="304" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO SE ENCONTRÓ INFORMACIÓN]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="262" width="660" height="46"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["subreport_psedis.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="212" y="15" width="237" height="56"/>
+				<box leftPadding="2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Ingreso Recibido Para Terceros\r"+$P{RAZONFP}+"\rNIT: "+$P{NITFP}]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

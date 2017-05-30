@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Relación convenio canal</title>
+</head>
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:spacer height="5" />
+				<rich:messages style="color:red;" styleClass="bold" />
+
+				<h:form id="form">
+					<rich:panel id="principal">
+						<f:facet name="header">
+							<h:outputText value="Relación Convenio-Canal" />
+						</f:facet>
+						<rich:panel rendered="#{agreementChanel.permissionCreate}">
+							<f:facet name="header">
+								<h:outputText value="Filtro" />
+								<h:commandLink value="Crear Relación Convenio-Canal"
+									action="#{agreementChanel.showViewCreate}"
+									styleClass="no-decor"></h:commandLink>
+							</f:facet>
+							<h:panelGroup id="createChannel"
+								rendered="#{agreementChanel.viewFormCreate}">
+								<h:panelGrid columns="4">
+									<h:panelGroup>
+										<h:outputLabel value="Código Convenio:"></h:outputLabel>
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:selectOneMenu  value="#{agreementChanel.typeValueAgreement}">
+										<f:selectItems value="#{agreementChanel.agreementsList}" />
+
+									</h:selectOneMenu>
+
+									<h:panelGroup>
+										<h:outputLabel value="Código Canal:"></h:outputLabel>
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:selectOneMenu value="#{agreementChanel.typeValueChannel}">
+										<f:selectItems value="#{agreementChanel.channelsList}" />
+									</h:selectOneMenu>
+								</h:panelGrid>
+								<h:panelGrid columns="4"
+									style="size 350px; margin: auto; padding:10px; ">
+									<rich:spacer style="width: 230px" />
+									<a4j:commandButton value="Guardar" styleClass="center"
+										action="#{agreementChanel.confirmationSave}"
+										style="width: 80px" onclick="this.disabled=true"
+										oncomplete="this.disabled=false" reRender="Confirmation,Cn">
+									</a4j:commandButton>
+									<h:commandButton action="#{agreementChanel.clear}"
+										value="Cancelar" styleClass="center" style="width: 80px" />
+									<rich:spacer style="width: 230px" />
+								</h:panelGrid>
+
+								<h:panelGroup>
+									<h:outputLabel value="#{msg.Asterisk}"
+										styleClass="asteriskMandatoryField" />
+									<h:outputLabel value="#{msg.MandFields}"
+										styleClass="loginInput" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</rich:panel>
+
+						<rich:spacer height="5" />
+
+						<rich:panel>
+							<f:facet name="header">
+								<h:outputText value="Lista Relación Convenio - Canales" />
+							</f:facet>
+							<div id="scroll_horizontal">
+								<rich:dataTable
+									value="#{agreementChanel.listReAgreementChannel}"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+									rowClasses="white,grey" var="list" id="lista" rows="10">
+
+									<rich:column width="100px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Código Canal" />
+										</f:facet>
+										<h:outputText value="#{list.codeChannel}" />
+									</rich:column>
+									<rich:column width="150px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Nombre Canal" />
+										</f:facet>
+										<h:outputText value="#{list.nameChannel}" />
+									</rich:column>
+									<rich:column width="100px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Código Convenio" />
+										</f:facet>
+										<h:outputText value="#{list.codeAgreement}" />
+									</rich:column>
+									<rich:column width="150px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Nombre Convenio" />
+										</f:facet>
+										<h:outputText value="#{list.nameAgreement}" />
+									</rich:column>
+
+									<rich:column width="150px" style="text-align:center;" rendered="#{agreementChanel.permissionActiveInactive}">
+										<f:facet name="header">
+											<h:outputText value="Estado" />
+										</f:facet>
+										<h:commandLink value="#{list.stateReAgreementChannel}"
+											action="#{agreementChanel.confirmInactiveActive}">
+											<f:setPropertyActionListener
+												value="#{list.stateReAgreementChannel}"
+												target="#{agreementChanel.stateReAgreementChannel}" />
+												<f:setPropertyActionListener
+												value="#{list.nameAgreement}"
+												target="#{agreementChanel.nameAgreement}" />
+											<f:setPropertyActionListener
+												value="#{list.agreementChannelId}"
+												target="#{agreementChanel.id_agreementChannel}" />
+											<f:setPropertyActionListener value="#{list.nameChannel}"
+												target="#{agreementChanel.nameChannel}" />
+											<f:setPropertyActionListener value="#{list.codeAgreement}"
+												target="#{agreementChanel.codeAgreement}" />
+										</h:commandLink>
+									</rich:column>
+
+									<rich:column style="text-align:center;" rendered="#{agreementChanel.viewColumDelete}">
+										<f:facet name="header">
+											<h:outputText value="Eliminar" />
+										</f:facet>
+										<h:commandLink value="Eliminar" rendered="#{list.haveTransactions!=2}"></h:commandLink>
+									</rich:column>
+
+								</rich:dataTable>
+								<rich:datascroller align="center" for="lista" />
+							</div>
+
+
+						</rich:panel>
+
+						<rich:spacer height="5" />
+
+					</rich:panel>
+				</h:form>
+
+
+				<rich:modalPanel id="Confirmation" width="350" height="115"
+					showWhenRendered="#{agreementChanel.modal}" autosized="true"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{agreementChanel.hiddenModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{agreementChanel.message}"
+						styleClass="normal" />
+					<h:form>
+						<rich:spacer height="15" />
+						<div align="center">
+							<h:panelGroup>
+								<a4j:commandButton value="Aceptar" onclick="this.disabled=true"
+									oncomplete="this.disabled=false"
+									action="#{agreementChanel.saveReAgreementChannel}"
+									style="width: 80px" reRender="Cn,Cn1" />
+								<rich:spacer width="10" />
+								<h:commandButton value="Cancelar"
+									action="#{agreementChanel.hiddenModal}" style="width: 80px" />
+							</h:panelGroup>
+						</div>
+					</h:form>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="Update" width="350" height="115"
+					showWhenRendered="#{agreementChanel.modalUpdate}" autosized="true"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{agreementChanel.hiddenModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{agreementChanel.message}"
+						styleClass="normal" />
+					<h:form>
+						<rich:spacer height="15" />
+						<div align="center">
+							<h:panelGroup>
+								<a4j:commandButton value="Aceptar" onclick="this.disabled=true"
+									oncomplete="this.disabled=false"
+									action="#{agreementChanel.inactiveActive}"
+									style="width: 80px" reRender="Cn" />
+								<rich:spacer width="10" />
+								<h:commandButton value="Cancelar"
+									action="#{agreementChanel.hiddenModal}" style="width: 80px" />
+							</h:panelGroup>
+						</div>
+					</h:form>
+				</rich:modalPanel>
+
+
+				<rich:modalPanel id="Cn" width="350" height="115"
+					showWhenRendered="#{agreementChanel.modal1}" autosized="false"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{agreementChanel.hiddenModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{agreementChanel.message}"
+						styleClass="normal" />
+					<h:form>
+						<rich:spacer height="15" />
+						<div align="center">
+							<h:panelGroup>
+								<h:commandButton value="Aceptar"
+									action="#{agreementChanel.hiddenModal}" style="width: 80px">
+									<a4j:support event="oncomplete" reRender="lista" />
+								</h:commandButton>
+								<rich:spacer width="10" />
+
+							</h:panelGroup>
+						</div>
+					</h:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="Cn1" width="350" height="115"
+					showWhenRendered="#{agreementChanel.modal11}" autosized="false"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{agreementChanel.hiddenModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{agreementChanel.message}"
+						styleClass="normal" />
+					<h:form>
+						<rich:spacer height="15" />
+						<div align="center">
+							<h:panelGroup>
+								<h:commandButton value="Aceptar"
+									action="#{agreementChanel.clear}" style="width: 80px">
+									<a4j:support event="oncomplete" reRender="lista" />
+								</h:commandButton>
+								<rich:spacer width="10" />
+
+							</h:panelGroup>
+						</div>
+					</h:form>
+				</rich:modalPanel>
+				
+
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

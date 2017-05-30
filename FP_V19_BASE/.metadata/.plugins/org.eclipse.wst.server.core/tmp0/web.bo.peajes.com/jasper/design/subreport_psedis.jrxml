@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="disclaimerPse" language="groovy" pageWidth="660" pageHeight="100" whenNoDataType="NoDataSection" columnWidth="660" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select regexp_replace(system_parameter_value,'\s(?:|style)\s*=\s*"[^"]*"\s*','') as system_parameter_value from tb_system_parameter where system_parameter_id=54]]>
+	</queryString>
+	<field name="SYSTEM_PARAMETER_VALUE" class="oracle.sql.CLOB"/>
+	<detail>
+		<band height="48" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="660" height="21" forecolor="#C6C6E8" backcolor="#C6C6E8"/>
+			</rectangle>
+			<rectangle radius="30">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="2" width="660" height="46" backcolor="#C6C6E8"/>
+				<graphicElement>
+					<pen lineWidth="3.5" lineColor="#C6C6E8"/>
+				</graphicElement>
+			</rectangle>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="4" width="660" height="30"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="10" isBold="false" isItalic="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SYSTEM_PARAMETER_VALUE}.getSubString(1l,(new Long($F{SYSTEM_PARAMETER_VALUE}.length())).intValue())]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<div>
+	<rich:messages style="color:red;" styleClass="bold"/>		
+	<h:form id="Formulario">
+		<rich:panel style="width:350px;">
+			<table width="100%">
+				<tr>
+						<td width="10%"></td>
+						<td width="20%"><h:outputLabel value="Nit o C.C:" styleClass="bold"/></td>
+						<td width="70%"><h:inputText value="#{bankAccountClientBean.userCode}" disabled="true"/></td>
+						<td width="23%">							
+						</td>
+				</tr>
+				<tr>
+					<td width="10%"></td>
+					<td width="50%"><h:outputText value="Banco:" styleClass="bold"/></td>
+					<td width="40%">
+						<h:selectOneMenu value="#{bankAccountClientBean.idBank}">
+							<f:selectItems value="#{bankAccountClientBean.bankList}"/>
+						</h:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%"></td>
+					<td width="50%">
+						<h:outputText value="Ingrese 4 últimos digitos del producto: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="40%">
+						<h:inputText value="#{bankAccountClientBean.bankAccountNumber}" 
+						required="true"  requiredMessage="Ingrese 4 últimos digitos del producto bancario son Requerido." 
+						onkeypress="return numOnly(event)" maxlength="4"/>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%"></td>
+					<td width="50%"><h:outputText value="Tipo Producto: " styleClass="bold"/></td>
+					<td width="40%">
+						<h:selectOneMenu value="#{bankAccountClientBean.bankAccountType}">
+							<f:selectItems value="#{bankAccountClientBean.bankAccountTypes}"/>
+						</h:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td width="20%"></td>
+					<td width="20%"></td>
+					<td width="30%"><h:commandButton value="Crear" action="#{bankAccountClientBean.addBank}"/></td>	
+				</tr>
+			</table>
+
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>	
+
+</div>
+</f:view>
+</div>
+</body>
+</html>

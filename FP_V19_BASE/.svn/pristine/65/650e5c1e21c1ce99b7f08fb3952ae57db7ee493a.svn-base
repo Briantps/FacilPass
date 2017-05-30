@@ -1,0 +1,30 @@
+RICH_CALENDAR_TODAY_LABEL=Hoy
+RICH_CALENDAR_CLEAN_LABEL=Limpiar
+RICH_CALENDAR_APPLY_LABEL=Aplicar
+RICH_CALENDAR_CLOSE_LABEL=Cerrar
+RICH_CALENDAR_OK_LABEL=Ok
+RICH_CALENDAR_CANCEL_LABEL=Cancelar
+
+org.richfaces.component.UIExtendedDataTable.Menu.Columns=Columna
+org.richfaces.component.UIExtendedDataTable.Menu.SortAscending=Ordenar Asecendente
+org.richfaces.component.UIExtendedDataTable.Menu.SortDescending=Ordenar Descendente
+org.richfaces.component.UIExtendedDataTable.Menu.GroupByColumn=Agrupar por columna
+org.richfaces.component.UIExtendedDataTable.Menu.DisableGrouping=Anular agrupamiento
+
+RICH_FILE_UPLOAD_CANCEL_LABEL=CANCELAR
+RICH_FILE_UPLOAD_STOP_LABEL=CANCELAR
+RICH_FILE_UPLOAD_ADD_LABEL=SUBIR
+RICH_FILE_UPLOAD_UPLOAD_LABEL=CARGAR
+RICH_FILE_UPLOAD_CLEAR_LABEL=LIMPIAR
+RICH_FILE_UPLOAD_CLEAR_ALL_LABEL=LIMPIAR TODO
+RICH_FILE_UPLOAD_PROGRESS_LABEL=EN PROCESO
+RICH_FILE_UPLOAD_SIZE_ERROR_LABLE=Error en Tamaño
+RICH_FILE_UPLOAD_TRANSFER_ERROR_LABLE=Error en Transferencia
+RICH_FILE_UPLOAD_ENTRY_STOP_LABEL=Detener
+RICH_FILE_UPLOAD_ENTRY_CLEAR_LABEL=Limpiar
+RICH_FILE_UPLOAD_ENTRY_CANCEL_LABEL=Cancelar
+
+avax.faces.component.UIInput.REQUIRED = El campo {0} es requerido.
+javax.faces.validator.LengthValidator.MINIMUM = El valor del campo {1} es  menor que el valor permitido: ''{0}'' caracteres.
+javax.faces.validator.LengthValidator.MAXIMUM = El valor del campo {1} es m\u00E1s grande que el valor m\u00E1ximo permitido: ''{0}'' caracteres.
+javax.faces.converter.IntegerConverter.INTEGER={2}: ''{0}'' debe ser un número.

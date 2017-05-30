@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<metadatadoc version="2.0">
+	<object type="Table" id="9ADCD944-8D87-F53F-95FD-607AEEEDEE2B" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="true" entitytype="" splittedTableID="" allow_type_substitution="true" minVolumes="0" expectedVolumes="0" maxVolumes="9999999" growthPercent="0" growthType="Year" normalForm="Third" adequatelyNormalized="NO" abbreviation="" oid_is_pk="false" use_default_color="false" background_color="null" foreground_color="null">
+		<name>TB_DEVICE</name>
+		<comment></comment>
+		<notes></notes>
+		<alter type="created">
+			<user>root</user>
+			<timestamp>2010-06-10 10:42:04</timestamp>
+		</alter>
+		<alter type="changed">
+			<user>root</user>
+			<timestamp>2010-06-10 10:42:04</timestamp>
+		</alter>
+		<generator>881C0195-8C92-8AAC-938E-FCA0A6B570DE</generator>
+		<properties>
+			<parameter name="design.owner" value="bo" />
+			<parameter name="object.existsinrepository" value="true" />
+			<parameter name="property.comment.rdbms" value="" />
+		</properties>
+		<include_in_ddl value="false" />
+		<beforeDrop value="" />
+		<beforeCreate value="" />
+		<beforeAlter value="" />
+		<afterCreate value="" />
+		<afterAlter value="" />
+		<endOfScript value="" />
+		<spatial_table value="false" />
+		<oid_pk_columns />
+		<engineering should="true" />
+		<des_obj_version version="1.0" />
+		<fonts>
+			<font_object>
+				<parameter name="fo_type" value="Title" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="1" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Column" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Datatype" />
+				<parameter name="font_color" value="-16744448" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="PK Element" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="FK Element" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="UK Element" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Not Null" />
+				<parameter name="font_color" value="-65536" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Key" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+		</fonts>
+		<documents />
+		<parties />
+		<changerequests />
+		<measurements />
+		<contained>
+			<object type="Column" id="FD716883-BC79-24E7-E5EC-BD4B8F4008BF" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>DEVICE_ID</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<generator>750225C3-BB66-CFB0-0CB8-C496F259FD98</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="object.property.defaultvalue" value="" />
+					<parameter name="object.property.usesdefault" value="false" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering should="true" />
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="19" scale="0" typename="NUMBER" />
+				<abbreviation />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<security />
+				<ui_defaults readOnly="false" displayedOnReports="true" displayedOnForms="true" displayAs="Text" />
+				<eng_attribute_id eng_id="750225C3-BB66-CFB0-0CB8-C496F259FD98" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Column" id="8442955F-11E5-6188-3998-8A4FE38A59B7" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>DEVICE_CODE</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<generator>CA506728-03DA-F67E-7EF4-E020BEC33B4D</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="object.property.defaultvalue" value="" />
+					<parameter name="object.property.usesdefault" value="false" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering should="true" />
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="var" size="50 BYTE" typename="VARCHAR2" />
+				<abbreviation />
+				<reference value="false" />
+				<logicaltype dttype="VARCHAR" oid="LOGDT024" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<security />
+				<ui_defaults readOnly="false" displayedOnReports="true" displayedOnForms="true" displayAs="Text" />
+				<eng_attribute_id eng_id="CA506728-03DA-F67E-7EF4-E020BEC33B4D" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Column" id="59BCB32C-598D-D740-2F5A-D383B3591B1F" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>DEVICE_CURRENT_BALANCE</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<generator>914B2588-6000-DE96-F2EF-C4096CC1E689</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="object.property.defaultvalue" value="" />
+					<parameter name="object.property.usesdefault" value="false" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering should="true" />
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="19" scale="0" typename="NUMBER" />
+				<abbreviation />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<security />
+				<ui_defaults readOnly="false" displayedOnReports="true" displayedOnForms="true" displayAs="Text" />
+				<eng_attribute_id eng_id="914B2588-6000-DE96-F2EF-C4096CC1E689" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Column" id="6B310953-8551-C454-C2BA-904FE8209645" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>DEVICE_TYPE</name>
+				<comment>Type 0: TAG Device&lt;br&gt;Type 1: TSC Device-Especial&lt;br&gt;Type 2: TSC Device-Exento&lt;br&gt;Type 3: TSC Device-Tarjeta COLOMBIA&lt;br&gt;Type 4: TSC Device-Tarjeta PISA&lt;br&gt;Type 5: TSC Device-Tarjeta COVIANDES</comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<generator>7D5F9AE4-FDD2-5D33-D27F-3EFFB96367E3</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="object.property.defaultvalue" value="" />
+					<parameter name="object.property.usesdefault" value="false" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering should="true" />
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="1" scale="0" typename="NUMBER" />
+				<abbreviation />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<security />
+				<ui_defaults readOnly="false" displayedOnReports="true" displayedOnForms="true" displayAs="Text" />
+				<eng_attribute_id eng_id="7D5F9AE4-FDD2-5D33-D27F-3EFFB96367E3" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Column" id="FA3A77DB-2908-88D8-EF9C-5E0EE64AFDDC" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>DEVICE_STATE</name>
+				<comment>State 0: Dispositivo en Preorden&lt;br&gt;State 2: Dispositivo personalizado&lt;br&gt;State 4: Dispositivo instalado&lt;br&gt;State 6: Dispositivo activado&lt;br&gt;State 7: Dispositivo desactivado&lt;br&gt;State 9: Dispositivo en lista negra</comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<generator>06463F98-9117-BAC7-AB9C-0FDCA250ECE5</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="object.property.defaultvalue" value="" />
+					<parameter name="object.property.usesdefault" value="false" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering should="true" />
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="1" scale="0" typename="NUMBER" />
+				<abbreviation />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<security />
+				<ui_defaults readOnly="false" displayedOnReports="true" displayedOnForms="true" displayAs="Text" />
+				<eng_attribute_id eng_id="06463F98-9117-BAC7-AB9C-0FDCA250ECE5" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+		</contained>
+		<key>
+			<object type="Index" id="953ABC8D-F042-7F45-29F9-89831596450F" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" pk="true" indexstate="Primary Constraint">
+				<name>DEVICE_PK</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 10:42:04</timestamp>
+				</alter>
+				<generator>DCFFD85F-7DE3-9804-5740-B8B83BA8A119</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering should="true" />
+				<des_obj_version version="1.0" />
+				<functional></functional>
+				<contains type="Column" sortorder="ASC">FD716883-BC79-24E7-E5EC-BD4B8F4008BF</contains>
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+		</key>
+	</object>
+</metadatadoc>

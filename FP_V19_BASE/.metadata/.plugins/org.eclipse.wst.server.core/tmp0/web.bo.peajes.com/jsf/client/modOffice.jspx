@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<div>	
+					<h:form id="Formulario">
+						<rich:panel style="width:340px;">			
+							<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+								<h:panelGroup>
+									<h:outputLabel value="Dependencia: " id="otxt" styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:inputText maxlength="50" value="#{clientBean.officeName}" label="Dependencia" 
+										styleClass="normal">
+								</h:inputText>
+								<h:panelGroup>
+									<h:outputLabel value="Ciudad: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>	
+								<h:selectOneMenu value="#{clientBean.city}" styleClass="normal" style="width: 130px;">
+									<f:selectItems value="#{clientBean.cities}"/>
+								</h:selectOneMenu>	
+								<h:panelGroup>
+									<h:outputLabel value="Dirección: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:inputText maxlength="50" id="add" label="Dirección" value="#{clientBean.address}" 
+											styleClass="normal">
+								</h:inputText>
+								<h:panelGroup>
+									<h:outputLabel value="Teléfono: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:inputText value="#{clientBean.phone}" label="Teléfono" styleClass="normal"
+											onkeypress="return noEspecialOptionalNumber(event)" maxlength="15">
+								</h:inputText>
+								<h:outputLabel value="Teléfono Opcional: " styleClass="bold"/>
+								<h:inputText value="#{clientBean.optionalPhone}" label="Teléfono Opcional" styleClass="normal"
+											 onkeypress="return noEspecialOptionalNumber(event)" maxlength="15">
+								</h:inputText>
+								<h:panelGroup>
+									<h:outputLabel value="Contacto: " id="ctxt" styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>	 
+								<h:inputText maxlength="50" value="#{clientBean.contactName}" label="Contacto" 
+											styleClass="normal">
+								</h:inputText>
+								<h:panelGroup>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+								</h:panelGroup>
+								<h:commandButton value="Guardar" action="#{clientBean.modOffice}"/>
+							</h:panelGrid>
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>				
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{clientBean.showModalMod}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Modificar Dependencia" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{clientBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{clientBean.message}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{clientBean.hideModal}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+					    </h:form>		
+						<br/>
+					</rich:modalPanel>
+				</div>
+			</f:view>
+		</div>
+	</body>
+</html>

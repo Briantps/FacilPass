@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<div>	
+				<f:loadBundle basename="staticText.messages" var="msg" />
+					<h:form id="Formulario">
+						<rich:panel style="width:350px;">			
+							<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 200px; padding:1px;">
+								<h:panelGroup>  
+									<h:outputLabel value="Digite Observación: "  styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<rich:spacer/>
+								</h:panelGrid>
+								<h:inputTextarea id="obser" value="#{activeDeviceBean.observation}" onkeypress="return Observation(event)"
+									style="width:300px; height:100px; margin: auto; size: 300px; padding:10px;">									
+						      	</h:inputTextarea>
+					      		<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+					     		 <h:panelGroup>  
+							      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							     </h:panelGroup>
+									<h:commandButton value="Guardar" action="#{activeDeviceBean.activate}" style="width: 70px"/>
+						    	</h:panelGrid> 													
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>					
+						
+				</div>
+			</f:view>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Order de Pedido</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">				
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<rich:messages style="color:red;" styleClass="bold"/>
+					<a4j:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Consulta de Orden de Pedido" styleClass="bold"/>
+							</f:facet>				
+							<rich:panel>
+								<h:panelGrid styleClass="tableBO" columns="3" style="size 300px; margin: auto; padding:10px; ">
+									<h:panelGroup>
+										<h:outputText value="Número de Orden de Pedido: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:inputText id="numO" value="#{consultOrder.orderNumber}" styleClass="normal"
+											converterMessage="Debe digitar el Número de La Orden." required="true"
+											onkeypress="return numOnly(event)" maxlength="50"
+											requiredMessage="Debe Digitar el Número de Orden.">
+											<f:convertNumber integerOnly="true"/>
+											<f:validator validatorId="blank"/>
+										</h:inputText>
+									</h:panelGroup>
+									<h:commandButton value="Buscar" action="#{consultOrder.search}"/>
+								</h:panelGrid>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							</rich:panel>							
+							<rich:spacer height="5"/>				
+							<a4j:outputPanel id="panelMessage" layout="inline">
+							 	<rich:panel id="pm" rendered="#{consultOrder.showMessage}">
+							 		<h:outputText id="message" value="No hay información para la Orden de Pedido Digitada." 
+										styleClass="bold" style="color: red; font-size: 16"/>
+								</rich:panel>
+							</a4j:outputPanel>							
+							<a4j:outputPanel id="panelData" layout="inline">
+							 	<rich:panel id="pd" rendered="#{consultOrder.showData}">				
+									<h:panelGrid styleClass="tableBO" columns="4" style="margin: auto; size: 300px; padding:10px;">
+				                    	<h:outputText value="# Orden: " styleClass="bold"/>
+				                    	<h:outputText value="#{consultOrder.order.order.puchaseOrderNumber}" styleClass="bold"/>
+				                    	<h:outputText value="Cliente:" styleClass="bold"></h:outputText>
+				                    	<h:panelGroup>
+				                    		<h:outputText value="#{consultOrder.order.order.tbUserData.tbSystemUser.userNames} #{consultOrder.order.order.tbUserData.tbSystemUser.userSecondNames}" styleClass="normal" 
+			                    				rendered="#{consultOrder.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+				                    		<h:outputText value="#{consultOrder.order.order.tbUserData.tbSystemUser.userNames}" styleClass="normal" 
+				                    			rendered="#{consultOrder.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+				                    	</h:panelGroup>
+				                    	<h:outputText value="#{msg.NumDoc}:" styleClass="bold"></h:outputText>
+				                    	<h:outputText value="#{consultOrder.order.order.tbUserData.tbSystemUser.userCode} - #{consultOrder.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+			              				<h:outputText value="Dependencia:" styleClass="bold"/>
+			              				<h:outputText value="#{consultOrder.order.order.tbUserData.userDataOfficeName}" styleClass="normal"/>
+				              			<h:outputText value="Ciudad:" styleClass="bold"/>
+				              			<h:outputText value="#{consultOrder.order.order.tbUserData.tbMunicipality.municipalityName}" styleClass="normal"/>
+				              			<h:outputText value="Valor Total :" styleClass="bold"/>
+										<h:outputText value="#{consultOrder.order.order.purchaseOrderValue}" styleClass="bold">
+											<f:convertNumber pattern="$#,##0.00"/>
+										</h:outputText>
+										<h:outputText/>
+										<h:outputText/>
+										<h:outputText/>
+										<h:commandLink value="Ver Detalle" action="#{consultOrder.initShowDetail}"
+											styleClass="bold"/>
+										<h:outputText/>
+										<h:outputText/>
+										<h:outputText/>
+										<h:commandLink value="Ver Cuenta Asociada" action="#{consultOrder.iniShowAccount}" 
+											styleClass="bold"/>
+										<h:outputText/>
+										<h:outputText/>
+										<h:outputText/>
+										<h:commandLink id="clinkpdf" target="_blank" value="" action="#{consultOrder.printPdf}">
+											<img title="Imprimir" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+												style="cursor: pointer; border: 0px solid blue;" />
+					                	</h:commandLink>
+									</h:panelGrid>
+							 		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>			
+								</rich:panel>
+							</a4j:outputPanel>				
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>				
+					<rich:modalPanel id="consigs" width="350" autosized="true" showWhenRendered="#{consultOrder.consigShow}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Cuenta Asociada" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{consultOrder.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<a4j:form>
+							<rich:panel styleClass="richPanel">
+								<h:panelGrid style="width: 500px; margin: auto; padding:10px; " styleClass="tableBO" columns="2">
+									<h:outputText value="No. Cuenta: " styleClass="bold"/>
+									<h:outputText value="#{consultOrder.order.tbAccount.accountId}"
+										styleClass="normal"/>
+									<h:outputText value="Saldo en Cuenta: " styleClass="bold"/>
+									<h:outputText value="#{consultOrder.order.tbAccount.accountBalance}" styleClass="normal" >
+										<f:convertNumber pattern="$#,##0.00"/>
+									</h:outputText>
+								</h:panelGrid>
+							</rich:panel>
+					    </a4j:form>
+						<br />
+					</rich:modalPanel>				
+					<rich:modalPanel id="detailss" width="350" autosized="true" showWhenRendered="#{consultOrder.detailShow}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{consultOrder.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<a4j:form>
+							<rich:panel styleClass="richPanel">
+								<rich:dataTable id="datalist" value="#{consultOrder.order.details}"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'" 
+									onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+									var="list" rows="20" width="600px" rowClasses="white,white">
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Tipo de Operación" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value=" #{list.tbOperationType.operationTypeName}" 
+											styleClass="normal" style="font-size: 15px;"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Valor Operación" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{list.detailOperationValue}" 
+											styleClass="normal" style="font-size: 15px;">
+											<f:convertNumber pattern="$#,##0.00"/>
+										</h:outputText>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Id Facial" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value=" #{list.tbDevice.deviceFacialId}" 
+											styleClass="normal" style="font-size: 15px;"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Estación Operación" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value=" #{list.tbStationBO.stationBOName}" 
+											styleClass="normal" style="font-size: 15px;"/>
+									</rich:column>
+									<f:facet name="footer">
+										<rich:datascroller/>
+									</f:facet>
+								</rich:dataTable>
+							</rich:panel>
+						</a4j:form>
+						<br />
+					</rich:modalPanel>					
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

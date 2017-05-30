@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Entidades Programación Automática</title>
+</head>
+<script>
+	function getFocus() {
+		setTimeout(function() {
+			document.getElementById("formfocus:alertAcepts").focus()
+		}, 1000);
+	}
+</script>
+<body onload="getFocus()">
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:spacer height="5" />
+				<rich:panel id="panelfull" styleClass="richPanel">
+					<f:facet name="header">
+						<h:outputText value="Administración de Entidades"
+							styleClass="bold" />
+					</f:facet>
+
+
+					<h:form id="formAdministra">
+						<rich:panel id="pnlAdministra">
+							<f:facet name="header">
+								<h:outputText
+									value="Entidades habilitadas  para autorizar recargas programadas"
+									styleClass="bold" />
+							</f:facet>
+							<div id="scroll_horizontal">
+								<rich:dataTable id="listBank" var="item"
+									value="#{automaticProgrammingEntitiesBean.bankList}"
+									style="margin:auto;" rows="10">
+
+									<rich:column width='50'>
+										<f:facet name="header">
+											<h:outputText value="Código" styleClass="bold" />
+										</f:facet>
+										<h:outputText value="#{item.bankId}"  styleClass="normal"
+											style="text-align: center;overflow-x: hidden;overflow-y: auto;width: 120px;word-wrap: break-word;" />
+									</rich:column>
+
+									<rich:column width='120'>
+										<f:facet name="header">
+											<h:outputText value="Entidad" styleClass="bold" />
+										</f:facet>
+										<h:outputText value="#{item.bankName}"
+											styleClass="normal"
+											style="text-align: center;width: 120px;resize: none;overflow-x: hidden;overflow-y: auto;display: block;word-wrap: break-word;" />
+									</rich:column>
+
+									<rich:column width='64' style="text-align: center;">
+										<f:facet name="header">
+											<h:outputText value="Grupo Aval" styleClass="bold" />
+										</f:facet>
+										<h:outputText value="#{item.bankAval}" styleClass="normal"/>
+									</rich:column>
+
+									<rich:column width='80'  style="text-align: center;">
+										<f:facet name="header">
+											<h:outputText value="Permite Programación" styleClass="bold"
+												style="word-wrap: break-word;" />
+										</f:facet>
+
+										<h:selectBooleanCheckbox value="#{item.bankProgramming}" disabled="#{!automaticProgrammingEntitiesBean.permEdit}"> 
+											<a4j:support event="onclick"
+												action="#{automaticProgrammingEntitiesBean.selectChek}">
+												<f:setPropertyActionListener value="#{item.bankId}"
+													target="#{automaticProgrammingEntitiesBean.bankId}" />
+												<f:setPropertyActionListener value="#{item.bankProgramming}"
+													target="#{automaticProgrammingEntitiesBean.modifyPermProgramm}" />												
+											</a4j:support>
+											<a4j:support event="onchange" ajaxSingle="true" />
+										</h:selectBooleanCheckbox>
+									</rich:column>
+
+
+									<rich:column width='120'>
+										<f:facet name="header">
+											<h:outputText value="URL" styleClass="bold " />
+										</f:facet>
+										<h:outputText value="#{item.bankUrl}" styleClass="normal"
+											style="text-align: center;width: 250px;resize: none;display: block;overflow-x: hidden;overflow-y: auto; word-wrap: break-word;" />
+									</rich:column>
+
+									<rich:column width='80' rendered="#{automaticProgrammingEntitiesBean.permEdit}" style="text-align: center;">
+									<f:facet name="header">
+											<h:outputText value="Editar" styleClass="bold"/>
+									</f:facet>
+									
+									<h:commandLink value="Editar" action="#{automaticProgrammingEntitiesBean.editURLBank}" disabled="#{!automaticProgrammingEntitiesBean.permEdit}" styleClass="bold" style="text-align: center;">      
+												<f:setPropertyActionListener value="#{item.bankId}"  target="#{automaticProgrammingEntitiesBean.bankId}"/>																																						
+												<a4j:support event="oncomplete" reRender="formAdministra,modalpanel"/>
+									</h:commandLink> 							
+									</rich:column>
+									
+									<f:facet name="footer">
+										<rich:datascroller align="center" for="listBank" id="ds">
+										</rich:datascroller>
+									</f:facet>
+								</rich:dataTable>
+							</div>
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20" />
+					<h:form id="formButton">
+						<div align="center">
+							<a4j:commandButton id="Butoon" value="Confirmar"
+								action="#{automaticProgrammingEntitiesBean.confirmModify}"
+								rendered="#{automaticProgrammingEntitiesBean.permEdit}"								
+								style="width: 80px;"
+								onclick="this.disabled=true;document.getElementById('formButton:ButoonCancel').disabled = true;"
+								oncomplete="this.disabled=false;document.getElementById('formButton:ButoonCancel').disabled = false;"
+								reRender="formAdministra,pnlAdministra,modalpanel,formButton,modalpanelAlert,confirmacion" />
+							<rich:spacer width="20" />
+							<h:commandButton id="ButoonCancel" value="Cancelar"
+								action="#{automaticProgrammingEntitiesBean.cancelModify}"
+								style="width: 80px">							
+								<a4j:support event="oncomplete" reRender="formAdministra,modalpanel" />
+							</h:commandButton>
+						</div>
+					</h:form>
+				</rich:panel>
+
+				<rich:modalPanel id="modalpanelAlert" width="350" height="115"
+					showWhenRendered="#{automaticProgrammingEntitiesBean.modalAlert}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Entidades Programación Automática" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{automaticProgrammingEntitiesBean.ocult}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					
+					<h:outputText value="#{automaticProgrammingEntitiesBean.msnmodal}"
+					escape="false"
+						styleClass="normal" />
+					<rich:spacer height="20" />
+					<h:form id="formfocus">
+						<div align="center">
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton id="alertAcepts" value="Aceptar"
+										action="#{automaticProgrammingEntitiesBean.ocult}">
+									</h:commandButton>
+								</h:panelGroup>
+							</h:panelGrid>
+						</div>
+					</h:form>
+					<br />
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="modalpanelAlertVali" width="350" height="115"
+					showWhenRendered="#{automaticProgrammingEntitiesBean.modalAlertVali}"
+					onresize="return false;" moveable="false" zindex="5000">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Entidades Programación Automática" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{automaticProgrammingEntitiesBean.ocultTwo}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					
+					<h:outputText value="#{automaticProgrammingEntitiesBean.msnmodal}"
+					escape="false"
+						styleClass="normal" />
+					<rich:spacer height="20" />
+					<h:form id="formVali">
+						<div align="center">
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton id="alertAceptsVali" value="Aceptar"
+										action="#{automaticProgrammingEntitiesBean.ocultTwo}">
+
+									</h:commandButton>
+								</h:panelGroup>
+							</h:panelGrid>
+						</div>
+					</h:form>
+					<br />
+				</rich:modalPanel>
+
+				<rich:modalPanel id="modalModifyURL" width="350" height="150"
+					showWhenRendered="#{automaticProgrammingEntitiesBean.modalModifyURL}"
+					onresize="return false;" moveable="false"> 
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Entidades Programación Automática" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton
+									action="#{automaticProgrammingEntitiesBean.ocult}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<rich:panel>
+					<h:form id="formModifyUTL">
+					<h:panelGrid columns="2" styleClass="tableBO">
+						<h:panelGroup>
+							<h:outputText value="URL:" styleClass="bold" />
+							<h:outputLabel value="*" styleClass="asteriskMandatoryField" />
+						</h:panelGroup>
+						<h:inputText value="#{automaticProgrammingEntitiesBean.modifyURL}"
+							styleClass="normal" style="width:230px" maxlength="299" />
+					</h:panelGrid>
+
+					
+						<div align="center">
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+			   						<h:outputLabel value="*" styleClass="asteriskMandatoryField"/>
+			   				 		<h:outputText value="Campos Obligatorios"  styleClass="bold"/>
+			   				 	</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton id="modifyURLAcepts" value="Aceptar"
+										action="#{automaticProgrammingEntitiesBean.aceptsModifyURL}">
+										<a4j:support event="oncomplete"
+											reRender="modalModifyURL,formAdministra,pnlAdministra,listBank" />
+									</h:commandButton>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton id="modifyURLCancel" value="Cancelar"
+										action="#{automaticProgrammingEntitiesBean.ocult}">
+										<a4j:support event="oncomplete"
+											reRender="modalModifyURL,formAdministra,pnlAdministra" />
+									</h:commandButton>
+								</h:panelGroup>
+							</h:panelGrid>
+						</div>
+					</h:form>
+					
+					</rich:panel>
+					
+				</rich:modalPanel>
+
+				<rich:modalPanel id="confirmacion" width="340" autosized="true" height="100"
+					showWhenRendered="#{automaticProgrammingEntitiesBean.modalconfirm}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación - Entidades Programación Automática" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton
+									action="#{automaticProgrammingEntitiesBean.ocult}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{automaticProgrammingEntitiesBean.msnmodal}"
+						escape="false"
+						styleClass="normal" 
+						style="width:320px; resize: none;display: inline-block; overflow: hidden;word-wrap: break-word;"/>
+					<rich:spacer height="10" />
+					<h:form>
+						<h:panelGrid columns="4" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:region id="aprob">
+									<a4j:commandButton id="send" value="Aceptar"
+										action="#{automaticProgrammingEntitiesBean.apply}"
+										style="width: 80px">
+										<a4j:support event="oncomplete"
+											reRender="confirmacion,formAdministra,pnlAdministra,wait,modalpanelAlert" />
+										<a4j:status onstart="#{rich:component('wait')}.show()"
+											for="aprob"/>
+									</a4j:commandButton>
+								</a4j:region>
+								<rich:spacer width="20" />
+								<h:commandButton value="Cancelar"
+									action="#{automaticProgrammingEntitiesBean.cancelModify}"
+									style="width: 80px" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:form>					
+				</rich:modalPanel>
+				<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false" zindex="5000">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Por favor espere..." style="font-size:12px;" />
+				</rich:modalPanel>
+				
+			</div>
+			
+			
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

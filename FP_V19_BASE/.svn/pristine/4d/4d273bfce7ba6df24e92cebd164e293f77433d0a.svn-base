@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Gestión de TAGs</title>
+    <script type="text/javascript">
+	function validarSize (campo, limite) {
+		if (campo.value.length > limite){
+			campo.value = campo.value.substring(0, limite);
+		} 
+	}
+	
+	function function1(placa){
+		if(placa.value.length >= 4){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	function searchbtn(evt){
+		var charCode = (evt.which) ? evt.which : window.event.keyCode;
+		if (charCode == 13){
+			var bnt = document.getElementById("form:botonBuscar");
+			bnt.click();
+		}
+	}
+	</script> 
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+    <f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+
+    <h:form id="form">
+    <rich:panel id="principal">
+     <f:facet name="header">
+       <h:outputText value="Gestión de TAGs"/>
+     </f:facet>
+       <rich:panel id="filtrosCliente">
+         <f:facet name="header">
+           <h:outputText value="Filtros de Cliente"/>
+         </f:facet>
+         <h:panelGrid styleClass="tableBO" columns="5"  style="size:300px; margin: auto; padding:10px; ">
+
+           <h:outputText value="Tipo Identificación:" styleClass="bold"/>
+           <h:selectOneMenu id="tipos" value="#{adminTagsBean.typeId}" style="width:157px;">
+             <f:selectItems  value="#{adminTagsBean.typeList}"/>
+           </h:selectOneMenu>
+
+           <h:outputText value="No. Identificación: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.codClient}" styleClass="normal" maxlength="15" onkeypress="return numOnly(event);searchbtn(event)" style="width:153px;">
+           </h:inputText>
+           <rich:spacer height="1"/>
+
+           <h:outputText value="Nombre: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.nomClient}" styleClass="normal" style="text-transform:uppercase;width:153px;" onkeypress="return noEspecialRazSol(event)">
+           </h:inputText>
+
+           <h:outputText value="Apellidos: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.apeClient}" styleClass="normal" style="text-transform:uppercase;width:153px;" onkeypress="return alphaSpaceWithoutPoint(event)">
+           </h:inputText>
+           <rich:spacer height="10"/>
+ 
+           <h:outputText value="Usuario: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.user}" styleClass="normal" style="width:153px;" onkeypress="return emailValidation(event)">
+           </h:inputText>
+
+           <h:outputText value="Cuenta FacilPass: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.accountClient}" styleClass="normal"  onkeypress="return numOnly(event)" style="width:153px;">
+           </h:inputText>
+           <rich:spacer height="10"/>
+        
+           <h:outputText value="Placa: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.plateClient}" styleClass="normal" maxlength="12" style="text-transform:uppercase;width:153px;" onkeypress="return alphaNumOnly2(event)" >
+           </h:inputText>
+
+           <h:outputText value="Adicional 1: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.aditional1}" styleClass="normal" style="width:153px;" onkeypress="return alphaNumSpaceSimple(event)">
+           </h:inputText>
+           <rich:spacer height="10"/>
+
+           <h:outputText value="Adicional 2: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.aditional2}" styleClass="normal" style="width:153px;" onkeypress="return alphaNumSpaceSimple(event)">
+           </h:inputText>
+
+           <h:outputText value="Adicional 3: " styleClass="bold"/>
+           <h:inputText value="#{adminTagsBean.aditional3}" styleClass="normal" style="width:153px;" onkeypress="return alphaNumSpaceSimple(event)">
+           </h:inputText>
+		   <rich:spacer height="1"/>
+         </h:panelGrid>
+
+         <div align="center">
+           <h:commandButton id="botonBuscar" value="Buscar" action="#{adminTagsBean.search}" style="width: 80px">
+             <a4j:support event="oncomplete" reRender="outputB,dTable" immediate="true"/>
+           </h:commandButton>
+			<rich:spacer width="20"/>
+           <h:commandButton value="Limpiar" action="#{adminTagsBean.reset}" style="width: 80px">
+              <a4j:support immediate="true" event="oncomplete" reRender="outputB,dTable,acciones1,couriers,rollos,output,richE,table,outputP,outputP1,richP,richP1,outputChange,richC,outputCobro,richCb,observ,cobro, acciones1,couriers,rollos"/>
+           </h:commandButton>
+         </div>
+       </rich:panel>
+       <rich:spacer height="10" />
+       <rich:panel id="outputB" rendered="#{adminTagsBean.showClient}">
+           <f:facet name="header">
+             <h:outputText value="Resultado de la Búsqueda"/>
+           </f:facet>
+
+           <div id="scroll_horizontal">
+		   <rich:dataTable id="dTable" width="800" value="#{adminTagsBean.client}" var="cliente" rows="1"
+                      onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+	                   rowClasses="white,grey">
+						
+			<rich:column width="50px">
+			  <f:facet name="header">
+				<h:outputText value="Tipo Identificación" styleClass="bold"/>
+			  </f:facet>
+			  <h:outputText value="#{cliente.type}" styleClass="normal" style="font-size: 12px;"/>
+			</rich:column>
+            <rich:column width="120px">
+			  <f:facet name="header">
+				<h:outputText value="No. Identificación" styleClass="bold"/>
+			  </f:facet>
+			  <h:outputText value="#{cliente.cod}" 	styleClass="normal" style="font-size: 12px;"/>
+			</rich:column>
+            <rich:column width="150px" >
+			  <f:facet name="header">
+				<h:outputText value="Nombre" styleClass="bold"/>
+			  </f:facet>
+			  <h:outputText value="#{cliente.nom}" 	styleClass="normal" style="font-size: 12px;"/>
+			</rich:column>
+            <rich:column width="150px" >
+			  <f:facet name="header">
+				<h:outputText value="Apellidos" styleClass="bold"/>
+			  </f:facet>
+			  <h:outputText value="#{cliente.ape}" 	styleClass="normal" style="font-size: 12px;"/>
+			</rich:column>
+            <rich:column width="100px">
+			  <f:facet name="header">
+				<h:outputText value="Cuenta FacilPass" styleClass="bold"/>
+			  </f:facet>
+			  <h:outputText value="#{adminTagsBean.accountId}" styleClass="normal" style="font-size: 12px;" rendered="#{adminTagsBean.showOneAccount}"/>
+			  <h:selectOneMenu id="accounts" value="#{adminTagsBean.accountId}" style="width:100px;" rendered="#{!adminTagsBean.showOneAccount}">
+                 <f:selectItems  value="#{adminTagsBean.accountList}" />                 
+                 <a4j:support event="onchange" action="#{adminTagsBean.hideModalCuenta}" reRender="acciP,acciones,outputP1,placas,acciones1,couriers,rollos,output,richE,table,observ,cobro"></a4j:support>
+              </h:selectOneMenu>
+            </rich:column>
+            <f:facet name="footer">
+              <rich:datascroller  for="dTable"/>
+           	</f:facet>
+           </rich:dataTable>
+           </div>
+         </rich:panel>
+        <rich:spacer height="10" />
+		<a4j:outputPanel id="acciP">
+         <rich:panel id="acciones" rendered="#{adminTagsBean.showActions}">
+           <f:facet name="header">
+             <h:outputText value="Acción a Realizar"/>
+           </f:facet>
+           
+             <table border="0">
+             <tr>
+             <td>
+               <rich:spacer width="17"/>
+               <h:panelGroup> 
+                 <h:outputText value="Acción: " styleClass="bold"/>
+                 <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+               </h:panelGroup>
+             </td>
+             
+             <td>
+               <rich:spacer width="15"/>
+               <h:selectOneMenu id="acciones1" value="#{adminTagsBean.actionId}" style="width:170px;" >
+                 <f:selectItems value="#{adminTagsBean.actionList}"/>
+			     <a4j:support event="onchange" reRender="couriers,rollos,output,richE,outputChange,outputP,outputP1,richC,plac,placas,outputCobro,richCb,panelm2" 
+                               action="#{adminTagsBean.activeCourier}"/>
+               </h:selectOneMenu>
+             </td>
+             
+             <td><rich:spacer width="20"/></td>
+             
+             <td>
+               <rich:spacer width="27"/>
+               <h:panelGroup>
+                 <h:outputText value="Courier: " styleClass="bold" />
+                 <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+               </h:panelGroup>
+             </td>
+             
+             <td>
+               <rich:spacer width="10"/>
+               <h:selectOneMenu id="couriers" value="#{adminTagsBean.courierId}" disabled="#{adminTagsBean.activeCouriers}" style="width:170px;">
+                 <f:selectItems value="#{adminTagsBean.courierList}"/>
+                 <a4j:support event="onchange" reRender="rollos,output,richE,placas" action="#{adminTagsBean.activeRoll}"/>
+               </h:selectOneMenu>
+             </td>
+             </tr>
+             
+             <tr>
+             <td>
+               <h:panelGroup>
+                 <a4j:outputPanel>
+                   <rich:panel style="border:0px;" >
+                    <rich:spacer width="6"/>
+                     <h:outputText value="Rollo: " styleClass="bold"  />
+                     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+                   </rich:panel>
+                 </a4j:outputPanel>
+               </h:panelGroup>
+             </td>
+             
+             <td>
+               <h:panelGroup>
+                 <a4j:outputPanel>
+                   <rich:panel style="border:0px;">
+                   <rich:spacer width="3"/>
+                     <h:selectOneMenu id="rollos" value="#{adminTagsBean.rolloId}" disabled="#{adminTagsBean.activeRollo}" style="width:170px;" >
+                       <f:selectItems value="#{adminTagsBean.rolloList}"/>
+                         <a4j:support event="onchange"  reRender="output,richE,panelm" action="#{adminTagsBean.showForm}"/>
+                     </h:selectOneMenu>
+                   </rich:panel>
+                 </a4j:outputPanel>
+               </h:panelGroup>
+             </td>
+             <td><rich:spacer width="20"/></td>
+             
+             <td>
+               <h:panelGroup>
+                 <a4j:outputPanel id="outputP" style="padding:0px;">
+                   <rich:panel id="richP" rendered="#{adminTagsBean.showFormCambioyRep}" style="border:0px;padding:0px;">
+                     <rich:spacer width="17"/>
+                     <h:outputText id="plac" value="Placa: " styleClass="bold" />
+                     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+                   </rich:panel>
+                 </a4j:outputPanel>
+               </h:panelGroup>
+             </td>
+             
+             <td>
+               <h:panelGroup>
+                 <a4j:outputPanel id="outputP1" style="padding:0px;">
+                   <rich:panel id="richP1" rendered="#{adminTagsBean.showFormCambioyRep}" style="border:0px;padding:0px;">
+                     <h:selectOneMenu id="placas" value="#{adminTagsBean.vehicleId}" style="width:170px;">
+                       <f:selectItems value="#{adminTagsBean.vehicleList}"/>
+                     </h:selectOneMenu>
+                   </rich:panel>
+                 </a4j:outputPanel>
+               </h:panelGroup>
+             </td>
+             
+             </tr>   
+             </table>
+           
+           <a4j:outputPanel id="output">
+             <rich:panel id="richE" rendered="#{adminTagsBean.showGrillaEnrolar}" style="border:0px;">
+               <h:panelGrid columns="1" style="size:300px; margin: auto; padding:0px; ">
+                 <div id="scroll_horizontal">
+                 <rich:dataTable value="#{adminTagsBean.devices}" var="list" id="table"  rows="20" 
+                                style="width:300px;height:70px;" reRender="pag">
+
+                   <rich:column width="50px" style="align:bottom;vertical-align:bottom;">
+                     <f:facet name="header">
+                       <h:panelGroup>
+                         <!-- <h:commandButton action="#{adminTagsBean.image}" image="/img/lupa.jpg" style="width:20px;height:15px;"/>-->
+                       </h:panelGroup>
+                     </f:facet>
+
+                     <h:selectBooleanCheckbox id="cb" value="#{list.active}" >
+                       <a4j:support  event="onclick" action="#{adminTagsBean.selectOne}" reRender="output,richE,table" status="commonstatus" >
+                         <f:setPropertyActionListener target="#{adminTagsBean.activeOne}" value="#{list.active}" />
+                         <f:setPropertyActionListener target="#{adminTagsBean.plateId}" value="#{list.vehicleId}"/>
+                         <f:setPropertyActionListener target="#{adminTagsBean.tagId}" value="#{list.deviceId}"/>
+                       </a4j:support>
+ 
+                      </h:selectBooleanCheckbox>
+      
+                     
+                   </rich:column>
+
+                   <rich:column width="100px"  filterBy="#{list.vehiclePlate}" filterEvent="onkeyup">          
+                     <f:facet name="header">
+                       <h:panelGroup>
+                         <h:outputText value="PLACA" styleClass="bold"  style="padding-bottom:20px;vertical-align:top;"/>
+                       </h:panelGroup>
+                     </f:facet>
+                     <h:outputText value="#{list.vehiclePlate}"/>
+                   </rich:column>
+
+                   <rich:column width="100px">
+                     <f:facet name="header">
+                       <h:panelGroup>
+                         <h:outputText value="TAG" styleClass="bold" style="padding-bottom:20px;vertical-align:top;"/>
+                       </h:panelGroup>
+                     </f:facet>
+                     <h:outputText value="#{list.deviceFacialId}"/>
+                   </rich:column>
+               </rich:dataTable>
+               
+               <f:facet name="footer" >
+                 <rich:datascroller id="pag" for="table" page="#{adminTagsBean.scrollerPage}" style="width:300px;" reRender="output,richE,table">
+                 </rich:datascroller>
+           	    </f:facet>
+               </div>
+                </h:panelGrid>
+
+                <h:panelGrid columns="1" style="size:300px; margin: auto; padding:0px; ">
+                  <h:panelGroup>
+                     <a4j:region id="editando1">
+                     <h:selectBooleanCheckbox id="select" value="#{adminTagsBean.activeAllTags}" >
+                       <a4j:support event="onclick" action="#{adminTagsBean.selectAll}" reRender="output,richE,table,cb" />
+                     </h:selectBooleanCheckbox>
+                     
+                     <a4j:status id="commonstatus" onstart="#{rich:component('process')}.show()" onstop="#{rich:component('process')}.hide()">
+		             </a4j:status>
+                     </a4j:region>
+                    <h:outputText value="Seleccionar todos los vehículos" styleClass="bold"/>
+                  </h:panelGroup>
+                <h:commandButton value="Aceptar" action="#{adminTagsBean.enrolarConfirm}">
+                </h:commandButton>
+               </h:panelGrid>
+             </rich:panel>
+             
+           </a4j:outputPanel>
+           
+           <a4j:outputPanel id="outputChange" style="border:0px;padding:0px;">
+             <rich:panel id="richC" rendered="#{adminTagsBean.showFormCambioyRep}" style="border:0px;padding:0px;">
+               <h:panelGrid columns="2" style="size:300px; margin: auto; padding:0px; ">
+                 <a4j:outputPanel style="border:0px;padding:0px;">
+                   <rich:panel style="border:0px;padding:0px;">
+                     <h:panelGroup>
+                       <h:outputText value="Observación: " styleClass="bold"/>
+                       <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+                       <h:inputTextarea id="observ" value="#{adminTagsBean.observation}" onkeyup="validarSize(this,200);"  onkeydown="validarSize(this,200);"
+                                       onkeypress="return noEspecialobjection2(event);" style="width:200px;height:100px; text-transform:uppercase; resize:none;">
+                       </h:inputTextarea>
+                     </h:panelGroup>
+                   </rich:panel>
+                 </a4j:outputPanel>
+
+                 <a4j:outputPanel id="outputCobro" style="border:0px;padding:0px;">
+                   <rich:panel id="richCb" rendered="#{adminTagsBean.showFormCobro}" style="border:0px;padding:0px;">
+                     <rich:spacer width="6"/>
+                     <h:outputText value="Cobro: " styleClass="bold"/>
+                     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+                     <rich:spacer width="35"/>
+                     <h:inputText id="cobro" value="#{adminTagsBean.cobro}" style="width:168px;" onkeypress="return solonumeros(event)" maxlength="15" 
+                                           onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+				 	 </h:inputText>
+                   </rich:panel>
+                 </a4j:outputPanel>
+                
+                 <h:commandButton value="Reasignar" action="#{adminTagsBean.saveChange}" rendered="#{!adminTagsBean.showFormCobro}"/>
+                 
+                 <h:commandButton id="reponer" value="Reponer" action="#{adminTagsBean.saveChange}" rendered="#{adminTagsBean.showFormCobro}"/>
+                 
+               </h:panelGrid>
+             </rich:panel>
+           </a4j:outputPanel>
+
+         </rich:panel>
+         </a4j:outputPanel>
+     
+    </rich:panel>
+    </h:form>
+
+ <rich:modalPanel id="panelm1" width="370" height="115" showWhenRendered="#{adminTagsBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Gestión Dispositivos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{adminTagsBean.hideModal1}" image="/img/close.png">
+                        <a4j:support event="onclick" action="#{adminTagsBean.hideModal1}" reRender="panelm1"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panelm1" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{adminTagsBean.message}" styleClass="normal"/>
+		<br/>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding-left:12px;">
+        <rich:spacer height="10"/>
+          <a4j:form>
+			<h:commandButton value="Aceptar" action="#{adminTagsBean.hideModal1}">
+			  <a4j:support event="oncomplete" 
+			    oncomplete="document.getElementById('formulario:reponer').disabled=false;document.getElementById('formulario:cancelar').disabled=false;document.getElementById('formu:bCambio1').disabled=false;document.getElementById('formu:bCancelar1').disabled=false;document.getElementById('formE:bAcceptar2').disabled=false;document.getElementById('formE:bCancelar2').disabled=false"/>
+			</h:commandButton>
+			<rich:componentControl for="panelm1" attachTo="hidelink" operation="hide" event="onclick" />
+		  </a4j:form>
+        </h:panelGrid>
+	</rich:modalPanel>
+
+     <rich:modalPanel id="panelm" width="370" height="118" showWhenRendered="#{adminTagsBean.showModalError}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Gestión Dispositivos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{adminTagsBean.hideModal}" image="/img/close.png">
+                        <a4j:support event="onclick" action="#{adminTagsBean.hideModal}" reRender="panelm"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panelm" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{adminTagsBean.message}" styleClass="normal"/>
+		<br/>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding-left:12px;">
+        <rich:spacer height="5"/>
+          <a4j:form>
+			<h:commandButton value="Aceptar" action="#{adminTagsBean.hideModal}">
+			  <a4j:support event="oncomplete" reRender="acciones1,couriers,rollos,output,richE,table"/>
+			</h:commandButton>
+			<rich:componentControl for="panelm" attachTo="hidelink" operation="hide" event="onclick" />
+		  </a4j:form>
+        </h:panelGrid>
+	</rich:modalPanel>
+
+     <rich:modalPanel id="panelm2" width="370" height="115" showWhenRendered="#{adminTagsBean.showModalError2}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Gestión Dispositivos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{adminTagsBean.hideModal2}" image="/img/close.png">
+                        <a4j:support event="onclick" action="#{adminTagsBean.hideModal2}" reRender="panelm2"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panelm2" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{adminTagsBean.message}" styleClass="normal"/>
+		<br/>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding-left:12px;">
+        <rich:spacer height="10"/>
+          <a4j:form>
+			<h:commandButton value="Aceptar" action="#{adminTagsBean.hideModal2}">
+			</h:commandButton>
+			<rich:componentControl for="panelm2" attachTo="hidelink" operation="hide" event="onclick" />
+		  </a4j:form>
+        </h:panelGrid>
+	</rich:modalPanel>
+
+    <rich:modalPanel id="confirmacion" width="400" height="400" showWhenRendered="#{adminTagsBean.showConfirmation}" 
+                     style="overflow:auto;" moveable="false" onresize="return false;" >
+        <f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación Enrolar TAG" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form id="fc1">
+					<h:commandButton id="bc1" action="#{adminTagsBean.hideModal}" disabled="false" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<a4j:form id="formE">
+        <rich:panel style="width:350px;padding-right:0px;border:0px;display: block;
+	                 clear: both;text-align: center;margin: auto; ">
+	                 
+		<h:panelGrid columns="1" styleClass="tableBO" style="width:300px;margin:auto;padding-right:0px; ">
+           <h:panelGroup>
+             <h:outputText value="#{adminTagsBean.corfirmMessage}" styleClass="normal"/>
+		     <rich:spacer height="10"/>
+		   </h:panelGroup>
+           <h:panelGroup> 
+		    <rich:dataTable id="dTablec" width="300" style="margin:auto;" value="#{adminTagsBean.listaTemp}" var="tags" rows="20"
+                      onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+	                   rowClasses="white,grey">
+						
+			<rich:column width="150px">
+			  <f:facet name="header">
+				<h:outputText value="PLACA" styleClass="bold"/>
+			  </f:facet>
+			  <h:outputText value="#{tags.vehiclePlate}" styleClass="normal" style="font-size: 12px;"/>
+			</rich:column>
+            <rich:column width="150x">
+			  <f:facet name="header">
+				<h:outputText value="TAG" styleClass="bold"/>
+			  </f:facet>
+			  <h:outputText value="#{tags.deviceFacialId}" 	styleClass="normal" style="font-size: 12px;"/>
+			</rich:column>
+            <f:facet name="footer">
+              <rich:datascroller for="dTablec"/>
+           	</f:facet>
+           </rich:dataTable>
+           
+           </h:panelGroup>
+   
+           <h:panelGroup>
+              <rich:spacer width="63"/>
+             <a4j:commandButton id="bAcceptar2" value="Aceptar" action="#{adminTagsBean.enrolar}">
+                <a4j:support event="onclick" 
+                  onsubmit="document.getElementById('formE:bAcceptar2').disabled=true;document.getElementById('formE:bCancelar2').disabled=true;document.getElementById('fc1:bc1').disabled=true"/>
+                <a4j:support event="oncomplete" reRender="panelm,panelm1"/>
+             </a4j:commandButton>
+             <rich:spacer width="15"/>
+             <a4j:commandButton id="bCancelar2" value="Cancelar" action="#{adminTagsBean.cancelar}" reRender="panelm"/>     
+           </h:panelGroup>
+              	
+	    </h:panelGrid>
+        </rich:panel>
+	    </a4j:form>
+	</rich:modalPanel>
+
+      <rich:modalPanel id="confirmacion2" width="400" height="155" showWhenRendered="#{adminTagsBean.showConfirmation3}"
+                        moveable="false" onresize="return false;" >
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación Reposición TAG" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form id="fc2">
+					<h:commandButton id="bc2" action="#{adminTagsBean.hideModal}" disabled="false" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{adminTagsBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<a4j:form id="formu">
+		  <h:panelGrid columns="3" styleClass="tableBO" style="width:250px; height:150px; margin: auto; padding-right:53px; ">
+	     	<h:panelGroup><div class="span-1"></div></h:panelGroup>
+            <h:panelGroup>
+              <a4j:commandButton id="bCambio1" value="Aceptar" action="#{adminTagsBean.cambiar}">
+                <a4j:support event="onclick" 
+                  onsubmit="document.getElementById('formu:bCambio1').disabled=true;document.getElementById('formu:bCancelar1').disabled=true;document.getElementById('fc2:bc2').disabled=true"/> 
+                <a4j:support event="oncomplete" reRender="panelm,panelm1"/>  
+              </a4j:commandButton>
+              
+            </h:panelGroup>   	
+	     	<h:panelGroup>
+              <a4j:commandButton id="bCancelar1" value="Cancelar" action="#{adminTagsBean.cancelar}" reRender="panelm"/>
+            </h:panelGroup>	     	
+	      </h:panelGrid>
+	    </a4j:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion3" width="400" height="140" showWhenRendered="#{adminTagsBean.showConfirmation2}"
+                        moveable="false" onresize="return false;" >
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación Cambio TAG" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form id="fc3">
+					<h:commandButton id="bc3" action="#{adminTagsBean.hideModal}" disabled="false" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{adminTagsBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<a4j:form id="formulario">
+		  <h:panelGrid columns="3" styleClass="tableBO" style="width:250px; height:150px; margin: auto; padding-right:53px; ">
+	     	<h:panelGroup><div class="span-1"></div></h:panelGroup>
+            <h:panelGroup>
+              <a4j:commandButton id="reponer" value="Aceptar" action="#{adminTagsBean.cambiar}">
+                <a4j:support event="onclick" 
+                  onsubmit="document.getElementById('formulario:reponer').disabled=true;document.getElementById('formulario:cancelar').disabled=true;document.getElementById('fc3:bc3').disabled=true"/>
+                <a4j:support event="oncomplete"  reRender="panelm,panelm1"/> 
+                 
+              </a4j:commandButton>
+            </h:panelGroup>   	
+	     	<h:panelGroup>
+              <a4j:commandButton id="cancelar" value="Cancelar" action="#{adminTagsBean.cancelar}" reRender="panelm"/>
+            </h:panelGroup>	     	
+	      </h:panelGrid>
+	    </a4j:form>
+	</rich:modalPanel>
+
+   <rich:modalPanel id="process" autosized="true" width="35" height="35" moveable="false" resizeable="false">
+     <h:form>
+        <h:commandLink>
+        <h:graphicImage value="/img/procesando.gif" />
+      </h:commandLink>
+     </h:form>
+     
+	</rich:modalPanel> 
+	
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

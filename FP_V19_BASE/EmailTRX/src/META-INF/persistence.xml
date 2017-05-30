@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+	<persistence-unit name="emailTransaction" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>jpa.TbSystemUser</class>
+		<class>jpa.TbAccountType</class>
+		<class>jpa.TbCodeType</class>
+		<class>jpa.TbDistributionType</class>
+		<class>jpa.TbUserStateType</class>
+		<class>jpa.TbAccount</class>
+		<class>jpa.TbOtp</class>
+		<class>jpa.ReUserOtp</class>
+		<class>jpa.TbUmbral</class>
+		<class>jpa.TbUserStateType</class>
+		<class>jpa.TbChanel</class>
+		<class>jpa.TbState</class>
+		<class>jpa.TbPaymentMethod</class>
+		<class>jpa.TbAgreement</class>
+		<class>jpa.ReAgreementChanel</class>
+		<class>jpa.TbRechargeOnline</class>
+		
+	</persistence-unit>
+</persistence>

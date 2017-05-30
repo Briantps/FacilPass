@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Seguimiento de Proceso de Orden de Pedido</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+	<f:subview id="header">
+		<ui:include src="/jsf/content/header.jsp"/>
+	</f:subview>
+	<div class="span-24"><f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/></f:subview>
+	</div>
+	<div class="span-5">
+		<ui:include src="/jsf/menu/sideMenu.jsp"/>
+	</div>
+
+<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<h:form>
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header">
+				<h:outputText value="Seguimiento de Orden de Pedido" styleClass="bold"/>
+			</f:facet>
+			
+			<rich:messages styleClass="bold" style="color: red;"/>
+			<rich:panel>
+				<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+					<h:panelGroup>
+						<h:outputText value="Digite el Número de Orden de Pedido: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:inputText id="codc" value="#{purchaseOrderProcessBean.orderNumber}" 
+							styleClass="normal" maxlength="20" onkeypress="return numOnly(event)" 
+							converterMessage="Debe digitar un número válido." required="true" 
+							requiredMessage="El Campo número de orden de pedido es requerido">
+							<f:convertNumber integerOnly="true"/>
+							<f:validator validatorId="blank"/> 
+						</h:inputText>
+					</h:panelGroup>
+					<h:outputText/>
+					<h:commandButton value="Buscar" action="#{purchaseOrderProcessBean.search}">
+						<a4j:support event="oncomplete" reRender="panelMessage,panelData"/>
+					</h:commandButton>
+				</h:panelGrid>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+			</rich:panel>
+
+			<rich:spacer height="20"/>
+			
+			<a4j:outputPanel id="panelMessage" layout="inline">
+			 	<rich:panel id="pm" rendered="#{purchaseOrderProcessBean.showMessage}">
+			 		<h:outputText id="message" value="#{purchaseOrderProcessBean.message}" 
+						styleClass="bold" style="color: red; font-size: 16"/>
+				</rich:panel>
+			</a4j:outputPanel>
+			
+			<a4j:outputPanel id="panelData" layout="inline">
+				<rich:panel id="pd" rendered="#{purchaseOrderProcessBean.showData}">
+					<f:facet name="header">
+						<h:outputText styleClass="bold" value="Detalle de Seguimientos de Proceso"/>
+					</f:facet>
+					
+					<rich:spacer height="10"/>
+					
+					<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+	                    <h:outputText value="No. de Orden de Pedido: " styleClass="bold"/>
+	                    <h:outputText value="#{purchaseOrderProcessBean.order.order.puchaseOrderNumber} " styleClass="normal"/>
+	                    <h:outputText value="Fecha de Orden de Pedido: " styleClass="bold"/>
+	                    <h:outputText value="#{purchaseOrderProcessBean.order.order.purchaseOrderDate}" styleClass="normal"
+	                    	converter="TimeStampToStringDateConverter"/>
+	                    <h:outputText value="Estado Actual: " styleClass="bold"/>
+	                    <h:panelGroup>
+	                    	<h:outputText value="Nueva" styleClass="normal"
+	                    		rendered="#{purchaseOrderProcessBean.order.order.purchaseOrderState == 0}" />
+	                    	<h:outputText value="Detallada" styleClass="normal"
+	                    		rendered="#{purchaseOrderProcessBean.order.order.purchaseOrderState == 1}" />
+	                    </h:panelGroup>
+	                    
+               		</h:panelGrid>
+					
+					<rich:spacer height="10"/>
+				
+					<rich:dataTable id="datalist" value="#{purchaseOrderProcessBean.details}" 
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+								var="list" rows="20" width="650px" rowClasses="grey,">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Detalle"/>
+							</f:facet>
+							<h:outputText value="#{list.processTrackDetailMessage}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Fecha Detalle"/>
+							</f:facet>
+							<h:outputText value="#{list.processTrackDetailDate}" styleClass="normal" 
+								converter="TimeStampToStringDateConverter"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Estado"/>
+							</f:facet>
+							<h:outputText value="Abierto" rendered="#{list.processTrackDetailState==0}" styleClass="normal"/>
+							<h:outputText value="Cerrado" rendered="#{list.processTrackDetailState==1}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Usuario de Creación"/>
+							</f:facet>
+							<h:outputText value="#{list.tbSystemUser.userNames} #{list.tbSystemUser.userSecondNames}" styleClass="normal" 
+	                    			rendered="#{list.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+	                    	<h:outputText value="#{list.tbSystemUser.userNames}" styleClass="normal" 
+	                    			rendered="#{list.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+						</rich:column>
+						<f:facet name="footer">
+							<rich:datascroller/>
+						</f:facet>
+					</rich:dataTable>
+					
+				</rich:panel>
+			</a4j:outputPanel>
+			
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>	
+</div>
+	<f:subview id="footer">
+		<ui:include src="/jsf/content/footer.jsp"/>
+	</f:subview>
+</f:view>
+</div>
+</body>
+</html>

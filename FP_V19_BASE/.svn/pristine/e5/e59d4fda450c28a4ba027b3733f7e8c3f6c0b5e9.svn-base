@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Registro de Dispositivo Maestro</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5"><ui:include src="../menu/sideMenu.jsp"/></div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+	<h:form>
+		<rich:panel styleClass="richPanel" >
+			<f:facet name="header">
+				<h:outputText value="Registrar Maestro" styleClass="bold"/>
+			</f:facet>
+			
+			<rich:panel style="background-color: #FBFBFB">
+				<fieldset style="background-color: white;">
+					<legend>Tipo Operación</legend>
+					<h:panelGrid columns="1">
+						<h:selectOneRadio value="#{masterBean.operationTypeId}" styleClass="bold">
+							<f:selectItems value="#{masterBean.operationTypes}"/>
+							<a4j:support event="onchange" action="#{masterBean.changeTypeOperation}" reRender="lcnv,typedp,causesp,blackListP,svehi,panelradc,clientallpanel,panelrad"/>
+						</h:selectOneRadio>
+					</h:panelGrid>
+				</fieldset>	
+				
+				<fieldset style="background-color: white;">
+					<legend>Vehículo</legend>
+					<h:panelGrid columns="2">
+						<a4j:outputPanel id="lcnv">
+							<h:commandLink value="Crear Vehículo" action="#{masterBean.initCreateVehicle}" 
+								rendered="#{masterBean.newMaster}" styleClass="bold">
+								<a4j:support event="oncomplete" reRender="svehi,panelradc,clientallpanel"/>
+							</h:commandLink>
+						</a4j:outputPanel>
+						<h:commandLink value="Buscar Vehículo" action="#{masterBean.initSearchVehicle}" styleClass="bold">
+							<a4j:support event="oncomplete" reRender="svehi,panelradc,clientallpanel"/>
+						</h:commandLink>
+					</h:panelGrid>
+				</fieldset>	
+				
+				<a4j:outputPanel id="svehi" >
+					<rich:panel rendered="#{masterBean.showVehicle}">
+					<fieldset style="background-color: white;">
+						<legend>Datos Vehículo</legend>
+						<h:panelGrid columns="6">
+							<h:outputText value="Placa: " styleClass="bold"/>
+							<h:outputText value="#{masterBean.vehicleObject.vehiclePlate}" styleClass="normal"/>
+							<h:outputText value="Núm Chasis: " styleClass="bold"/>
+							<h:outputText value="#{masterBean.vehicleObject.vehicleChassis}" styleClass="normal"/>
+							<h:outputText value="Cód Interno: " styleClass="bold"/>
+							<h:outputText value="#{masterBean.vehicleObject.vehicleInternalCode}" styleClass="normal"/>
+							<h:outputText value="Color: " styleClass="bold"/>
+							<h:outputText value="#{masterBean.vehicleObject.tbColor.colorName}" styleClass="normal"/>
+							<h:outputText value="Marca: " styleClass="bold"/>
+							<h:outputText value="#{masterBean.vehicleObject.tbBrand.brandName}" styleClass="normal"/>
+							<h:outputText value="Categoría: " styleClass="bold"/>
+							<h:outputText value="#{masterBean.vehicleObject.tbCategory.categoryName}" styleClass="normal"/>
+						</h:panelGrid>
+					</fieldset>	
+					</rich:panel>
+				</a4j:outputPanel>
+				<rich:spacer height="10"/>
+				
+				<a4j:outputPanel id="panelradc">
+					<rich:panel style="background-color: #FBFBFB" rendered="#{masterBean.showVehicle}">
+						<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+							styleClass="tableBO"  columns="4" >
+							<h:outputText value="Núm. Radicación: " styleClass="bold"/>
+							<h:inputText value="#{masterBean.filingNumber}" maxlength="20"/>
+							<h:outputText value="Fecha Radicado: " styleClass="bold"/>	
+							<rich:calendar id="beg_date" value="#{masterBean.filingDate}"                 		
+						    	cellWidth="26px" cellHeight="22px" style="width:150px" 
+						        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+						    </rich:calendar>
+						    <h:outputText value=""/>
+						    <h:outputText value=""/>		
+						    <h:outputText value="Fecha Recibido COR: " styleClass="bold"/>	
+						    <rich:calendar id="cor_date" value="#{masterBean.corReceivedDate}"                 		
+						    	cellWidth="26px" cellHeight="22px" style="width:150px" 
+						        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+						    </rich:calendar>				
+						</h:panelGrid>
+				
+						<fieldset style="background-color: white;">
+							<legend>Tipo Personalización</legend>
+							<h:panelGrid columns="2">
+								<h:selectOneRadio value="#{masterBean.idType}" styleClass="bold">
+									<f:selectItems value="#{masterBean.typeList}"/>
+									<a4j:support ajaxSingle="true" event="onchange" reRender="eetype,pdep,stationp,pdtable,regionp,panelrad,clientallpanel"/>
+								</h:selectOneRadio>
+								<a4j:outputPanel id="eetype">
+									<h:selectOneMenu value="#{masterBean.especialExemptId}" style="width: 180px">
+										<f:selectItems value="#{masterBean.especialExemptList}"/>
+										<a4j:support ajaxSingle="true" event="onchange" reRender="pdep"/>
+									</h:selectOneMenu>
+								</a4j:outputPanel>
+								<a4j:outputPanel id="pdep">
+									<h:panelGrid columns="2">
+										<h:outputText value="Dependencia: " styleClass="bold" rendered="#{masterBean.exempt}"/>
+										<h:selectOneMenu value="#{masterBean.exemptOfficeId}" style="width: 220px" rendered="#{masterBean.exempt}">
+											<f:selectItems value="#{masterBean.exemptOfficeList}"/>
+										</h:selectOneMenu>
+									</h:panelGrid>
+								</a4j:outputPanel>
+							</h:panelGrid>
+						</fieldset>	
+					</rich:panel>
+				</a4j:outputPanel>
+				
+				<rich:spacer height="10"/>
+				
+				<a4j:outputPanel id="clientallpanel" >
+					<rich:panel rendered="#{masterBean.idType!=null}">
+					<fieldset style="background-color: white;">
+						<legend>Cliente</legend>
+						<h:panelGrid columns="2">
+							<h:outputText value="Seleccione el Cliente: " styleClass="bold"/>
+							<h:selectOneMenu id="sidcli" value="#{masterBean.idClientAccount}" style="width: 300px;" styleClass="normal">
+								<f:selectItems value="#{masterBean.clientNames}"/>
+								<a4j:support ajaxSingle="true" event="onchange" action="#{masterBean.changeClient}" reRender="dataClient"/>
+							</h:selectOneMenu>
+						</h:panelGrid>
+						<a4j:outputPanel id="dataClient">
+							<h:panelGrid columns="4" rendered="#{masterBean.showClient}">
+								<h:outputText value="Cliente: " styleClass="bold"/>
+			                    <h:panelGroup>
+			                    	<h:outputText value="#{masterBean.client.userNames} #{masterBean.client.userSecondNames}" styleClass="normal" 
+			                    			rendered="#{masterBean.client.tbCodeType.codeTypeId!=3}"/>
+			                    	<h:outputText value="#{masterBean.client.userNames}" styleClass="normal" 
+			                    			rendered="#{masterBean.client.tbCodeType.codeTypeId==3}"/>
+			                    </h:panelGroup>
+			                    <h:outputText value="#{msg.NumDoc}: " styleClass="bold"></h:outputText>
+			                    <h:outputText value="#{masterBean.client.userCode} - #{masterBean.client.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+							</h:panelGrid>
+						</a4j:outputPanel>
+					</fieldset>	
+				
+				<fieldset style="background-color: white;">
+					<legend>Categoría</legend>
+					<h:panelGrid columns="2">
+						<h:outputText value="Seleccione la Categoría: " styleClass="bold"/>
+						<h:selectOneMenu id="cse" value="#{masterBean.idCategory}" style="width: 300px;" styleClass="normal">
+							<f:selectItems value="#{masterBean.categories}"/>
+						</h:selectOneMenu>
+					</h:panelGrid>
+				</fieldset>	
+				
+				<fieldset style="background-color: white;">
+					<legend>Regional</legend>
+					<h:panelGrid columns="4">
+						<a4j:outputPanel id="regionp">
+							<h:panelGrid columns="2" rendered="#{masterBean.exempt}">
+								<h:outputText value="Regional: " styleClass="bold"/>
+								<h:selectOneMenu id="dpsel" value="#{masterBean.departmentId}" style="width: 150px;" styleClass="normal">
+									<f:selectItems value="#{masterBean.departments}"/>
+								</h:selectOneMenu>
+							</h:panelGrid>
+						</a4j:outputPanel>
+						<a4j:outputPanel id="stationp">
+							<h:panelGrid columns="2" rendered="#{masterBean.special}">
+								<h:outputText/>
+								<h:commandLink value="Agregar Peaje" styleClass="bold" action="#{masterBean.initAddStation}">
+								</h:commandLink>
+							</h:panelGrid>
+						</a4j:outputPanel>
+						<a4j:outputPanel id="pdtable">
+							<h:panelGrid rendered="#{masterBean.special}"> 
+								<rich:dataTable id="datalist" value="#{masterBean.stationList}" 
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+									var="list" rows="10" width="650px" rowClasses="white,white"
+									rendered="#{masterBean.showStations}">
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText styleClass="bold" value="Regional"/>
+										</f:facet>
+										<h:outputText value="#{list.tbDepartment.departmentName}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText styleClass="bold" value="Peaje"/>
+										</f:facet>
+										<h:outputText value="#{list.stationBOName}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText styleClass="bold" value=""/>
+										</f:facet>
+										<h:commandLink value="Quitar" action="#{masterBean.removeStation}" styleClass="bold">
+											<f:setPropertyActionListener value="#{list.stationBOId}" target="#{masterBean.idStationToDelete}"/>
+											<a4j:support event="oncomplete" reRender="pdtable"/>
+										</h:commandLink>
+									</rich:column>
+									<f:facet name="footer">
+										<rich:datascroller/>
+									</f:facet>
+							</rich:dataTable>
+							</h:panelGrid>
+						</a4j:outputPanel>
+					</h:panelGrid>
+				</fieldset>	
+				</rich:panel>
+				</a4j:outputPanel>
+			</rich:panel>
+			
+			<rich:spacer height="5"/>
+			<a4j:outputPanel id="panelrad">
+				<rich:spacer height="5"/>
+				<rich:panel style="background-color: #FBFBFB" rendered="#{masterBean.idType!=null}">
+					<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+						styleClass="tableBO"  columns="6" >
+						<h:outputText value="Núm Oficio: " styleClass="bold"/>
+						<h:inputText value="#{masterBean.officialDocumentNumber}" maxlength="20" style="width: 115px"/>
+						<h:outputText value="Fecha Oficio: " styleClass="bold"/>	
+						<rich:calendar id="offddate" value="#{masterBean.officialDocuementDate}"                 		
+					    	cellWidth="26px" cellHeight="22px" style="width: 113px" 
+					        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+					    </rich:calendar>
+					    <h:outputText value="Pago: " styleClass="bold"/>
+					    <h:selectOneMenu value="#{masterBean.payOption}" styleClass="normal" style="width: 53px">
+					    	<f:selectItems value="#{masterBean.payOptions}"/>
+					    	<a4j:support event="onchange" reRender="psurplus"/>
+					    </h:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+						styleClass="tableBO"  columns="3" >
+						<a4j:outputPanel id="typedp">
+							<h:panelGroup style="width: 150px" rendered="#{masterBean.newMaster}">
+								<h:outputText value="Digitado: " styleClass="bold"/>
+								<h:outputText value=" " styleClass="bold"/>
+								 <h:selectOneMenu value="#{masterBean.typedOption}" styleClass="normal">
+							    	<f:selectItems value="#{masterBean.typedOptions}"/>
+							    </h:selectOneMenu>	
+							</h:panelGroup>
+						</a4j:outputPanel>
+						<a4j:outputPanel id="causesp">
+							<h:panelGroup style="width: 150px" rendered="#{masterBean.replacement}">
+								<h:outputText value="Causa: " styleClass="bold"/>
+								<h:outputText value=" " styleClass="bold"/>
+								 <h:selectOneMenu value="#{masterBean.causeId}" styleClass="normal">
+							    	<f:selectItems value="#{masterBean.causes}"/>
+							    </h:selectOneMenu>	
+							</h:panelGroup>
+						</a4j:outputPanel>
+					    <a4j:outputPanel id="psurplus" style="width: 350px">
+					    	<h:panelGrid columns="2" rendered="#{masterBean.surplus}">
+						    	<h:outputText value="Valor Excedente: " styleClass="bold"/>	
+							    <h:inputText value="#{masterBean.surplusValue}" maxlength="15"
+							    	onkeypress="return numOnly(event)" converterMessage="Debe digitar un número válido.">
+									<f:convertNumber integerOnly="true"/>
+								</h:inputText>	
+							</h:panelGrid>
+					    </a4j:outputPanel>
+					</h:panelGrid>
+					
+					<a4j:outputPanel id="blackListP">
+						<rich:panel rendered="#{masterBean.replacement}" style="background-color: white;">
+							<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+								styleClass="tableBO"  columns="1" >
+								<h:outputText value="Lista Negra: " styleClass="bold"/>
+								<h:selectOneMenu value="#{masterBean.blackListOption}">
+									<f:selectItems value="#{masterBean.blackListOptions}"/>
+									<a4j:support event="onchange" reRender="blackListy"/>
+								</h:selectOneMenu>
+								<h:panelGroup>
+									<h:outputText value="ID Tarjeta Anterior: " styleClass="bold"/>
+									<h:inputText value=" #{masterBean.oldDevice.deviceCode}" styleClass="bold" disabled="true"/>
+									<h:outputText value=" ID Facial Tarjeta Anterior: " styleClass="bold"/>
+									<h:inputText value=" #{masterBean.oldDevice.deviceFacialId}" styleClass="bold" disabled="true"/>
+								</h:panelGroup>
+								
+								<a4j:outputPanel id="blackListy">
+									<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+										styleClass="tableBO"  columns="4" rendered="#{masterBean.blackList}">
+										<h:outputText value="Fecha Ingreso: " styleClass="bold"/>	
+										<rich:calendar id="offddateblin" value="#{masterBean.blackListDate}"                 		
+									    	cellWidth="26px" cellHeight="22px" style="width: 100px" 
+									        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+									    </rich:calendar>
+										<h:outputText value="Núm Oficio: " styleClass="bold"/>
+										<h:inputText value="#{masterBean.blackListOfficialNumber}" maxlength="20" style="width: 77px"/>
+										<h:outputText value="Fecha Oficio: " styleClass="bold"/>	
+										<rich:calendar id="offddatebl" value="#{masterBean.blackListOfficialDate}"                 		
+									    	cellWidth="26px" cellHeight="22px" style="width: 100px" 
+									        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+									    </rich:calendar>
+									    <h:outputText value="Denuncio: " styleClass="bold"/>
+									    <h:selectOneMenu value="#{masterBean.reported}" styleClass="normal">
+									    	<f:selectItems value="#{masterBean.reportedOptions}"/>
+									    </h:selectOneMenu>
+									    <h:outputText value="Dev TIE: " styleClass="bold"/>
+									     <h:selectOneMenu value="#{masterBean.returned}" styleClass="normal">
+									    	<f:selectItems value="#{masterBean.returnedOptions}"/>
+									    </h:selectOneMenu>
+									</h:panelGrid>
+								</a4j:outputPanel>
+							</h:panelGrid>
+						</rich:panel>
+					</a4j:outputPanel>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Observaciones: " styleClass="bold"/>
+						<h:inputTextarea styleClass="normal" value="#{masterBean.observation}"
+							onkeyup="this.value = this.value.substring(0, 3500);" style="height: 73px; width: 460px"/>
+						<h:outputText value=""/>
+						<h:commandButton value="Guardar" action="#{masterBean.initSave}">
+						</h:commandButton>
+					</h:panelGrid>
+				</rich:panel>
+			</a4j:outputPanel>
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>
+
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{masterBean.modal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Maestro" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{masterBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{masterBean.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="150" showWhenRendered="#{masterBean.confirmationShow}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{masterBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{masterBean.confirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{masterBean.createVehicle}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{masterBean.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="confirmacionSave" width="350" height="150" showWhenRendered="#{masterBean.confirmationSaveShow}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{masterBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{masterBean.confirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{masterBean.save}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{masterBean.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="addPanel" autosized="true" width="450" 
+		showWhenRendered="#{masterBean.showAddVehicle}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:outputText value="Agregar vehiculo" styleClass="bold"/>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{masterBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<f:loadBundle basename="staticText.messages" var="msg" />
+			<h:messages style="color:red;" styleClass="bold"/>
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" columnClasses="paddingCol">
+					<h:panelGroup>
+						<h:outputText value="Placa: " styleClass="bold" />
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>
+					<h:inputText value="#{masterBean.vehiclePlate}" maxlength="6" required="true"
+						requiredMessage="La Placa Es Requerida.">
+						<f:validator validatorId="plate"/>
+					</h:inputText>
+                    
+                    <h:outputText value="Chasis: " styleClass="bold" />
+					<h:inputText value="#{masterBean.vehicleChassis}" maxlength="20">
+						<f:validator validatorId="blank"/>
+					</h:inputText>
+					
+					<h:outputText value="Cód. Interno: " styleClass="bold" />
+					<h:inputText value="#{masterBean.vehicleInternalCode}" maxlength="10">
+						<f:validator validatorId="blank"/>
+					</h:inputText>
+					
+					<h:outputText value="Color: " styleClass="bold" />
+					<h:selectOneMenu styleClass="normal" value="#{masterBean.colorId}" style="width: 157px">
+						<f:selectItems value="#{masterBean.colorsList}" />
+					</h:selectOneMenu>
+					
+					<h:outputText value="Marca: " styleClass="bold" />
+					<h:selectOneMenu styleClass="normal" value="#{masterBean.brandId}" style="width: 157px">
+						<f:selectItems value="#{masterBean.brandList}"/>
+					</h:selectOneMenu>
+					
+					<h:panelGroup>
+						<h:outputText value="Categoría: " styleClass="bold" />
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>						
+					<h:selectOneMenu value="#{masterBean.categoryId}" style="width: 157px">
+						<f:selectItems value="#{masterBean.categoryList}"/>
+					</h:selectOneMenu>
+					<h:outputText/>
+					<h:commandButton value="Guardar" action="#{masterBean.initConfirm}" />
+				</h:panelGrid>
+				<h:panelGroup>
+      				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="searchPanel" autosized="true" width="450" 
+		showWhenRendered="#{masterBean.showSearchVehicle}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:outputText value="Buscar Vehículo" styleClass="bold"/>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{masterBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<f:loadBundle basename="staticText.messages" var="msg" />
+			<rich:messages style="color:red;" styleClass="bold"/>
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" columnClasses="paddingCol">
+					<h:panelGroup>
+						<h:outputText value="Digite la Placa: " styleClass="bold" />
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>						
+					<h:inputText value="#{masterBean.vehiclePlate}" maxlength="6" required="true"
+						requiredMessage="Digite la Placa.">
+						<f:validator validatorId="plate"/>
+					</h:inputText>
+					<h:outputText/>
+					<h:commandButton value="Buscar" action="#{masterBean.searchVehicle}" />
+				</h:panelGrid>
+				<h:panelGroup>
+      				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="addStation" autosized="true" width="450" 
+		showWhenRendered="#{masterBean.showAddStation}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:outputText value="Peaje Adicional" styleClass="bold"/>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{masterBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<rich:messages style="color:red;" styleClass="bold"/>
+			<h:panelGrid columns="4">
+					<h:outputText value="Regional: " styleClass="bold"/>
+					<h:selectOneMenu id="dpselta" value="#{masterBean.departmentIdA}" style="width: 150px;" styleClass="normal">
+						<f:selectItems value="#{masterBean.departmentsA}"/>
+						<a4j:support event="onchange" reRender="stasela"/>
+					</h:selectOneMenu>
+					<h:outputText value="Peaje: " styleClass="bold"/>
+					<h:selectOneMenu id="stasela" value="#{masterBean.stationIdA}" style="width: 150px;" styleClass="normal">
+						<f:selectItems value="#{masterBean.stationsA}"/>
+					</h:selectOneMenu>
+					<h:outputText/>
+					<h:commandButton value="Adicionar" action="#{masterBean.addStation}" >
+						<a4j:support ajaxSingle="true" event="oncomplete" reRender="pdtable"/>
+					</h:commandButton>
+			</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

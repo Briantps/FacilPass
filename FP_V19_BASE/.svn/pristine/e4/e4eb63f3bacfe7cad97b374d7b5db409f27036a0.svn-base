@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Detallar Orden de Pedido</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;" styleClass="bold"/>
+	<a4j:form>
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header"><h:outputText value="Solicitud de Operación" styleClass="bold"/></f:facet>				
+			<rich:panel>
+				<h:panelGrid styleClass="tableBO" columns="3" style="size 300px; margin: auto; padding:10px; ">
+					<h:panelGroup>
+						<h:outputText value="Número de Orden de Pedido: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:inputText id="numO" value="#{purchaseBean.orderNumber}" styleClass="normal"
+							converterMessage="Debe digitar el Número de La Orden." required="true"
+							onkeypress="return numOnly(event)" maxlength="50"
+							requiredMessage="Debe Digitar el Número de Orden.">
+							<f:convertNumber integerOnly="true"/>
+							<f:validator validatorId="blank"/>
+						</h:inputText>
+					</h:panelGroup>
+					<h:commandButton value="Buscar" action="#{purchaseBean.search}"/>
+				</h:panelGrid>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>				
+			</rich:panel>
+			
+			<rich:spacer height="5"/>
+
+			<a4j:outputPanel id="panelMessage" layout="inline">
+			 	<rich:panel id="pm" rendered="#{purchaseBean.showMessage}">
+			 		<h:outputText id="message" value="No hay información para la Orden de Pedido Digitada o ya se ha hecho la solicitud." 
+						styleClass="bold" style="color: red; font-size: 16"/>
+				</rich:panel>
+			</a4j:outputPanel>
+			
+			<a4j:outputPanel id="panelData" layout="inline">
+			 	<rich:panel id="pd" rendered="#{purchaseBean.showData}">
+			 		<h:panelGrid styleClass="tableBO" columns="4" style="margin: auto; size: 300px; padding:10px;">
+	                    <h:outputText value="# Orden: " styleClass="bold"/>
+	                    <h:outputText value="#{purchaseBean.order.order.puchaseOrderNumber}" styleClass="bold"/>
+	                    <h:outputText value="Número de Operaciones: " styleClass="bold"/>
+               			<h:outputText value="#{purchaseBean.numOper}" styleClass="bold" />
+	                    <h:outputText value="Cliente: " styleClass="bold"></h:outputText>
+	                    <h:panelGroup>
+	                    	<h:outputText value="#{purchaseBean.order.order.tbUserData.tbSystemUser.userNames} #{purchaseBean.order.order.tbUserData.tbSystemUser.userSecondNames}" styleClass="normal" 
+	                    			rendered="#{purchaseBean.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+	                    	<h:outputText value="#{purchaseBean.order.order.tbUserData.tbSystemUser.userNames}" styleClass="normal" 
+	                    			rendered="#{purchaseBean.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+	                    </h:panelGroup>
+	                    <h:outputText value="#{msg.NumDoc}: " styleClass="bold"></h:outputText>
+	                    <h:outputText value="#{purchaseBean.order.order.tbUserData.tbSystemUser.userCode} - #{purchaseBean.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+               			<h:outputText value="Dependencia: " styleClass="bold"/>
+               			<h:outputText value="#{purchaseBean.order.order.tbUserData.userDataOfficeName}" styleClass="normal"/>
+               			<h:outputText value="Ciudad: " styleClass="bold"/>
+               			<h:outputText id="city" value="#{purchaseBean.order.order.tbUserData.tbMunicipality.municipalityName}" styleClass="normal"/>
+               			<h:outputText value="Número de Factura: " styleClass="bold"/>
+               			<h:inputText id="invNum" value="#{purchaseBean.invoiceNumber}" styleClass="normal" maxlength="20"/>
+               			<h:outputText value=""/>
+               			<h:outputText value=""/>
+               			<h:outputText value="Valor Total: " styleClass="bold"/>
+						<h:outputText value="#{purchaseBean.order.valueTo}" styleClass="bold">
+							<f:convertNumber pattern="$#,##0.00"/>
+						</h:outputText>
+						<h:outputText value="Saldo de La Cuenta: " styleClass="bold" rendered="#{purchaseBean.order.allowDetail}"/>
+						<h:outputText value="#{purchaseBean.order.tbAccount.accountBalance}" styleClass="bold" rendered="#{purchaseBean.order.allowDetail}">
+							<f:convertNumber pattern="$#,##0.00"/>
+						</h:outputText>
+               			<h:outputText rendered="#{!purchaseBean.order.allowDetail}"/><h:outputText rendered="#{!purchaseBean.order.allowDetail}"/>
+               			<h:outputText rendered="#{purchaseBean.order.transfer}"/>
+               			<h:outputText rendered="#{purchaseBean.order.transfer}"/>
+               			<h:outputText rendered="#{purchaseBean.order.transfer}"/>
+               			<h:panelGroup rendered="#{purchaseBean.order.transfer}">
+               				<h:commandLink value="Registrar Traslado" action="#{purchaseBean.initTrans}" 
+               					styleClass="bold" rendered="#{purchaseBean.order.transfer}"/>
+               			</h:panelGroup>
+               			<h:outputText/><h:outputText/><h:outputText/>
+               			<h:panelGroup>
+               				<h:commandLink value="Seleccione la Cuenta de Cliente" action="#{purchaseBean.initValue}" 
+               					styleClass="bold" rendered="#{purchaseBean.order.account}"/>
+               				<h:commandLink value="Información de la Cuenta" action="#{purchaseBean.initAccountDetail}" 
+               					styleClass="bold" rendered="#{purchaseBean.order.showAccountDetail}"/>
+               			</h:panelGroup>
+               		</h:panelGrid>
+               		<rich:spacer height="5"/>
+               		<rich:separator lineType="double" height="3"/>
+               		<rich:spacer height="5"/>
+               		<rich:dataTable id="datalist" value="#{purchaseBean.order.toDetailList}"
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'" rendered="#{purchaseBean.order.allowDetail}"
+						onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+						var="list" rows="20" width="600px" rowClasses="white,white">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Tipo de Operación" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value=" #{list.detail.tbOperationType.operationTypeName}" 
+								styleClass="normal" style="font-size: 15px;"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Valor Operación" styleClass="bold"/>
+							</f:facet>
+							<h:inputText value="#{list.valueTo}" maxlength="10" style="width: 150px;"
+							 disabled="#{list.detail.detailState == 3}"	onkeypress="return numOnly(event)">
+							</h:inputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Id. Facial" styleClass="bold"/>
+							</f:facet>
+							<h:selectOneMenu value="#{list.idDevice}" style="width: 130px;" styleClass="normal">
+								<f:selectItems value="#{purchaseBean.devices}"/>
+							</h:selectOneMenu>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Punto Operación" styleClass="bold"/>
+							</f:facet>
+							<h:selectOneMenu value="#{list.idStation}" style="width: 130px;" styleClass="normal">
+								<f:selectItems value="#{purchaseBean.stations}"/>
+							</h:selectOneMenu>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="" styleClass="bold"/>
+							</f:facet>
+							<h:commandLink value="Recargar" styleClass="bold" action="#{purchaseBean.initRecharge}" 
+								rendered="#{list.detail.tbOperationType.operationTypeId == 1 and list.detail.detailState != 3}">
+								<f:setPropertyActionListener value="#{list.detail.purchaseOrderDetailId}" 
+									target="#{purchaseBean.idDetail}"/>
+							</h:commandLink>							
+						</rich:column>
+						<f:facet name="footer">
+							<rich:datascroller/>
+						</f:facet>
+					</rich:dataTable>
+					<h:panelGrid styleClass="tableBO" columns="3" rendered="#{purchaseBean.order.allowDetail}"
+						style="size 300px; margin: auto; padding:10px; ">
+						<h:commandButton value="Guardar" action="#{purchaseBean.initSaveDetails}">
+						</h:commandButton>
+					</h:panelGrid>
+					<f:subview id="rtranre">
+						<ui:include src="/jsf/purchasing/recharge.jspx"></ui:include>
+					</f:subview>
+				</rich:panel>
+			</a4j:outputPanel>
+		</rich:panel>
+	</a4j:form>
+	<rich:spacer height="20"/>	
+		
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{purchaseBean.showModal}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Orden de Pedido" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{purchaseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{purchaseBean.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="150" showWhenRendered="#{purchaseBean.confirmationShow}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{purchaseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{purchaseBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{purchaseBean.saveAccountRelation}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{purchaseBean.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacionRec" width="350" height="150" showWhenRendered="#{purchaseBean.confirmRecharge}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{purchaseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{purchaseBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{purchaseBean.recharge}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{purchaseBean.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacionT" width="350" height="150" showWhenRendered="#{purchaseBean.confirmationShowT}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{purchaseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{purchaseBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{purchaseBean.consigT}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{purchaseBean.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacionsT" width="350" height="150" showWhenRendered="#{purchaseBean.confirmSend}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{purchaseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{purchaseBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{purchaseBean.save}">
+	     			<a4j:support event="oncomplete" reRender="panelMessage, panelData"/>
+	     		</h:commandButton>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{purchaseBean.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panelcd" width="350" autosized="true" showWhenRendered="#{purchaseBean.showAccountDetail}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Detalle Cuenta" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{purchaseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<a4j:form>
+		<f:subview id="deconsig">
+			<ui:include src="/jsf/purchasing/consigDetail.jspx"></ui:include>
+		</f:subview>
+		</a4j:form>
+		<br />
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="panelv" width="350" autosized="true" showWhenRendered="#{purchaseBean.showValue}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Cuentas del Cliente" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{purchaseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>		
+		<f:subview id="rvalue">
+			<ui:include src="/jsf/purchasing/value.jspx"></ui:include>
+		</f:subview>
+		<br />
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="panelt" width="350" autosized="true" showWhenRendered="#{purchaseBean.showTran}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Registar Valor" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{purchaseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>		
+		<f:subview id="rtran">
+			<ui:include src="/jsf/purchasing/transfer.jspx"></ui:include>
+		</f:subview>
+		<br/>
+	</rich:modalPanel>	
+	
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

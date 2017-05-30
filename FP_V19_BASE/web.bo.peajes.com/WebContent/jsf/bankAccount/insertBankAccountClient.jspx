@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head></head>
+<body>
+<div class="container">
+<f:view>
+<div>
+    <f:loadBundle basename="staticText.messages" var="msg" />
+	<h:form id="Formulario">
+		<rich:panel style="width:365px;">
+			<table width="100%">
+				<tr>
+					<td>
+						<h:outputLabel value="#{msg.NumDoc}: " styleClass="bold"/>
+					</td>
+					<td>
+						<h:inputText value="#{bankAccountClientBean.userCode}" disabled="true" style="width: 173px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h:outputText value="Entidad: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td>
+						<h:selectOneMenu value="#{bankAccountClientBean.idBank}" style="width: 175px;">
+							<f:selectItems value="#{bankAccountClientBean.banks}"/>
+						</h:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h:outputText value="#{msg.TipProd}: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td>
+						<h:selectOneMenu value="#{bankAccountClientBean.bankAccountType}" style="width: 175px;">
+							<f:selectItems value="#{bankAccountClientBean.bankAccountTypes}"/>
+						</h:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td width="100%">
+						<h:outputText value="#{msg.UltDig}: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td>						
+					    <h:inputText id="bankAccountNumber" value="#{bankAccountClientBean.bankAccountNumber}" 
+					                 onkeypress="return solonumeros(event)" maxlength="4" style="width: 173px;">
+						</h:inputText>
+					</td>
+				</tr>
+				<!--<tr>
+				    <td width="100%">
+				    	<h:outputText value="#{msg.VrRecargaI}: " styleClass="bold"/>
+				    </td>
+					<td>
+					   	<h:inputText id="initValue" value="#{bankAccountClientBean.valueRechText}" style="width:173px" 
+					   	onkeypress="return solonumeros(event)" maxlength="15" 
+			   	  		onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">		   
+	                   </h:inputText> 
+					</td>
+				</tr>  -->
+				<tr>
+					<td>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+					</td>
+					<td width="30%">
+						<h:commandButton value="Definir" action="#{bankAccountClientBean.addBankAccountClient}" styleClass="normal" style="width: 80px"/>
+					</td>	
+				</tr>
+			</table>
+		</rich:panel>
+	</h:form>
+
+	<rich:modalPanel id="confirmacionInsert" width="350" height="115" 
+	showWhenRendered="#{bankAccountClientBean.showConfirmation}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{bankAccountClientBean.hideModal2}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{bankAccountClientBean.corfirmMessage}" styleClass="normal"/>
+		
+		<h:outputText value="#{rechargeClient.msgModal}" styleClass="normal"/>
+		<a4j:form id="form">
+		<h:message for="send"/>
+		<rich:spacer height="10"/>
+		  <div align="center">
+			<a4j:region id="editando">
+	     		<a4j:commandButton id="send" value="Aceptar" action="#{bankAccountClientBean.insertBankAccountClient}" style="width: 80px">
+	                 <a4j:support event="oncomplete" reRender="panelm"/>
+		           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+		   			</a4j:status>
+	            </a4j:commandButton>
+			</a4j:region>
+			<rich:spacer width="20"/>
+				<h:commandButton value="Cancelar" action="#{bankAccountClientBean.hideModal2}" style="width: 80px"/>
+			 </div>
+	    </a4j:form>
+	</rich:modalPanel>			
+	
+	
+	<rich:modalPanel id="panelm" width="350" height="115" 
+		showWhenRendered="#{bankAccountClientBean.showModalValidate}" onresize="return false;" moveable="false">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Mensaje - Definir Producto Bancario" styleClass="bold"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup> 
+					<a4j:form>
+						<h:commandButton action="#{bankAccountClientBean.hideModal2}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			<h:outputText value="#{bankAccountClientBean.modalMessage}" styleClass="normal"/>
+			<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{bankAccountClientBean.hideModal2}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+    		</h:form>	
+			<br/>
+		</rich:modalPanel>	
+		
+	
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+	</rich:modalPanel> 
+
+</div>
+</f:view>
+</div>
+</body>
+</html>

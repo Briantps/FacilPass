@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<title>Permisos</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>		
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>		
+				<div class="bkContents span-18 prepend-1">				
+					<rich:spacer height="5"/>	
+					<rich:panel style="width:700px;margin:auto; background-color: #FFFFFF;">
+						<f:facet name="header">
+							<h:outputText value="Asignación de Permisos" styleClass="bold"/>
+						</f:facet>
+				    	<h:form id="myform">				
+							<rich:panel>
+								<table width="100%">
+									<tr>
+										<div align="center">
+											<h:outputText value="Rol: " styleClass="bold"/>
+											<rich:spacer width="7"/>
+											<h:selectOneMenu id="role" value="#{permission.role}">
+												<f:selectItems value="#{permission.listRoles}"/>
+												<a4j:support event="onchange"  action="#{permission.ocult}" reRender="op,r1,op1,rb"/>
+											</h:selectOneMenu>
+											<rich:spacer width="12"/>
+		                            		<h:commandButton value="Listar Permisos" action="#{permission.loadPermission}"/>
+										</div>
+									</tr>
+								</table>
+							</rich:panel>				
+							<rich:spacer height="10"/>
+			                <a4j:outputPanel  id="op">
+								<rich:panel id="r1" rendered="#{permission.showList}">
+									<rich:dataTable var="items" value="#{permission.listPermission}" id="tableOption" style="width:600px;margin:auto;">
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Opción" styleClass="bold"/>
+											</f:facet>
+											<h:outputText value="#{items.optAct.optionId.optionName}" styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Acción"  styleClass="bold"/>
+											</f:facet>
+											<h:outputText value="#{items.optAct.actionId.actionName}" styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Asignar"  styleClass="bold"/>
+											</f:facet>
+											<h:selectBooleanCheckbox value="#{items.active}"/>
+										</rich:column>
+									</rich:dataTable>
+								</rich:panel>
+			                </a4j:outputPanel>				
+							<rich:spacer height="10"/>
+			                <a4j:outputPanel  id="op1">
+								<rich:panel id="rb" rendered="#{permission.showList}">
+									<table>
+										<tr>
+											<td width="25%"></td>
+											<td width="25%"></td>
+											<td width="25%"></td>
+											<td width="25%">
+												<h:commandButton id="savebutton" action="#{permission.viewPermAsig}" value="Guardar" styleClass="normal"/>
+											</td>
+										</tr>
+									</table>
+								</rich:panel>
+			                </a4j:outputPanel>
+						</h:form>
+					</rich:panel>
+					<rich:spacer height="20"/>				
+					<rich:modalPanel id="panel" width="350" height="115" rendered="#{permission.result}" showWhenRendered="#{permission.result}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Asignar Permisos" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{permission.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{permission.msg}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+							    <h:panelGroup>
+							    	<h:commandButton value="Aceptar" action="#{permission.hideModal}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,489 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* HTML */
+body {
+	background-color: #000000; 
+	font-family: sans-serif; 
+	font-size: 11px; 
+ 	margin: 12px; 
+	padding: 0;
+	background-image: url("../img/background_via.gif");
+	background-repeat: repeat;
+	}
+th {background-color: #AAAAAA;}
+/*textarea {width: 200px; height: 100px;}*/
+
+/* blueprint styles */
+.container {background-color: #ffffff;}
+/* typography */
+.center {width: 100%; text-align: center;}
+.right {width: 100%; text-align: right;}
+.left {width: 100%; text-align: left;}
+/* navigation bar */
+.navbar {
+	width: 100%;
+	/*height: 90px; */
+	float: left; 
+	background-image: url("../img/top_bg_via.jpg"); 
+	background-repeat: no-repeat;
+	bottom: 0;
+}
+.navbar .logo {width: 202px; height: 121px; float: left; margin: 0; padding: 0;}
+.navbar .icon {width: 255px; height: 122px; float: right; margin: 0; padding: 0;}
+.navbar .top-menu {
+	width: 493px; 
+	height: 100%; 
+	float: left; 
+	margin: 0; 
+	padding: 0; 
+	text-align: center;
+	}
+/* menu navigator */
+.menu2 {
+	height:490px;
+	height:20px; 
+	font-size:0.75em; 
+	position:relative; 
+	z-index:100; 
+	bottom: 0;
+	vertical-align: bottom;
+	}
+	
+.exit{
+	color: red;
+}
+/* hack to correct IE5.5 faulty box model */
+/*html .menu {width:381px; width:380px;}*/ 
+/* remove all the bullets, borders and padding from the default list styling */
+.menu ul {padding:0;margin:0;list-style-type:none;}
+.menu ul ul {width:95px;}
+/* float the list to make it horizontal and a relative positon so that you can control the 
+
+dropdown menu positon */
+.menu li {float:left;width:95px;position:relative;}
+/* style the links for the top level */
+.menu a, .menu a:visited {display:block;font-size:11px;text-decoration:none; color:#fff; 
+
+width:89px; height:30px; border:1px solid #000; border-width:1px 0 1px 1px; background:#333333; 
+
+padding-left:5px; line-height:29px;}
+/* a hack so that IE5.5 faulty box model is corrected */
+html .menu a, html .menu a:visited {width:95px; width:89px;}
+/* style the second level background */
+.menu ul ul a.drop, .menu ul ul a.drop:visited {background:#666666 
+
+url(http://www.cssplay.co.uk/graphics/drop.gif) bottom right no-repeat;}
+/* style the second level hover */
+.menu ul ul a.drop:hover{background:#EE6600 url(http://www.cssplay.co.uk/graphics/drop.gif) 
+
+bottom right no-repeat;}
+.menu ul ul :hover > a.drop {background:#EE6600 url(http://www.cssplay.co.uk/graphics/drop.gif) 
+
+bottom right no-repeat;}
+/* style the third level background */
+.menu ul ul ul a, .menu ul ul ul a:visited {background:#333333;}
+/* style the third level hover */
+.menu ul ul ul a:hover {background:#EE6600;}
+/* hide the sub levels and give them a positon absolute so that they take up no room */
+.menu ul ul {visibility:hidden;position:absolute;height:0;top:31px;left:0; 
+
+width:95px;border-top:1px solid #000;}
+/* another hack for IE5.5 */
+html .menu ul ul {top:30px;top:31px;}
+/* position the third level flyout menu */
+.menu ul ul ul{left:95px; top:-1px; width:95px;}
+/* position the third level flyout menu for a left flyout */
+.menu ul ul ul.left {left:-95px;}
+/* style the table so that it takes no ppart in the layout - required for IE to work */
+.menu table {position:absolute; top:0; left:0; border-collapse:collapse;;}
+/* style the second level links */
+.menu ul ul a, .menu ul ul a:visited {
+	background:#666666; 
+	color:#FFF; 
+	height:auto; 
+	line-height:1em; 
+	padding:5px 5px; 
+	width:64px;
+	border-width:0 1px 1px 1px;
+}
+/* yet another hack for IE5.5 */
+* html .menu ul ul a{width:96px;w\idth:84px;}
+/* style the top level hover */
+.menu a:hover, .menu ul ul a:hover{color:#fff; background:#EE6600;}
+.menu :hover > a, .menu ul ul :hover > a {color:#fff;background:#EE6600;}
+/* make the second level visible when hover on first level list OR link */
+.menu ul li:hover ul,
+.menu ul a:hover ul{visibility:visible; }
+/* keep the third level hidden when you hover on first level list OR link */
+.menu ul :hover ul ul{visibility:hidden;}
+/* make the third level visible when you hover over second level list OR link */
+.menu ul :hover ul :hover ul{ visibility:visible;}
+/* colors */
+.grey {background-color: #f3f5f5}
+.white {background-color: #ffffff}
+/* footer */
+.footer {width: 100%; height: 172px; float: left; background-image: 
+
+url("../img/bottom_bg_via.jpg");}
+.footer .bottom-message {
+	width: 827px; 
+	height: 34px; 
+	float: right; 
+	margin: 0; 
+	padding: 6px 0 0 9px; 
+	color: #f4f4f4;
+	}
+.bottom-message2{
+	width: 100%; 
+	height: 12px;
+	font-family: Arial, Verdana, sans-serif; 
+	text-align: center;
+	font-size: 10px;
+	margin: 0; 
+	padding: 6px 0 0 9px; 
+	color: #ffffff;
+	vertical-align: middle;
+}
+
+.bottom-message3{
+	width: 100%; 
+	height: 12px;
+	font-family: Arial, Verdana, sans-serif; 
+	text-align: left;
+	font-size: 9px;
+	margin: 0; 
+	padding: 6px 0 0 9px; 
+	color: #ffffff;
+	vertical-align: middle;
+}
+.footer .ticon {
+	width: 100%; 
+	height: 34px; 
+	margin: 0; 
+	padding: 0;
+	text-align: center;
+	
+}
+.footer .ticon a {border: 0;}
+/* tables */
+#mainTable {width: 80%; margin-left: auto; margin-right: auto;}
+/* login form */
+.login-form {
+	width: 100%; 
+	display: block;
+	text-align: right;
+	color: white;
+}
+.login-form .top-block {float: left;  background-color:#e5e5e5; }
+.login-form .block {float: left;  background-color: #0a120f;}
+.login-form .bottom-block {float: left; background-color: #e5e5e5; color:white;}
+.login-form .submit-button {font-style: normal; color: #000000; background-color: #e5e5e5;}
+.login-form input {font-family: sans-serif; font-style: italic; font-size: 10px; color: gray;}
+/* download button */
+.downloadButton {width: 20%; height: 39px; float: left; padding-top: 15px;}
+.downloadButton .lbutton {width: 12px; height: 39px; float: left;}
+.downloadButton .mbutton {height: 39px; float: left; background-image: 
+
+url("../img/download_middle.gif"); background-repeat: repeat-x;}
+.downloadButton .mbutton a {margin: 7px 0 0 2px;  display:block; text-decoration:none;}
+.downloadButton .rbutton {width: 38px; height: 39px; float: left;}
+/* blog */
+.titleGenBlog{
+	font:Verdana, Arial, Helvetica, sans-serif;
+	font-size:19px;
+	font-weight:bold;
+	color:#022a1c;
+	text-align:left;
+	padding:6px;
+	background-color:#bdd2cb;
+}
+
+.contentBlogGen{
+	font: Arial, Verdana, Helvetica, sans-serif;
+	font-size:11px;
+	color:#000000;
+	padding:10px;
+	text-align:left;
+}
+
+.blog{
+	margin: auto;
+	width:80%;
+	height: 90px;
+}
+
+.cuadBlog{
+	padding:3px;
+	padding: 10px;
+	background-color:#f9f9f9;
+}
+
+.titleBlog{
+	font:Verdana, Arial, Helvetica, sans-serif;
+	font-size:13px;
+	color:#870c0c;
+	text-decoration:underline;
+	text-align:left;
+}
+
+.contentBlog{
+	font:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#424242;
+	padding:5px;
+	text-align:left;
+}
+
+
+.moreBlog{
+	font:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#ff0000;
+	padding:2px;
+	text-align:right;
+	text-decoration:underline;
+}
+
+.tab {margin-left: 5px;}
+.swf {text-align: center; width: 100%; height: 500px; background-color: #ffffff;}
+
+.regisbg{
+	background-color: #CCCCCC;
+}
+
+.section{
+	border: 1px solid #000000;
+}
+
+.sectionNoNumber{
+	width:920px;
+	margin:1px;
+	border-left: 15px solid #000000;
+}
+.backgroundCamara{
+ 	background-color: #eeeeee;
+}
+
+.backgroundRegis{
+ 	background-color: #cccccc;
+}
+
+.minmargin{
+	padding: 2px;
+	padding-right: 2px;
+}
+
+#btnAddBrandAlign{
+	margin-left:90px;
+	margin-right:90px;
+	text-align: left;
+}
+
+#numForm{
+	font:Verdana, Arial, Helvetica, sans-serif;
+	font-size:25px;
+	font-weight:bold;
+	color:#000000;
+	padding:2px;
+	text-align:right;
+}
+
+#tituloGen{
+	font: Arial, Verdana, Helvetica, sans-serif;
+	font-size:13px;
+	font-weight:bold;
+	color:#000000;
+	padding:2px;
+	text-align:center;
+}
+
+#tableCandidates{
+	border: 1px solid #AAAAAA;
+	width:100%;
+	background-color: #FFFFFF;
+	color: #000000;
+}
+
+.button{
+	color:#ffffff;
+	border:ridge;
+	border-color:#CCCCCC;
+	background-color:#003300;
+}
+
+.button:hover {
+    border: none;
+    background-color:#4ca939;
+    border-color: #fff;
+}
+
+.borderRedValidation{
+  border-color:#FF0000;
+  border-style:double;
+  border-width:2px;
+}
+
+.borderNormalValidation{
+}
+
+.textMessageValidation{
+	color: #FF0000;
+	font-weight: bold;
+	size: 16px;
+}
+
+.tableMotive, .tableMotive td {
+	border-collapse: collapse; 
+	height: 100%;
+	background-color:#F5F5F5;
+	margin: 0px;
+	border-collapse: collapse; 
+	font-size: 0.9em;
+	background-color:#FFFFFF;
+}
+
+
+.bkYellowViaRapidaMenu{
+	margin-left:3px;
+	margin-right:3px;
+	background-color:#f9bd00;
+}
+
+.bkContents{
+	/*width:100%;*/
+	background-image:url(../img/background_via_white.gif);
+	background-repeat:no-repeat;
+	background-position: 2% 100%;
+}
+
+.loginLabel{
+	font: Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#ffffff;
+}
+.loginInput{
+	font: Arial, Helvetica, sans-serif;
+	font-size:10px;
+	color:#000000;
+	background-color:#ffffff;
+	border:#666666;
+}
+.loginButton{
+ border: 0;
+   border-collapse: separate;
+   -webkit-background-origin: border !important;
+   -moz-background-origin: border !important;
+   background-origin: border-box !important;
+   background: #FFFFFF;
+   background: linear-gradient(top, #FFFFFF 0, #B3D4EF 100%) no-repeat;
+   background: -webkit-linear-gradient(top, #FFFFFF 0, #B3D4EF 100%) no-repeat;
+   background: -moz-linear-gradient(top, #FFFFFF 0, #B3D4EF 100%) no-repeat;
+   background: -o-linear-gradient(top, #FFFFFF 0, #B3D4EF 100%) no-repeat;
+   background: -ms-linear-gradient(top, #FFFFFF 0, #B3D4EF 100%) no-repeat;
+   background: linear-gradient(top, #FFFFFF 0, #B3D4EF 100%) no-repeat;
+   -svg-background: linear-gradient(top, #FFFFFF 0, #B3D4EF 100%) no-repeat;
+   -webkit-border-radius:4px;
+   -moz-border-radius:4px;
+   border-radius:4px;
+   -webkit-box-shadow:0 0 2px 1px rgba(0, 0, 0, 0.25);
+   -moz-box-shadow:0 0 2px 1px rgba(0, 0, 0, 0.25);
+   box-shadow:0 0 2px 1px rgba(0, 0, 0, 0.25);
+   padding:5 20px;
+   margin:5 auto;
+   height:25px;
+   cursor: pointer;
+}
+
+/* side menu */
+.left-menu {
+	display: block;
+	width: 190px;
+	margin-top: 2px;
+	
+}
+
+.bold{
+	font-weight: bold;
+	font-family: 'Arial'; 
+	font-size: 12px;
+}
+
+.normal{
+	font-family: 'Arial'; 
+	font-size: 12px;
+}
+
+.richPanel{
+	width:700px;
+	margin:auto;
+}
+
+.richPanelColor{
+	width:700px;
+	margin:auto;
+}
+
+.errorReport{
+	padding:.8em;
+	margin-bottom:1em;
+	border:2px solid #ddd;
+	background:#FBE3E4;
+	color:#8a1f11;
+	border-color:#FBC2C4;
+	visibility: hidden;
+}
+.errorReport a {
+	color:#8a1f11;
+}
+
+.paddingCol {
+	padding-bottom: 10px;
+}
+
+#scroll_horizontal {
+	width: 100%;
+	overflow: auto;
+	clear: both;
+	text-align: center;
+	margin: auto;
+}
+
+#scroll_vertical {
+	height: 100%;
+	overflow: auto;
+	clear: both;
+	text-align: center;
+	margin: auto;
+}
+
+.tableBO tr td{
+	padding: 5px 5px 5px 5px;
+}
+
+.warn{
+	font-family: 'Arial'; 
+	font-size: 13px;
+	color: #E2A902;
+	font-weight: bold;
+}
+
+.panelGray{
+	background-color: #EAEAEA;
+}
+
+.register {
+  background-image:url(../img/registrese.png);  
+  background-repeat: no-repeat;
+  width: 160px;
+  height: 45px;
+  text-decoration:none;
+  font-size:20px;
+  color: #000000;
+  cursor: pointer;
+}
+
+.link {
+	color: #81BC00;
+	font-family: Arial, 'Arial Unicode MS', Helvetica, Sans-Serif; 
+}

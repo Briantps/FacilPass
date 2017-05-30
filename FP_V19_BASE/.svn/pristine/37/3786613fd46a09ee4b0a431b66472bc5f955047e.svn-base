@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<div>
+					<rich:messages style="color:red;" styleClass="bold"/>		
+					<h:form id="Formulario">
+						<f:loadBundle basename="staticText.messages" var="msg" />
+						<rich:panel style="width:350px;">
+							<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+								<h:panelGroup>
+									<h:outputText value="Digite la Causa de Reposición: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:inputText value="#{replacementCausesBean.causeName}" maxlength="50" id="Nombre" />
+								<h:panelGroup>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+								</h:panelGroup>
+								<h:commandButton value="Crear"  styleClass="bold" action="#{replacementCausesBean.addCause}"/>
+							</h:panelGrid>			
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>				
+				</div>
+			</f:view>
+		</div>
+	</body>
+</html>

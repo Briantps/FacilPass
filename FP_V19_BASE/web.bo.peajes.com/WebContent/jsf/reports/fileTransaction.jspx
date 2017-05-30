@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Reporte General</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+    <f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+
+    <h:form>
+      <rich:panel>
+        <f:facet name="header">
+          <h:outputText value="Reporte General"/>
+        </f:facet>
+
+        <table>
+          <tr>
+            <td>
+              <h:outputText value="Cuenta FacilPass:" styleClass="bold"/>
+		      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+            </td>
+            <td>
+              <rich:panel id="ra1" rendered="#{fileTransactionBean.showAccounts1}" style="border:0px;margin:auto;padding-left:0px;">
+                <h:selectOneMenu  value="#{fileTransactionBean.accountId}" style="width:157px;">
+                  <f:selectItems value="#{fileTransactionBean.accountList}"></f:selectItems>
+                    <a4j:support event="onchange" action="#{fileTransactionBean.ocult2}" reRender="placas,output,richd" ajaxSingle="true"/>
+ 		        </h:selectOneMenu>
+              </rich:panel>
+              
+              <rich:panel id="ra2" rendered="#{fileTransactionBean.showAccounts2}" style="border:0;margin:auto;">
+                <h:inputText value="#{fileTransactionBean.accountId}" style="width:152px;font-weight:bold; color:black;" disabled="true"/>
+              </rich:panel>
+            </td>
+          </tr>
+          
+          <tr>
+            <td>
+              <h:outputText value="Placa:" styleClass="bold"/>
+		      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+            </td>
+            <td>
+              <rich:spacer width="9"/>
+              <h:selectOneMenu  id="placas" value="#{fileTransactionBean.plateId}" style="width:157px;">
+                <f:selectItems value="#{fileTransactionBean.plateList}"></f:selectItems>
+                <a4j:support event="onchange" action="#{fileTransactionBean.ocult2}" reRender="output,richd" ajaxSingle="true"/>
+ 		      </h:selectOneMenu>
+            </td>
+          </tr>
+          
+          <tr>
+            <td>
+            <rich:spacer height="25"/>
+              <h:outputText value="Fecha Inicial:" styleClass="bold"/>
+		      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+            </td>
+            <td>
+              <rich:spacer width="9"/>
+              <rich:calendar id="fec1" value="#{fileTransactionBean.dateIni}" cellWidth="26px" cellHeight="22px" style="width:157px;margin:auto;" 
+                  datePattern="dd/MM/yyyy" defaultTime="00:00:00" popup="true" styleClass="normal">
+                  <a4j:support event="onclick" action="#{fileTransactionBean.ocult2}" reRender="output,richd"/>
+              </rich:calendar>
+            </td>
+          </tr>
+ 
+          <tr>
+            
+            <td>
+            <rich:spacer height="30"/>
+              <h:outputText value="Fecha Final:" styleClass="bold"/>
+		      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+            </td>
+            <td>
+              <rich:spacer width="9"/>
+              <rich:calendar id="fec2" value="#{fileTransactionBean.dateEnd}" cellWidth="26px" cellHeight="22px" style="width:157px;margin:auto;" 
+                 datePattern="dd/MM/yyyy" defaultTime="00:00:00" popup="true" styleClass="normal">
+                 <a4j:support event="onclick" action="#{fileTransactionBean.ocult2}" reRender="output,richd"/>
+              </rich:calendar>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		      <h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+            </td>
+            <td>
+               <rich:spacer width="9"/>
+               <rich:spacer height="30"/>
+              <h:commandButton id="bn" value="Generar Archivo" action="#{fileTransactionBean.validate}"> 
+              </h:commandButton>
+            </td>
+          </tr>
+        </table>
+
+         <a4j:outputPanel id="output">
+           <rich:panel id="richd" rendered="#{fileTransactionBean.showPanelDownload}">
+           <rich:spacer width="5"/>
+             <h:panelGrid style="width: 160px; margin: auto; padding:0px;" columns="2">     
+              <a4j:region id="editando">         
+               <h:commandLink id="clicktxt"  value="" action="#{fileTransactionBean.downloadFile}"  >
+			     <img title="Imprimir" src="/web.bo.peajes.com/img/generar_txt_btn.gif" alt="Imprimir"
+						style="cursor: pointer; border: 0px solid blue;" /> 
+                   <a4j:support event="oncomplete" reRender="panelP,panelg"/>
+                   <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+		       </h:commandLink>
+		      </a4j:region>
+		       
+               <h:commandLink id="clickexcel" target="_blank" value="" action="#{fileTransactionBean.printPdf}"  >
+			     <img title="Imprimir" src="/web.bo.peajes.com/img/generar_xls_btn.gif" alt="Imprimir"
+						style="cursor: pointer; border: 0px solid blue;" />
+                   <f:setPropertyActionListener target="#{fileTransactionBean.exportOption}" value="EXCEL"/>
+		       </h:commandLink>
+               
+             </h:panelGrid>
+           </rich:panel>
+         </a4j:outputPanel>
+     </rich:panel>
+    </h:form>
+
+    <rich:modalPanel id="panelP" width="350" height="115" showWhenRendered="#{fileTransactionBean.showMessageError}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fileTransactionBean.init}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fileTransactionBean.messageError}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+		     	<h:panelGroup>
+		     		<h:commandButton value="Aceptar" action="#{fileTransactionBean.init}"  />
+		     	</h:panelGroup>	     	
+		    </h:panelGrid>
+		</h:form>		
+		<br />
+	</rich:modalPanel>
+
+    <rich:modalPanel id="panelg" width="350" height="115" showWhenRendered="#{fileTransactionBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fileTransactionBean.init}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fileTransactionBean.messageError}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+		     	<h:panelGroup>
+		     		<h:commandButton value="Aceptar" action="#{fileTransactionBean.showDownload}"  />
+		     	</h:panelGroup>	     	
+		    </h:panelGrid>
+		</h:form>		
+		<br />
+	</rich:modalPanel>
+
+
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+	</rich:modalPanel> 
+
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

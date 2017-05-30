@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Ver Documentos</title>
+<style>
+	.top {
+	    vertical-align: top;  
+	}
+	.info {
+	    height: 600px;
+	    overflow: auto;
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="/jsf/content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="10"/>
+	<rich:panel style="width: 700px;">	
+		<f:facet name="header">
+			<h:outputText value="Descargar Documentos" styleClass="bold"/>
+		</f:facet>
+		<h:form>
+			<rich:spacer height="10"/>
+		    <rich:panel>
+				<h:commandButton value="Listar" action="#{fileDownloadBean.viewFilesClient}" reRender="info,messInfo"/>
+            </rich:panel> 
+            <rich:panel id="messInfo" rendered="#{fileDownloadBean.showMessage}">
+				<h:outputText value="#{fileDownloadBean.messageInfo}" styleClass="bold"/>	
+			</rich:panel>
+			<rich:dataTable value="#{fileDownloadBean.files}" var="file" id="lista" rows="15" width="800px"> 
+					
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Nombre Documento"/></f:facet>
+				<h:outputText value="#{file.name}" styleClass="normal"/>
+			</rich:column>
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Tamaño del Documento(bytes)"/></f:facet>
+				<h:outputText value="#{file.length}" styleClass="normal"/>  
+			</rich:column>
+			<rich:column width="100px" style="text-align:center;">
+				<f:facet name="header"><h:outputText styleClass="bold" value=""/></f:facet>
+				<h:commandLink value="Descargar" action="#{fileDownloadBean.downLoad}" styleClass="bold">
+					<f:setPropertyActionListener value="#{file.name}" target="#{fileDownloadBean.name}"/>  
+				</h:commandLink>
+		    </rich:column>
+		</rich:dataTable> 
+		</h:form>	
+	</rich:panel>
+	<rich:spacer height="20"/>
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

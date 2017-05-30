@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<metadatadoc version="2.0">
+	<object type="Entity" id="75758805-4C7E-65E0-35B2-33981C9AE7C5" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="true" entitytype="" allow_type_substitution="true" strategy="Single Table" minVolumes="0" expectedVolumes="0" maxVolumes="9999999" growthPercent="0" growthType="Year" normalForm="Third" adequatelyNormalized="NO" use_default_color="true" background_color="null" foreground_color="null">
+		<name>TB_LANE</name>
+		<comment></comment>
+		<notes></notes>
+		<alter type="created">
+			<user>root</user>
+			<timestamp>2010-06-10 09:51:56</timestamp>
+		</alter>
+		<alter type="changed">
+			<user>root</user>
+			<timestamp>2010-06-10 10:01:15</timestamp>
+		</alter>
+		<properties>
+			<parameter name="design.owner" value="bo" />
+			<parameter name="object.existsinrepository" value="true" />
+			<parameter name="property.comment.rdbms" value="" />
+		</properties>
+		<parent inherits="false" />
+		<engineering>
+			<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+		</engineering>
+		<des_obj_version version="1.0" />
+		<fonts>
+			<font_object>
+				<parameter name="fo_type" value="Title" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="1" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Attribute" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Datatype" />
+				<parameter name="font_color" value="-16744448" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="PK Element" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="FK Element" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="UK Element" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Not Null" />
+				<parameter name="font_color" value="-65536" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Key" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+		</fonts>
+		<documents />
+		<parties />
+		<changerequests />
+		<measurements />
+		<contained>
+			<object type="Attribute" id="C2C05252-93C9-780C-3649-90851CB34413" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>LANE_ID</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 09:55:23</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 09:55:49</timestamp>
+				</alter>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="19" scale="0" typename="NUMBER" />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<source value="" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Attribute" id="CD18FA7E-36FD-9E20-BAA5-6E61B628458C" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="true" references="2B5D27E2-4DE4-71F9-0EB8-53FA52210BE3">
+				<name>STATION_ID</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 10:00:19</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 10:00:40</timestamp>
+				</alter>
+				<generator>BE1EFFC7-0C7A-CE0B-6802-195B454BAC03</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="property.comment.rdbms" value="" />
+					<parameter name="refers.attribute" value="2B5D27E2-4DE4-71F9-0EB8-53FA52210BE3" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="19" scale="0" typename="NUMBER" />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<source value="" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Attribute" id="491BFABE-0649-64B0-1248-71390529E471" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>LANE_CODE</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 09:55:23</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 09:56:27</timestamp>
+				</alter>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="var" size="20 BYTE" typename="VARCHAR2" />
+				<reference value="false" />
+				<logicaltype dttype="VARCHAR" oid="LOGDT024" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<source value="" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Attribute" id="9167E0B4-DAEC-2119-C5A1-719F1F87EA00" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>LANE_NAME</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 09:55:23</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 09:57:05</timestamp>
+				</alter>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="var" size="20 BYTE" typename="VARCHAR2" />
+				<reference value="false" />
+				<logicaltype dttype="VARCHAR" oid="LOGDT024" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<source value="" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+		</contained>
+		<key>
+			<object type="Candidate Key" id="664582F3-46DD-E160-779E-F7FC77C7FFFA" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" pk="true" keystate="Primary Key" synonym="">
+				<name>TB_LANE_PK</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-10 09:55:46</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 10:01:09</timestamp>
+				</alter>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<contains type="Attribute">C2C05252-93C9-780C-3649-90851CB34413</contains>
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+		</key>
+	</object>
+</metadatadoc>

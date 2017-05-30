@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Gestión Editor de Texto</title>
+</head>
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:spacer height="5" />
+				<rich:messages style="color:red;" styleClass="bold" />
+
+				<h:form id="form1">
+					<rich:panel id="principal">
+						<f:facet name="header">
+							<h:outputText value="Gestor Editor de Texto" />
+						</f:facet>
+						<rich:panel id="Editores">
+							<f:facet name="header">
+								<h:outputText value="Configurar Editor" />
+							</f:facet>
+							
+								<rich:spacer height="10" />
+
+								<rich:dataTable id="listTxt" var="item"
+									value="#{textEditorManager.listEditor}">
+
+									<rich:column>
+										
+											<f:facet name="header">
+												<h:outputText value="Editor" styleClass="bold"
+													style="width:110px" />
+											</f:facet>
+											<h:outputText value="#{item.nameTxt}" styleClass="normal"
+												style="width:110px" />
+									</rich:column>
+
+									<rich:column>
+										<div align="center">
+											<f:facet name="header">
+												<h:outputText value="Barra de Texto" styleClass="bold"
+													style="width:110px" />
+											</f:facet>
+
+											<h:selectBooleanCheckbox immediate="true"
+												value="#{item.textBar}" disabled="#{item.actvText == '3'}">												
+											</h:selectBooleanCheckbox>
+										</div>
+									</rich:column>
+
+									<rich:column>
+										<div align="center">
+											<f:facet name="header">
+												<h:outputText value="Barra de Hipervínculo"
+													styleClass="bold" style="width:110px" />
+											</f:facet>
+
+											<h:selectBooleanCheckbox immediate="true"
+												value="#{item.hyperlinkBar}" disabled="#{item.actvHyper == '3'}">
+											</h:selectBooleanCheckbox>
+										</div>
+									</rich:column>
+
+									<rich:column>
+										<div align="center">
+											<f:facet name="header">
+												<h:outputText value="Barra de Multimedia" styleClass="bold"
+													style="width:110px" />
+											</f:facet>
+
+											<h:selectBooleanCheckbox immediate="true"
+												value="#{item.multimediaBar}" disabled="#{item.actvMultime == '3'}">
+											</h:selectBooleanCheckbox>
+										</div>
+									</rich:column>
+
+								</rich:dataTable>
+							
+							
+							<rich:spacer height="10" />
+
+
+							<h:panelGroup>
+								<div align="center">
+									<h:commandButton  value="Guardar"
+										action="#{textEditorManager.confirm}" style="width: 80px">
+										<a4j:support event="oncomplete"
+											reRender="form1,principal" />
+									</h:commandButton>
+									<rich:spacer width="20" />
+									<h:commandButton value="Cancelar"
+										action="#{textEditorManager.cancelSettings}" style="width: 80px">
+										<a4j:support event="oncomplete"
+											reRender="form1,principal" />
+									</h:commandButton>
+								</div>
+							</h:panelGroup>
+
+						</rich:panel>
+					</rich:panel>
+				</h:form>
+				
+				<rich:modalPanel id="confirmacion" width="340" height="115" showWhenRendered="#{textEditorManager.modalOption}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{textEditorManager.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{textEditorManager.msn}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{textEditorManager.saveSettings}" style="width: 80px">
+				                	<a4j:support event="oncomplete" reRender="form1,principal,Editores,panelOK"/>
+				                	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>						           
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <rich:spacer width="20" />
+			                <h:commandButton value="Cancelar" action="#{textEditorManager.hideModal}" style="width: 80px"/>
+				     	</h:panelGroup>   	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panelOK" width="350" height="115" showWhenRendered="#{textEditorManager.modal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Mensaje - Gestión Editor de Texto" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{textEditorManager.cancelSettings}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{textEditorManager.msn}" styleClass="normal"/>
+						<rich:spacer height="20"/>
+						<h:form>
+						 <div align = "center" >
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+					     	<h:panelGroup>
+					     		<h:commandButton value="Aceptar" action="#{textEditorManager.cancelSettings}"  />
+					     	</h:panelGroup>	     	
+					    </h:panelGrid>
+					    </div>
+					    </h:form>	
+						<br />
+					</rich:modalPanel>	
+					
+					<rich:modalPanel id="panelError" width="350" height="115" showWhenRendered="#{textEditorManager.modaError}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Mensaje - Gestión Editor de Texto" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{textEditorManager.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{textEditorManager.msnError}" styleClass="normal"/>
+						<rich:spacer height="20"/>
+						<h:form>
+						 <div align = "center" >
+						   	<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+					     	<h:panelGroup>
+					     		<h:commandButton value="Aceptar" action="#{textEditorManager.hideModal}"  />
+					     	</h:panelGroup>	     	
+					    </h:panelGrid>
+					    </div>
+					    </h:form>	
+						<br />
+					</rich:modalPanel>
+					
+				<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Por favor espere..." style="font-size:12px;" />
+				</rich:modalPanel>
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp"/>
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

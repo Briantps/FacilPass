@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head/>
+<body>
+<f:view>
+<div>		
+	<rich:panel style="width: 800px;">
+		<f:facet name="header">
+			<h:outputText value="Relacionar Cuenta" styleClass="bold"/>
+		</f:facet>
+		<a4j:form>
+			<h:outputText value="El Cliente no tiene cuentas asociadas." styleClass="bold" style="color: red;"
+				rendered="#{!purchaseBean.showConsignments}"/>
+			<rich:dataGrid value="#{purchaseBean.accountList}" var="con" columns="1" 
+				elements="1" width="600px" rendered="#{purchaseBean.showConsignments}">
+				<h:panelGrid style="width: 500px; margin: auto; padding:10px; " styleClass="tableBO" columns="2">
+								
+					<h:outputText value="No. Cuenta: " styleClass="bold"/>
+					<h:outputText value="#{con.accountId}" styleClass="normal"/>
+							
+					<h:outputText value="Valor Pago: " styleClass="bold"/>
+					<h:outputText value="#{con.accountBalance}" styleClass="normal" >
+						<f:convertNumber pattern="$#,##0.00"/>
+					</h:outputText>
+					<h:outputText/>
+					<h:commandLink value="Asociar" action="#{purchaseBean.initConfirm}" styleClass="bold">
+						<f:setPropertyActionListener value="#{con.accountId}" 
+							target="#{purchaseBean.accountId}"/>
+					</h:commandLink>
+				</h:panelGrid>
+				<f:facet name="footer">
+					<rich:datascroller/>
+            	</f:facet>
+			</rich:dataGrid>
+			<rich:spacer height="5"/>
+		</a4j:form>
+	</rich:panel>
+</div>
+</f:view>
+</body>
+</html>

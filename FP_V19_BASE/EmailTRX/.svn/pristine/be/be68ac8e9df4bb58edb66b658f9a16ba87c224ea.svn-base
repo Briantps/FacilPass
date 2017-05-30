@@ -1,0 +1,14 @@
+[4.0.9.19.190215]
+- Solución definitiva EmailTransaction: manejo de logs, reingenieria al módulo, cambio de esados, guardado de fechas, esto se encuentra explicado detalladamente en el documento de cambios.
+[5.0.1.20.290515]
+- Mantis 1393: Se realiza modificación al aplicativo EmailTransaction para el envío de notificaciónes, relacionado con el Gestor de correos, dando solución a la incidencia reportada en mantis.
+[4.0.10.20.230615 y 5.0.3.22.230615]
+-Se agrega validación para que la aplicación verifique si el dispositivo no se encuentra asociado a una cuenta FacilPass, no envíe notificación, y muestre el error claramente en el log error.log.
+-Se agrega adicionalmente en el log  notification.log la escritura de cuando se envíe la notificación, adecuando el mensaje, para que no haya confusión al momento de ser interpretado.
+[4.0.11.21.010715 y 5.0.4.23.010715]
+- Se cambia mensaje en el archivo notification.log.
+[5.0.5.24.011015]
+-Mantis 2159: Se soluciona envío de notificación de disociación, ya que no se enviaban con la información del cliente.
+[4.0.13.23.031115 y 5.0.2.26.031115]
+- 294 Se soluciona incidente de desconexión a base de datos.
+-Mejora: Se incrementa creación de archivos logs a 800, para una mejor validacion al momento de presentarse un incidente.

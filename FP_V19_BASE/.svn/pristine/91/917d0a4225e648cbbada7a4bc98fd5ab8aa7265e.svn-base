@@ -1,0 +1,3535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+	version="1.2">
+
+	<application>
+		<message-bundle>staticText.messages</message-bundle>
+	</application>
+
+	<application>
+		<message-bundle>staticText.labels</message-bundle>
+		<locale-config>
+			<default-locale>es</default-locale>
+		</locale-config>
+	</application>
+
+
+	<!-- CONVERTERS -->
+	<converter>
+		<description>Time to complete task converter</description>
+		<display-name>Time to complete task converter</display-name>
+		<converter-id>AdsTimeConverter</converter-id>
+		<converter-class>converters.AdsTimeConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts user id to email addresses according to DB</description>
+		<display-name>User id to email</display-name>
+		<converter-id>UserMailConverter</converter-id>
+		<converter-class>converters.UserMailConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts to a user name, given an id.</description>
+		<display-name>User Id to Name</display-name>
+		<converter-id>UserIdConverter</converter-id>
+		<converter-class>converters.UserIdConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Used in rich:combobox to show string names instead of id in all tables</description>
+		<display-name>Row id to name</display-name>
+		<converter-id>RowIdToNameConverter</converter-id>
+		<converter-class>converters.RowIdToNameConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts a brand id to its corresponding name on database</description>
+		<display-name>Brand id to name</display-name>
+		<converter-id>BrandIdToNameConverter</converter-id>
+		<converter-class>converters.BrandIdToNameConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts a color id to its corresponding name on database</description>
+		<display-name>Color id to name</display-name>
+		<converter-id>ColorIdToNameConverter</converter-id>
+		<converter-class>converters.ColorIdToNameConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts a category id to its corresponding name on database</description>
+		<display-name>Category id to name</display-name>
+		<converter-id>CatIdToNameConverter</converter-id>
+		<converter-class>converters.CatIdToNameConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts timestamp values to strings with time format dd/MM/yy</description>
+		<display-name>Timestamp to string representation</display-name>
+		<converter-id>TimestampConverter</converter-id>
+		<converter-class>converters.TimestampConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts timestamp values to strings vehicles with time format dd/MM/yy</description>
+		<display-name>Timestamp to string representation vehicles</display-name>
+		<converter-id>TimestampConverterVehicles</converter-id>
+		<converter-class>converters.TimestampConverterVehicles</converter-class>
+	</converter>
+	<converter>
+		<description>Converts timestamp values to strings with time format dd/MM/yyyy h:mm a</description>
+		<display-name>Timestamp to string representation</display-name>
+		<converter-id>TimeStampToStringDateConverter</converter-id>
+		<converter-class>converters.TimeStampToStringDateConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts Date values to strings with time format dd/MM/yyyy</description>
+		<display-name>Date to string representation</display-name>
+		<converter-id>DateToStringDateConverter</converter-id>
+		<converter-class>converters.DateToStringDateConverter</converter-class>
+	</converter>
+	<converter>
+		<description>Converts string values to date with time format dd/MM/yyyy hh:mm aa</description>
+		<display-name>String to string/date representation</display-name>
+		<converter-id>StringToStringDateConverter</converter-id>
+		<converter-class>converters.StringToStringDateConverter</converter-class>
+	</converter>
+
+	<converter>
+		<description>Converts BigDecimal to money Format</description>
+		<display-name>BigDecimal to string representation</display-name>
+		<converter-id>BigDecimalToStringFormat</converter-id>
+		<converter-class>converters.BigDecimalToStringFormat</converter-class>
+	</converter>
+	<converter>
+		<description>Converts an id or name to a TbUser object</description>
+		<display-name>Id to TbUser</display-name>
+		<converter-id>TbUserConverter</converter-id>
+		<converter-class>converters.TbUserConverter</converter-class>
+	</converter>
+
+	<!-- MANAGED BEANS -->
+	<managed-bean>
+		<managed-bean-name>homeBean</managed-bean-name>
+		<managed-bean-class>home.HomeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>chartBean</managed-bean-name>
+		<managed-bean-class>home.ChartBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>loginMBean</managed-bean-name>
+		<managed-bean-class>mBeans.LoginMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>formInsBean</managed-bean-name>
+		<managed-bean-class>mBeans.FormInsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>STypePer</property-name>
+			<value>1</value>
+		</managed-property>
+		<managed-property>
+			<property-name>typePer</property-name>
+			<value>true</value>
+		</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>formInsUserBean</managed-bean-name>
+		<managed-bean-class>mBeans.FormInsUserBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>STypePer</property-name>
+			<value>1</value>
+		</managed-property>
+		<managed-property>
+			<property-name>typePer</property-name>
+			<value>true</value>
+		</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>formOutSideBean</managed-bean-name>
+		<managed-bean-class>mBeans.FormOutSideBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>STypePer</property-name>
+			<value>1</value>
+		</managed-property>
+		<managed-property>
+			<property-name>typePer</property-name>
+			<value>true</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>testMBean</managed-bean-name>
+		<managed-bean-class>mBeans.TestMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>permission</managed-bean-name>
+		<managed-bean-class>mBeans.PermissionMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>logoutMBean</managed-bean-name>
+		<managed-bean-class>mBeans.LogoutMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>aplicationVar</managed-bean-name>
+		<managed-bean-class>mBeans.AplicationVar</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>valSessionMBean</managed-bean-name>
+		<managed-bean-class>mBeans.ValSessionMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>listAccountCloseBean</managed-bean-name>
+		<managed-bean-class>process.account.ListAccountCloseBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>verificatorBean</managed-bean-name>
+		<managed-bean-class>process.recharge.VerificatorBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>loginPSEBean</managed-bean-name>
+		<managed-bean-class>util.ws.LoginPSEBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>accountCloseBean</managed-bean-name>
+		<managed-bean-class>process.account.AccountCloseBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>listUser</managed-bean-name>
+		<managed-bean-class>mBeans.ListUser</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>adminRoleMBean</managed-bean-name>
+		<managed-bean-class>mBeans.AdminRoleMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>adminPassCrlBean</managed-bean-name>
+		<managed-bean-class>configSystem.AdminPassCrlBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>adminOptMBean</managed-bean-name>
+		<managed-bean-class>mBeans.AdminOptMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>adminActMBean</managed-bean-name>
+		<managed-bean-class>mBeans.AdminActMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportVehicleBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.ReportVehicleBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<description>Manage Bean for E-Mail configuration.</description>
+		<managed-bean-name>emailMBean</managed-bean-name>
+		<managed-bean-class>mBeans.EmailMBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Side menu Manage Bean</description>
+		<managed-bean-name>sideMenuBean</managed-bean-name>
+		<managed-bean-class>menu.SideMenuBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>general</managed-bean-name>
+		<managed-bean-class>menu.GeneralManageBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>admin User Account Managed Bean</description>
+		<managed-bean-name>adminUserAccount</managed-bean-name>
+		<managed-bean-class>mBeans.AdminUserAccount</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+
+	<managed-bean>
+		<managed-bean-name>adminBrand</managed-bean-name>
+		<managed-bean-class>mBeans.AdminBrand</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>userReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.UserReportBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>traceabilityReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.TraceabilityReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>traceabilityReportBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBean.TraceabilityReportBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>adminVehicle</managed-bean-name>
+		<managed-bean-class>mBeans.AdminVehicle</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>adminVehicleAdmin</managed-bean-name>
+		<managed-bean-class>mBeans.AdminVehicleAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>	
+	<managed-bean>
+		<managed-bean-name>adminCat</managed-bean-name>
+		<managed-bean-class>mBeans.AdminCat</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>adminColor</managed-bean-name>
+		<managed-bean-class>mBeans.AdminColor</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>userStatementReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.UserStatementReportBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>fileUploadBean</managed-bean-name>
+		<managed-bean-class>upload.FileUploadBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileUploadAdminBean</managed-bean-name>
+		<managed-bean-class>upload.FileUploadAdminBean</managed-bean-class>  
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileUploadClientBean</managed-bean-name>
+		<managed-bean-class>upload.FileUploadClientBean</managed-bean-class>  
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>massiveVehicleLoadClientBean</managed-bean-name>
+		<managed-bean-class>mBeans.MassiveVehicleLoadClientBean</managed-bean-class>  
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>massiveVehicleLoadAdminBean</managed-bean-name>
+		<managed-bean-class>mBeans.MassiveVehicleLoadAdminBean</managed-bean-class>  
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileViewerBean</managed-bean-name>
+		<managed-bean-class>upload.FileViewerBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileDownloadBean</managed-bean-name>
+		<managed-bean-class>upload.FileDownloadBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileDownloadClientBean</managed-bean-name>
+		<managed-bean-class>upload.FileDownloadClientBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<description>Manage Bean for Reception of documents</description>
+		<managed-bean-name>receptionBean</managed-bean-name>
+		<managed-bean-class>mBeans.ReceptionBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Manage bean to track process of clients.</description>
+		<managed-bean-name>clientProcessBean</managed-bean-name>
+		<managed-bean-class>process.ClientProcessBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Manage Bean for Verification Process</description>
+		<managed-bean-name>verificationBean</managed-bean-name>
+		<managed-bean-class>process.verification.VerificationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Manage Bean for Version</description>
+		<managed-bean-name>version</managed-bean-name>
+		<managed-bean-class>mBeans.VersionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage client basic transactions</description>
+		<managed-bean-name>clientBean</managed-bean-name>
+		<managed-bean-class>mBeans.ClientBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Purchase Order Manage Bean</description>
+		<managed-bean-name>orderBean</managed-bean-name>
+		<managed-bean-class>arecatis.OrderBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage client consignations.</description>
+		<managed-bean-name>consigBean</managed-bean-name>
+		<managed-bean-class>process.purchasing.ConsigBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean To Edit a Purchase Order.</description>
+		<managed-bean-name>editOrderBean</managed-bean-name>
+		<managed-bean-class>arecatis.EditOrderBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to Manage the Purchase.</description>
+		<managed-bean-name>purchaseBean</managed-bean-name>
+		<managed-bean-class>arecatis.PurchaseBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage client account creation.</description>
+		<managed-bean-name>accountClient</managed-bean-name>
+		<managed-bean-class>process.affiliation.AccountClient</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage device association with an account.</description>
+		<managed-bean-name>deviceAccount</managed-bean-name>
+		<managed-bean-class>process.affiliation.DeviceAccount</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean To manage the approbation of consignment.</description>
+		<managed-bean-name>approveConsignment</managed-bean-name>
+		<managed-bean-class>process.purchasing.ApproveConsignment</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage the consult by user of one purchase order.</description>
+		<managed-bean-name>consultOrder</managed-bean-name>
+		<managed-bean-class>arecatis.ConsultOrder</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to Manage the purchase oreder's confirmation by warehouse.</description>
+		<managed-bean-name>confirmOrder</managed-bean-name>
+		<managed-bean-class>process.warehouse.ConfirmOrder</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage the recharge.</description>
+		<managed-bean-name>rechargeBean</managed-bean-name>
+		<managed-bean-class>arecatis.RechargeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage card balance consult.</description>
+		<managed-bean-name>consultCard</managed-bean-name>
+		<managed-bean-class>process.device.ConsultCard</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage device process Track.</description>
+		<managed-bean-name>deviceProcessBean</managed-bean-name>
+		<managed-bean-class>process.DeviceProcessBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to Manage Card Addition</description>
+		<managed-bean-name>addCard</managed-bean-name>
+		<managed-bean-class>process.device.AddCard</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean no manage the recharge historic consult</description>
+		<managed-bean-name>consultHisRecharge</managed-bean-name>
+		<managed-bean-class>arecatis.ConsultHisRecharge</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage clients report</description>
+		<managed-bean-name>reportAllClients</managed-bean-name>
+		<managed-bean-class>reportBean.ReportAllClients</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage contract clients</description>
+		<managed-bean-name>contractClients</managed-bean-name>
+		<managed-bean-class>reportBean.ContractClientsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean that manage the register of a Master Device.</description>
+		<managed-bean-name>masterBean</managed-bean-name>
+		<managed-bean-class>process.device.perti.MasterBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>masterReportBean</managed-bean-name>
+		<managed-bean-class>process.device.perti.MasterReportBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean To manage Authorize Master.</description>
+		<managed-bean-name>authorizeVipsa</managed-bean-name>
+		<managed-bean-class>process.device.perti.AuthorizeVipsa</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage Customization Process</description>
+		<managed-bean-name>customizationProcessBean</managed-bean-name>
+		<managed-bean-class>process.CustomizationProcessBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to Manage Inclusions.</description>
+		<managed-bean-name>inclusionBean</managed-bean-name>
+		<managed-bean-class>process.device.perti.InclusionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage Inclusion Process.</description>
+		<managed-bean-name>inclusionProcessBean</managed-bean-name>
+		<managed-bean-class>process.InclusionProcessBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>modInclusionBean</managed-bean-name>
+		<managed-bean-class>process.device.perti.ModInclusionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage the istallation location creation...edition..etc.</description>
+		<managed-bean-name>installationLocationBean</managed-bean-name>
+		<managed-bean-class>crud.InstallationLocationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage replacement causes admin.</description>
+		<managed-bean-name>replacementCausesBean</managed-bean-name>
+		<managed-bean-class>crud.ReplacementCausesBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage the register of a ties installation.</description>
+		<managed-bean-name>installationBean</managed-bean-name>
+		<managed-bean-class>process.device.perti.InstallationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>specialExemptTypeBean</managed-bean-name>
+		<managed-bean-class>crud.SpecialExemptTypeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>exemptOfficeBean</managed-bean-name>
+		<managed-bean-class>crud.ExemptOfficeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to Manage Purchase Order Bean Process.</description>
+		<managed-bean-name>purchaseOrderProcessBean</managed-bean-name>
+		<managed-bean-class>process.PurchaseOrderProcessBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>consultConsignment</managed-bean-name>
+		<managed-bean-class>process.purchasing.ConsultConsignment</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>configTaskEng</managed-bean-name>
+		<managed-bean-class>mBeans.ConfigTaskEngBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>consultClientConsignment</managed-bean-name>
+		<managed-bean-class>process.purchasing.ConsultClientConsignment</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>bankBean</managed-bean-name>
+		<managed-bean-class>crud.BankBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>bankAccountBean</managed-bean-name>
+		<managed-bean-class>crud.BankAccountBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>warehouseDependencyBean</managed-bean-name>
+		<managed-bean-class>crud.WarehouseDependencyBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>warehouseCardTypeBean</managed-bean-name>
+		<managed-bean-class>crud.WarehouseCardTypeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>listClient</managed-bean-name>
+		<managed-bean-class>mBeans.ListClient</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>companyBean</managed-bean-name>
+		<managed-bean-class>crud.CompanyBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>stationBean</managed-bean-name>
+		<managed-bean-class>crud.StationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>fixMaster</managed-bean-name>
+		<managed-bean-class>process.device.perti.FixMaster</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>pointBean</managed-bean-name>
+		<managed-bean-class>crud.PointBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>asignPointBean</managed-bean-name>
+		<managed-bean-class>process.recharge.AsignPointBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage the entry to warehouse.</description>
+		<managed-bean-name>entryOrderBean</managed-bean-name>
+		<managed-bean-class>process.warehouse.EntryOrderBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>updateEntryOrderBean</managed-bean-name>
+		<managed-bean-class>process.warehouse.UpdateEntryOrderBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>prechargeBean</managed-bean-name>
+		<managed-bean-class>process.warehouse.PrechargeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>entryOrderConsultBean</managed-bean-name>
+		<managed-bean-class>process.warehouse.EntryOrderConsultBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>paramPrechargeBean</managed-bean-name>
+		<managed-bean-class>process.warehouse.ParamPrechargeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>myProcessBean</managed-bean-name>
+		<managed-bean-class>process.MyProcessBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>initializationBean</managed-bean-name>
+		<managed-bean-class>process.warehouse.initialization.InitializationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>personalizationBean</managed-bean-name>
+		<managed-bean-class>process.device.perti.PersonalizationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>savePayment</managed-bean-name>
+		<managed-bean-class>process.device.SavePayment</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>accountTransactionBean</managed-bean-name>
+		<managed-bean-class>transaction.AccountTransactionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>accountDeviceBean</managed-bean-name>
+		<managed-bean-class>process.account.AccountDeviceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>distributionTagBean</managed-bean-name>
+		<managed-bean-class>process.account.DistributionTagBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>accountSettingsBean</managed-bean-name>
+		<managed-bean-class>process.account.AccountSettingsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>chargesBean</managed-bean-name>
+		<managed-bean-class>mBeans.ChargesBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>gettersBean</managed-bean-name>
+		<managed-bean-class>process.general.GettersBean</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>traceabilityPlateReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.TraceabilityPlateReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>allPlateReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.AllPlateReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>upTranTelepeajeBean</managed-bean-name>
+		<managed-bean-class>telepeaje.UpTranTelepeajeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage device register</description>
+		<managed-bean-name>enterDevice</managed-bean-name>
+		<managed-bean-class>process.device.EnterDevice</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>permReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.PermReportBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>userPermReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.UserPermReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage compensation report</description>
+		<managed-bean-name>reportCompensation</managed-bean-name>
+		<managed-bean-class>clearing.ReportClearing</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>	
+	<managed-bean>
+		<managed-bean-name>configBalanceBean</managed-bean-name>
+		<managed-bean-class>mBeans.ConfigBalanceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>lowBalanceBean</managed-bean-name>
+		<managed-bean-class>mBeans.LowBalanceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>lowBalanceAdminBean</managed-bean-name>
+		<managed-bean-class>mBeans.LowBalanceAdminBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>dataPoliciesBean</managed-bean-name>
+		<managed-bean-class>mBeans.DataPoliciesBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>informationBalanceBean</managed-bean-name>
+		<managed-bean-class>mBeans.InformationBalanceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>textEditorManager</managed-bean-name>
+		<managed-bean-class>configSystem.TextEditorManagerBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>changePasswordMessageBean</managed-bean-name>
+		<managed-bean-class>mBeans.ChangePasswordMessageBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>	
+	<managed-bean>
+		<description>Bean to manage compensation report</description>
+		<managed-bean-name>clearingConcRec</managed-bean-name>
+		<managed-bean-class>clearing.ReportConceRec</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage compensation report</description>
+		<managed-bean-name>clearingConcRecg</managed-bean-name>
+		<managed-bean-class>clearing.ReportConceRecg</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage compensation report</description>
+		<managed-bean-name>clearingPuntoRecg</managed-bean-name>
+		<managed-bean-class>clearing.ReportPuntoRecg</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean to manage compensation report</description>
+		<managed-bean-name>clearingPuntoRec</managed-bean-name>
+		<managed-bean-class>clearing.ReportPuntoRec</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>enterBlackListBean</managed-bean-name>
+		<managed-bean-class>process.device.blackList.EnterDeviceBlackListBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>traceabilityVehicleBean</managed-bean-name>
+		<managed-bean-class>reportBean.TraceabilityVehicleBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>accountNote</managed-bean-name>
+		<managed-bean-class>process.account.CreateNote</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>accountProcessBean</managed-bean-name>
+		<managed-bean-class>process.AccountProcessBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>invoiceGenerating</managed-bean-name>
+		<managed-bean-class>reportBean.InvoiceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>messageStatus</managed-bean-name>
+		<managed-bean-class>process.messageStatus.MessageStatusBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>imageSelector</managed-bean-name>
+		<managed-bean-class>process.images.ImageSelectorBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>imageRejected</managed-bean-name>
+		<managed-bean-class>process.images.ImageRejectedBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>reviewManualTransaction</managed-bean-name>
+		<managed-bean-class>process.images.ReviewManualTransactionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>createObjection</managed-bean-name>
+		<managed-bean-class>objection.CreateObjectionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>approveObjection</managed-bean-name>
+		<managed-bean-class>objection.ApproveObjectionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>electronicRechargeBean</managed-bean-name>
+		<managed-bean-class>process.account.ElectronicRechargeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+    <managed-bean>		
+		<managed-bean-name>associationPaymentMethodBean</managed-bean-name>
+		<managed-bean-class>crud.AssociationPaymentMethodBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>chargeMassiveTagsBean</managed-bean-name>
+		<managed-bean-class>process.device.ChargeMassiveTagsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean> 
+	<managed-bean>		
+		<managed-bean-name>activeDeviceAdminBean</managed-bean-name>
+		<managed-bean-class>process.device.ActiveDeviceAdminBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean> 
+	<managed-bean>		
+		<managed-bean-name>activeDeviceBean</managed-bean-name>
+		<managed-bean-class>process.device.ActiveDeviceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean> 
+    <managed-bean>		
+		<managed-bean-name>reconciliationReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.ReconciliationReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>assignmentsRechargeReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.AssignmentsRechargeReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>securityParametersReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.SecurityParametersReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>		
+		<managed-bean-name>auditReconciliationReportBean</managed-bean-name>
+		<managed-bean-class>reportBean.AuditReconciliationReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>bankAccountClientBean</managed-bean-name>
+		<managed-bean-class>crud.BankAccountClientBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>createBankAccountAdmin</managed-bean-name>
+		<managed-bean-class>crud.CreateBankAccountAdminBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>adminHolidaysBean</managed-bean-name>
+		<managed-bean-class>crud.AdminHolidaysBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>adminUserClientBean</managed-bean-name>
+		<managed-bean-class>mBeans.AdminUserClientBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>passwordDictionaryBean</managed-bean-name>
+		<managed-bean-class>dictionary.PasswordDictionary</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Bean encargado de la recarga manual</description>
+		<managed-bean-name>rechargeClient</managed-bean-name>
+		<managed-bean-class>process.recharge.RechargeClientBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>	
+	<managed-bean>
+		<description>Bean encargado de la sonda de cliente</description>
+		<managed-bean-name>threadSondaClientPSEBean</managed-bean-name>
+		<managed-bean-class>process.recharge.ThreadSondaClientPSEBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+	<description>Bean Encargado de mostrar la Informacion de Saldos de las cuentas FacilPass</description>
+	<managed-bean-name>informationBalanceAccount</managed-bean-name>
+	<managed-bean-class>mBeans.InformationBalanceAccontBean</managed-bean-class>
+	<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>systemParameters</managed-bean-name>
+		<managed-bean-class>configSystem.SystemParameter</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>	
+	<managed-bean>
+		<managed-bean-name>adminMenu</managed-bean-name>
+		<managed-bean-class>menu.AdminMenuBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>previewMenuBean</managed-bean-name>
+		<managed-bean-class>menu.PreviewMenuBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>emailSettings</managed-bean-name>
+		<managed-bean-class>email.EmailSettingsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>emailAdmin</managed-bean-name>
+		<managed-bean-class>email.EmailAdminBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>disableReAccountDevice</managed-bean-name>
+		<managed-bean-class>process.affiliation.DisableDeviceAccount</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>showDevices</managed-bean-name>
+		<managed-bean-class>process.affiliation.ShowDeviceState</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>editDataClientBean</managed-bean-name>
+		<managed-bean-class>mBeans.EditDataClientBean</managed-bean-class> 
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+		
+	<managed-bean>
+		<managed-bean-name>enterFactory</managed-bean-name>
+		<managed-bean-class>process.device.EnterFactory</managed-bean-class> 
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>validateDocumentBean</managed-bean-name>
+		<managed-bean-class>process.verification.ValidateDocumentBean</managed-bean-class> 
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+			
+	<managed-bean>
+		<managed-bean-name>formInsUserClientBean</managed-bean-name>
+		<managed-bean-class>mBeans.FormInsUserClientBean</managed-bean-class> 
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>createReclamation</managed-bean-name>
+		<managed-bean-class>objection.CreateReclamationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>invoiceReportByPlateBean</managed-bean-name>
+		<managed-bean-class>newReportBean.InvoiceReportByPlateBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>detailAccountMoveBean</managed-bean-name>
+		<managed-bean-class>newReportBean.DetailAccountMoveBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportTraceabilityVehicleBean</managed-bean-name>
+		<managed-bean-class>newReportBean.ReportTraceabilityVehicleBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportConsolidatedByVehicleBean</managed-bean-name>
+		<managed-bean-class>newReportBean.ReportConsolidatedByVehicleBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportIndividualByVehicleBean</managed-bean-name>
+		<managed-bean-class>newReportBean.ReportIndividualByVehicleBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileTransactionBean</managed-bean-name>
+		<managed-bean-class>newReportBean.FileTransactionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>summaryAccountMoveBean</managed-bean-name>
+		<managed-bean-class>newReportBean.SummaryAccountMoveBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportDistributionDeviceBean</managed-bean-name>
+		<managed-bean-class>newReportBean.ReportDistributionDeviceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>detailAccountMoveBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.DetailAccountMoveBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportDistributionDeviceBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.ReportDistributionDeviceBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>invoiceReportByPlateBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.InvoiceReportByPlateBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>summaryAccountMoveBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.SummaryAccountMoveBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>fileTransactionBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.FileTransactionBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportTraceabilityVehicleBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.ReportTraceabilityVehicleBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportConsolidatedByVehicleBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.ReportConsolidatedByVehicleBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reportIndividualByVehicleBeanAdmin</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.ReportIndividualByVehicleBeanAdmin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>adminTagsBean</managed-bean-name>
+		<managed-bean-class>process.affiliation.AdminTagsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>dailyConciliationBean</managed-bean-name>
+		<managed-bean-class>process.conciliation.DailyConciliationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>managementNotificationsAdmin</managed-bean-name>
+		<managed-bean-class>email.ManagementNotificationsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>managementNotificationsClient</managed-bean-name>
+		<managed-bean-class>email.ManagementNotificationsClientBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>reporAdminDeviceBean</managed-bean-name>
+		<managed-bean-class>reportBeanAdmin.ReportLogsAdminDeviceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>minimumBalanceBean</managed-bean-name>
+		<managed-bean-class>configSystem.MinimumBalanceBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>passwordsManagementBean</managed-bean-name>
+		<managed-bean-class>mBeans.PasswordsManagementBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>securityQuestionsBean</managed-bean-name>
+		<managed-bean-class>mBeans.SecurityQuestionsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>userValidationBean</managed-bean-name>
+		<managed-bean-class>mBeans.UserValidationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>passwordReset</managed-bean-name>
+		<managed-bean-class>mBeans.PasswordResetBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>adminChannel</managed-bean-name>
+		<managed-bean-class>mBeans.AdminChannelBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+		<managed-bean>
+		<managed-bean-name>agreementChanel</managed-bean-name>
+		<managed-bean-class>mBeans.ReAgreementChannelBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>agreementsManagementBean</managed-bean-name>
+		<managed-bean-class>mBeans.AgreementsManagementBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- NAVIGATION RULE -->
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>successCP</from-outcome>
+			<to-view-id>/jsf/account/changePasswordMessage.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>jsf/account/securityQuestionsNew.jspx</display-name>
+		<from-view-id>/jsf/account/securityQuestionsNew.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>successFL</from-outcome>
+			<to-view-id>/jsf/account/changePasswordFirst.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>jsf/account/securityQuestions.jspx</display-name>
+		<from-view-id>/jsf/account/securityQuestions.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>successCP</from-outcome>
+			<to-view-id>/jsf/account/changePasswordMessage.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+	<display-name>jsf/account/securityQuestionsNew.jspx</display-name>
+	<from-view-id>/jsf/account/securityQuestionsNew.jspx</from-view-id>
+	<navigation-case>
+		<from-outcome>successCP</from-outcome>
+		<to-view-id>/jsf/account/changePasswordMessage.jspx</to-view-id>
+		<redirect />
+	</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>successFL</from-outcome>
+			<to-view-id>/jsf/account/changePasswordFirst.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+		<display-name>jsf/user/passwordReset.jspx</display-name>
+		<from-view-id>/jsf/user/passwordReset.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>successFL</from-outcome>
+			<to-view-id>/jsf/account/changePasswordFirst.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+		<display-name>jsf/user/passwordReset.jspx</display-name>
+		<from-view-id>/jsf/user/passwordReset.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>successOut</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>successPU</from-outcome>
+			<to-view-id>/jsf/account/changePasswordPreenrollUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/jsf/home.jsp</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+		<display-name>verificator</display-name>
+		<from-view-id>/verificator.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>failConn</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>		
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>verificator</display-name>
+		<from-view-id>/verificator.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>okConn</from-outcome>
+			<to-view-id>/jsf/account/recharge.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>verificator</display-name>
+		<from-view-id>/verificator.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>pendingConn</from-outcome>
+			<to-view-id>/login.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>login</display-name>
+		<from-view-id>/login.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>successPSE</from-outcome>
+			<to-view-id>/jsf/account/recharge.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>login</display-name>
+		<from-view-id>/login.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>outPSE</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>close</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>fail</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createClient</from-outcome>
+			<to-view-id>/jsf/client/formInsClien.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Menú</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initAsigPerm}</from-action>
+			<from-outcome>asigPermission</from-outcome>
+			<to-view-id>/jsf/permission/permission.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>successOut</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>ProdcutCreate</from-outcome>
+			<to-view-id>/jsf/bankAccount/bankAccountClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createUser</from-outcome>
+			<to-view-id>/jsf/user/formInsUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminSystemUser</from-outcome>
+			<to-view-id>/jsf/user/listUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>editUser</from-outcome>
+			<to-view-id>/jsf/user/editUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>disableUser</from-outcome>
+			<to-view-id>/jsf/user/disableUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>removeUser</from-outcome>
+			<to-view-id>/jsf/user/removeUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>queryUser</from-outcome>
+			<to-view-id>/jsf/user/queryUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>onlineUser</from-outcome>
+			<to-view-id>/jsf/user/onlineUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>resetPasswordUser</from-outcome>
+			<to-view-id>/jsf/user/resetPasswordUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createRole</from-outcome>
+			<to-view-id>/jsf/role/insertRole.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>changePassCrl</from-outcome>
+			<to-view-id>/jsf/config/adminPassCrl.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminRole</from-outcome>
+			<to-view-id>/jsf/role/adminRole.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createOption</from-outcome>
+			<to-view-id>/jsf/option/insertOpt.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminOption</from-outcome>
+			<to-view-id>/jsf/option/adminOpt.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createAction</from-outcome>
+			<to-view-id>/jsf/action/insertAct.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminAction</from-outcome>
+			<to-view-id>/jsf/action/adminAct.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Menú</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>backHome</from-outcome>
+			<to-view-id>/jsf/home.jsp</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Menú</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminEmail</from-outcome>
+			<to-view-id>/jsf/email/sendEmail.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>createClientOutside</from-outcome>
+			<to-view-id>/jsf/client/formInsClienOutside.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>usrValidation</from-outcome>
+			<to-view-id>/jsf/client/userValidation.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>jsf/client/userValidation.jspx</display-name>
+		<from-view-id>/jsf/client/userValidation.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>backIndexOutside</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>dashboardClients</from-outcome>
+			<to-view-id>/jsf/home/dashboardClients.jsp</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>jsf/client/formInsClienOutside</display-name>
+		<from-view-id>/jsf/client/formInsClienOutside.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>backIndexOutside</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>changePassword</from-outcome>
+			<to-view-id>/jsf/account/changePassword.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminBrand</from-outcome>
+			<to-view-id>/jsf/vehicles/adminBrand.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminVehicle</from-outcome>
+			<to-view-id>/jsf/vehicles/adminVehicle.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminVehicleAdmin</from-outcome>
+			<to-view-id>/jsf/vehicles/adminVehicleAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>taskList</from-outcome>
+			<to-view-id>/jsf/task/dashBoard.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>userReport</from-outcome>
+			<to-view-id>/jsf/reports/userReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>traceabilityReport</from-outcome>
+			<to-view-id>/jsf/reports/traceabilityReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>loadTask</from-outcome>
+			<to-view-id>/jsf/task/loadTask.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminVehicle</from-outcome>
+			<to-view-id>/jsf/vehicles/adminVehicle.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>userStatementReport</from-outcome>
+			<to-view-id>/jsf/reports/userStatementReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>checkAffilationDocs</from-outcome>
+			<to-view-id>/jsf/affiliation/affiliationDocsCheck.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initConsig}</from-action>
+			<from-outcome>userShipment</from-outcome>
+			<to-view-id>/jsf/purchasing/userShipment.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>DashBoard</display-name>
+		<from-view-id>/jsf/task/dashBoard.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>taskExecution</from-outcome>
+			<to-view-id>/jsf/task/taskWizard.jspx</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>TaskWizard</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>taskTermination</from-outcome>
+			<to-view-id>/jsf/task/taskFinished.jspx</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>uploadFile</from-outcome>
+			<to-view-id>/jsf/upload/upload.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>uploadClient</from-outcome>
+			<to-view-id>/jsf/upload/uploadClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>uploadClientDocument</from-outcome>
+			<to-view-id>/jsf/upload/uploadClientDocument.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>massiveVehicleLoadClient</from-outcome>
+			<to-view-id>/jsf/vehicles/massiveVehicleLoadClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>massiveVehicleLoadAdmin</from-outcome>
+			<to-view-id>/jsf/vehicles/massiveVehicleLoadAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>uploadAdminDocument</from-outcome>
+			<to-view-id>/jsf/upload/uploadAdminDocument.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>viewFile</from-outcome>
+			<to-view-id>/jsf/upload/view.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>viewClient</from-outcome>
+			<to-view-id>/jsf/upload/viewClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>downloadClient</from-outcome>
+			<to-view-id>/jsf/upload/downloadClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>downloadClientDocument</from-outcome>
+			<to-view-id>/jsf/upload/downloadClientDocument.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>downloadAdmin</from-outcome>
+			<to-view-id>/jsf/upload/downloadAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initClientProcess}</from-action>
+			<from-outcome>viewClientProcess</from-outcome>
+			<to-view-id>/jsf/processTrack/clientProcess.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initVerificationDocs}</from-action>
+			<from-outcome>docsVerification</from-outcome>
+			<to-view-id>/jsf/verification/documents.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initCreateOffice}</from-action>
+			<from-outcome>createOffice</from-outcome>
+			<to-view-id>/jsf/client/createOffice.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initOrder}</from-action>
+			<from-outcome>createOrder</from-outcome>
+			<to-view-id>/jsf/purchasing/purchaseOrder.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initEditOrder}</from-action>
+			<from-outcome>editOrder</from-outcome>
+			<to-view-id>/jsf/purchasing/editOrder.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initPurchase}</from-action>
+			<from-outcome>purchase</from-outcome>
+			<to-view-id>/jsf/purchasing/purchase.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initAccountCreate}</from-action>
+			<from-outcome>accountCreate</from-outcome>
+			<to-view-id>/jsf/client/accountClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initDeviceAccount}</from-action>
+			<from-outcome>deviceAccount</from-outcome>
+			<to-view-id>/jsf/device/enrollAccount.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initApprove}</from-action>
+			<from-outcome>approveCosig</from-outcome>
+			<to-view-id>/jsf/treasury/approveConsig.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initConsultOrder}</from-action>
+			<from-outcome>consultOrder</from-outcome>
+			<to-view-id>/jsf/purchasing/consultOrder.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initConfirmOrder}</from-action>
+			<from-outcome>confirmOrder</from-outcome>
+			<to-view-id>/jsf/warehouse/confirmOrder.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initRecharge}</from-action>
+			<from-outcome>recharge</from-outcome>
+			<to-view-id>/jsf/manageTISC/recharge.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initConsultCard}</from-action>
+			<from-outcome>consultCard</from-outcome>
+			<to-view-id>/jsf/manageTISC/consult.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initDeviceProcess}</from-action>
+			<from-outcome>viewDeviceProcess</from-outcome>
+			<to-view-id>/jsf/processTrack/deviceProcess.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initAddCard}</from-action>
+			<from-outcome>addCard</from-outcome>
+			<to-view-id>/jsf/device/addCard.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.consultHisRecharge}</from-action>
+			<from-outcome>consultHisRecharge</from-outcome>
+			<to-view-id>/jsf/manageTISC/consultHistoRecharge.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportAllClients</from-outcome>
+			<to-view-id>/jsf/reports/allClientsReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>contractClients</from-outcome>
+			<to-view-id>/jsf/reports/contractClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.registerMaster}</from-action>
+			<from-outcome>newMaster</from-outcome>
+			<to-view-id>/jsf/manageTISC/newMaster.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>exportMaster</from-outcome>
+			<to-view-id>/jsf/manageTISC/exportMaster.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.authorizeVipsa}</from-action>
+			<from-outcome>authorizeVipsa</from-outcome>
+			<to-view-id>/jsf/manageTISC/authorizeMaster.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initCustomizationProcess}</from-action>
+			<from-outcome>viewCustomizationProcess</from-outcome>
+			<to-view-id>/jsf/processTrack/customizationProcess.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.createInclusion}</from-action>
+			<from-outcome>createInclusion</from-outcome>
+			<to-view-id>/jsf/inclusion/inclusion.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initInclusionProcess}</from-action>
+			<from-outcome>viewInclusionProcess</from-outcome>
+			<to-view-id>/jsf/processTrack/inclusionProcess.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.modInclusion}</from-action>
+			<from-outcome>modInclusion</from-outcome>
+			<to-view-id>/jsf/inclusion/modInclusion.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initInstallLocation}</from-action>
+			<from-outcome>installLocation</from-outcome>
+			<to-view-id>/jsf/installLocation/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initReplacementCauses}</from-action>
+			<from-outcome>replacementCauses</from-outcome>
+			<to-view-id>/jsf/replacementCauses/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initInstall}</from-action>
+			<from-outcome>initInstall</from-outcome>
+			<to-view-id>/jsf/manageTISC/install.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initSpecialExemptType}</from-action>
+			<from-outcome>initSpecialExemptType</from-outcome>
+			<to-view-id>/jsf/specialExemptType/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initExemptOffice}</from-action>
+			<from-outcome>initExemptOffice</from-outcome>
+			<to-view-id>/jsf/exemptOffice/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initExemptOffice}</from-action>
+			<from-outcome>initExemptOffice</from-outcome>
+			<to-view-id>/jsf/exemptOffice/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initAddConsig}</from-action>
+			<from-outcome>initAddConsig</from-outcome>
+			<to-view-id>/jsf/purchasing/registerConsig.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initConsultConsig}</from-action>
+			<from-outcome>initConsultConsig</from-outcome>
+			<to-view-id>/jsf/treasury/consultConsig.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initOrderProcess}</from-action>
+			<from-outcome>initOrderProcess</from-outcome>
+			<to-view-id>/jsf/processTrack/orderProcess.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Task Engine Config</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>confTaskEng</from-outcome>
+			<to-view-id>/jsf/taskeng/configTaskEng.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>consultConsig</from-outcome>
+			<to-view-id>/jsf/purchasing/consultClientConsig.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.adminBank}</from-action>
+			<from-outcome>adminBank</from-outcome>
+			<to-view-id>/jsf/bankAdmin/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.adminBankAccount}</from-action>
+			<from-outcome>adminBankAccount</from-outcome>
+			<to-view-id>/jsf/bankAccount/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.adminWarehouseDependency}</from-action>
+			<from-outcome>adminWarehouseDependency</from-outcome>
+			<to-view-id>/jsf/warehouse/adminDependency.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.adminWarehouseCardType}</from-action>
+			<from-outcome>adminWarehouseCardType</from-outcome>
+			<to-view-id>/jsf/warehouse/adminCardType.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.listClient}</from-action>
+			<from-outcome>listClient</from-outcome>
+			<to-view-id>/jsf/client/listClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initCompany}</from-action>
+			<from-outcome>initCompany</from-outcome>
+			<to-view-id>/jsf/company/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.createStation}</from-action>
+			<from-outcome>createStation</from-outcome>
+			<to-view-id>/jsf/station/create.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.listStation}</from-action>
+			<from-outcome>listStation</from-outcome>
+			<to-view-id>/jsf/station/list.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initFixTyped}</from-action>
+			<from-outcome>initFixTyped</from-outcome>
+			<to-view-id>/jsf/manageTISC/fixMaster.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.adminPoint}</from-action>
+			<from-outcome>adminPoint</from-outcome>
+			<to-view-id>/jsf/point/admin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.asignPoint}</from-action>
+			<from-outcome>asignPoint</from-outcome>
+			<to-view-id>/jsf/point/asign.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.createEntryOrder}</from-action>
+			<from-outcome>createEntryOrder</from-outcome>
+			<to-view-id>/jsf/warehouse/createEntry.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.updateEntryOrder}</from-action>
+			<from-outcome>updateEntryOrder</from-outcome>
+			<to-view-id>/jsf/warehouse/updateEntry.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initPrechargeTag}</from-action>
+			<from-outcome>initPrechargeTag</from-outcome>
+			<to-view-id>/jsf/warehouse/prechargeTag.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initConsultOrderDate}</from-action>
+			<from-outcome>initConsultOrderDate</from-outcome>
+			<to-view-id>/jsf/warehouse/consultEntryDate.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initConsultOrderNumber}</from-action>
+			<from-outcome>initConsultOrderNumber</from-outcome>
+			<to-view-id>/jsf/warehouse/consultEntryNumber.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initParamPrecharge}</from-action>
+			<from-outcome>initParamPrecharge</from-outcome>
+			<to-view-id>/jsf/warehouse/paramPrecharge.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>viewMyProcess</from-outcome>
+			<to-view-id>/jsf/account/myProcess.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initIniSpecialCard}</from-action>
+			<from-outcome>initIniSpecialCard</from-outcome>
+			<to-view-id>/jsf/initialization/specialInitialization.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initPerSpecialCard}</from-action>
+			<from-outcome>initPerSpecialCard</from-outcome>
+			<to-view-id>/jsf/personalization/specialPersonalization.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initSavePay}</from-action>
+			<from-outcome>initSavePay</from-outcome>
+			<to-view-id>/jsf/device/savePayment.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initAccountMove}</from-action>
+			<from-outcome>initAccountMove</from-outcome>
+			<to-view-id>/jsf/transaction/accountMove.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.iniAccountDevices}</from-action>
+			<from-outcome>iniAccountDevices</from-outcome>
+			<to-view-id>/jsf/account/devices.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.iniDistTag}</from-action>
+			<from-outcome>iniDistTag</from-outcome>
+			<to-view-id>/jsf/account/distributionBalanceTag.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initMyAccountDevices}</from-action>
+			<from-outcome>initMyAccountDevices</from-outcome>
+			<to-view-id>/jsf/account/myDevices.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initMyAccountMove}</from-action>
+			<from-outcome>initMyAccountMove</from-outcome>
+			<to-view-id>/jsf/account/accountMove.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>myTraceabilityReport</from-outcome>
+			<to-view-id>/jsf/account/traceabilityReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>myTraceabilityByPlate</from-outcome>
+			<to-view-id>/jsf/reports/traceabilityPlateReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+   <navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>traceabilityByPlate</from-outcome>
+			<to-view-id>/jsf/account/traceabilityPlateReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initUpTranTelepeaje}</from-action>
+			<from-outcome>initUpTranTelepeaje</from-outcome>
+			<to-view-id>/jsf/upload/uploadTelepeaje.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>contactInfo</from-outcome>
+			<to-view-id>/jsf/info/infoContactInside.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>contactInfo</from-outcome>
+			<to-view-id>/jsf/info/infoContact.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>jsf/info/infoContact.jspx</display-name>
+		<from-view-id>/jsf/info/infoContact.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>backIndexOutside</from-outcome>
+			<to-view-id>/index.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-action>#{general.initEnterDevice}</from-action>
+			<from-outcome>initEnterDevice</from-outcome>
+			<to-view-id>/jsf/device/enterDevice.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>roleReport</from-outcome>
+			<to-view-id>/jsf/reports/roleReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>userRoleReport</from-outcome>
+			<to-view-id>/jsf/reports/userRole.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportVehicleAdmin</from-outcome>
+			<to-view-id>/jsf/vehicles/reportVehicleAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>clearingGenerate</from-outcome>
+			<to-view-id>/jsf/clearing/clearingGenerate.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>clearingConcRec</from-outcome>
+			<to-view-id>/jsf/clearing/clearingConcRec.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>clearingConcRecg</from-outcome>
+			<to-view-id>/jsf/clearing/clearingConcRecg.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>clearingPuntoRecg</from-outcome>
+			<to-view-id>/jsf/clearing/clearingPuntoRecg.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>clearingPuntoRec</from-outcome>
+			<to-view-id>/jsf/clearing/clearingPuntoRec.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>configBalance</from-outcome>
+			<to-view-id>/jsf/balance/configBalance.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>lowbalance</from-outcome>
+			<to-view-id>/jsf/balance/lowbalance.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>lowbalanceAdmin</from-outcome>
+			<to-view-id>/jsf/balance/lowbalanceAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>dataPolicies</from-outcome>
+			<to-view-id>/jsf/config/dataPolicies.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+	<display-name>Home</display-name>
+	<from-view-id>/jsf/*</from-view-id>
+	<navigation-case>
+		<from-outcome>informationBalance</from-outcome>
+			<to-view-id>/jsf/config/informacionSaldos.jspx</to-view-id>
+			<redirect />
+	</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>accountSettings</from-outcome>
+			<to-view-id>/jsf/account/accountSettings.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>enterBlackList</from-outcome>
+			<to-view-id>/jsf/blackList/enterBlackList.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>vehicleByType</from-outcome>
+			<to-view-id>/jsf/reports/traceabilityVehicle.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>accountNote</from-outcome>
+			<to-view-id>/jsf/account/createNote.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>accountProcess</from-outcome>
+			<to-view-id>/jsf/processTrack/accountProcess.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>invoicesGenerating</from-outcome>
+			<to-view-id>/jsf/invoice/invoiceGeneration.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>messageStatus</from-outcome>
+			<to-view-id>/jsf/messageStatus/messageStatus.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>imageSelector</from-outcome>
+			<to-view-id>/jsf/images/imageSelector.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>imageRejected</from-outcome>
+			<to-view-id>/jsf/images/reviewImages.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+		<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reviewManualTransaction</from-outcome>
+			<to-view-id>/jsf/images/reviewManualTransaction.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createObjection</from-outcome>
+			<to-view-id>/jsf/objections/createObjection.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reconciliationReport</from-outcome>
+			<to-view-id>/jsf/reports/reconciliationReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>securityParametersReport</from-outcome>
+			<to-view-id>/jsf/reports/securityParametersReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>assignmentsRechargeReport</from-outcome>
+			<to-view-id>/jsf/reports/assignmentsRechargeReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>auditReconciliationReport</from-outcome>
+			<to-view-id>/jsf/reports/auditReconciliationReport.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>bankAccountClient</from-outcome>
+			<to-view-id>/jsf/bankAccount/bankAccountClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>associationPaymentMethod</from-outcome>
+			<to-view-id>/jsf/bankAccount/associationPaymentMethod.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>dissociationBankAccount</from-outcome>
+			<to-view-id>/jsf/bankAccount/dissociationBankAccount.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>informationBalanceClient</from-outcome>
+			<to-view-id>/jsf/bankAccount/informationBalance.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>chargeMassiveTags</from-outcome>
+			<to-view-id>/jsf/device/chargeMassiveTags.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>activeDevice</from-outcome>
+			<to-view-id>/jsf/device/activeDevice.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>activeDeviceAdmin</from-outcome>
+			<to-view-id>/jsf/device/activeDeviceAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+		<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createBankAccountAdmin</from-outcome>
+			<to-view-id>/jsf/bankAccount/createBankAccountAdministrator.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>electronicRecharge</from-outcome>
+			<to-view-id>/jsf/bankAccount/electronicRecharge.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createBankAccountAdmin</from-outcome>
+			<to-view-id>/jsf/bankAccount/createBankAccountAdministrator.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>cancelAutomaticRecharge</from-outcome>
+			<to-view-id>/jsf/bankAccount/cancelAutomaticRecharge.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminHolidays</from-outcome>
+			<to-view-id>/jsf/holidaysAdmin/adminHolidays.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>charges</from-outcome>
+			<to-view-id>/jsf/config/charges.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>approveObjection</from-outcome>
+			<to-view-id>/jsf/objections/approveObjection.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>accountListClose</from-outcome>
+			<to-view-id>/jsf/account/accountListClose.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>myAccountClose</from-outcome>
+			<to-view-id>/jsf/account/myAccountClose.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+		<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminPriorityProduct</from-outcome>
+			<to-view-id>/jsf/bankAccount/adminPriorityProduct.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+    <navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>dictionary</from-outcome>
+			<to-view-id>/jsf/passwordDictionary/passwordDictionary.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>   
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>recharge</from-outcome>
+			<to-view-id>/jsf/account/recharge.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>  
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>systemParameter</from-outcome>
+			<to-view-id>/jsf/config/systemParameters.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>  
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminMenu</from-outcome>
+			<to-view-id>/jsf/menu/adminMenu.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>  
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createEmail</from-outcome>
+			<to-view-id>/jsf/emailConfig/emailCreate.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>  
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminEmail</from-outcome>
+			<to-view-id>/jsf/emailConfig/emailAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>  
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>disableReAccountDevice</from-outcome>
+			<to-view-id>/jsf/device/disableReAccountDevice.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>showDeviceState</from-outcome>
+			<to-view-id>/jsf/device/showDeviceState.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+		
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>createReclamation</from-outcome>
+			<to-view-id>/jsf/objections/createReclamation.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+		<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>enterFactory</from-outcome>
+			<to-view-id>/jsf/device/enterFactory.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>documentList</from-outcome>
+			<to-view-id>/jsf/verification/documentList.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>editDataClient</from-outcome>
+			<to-view-id>/jsf/client/editDataClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>formEnterUserClient</from-outcome>
+			<to-view-id>/jsf/user/formEnterUserClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>invoiceReportByPlate</from-outcome>
+			<to-view-id>/jsf/reports/invoiceReportByPlate.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>detailAccount</from-outcome>
+			<to-view-id>/jsf/reports/detailAccountMove.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportTraceabilityVehicle</from-outcome>
+			<to-view-id>/jsf/reports/reportTraceabilityVehicle.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportConsolidatedByVehicle</from-outcome>
+			<to-view-id>/jsf/reports/reportConsolidatedByVehicle.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportIndividualByVehicle</from-outcome>
+			<to-view-id>/jsf/reports/reportIndividualByVehicle.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>fileTransaction</from-outcome>
+			<to-view-id>/jsf/reports/fileTransaction.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>summaryAccountMove</from-outcome>
+			<to-view-id>/jsf/reports/summaryAccount.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportDistributionDevice</from-outcome>
+			<to-view-id>/jsf/reports/distributionDevice.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>detailAccountMoveAdmin</from-outcome>
+			<to-view-id>/jsf/newAdminReports/detailAccountMoveAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportDistributionDeviceAdmin</from-outcome>
+			<to-view-id>/jsf/newAdminReports/distributionDeviceAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>invoiceReportByPlateAdmin</from-outcome>
+			<to-view-id>/jsf/newAdminReports/invoiceReportByPlateAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>summaryAccountMoveAdmin</from-outcome>
+			<to-view-id>/jsf/newAdminReports/summaryAccountAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>fileTransactionAdmin</from-outcome>
+			<to-view-id>/jsf/newAdminReports/fileTransactionAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportTraceabilityVehicleAdmin</from-outcome>
+			<to-view-id>/jsf/newAdminReports/reportTraceabilityVehicleAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportConsolidatedByVehicleAdmin</from-outcome>
+			<to-view-id>/jsf/newAdminReports/reportConsolidatedByVehicleAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reportIndividualByVehicleAdmin</from-outcome>
+			<to-view-id>/jsf/newAdminReports/reportIndividualByVehicleAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+    <navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminTags</from-outcome>
+			<to-view-id>/jsf/device/adminTags.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>dailyConciliation</from-outcome>
+			<to-view-id>/jsf/conciliation/dailyConciliation.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>managementNotificationAdmin</from-outcome>
+			<to-view-id>/jsf/emailConfig/managementNotificationAdmin.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>managementNotificationClient</from-outcome>
+			<to-view-id>/jsf/emailConfig/managementNotificationClient.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>  
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>reporAdminDevice</from-outcome>
+			<to-view-id>/jsf/newAdminReports/reportLogsAdminDevice.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>minimumBalance</from-outcome>
+			<to-view-id>/jsf/config/minimumBalance.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>textEditorManager</from-outcome>
+			<to-view-id>/jsf/config/textEditorManager.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule> 
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>passwordsManagement</from-outcome>
+			<to-view-id>/jsf/user/passwordsManagement.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>securityQuestions</from-outcome>
+			<to-view-id>/jsf/account/securityQuestions.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>securityQuestionsN</from-outcome>
+			<to-view-id>/jsf/account/securityQuestions.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>securityQuestionsNew</from-outcome>
+			<to-view-id>/jsf/account/securityQuestionsNew.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>jsf/account/securityQuestionsNew.jspx</display-name>
+		<from-view-id>/jsf/account/securityQuestionsNew.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>securityQuestionsNewClient</from-outcome>
+			<to-view-id>/jsf/account/changePasswordPreenrollUser.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>index</display-name>
+		<from-view-id>/index.jspx</from-view-id>
+		<navigation-case>
+			<from-outcome>passwordReset</from-outcome>
+			<to-view-id>/jsf/user/passwordReset.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>agreementsManagement</from-outcome>
+			<to-view-id>/jsf/rechargeOnlineAdmin/agreementsManagement.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+		<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>relationAgreementChanel</from-outcome>
+			<to-view-id>/jsf/channel/agreementchannel.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<display-name>Home</display-name>
+		<from-view-id>/jsf/*</from-view-id>
+		<navigation-case>
+			<from-outcome>adminChanel</from-outcome>
+			<to-view-id>/jsf/channel/adminChannel.jspx</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+<!-- VALIDATORS -->
+	<validator>
+		<validator-id>mail</validator-id>
+		<validator-class>validator.MailValidator</validator-class>
+	</validator>
+	<validator>
+		<validator-id>email</validator-id>
+		<validator-class>validator.EMailValidation</validator-class>
+	</validator>
+	<validator>
+		<validator-id>blank</validator-id>
+		<validator-class>validator.BlankValidator</validator-class>
+	</validator>
+	<validator>
+		<validator-id>plate</validator-id>
+		<validator-class>validator.PlateValidator</validator-class>
+	</validator>
+	<validator>
+		<validator-id>existingPlate</validator-id>
+		<validator-class>validator.ExistingPlateValidator</validator-class>
+	</validator>
+	<validator>
+		<validator-id>alpha</validator-id>
+		<validator-class>validator.AlphaValidator</validator-class>
+	</validator>
+</faces-config>

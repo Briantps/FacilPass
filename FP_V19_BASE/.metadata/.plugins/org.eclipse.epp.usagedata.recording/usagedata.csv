@@ -1,0 +1,53 @@
+what,kind,bundleId,bundleVersion,description,time
+started,bundle,org.eclipse.wst.jsdt.core,1.1.102.v201111090634,"org.eclipse.wst.jsdt.core",1494297227243
+started,bundle,org.eclipse.wst.jsdt.manipulation,1.0.300.v201104272153,"org.eclipse.wst.jsdt.manipulation",1494297227243
+started,bundle,org.eclipse.wst.jsdt.ui,1.1.102.v201201131900,"org.eclipse.wst.jsdt.ui",1494297227243
+started,bundle,org.eclipse.wst.server.core,1.1.304.v20120208_1420,"org.eclipse.wst.server.core",1494297227244
+started,bundle,org.eclipse.wst.server.ui,1.3.0.v20120210_1439,"org.eclipse.wst.server.ui",1494297227244
+started,bundle,org.eclipse.wst.validation,1.2.303.v201202090300,"org.eclipse.wst.validation",1494297227245
+started,bundle,org.eclipse.wst.web,1.1.501.v201201190400,"org.eclipse.wst.web",1494297227266
+started,bundle,org.eclipse.wst.xml.core,1.1.602.v201201091944,"org.eclipse.wst.xml.core",1494297227267
+started,bundle,org.tigris.subversion.clientadapter,1.8.6,"org.tigris.subversion.clientadapter",1494297227267
+started,bundle,org.tigris.subversion.subclipse.core,1.8.22,"org.tigris.subversion.subclipse.core",1494297227267
+started,bundle,org.tigris.subversion.subclipse.mylyn,3.0.0,"org.tigris.subversion.subclipse.mylyn",1494297227267
+started,bundle,org.tigris.subversion.subclipse.tools.usage,1.1.0,"org.tigris.subversion.subclipse.tools.usage",1494297227267
+started,bundle,org.tigris.subversion.subclipse.ui,1.8.21,"org.tigris.subversion.subclipse.ui",1494297227282
+os,sysinfo,,,"win32",1494297227286
+arch,sysinfo,,,"x86",1494297227286
+ws,sysinfo,,,"win32",1494297227286
+locale,sysinfo,,,"es_CO",1494297227286
+processors,sysinfo,,,"4",1494297227286
+java.runtime.name,sysinfo,,,"Java(TM) SE Runtime Environment",1494297227286
+java.runtime.version,sysinfo,,,"1.6.0_11-b03",1494297227286
+java.specification.name,sysinfo,,,"Java Platform API Specification",1494297227286
+java.specification.vendor,sysinfo,,,"Sun Microsystems Inc.",1494297227286
+java.specification.version,sysinfo,,,"1.6",1494297227286
+java.vendor,sysinfo,,,"Sun Microsystems Inc.",1494297227286
+java.version,sysinfo,,,"1.6.0_11",1494297227286
+java.vm.info,sysinfo,,,"mixed mode",1494297227286
+java.vm.name,sysinfo,,,"Java HotSpot(TM) Client VM",1494297227286
+java.vm.specification.name,sysinfo,,,"Java Virtual Machine Specification",1494297227286
+java.vm.specification.vendor,sysinfo,,,"Sun Microsystems Inc.",1494297227286
+java.vm.specification.version,sysinfo,,,"1.0",1494297227286
+java.vm.vendor,sysinfo,,,"Sun Microsystems Inc.",1494297227286
+java.vm.version,sysinfo,,,"11.0-b16",1494297227286
+started,bundle,org.eclipse.datatools.enablement.sybase.ase,1.0.2.v201201131122,"org.eclipse.datatools.enablement.sybase.ase",1494297227313
+started,bundle,org.eclipse.jst.servlet.ui,1.1.502.v201202011054,"org.eclipse.jst.servlet.ui",1494297227351
+started,bundle,org.eclipse.jdt.apt.core,3.3.500.v20110420-1015,"org.eclipse.jdt.apt.core",1494297227718
+started,bundle,org.eclipse.epp.usagedata.ui,1.3.1.R201106061540,"org.eclipse.epp.usagedata.ui",1494297228378
+started,bundle,org.eclipse.wst.dtd.core,1.1.501.v201107252021,"org.eclipse.wst.dtd.core",1494297228418
+started,bundle,org.eclipse.wst.sse.ui,1.3.2.v201201041522,"org.eclipse.wst.sse.ui",1494297228426
+started,bundle,org.eclipse.wst.html.ui,1.0.602.v201202091936,"org.eclipse.wst.html.ui",1494297228427
+started,bundle,org.eclipse.jdt.apt.pluggable.core,1.0.400.v20110305-1450,"org.eclipse.jdt.apt.pluggable.core",1494297228437
+started,bundle,org.eclipse.wst.sse.core,1.1.602.v201112071516,"org.eclipse.wst.sse.core",1494297228437
+started,bundle,org.eclipse.jst.jsf.common,1.2.3.v201104061039,"org.eclipse.jst.jsf.common",1494297228455
+started,bundle,org.eclipse.jst.jsf.core,1.3.105.v201108261005,"org.eclipse.jst.jsf.core",1494297228457
+started,bundle,org.eclipse.jst.jsp.core,1.2.402.v201112071853,"org.eclipse.jst.jsp.core",1494297228479
+started,bundle,org.eclipse.php.core,3.0.1.v201201110400,"org.eclipse.php.core",1494297228499
+started,bundle,org.eclipse.wst.wsdl.validation,1.1.502.v201104071820,"org.eclipse.wst.wsdl.validation",1494297228529
+started,bundle,org.eclipse.wst.xsd.core,1.1.600.v201104070312,"org.eclipse.wst.xsd.core",1494297228531
+started,bundle,org.eclipse.wst.xsl.core,1.1.100.v201102270516,"org.eclipse.wst.xsl.core",1494297228536
+started,bundle,org.eclipse.jpt.jpa.db,2.0.0.v201105030000,"org.eclipse.jpt.jpa.db",1494297228820
+deactivated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1494297232791
+started,bundle,org.eclipse.wst.common.uriresolver,1.1.401.v201004280700,"org.eclipse.wst.common.uriresolver",1494297234210
+started,bundle,org.eclipse.wst.html.core,1.1.502.v201202091936,"org.eclipse.wst.html.core",1494297237639

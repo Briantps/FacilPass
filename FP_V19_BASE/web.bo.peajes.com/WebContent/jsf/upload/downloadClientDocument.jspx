@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Descargar Documentos</title>   
+	</head>
+	
+	<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="/jsf/content/header.jsp"/>  
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="/jsf/menu/menu.jsp"/>
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp"/>
+			</div>
+			<div class="bkContents span-18 prepend-1">
+			<rich:spacer height="5"/>
+			<h:form>
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:panel styleClass="richPanel">
+					<f:facet name="header">
+						<h:outputText value="Descargar Documentos" styleClass="bold"/>
+					</f:facet>
+					<rich:messages styleClass="bold" style="color: red;"/>							  
+					<rich:spacer height="10"/>	
+					<div id="scroll_horizontal">									
+						<rich:dataTable id="dtable" width="600" value="#{fileDownloadClientBean.listAllInfoVerification}" var="list" rows="20"   
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'" 
+							onRowMouseOut="this.style.backgroundColor='#FFFFFF'"  
+							rowClasses="white,grey">  
+						<rich:column style="width: 150px;text-align:center;"> 
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Nombre Documento"/> 
+							</f:facet>
+							<h:outputText value="#{list.typeDocumentDescriptionU}" styleClass="normal"/> 
+						</rich:column>
+						<rich:column style="width: 150px;text-align:center;"> 
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Estado"/> 
+							</f:facet>
+								<h:outputText value="Validado" styleClass="normal" style="font-size: 12px;color:green;" rendered="#{list.stateU==3}" />
+								<h:outputText value="Pendiente por Validar" styleClass="normal" style="font-size: 12px; color:red;" rendered="#{list.stateU==4}" />
+								<h:outputText value="Rechazado" styleClass="normal" style="font-size: 12px;color:black;" rendered="#{list.stateU==-1}"/>
+						</rich:column>
+						<rich:column width="50px" style="text-align:center;">
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value=""/>
+							</f:facet>      
+							<h:commandLink value="Descargar" action="#{fileDownloadClientBean.downLoadFileAdmin}" styleClass="bold">
+								<f:setPropertyActionListener value="#{list.codeUserU}" target="#{fileDownloadClientBean.codeUser}"/>  
+								<f:setPropertyActionListener value="#{list.url}" target="#{fileDownloadClientBean.url}"/> 
+							</h:commandLink> 
+						</rich:column>										
+						</rich:dataTable>
+						<rich:datascroller align="center" for="dtable" />
+					</div>	
+				</rich:panel>
+			</h:form>
+	<rich:spacer height="20"/>
+
+	<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{fileDownloadClientBean.showModal}" onresize="return false;" moveable="false">
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Mensaje - Descargar Documentos" styleClass="bold"/>
+		</h:panelGroup>
+	</f:facet>
+	<f:facet name="controls">
+		<h:panelGroup>
+			<a4j:form>
+				<h:commandButton action="#{fileDownloadClientBean.hideModal}" image="/img/close.png" />
+			</a4j:form>
+		</h:panelGroup>
+	</f:facet>
+	<h:outputText value="#{fileDownloadClientBean.modalMessage}" styleClass="normal"/>
+	<h:form>
+	<h:panelGrid columns="3" styleClass="tableBO">
+		<h:panelGroup>
+			<div class="span-1"></div>
+		</h:panelGroup>
+     	<h:panelGroup>
+     		<h:commandButton value="Aceptar" action="#{fileDownloadClientBean.hideModal}"  />
+     	</h:panelGroup>	     	
+    </h:panelGrid>
+	</h:form>		
+	<br />
+	</rich:modalPanel>	
+	</div>
+	<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

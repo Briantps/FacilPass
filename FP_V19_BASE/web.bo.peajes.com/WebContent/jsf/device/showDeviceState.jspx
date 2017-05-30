@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Consultar Dispositivos</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;" styleClass="bold"/>
+	<h:form>
+      <rich:panel styleClass="richPanel">
+        <f:facet name="header">
+          <h:outputText value="Dispositivos Por Estado"/>
+        </f:facet>
+        <h:panelGrid columns="4" style="size:300px; margin:auto; padding:20px; ">
+        
+          <h:outputText value="Estado:" styleClass="bold"/>
+          <h:selectOneMenu id="estados" value="#{showDevices.stateId}">
+            <f:selectItems value="#{showDevices.states}"/>
+            <a4j:support event="onchange" action="#{showDevices.ocult1}" reRender="output,rich,dispositivo"/>
+          </h:selectOneMenu>
+          <h:outputText value="Dispositivo:" styleClass="bold"/>
+          <h:inputText id="dispositivo" value="#{showDevices.device}" style="text-transform:uppercase" maxlength="50" onkeypress="return onlyHexa(event)">
+            <a4j:support event="onkeydown" action="#{showDevices.ocult}" reRender="output,rich"/>
+          </h:inputText>
+          <h:outputText value="                            " styleClass="bold"/> 
+          <h:outputText value="                            " styleClass="bold"/>  
+          <h:commandButton value="Buscar" action="#{showDevices.search}"  style="width: 80px"/>
+          <h:outputText value="                            " styleClass="bold"/>  
+        </h:panelGrid>       
+      </rich:panel>
+	  <rich:spacer height="20"/>
+      <a4j:outputPanel id="output">
+        <rich:panel id="rich" rendered="#{showDevices.showData}" styleClass="richPanel">
+           <div id="scroll_horizontal">
+           <rich:dataTable id="dTable" width="800" value="#{showDevices.deviceList}" var="list" rows="10"
+                             onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+	                         rowClasses="white,grey">
+								<rich:column width="130px" sortBy="#{list.deviceCode}" sortable="true">
+									<f:facet name="header">
+										<h:outputText value="Dispositivo" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value=" #{list.deviceCode}" 
+										styleClass="normal" style="font-size: 12px;"/>
+								</rich:column>
+								<rich:column width="120px">
+									<f:facet name="header">
+										<h:outputText value="Facial" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value=" #{list.deviceFacialId}" 
+										styleClass="normal" style="font-size: 12px;">
+									</h:outputText>
+								</rich:column>
+								<rich:column width="138px" sortable="true" sortBy="#{list.deviceEntryDate}">
+									<f:facet name="header">
+										<h:outputText value="Fecha Creación" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value=" #{list.deviceEntryDate}"
+										styleClass="normal" style="font-size: 10px;" 
+										converter="StringToStringDateConverter"/>
+								</rich:column>
+                                <rich:column  width="150px">
+									<f:facet name="header">
+										<h:outputText value="Estado" styleClass="bold"/>
+									</f:facet>
+                                      <h:outputText value="#{list.tbDeviceState.deviceStateDescription}"  styleClass="normal" style="font-size: 12px;"/>
+								</rich:column>
+                         <f:facet name="footer">
+            	             <rich:datascroller for="dTable"/>
+           	            </f:facet>
+						</rich:dataTable>
+                   </div>
+        </rich:panel>
+      </a4j:outputPanel>
+    </h:form>
+
+      <rich:modalPanel id="panel1" width="350" height="115" showWhenRendered="#{showDevices.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Consultar Dispositivos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{showDevices.hideModal}" image="/img/close.png" />
+                     <rich:componentControl for="panel1" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{showDevices.modalMessage}" styleClass="normal"/>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+          <a4j:form>
+		    <h:commandButton value="Aceptar" action="#{showDevices.hideModal}"/>
+            <rich:componentControl for="panel1" attachTo="hidelink" operation="hide" event="onclick" />
+		  </a4j:form>       
+        </h:panelGrid>
+	</rich:modalPanel>
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

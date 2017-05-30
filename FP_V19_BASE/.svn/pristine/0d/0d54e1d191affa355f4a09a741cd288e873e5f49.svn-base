@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	</head>	
+	<body>
+		<f:view>		
+			<div>
+				<h:form>
+					<rich:panel style="width:580px;height:530px;overflow: auto;display: block;">
+						<rich:dataTable id="listOptAct" rows="10" var="item" value="#{adminOptMBean.listOptAct}" style="width:500px;margin:auto;">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Opción" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value="#{item.optAct.optionId.optionName}" styleClass="normal"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Acción" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value="#{item.optAct.actionId.actionName}" styleClass="normal"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Regla Navegación" styleClass="bold"/>
+								</f:facet>
+								<h:inputText value="#{item.optAct.behavior}" styleClass="normal" rendered="#{item.optAct.behavior == ''}"/>
+								<h:outputText value="#{item.optAct.behavior}" styleClass="normal" rendered="#{item.optAct.behavior != ''}"/>
+							</rich:column>
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText value="Asignar" styleClass="bold"/>
+								</f:facet>
+								<h:selectBooleanCheckbox value="#{item.active}" />
+							</rich:column>
+						    <f:facet name="footer">
+				                <rich:datascroller id="datascroller" for="listOptAct" />
+				            </f:facet>
+						</rich:dataTable>
+						<rich:spacer height="10"/>	
+						<table width="100px">
+							<tr>
+								<td width="25%"></td>
+								<td width="25%"></td>
+								<td width="25%"></td>
+								<td width="25%">
+									<h:commandButton action="#{adminOptMBean.assigOptAct}" value="Guardar" styleClass="normal"/>
+								</td>
+							</tr>
+						</table>		
+					</rich:panel>
+				</h:form>
+				<rich:spacer height="20"/>			
+				<rich:modalPanel id="panel" width="350" height="125" showWhenRendered="#{adminOptMBean.modificate || adminOptMBean.error}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Acciones por Opción" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{adminOptMBean.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{adminOptMBean.msg}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+				     		<h:panelGroup>
+				     			<h:commandButton value="Aceptar" action="#{adminOptMBean.hideModal}"  />
+				     		</h:panelGroup>	     	
+				    	</h:panelGrid>
+				    </h:form>
+				    <br/>
+				</rich:modalPanel>
+			</div>
+		</f:view>
+	</body>
+</html>

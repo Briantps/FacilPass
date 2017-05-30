@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	
+   <script>
+      function verFoto(id,fecc) {
+	    url = ('/web.bo.peajes.com/peajes/jsf/images/createNotif.jsf?id='+id+'&amp;fec='+fecc);
+	    win = window
+			.open(
+					url,
+					"",
+					"width=900, height=690, scrollbars=yes,  top=80, left=150, resizable=false, status=yes");
+      }
+      function selectionPhoto(idPhoto, name){
+    	  document.getElementById("form1:ids").value=idPhoto;
+    	  document.getElementById("idPhoto1").value=idPhoto;
+    	  document.getElementById("name1").value=name;	 
+      }
+      
+   </script>
+   <title>Certificación de Primer Paso</title>
+       <style type="text/css">
+        .pic-normal {
+            width: 120px;
+            border: 2px solid #ACBECE;
+
+        }
+        .wrap1 {
+            width:190px;
+            height: 130px;
+            float: left;            
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;" styleClass="bold"/>	
+    <h:form id="form">
+    <rich:panel style="width: 750px;">
+     <f:facet name="header" >
+      <h:outputText value="Certificación de Primer Paso" styleClass="bold"></h:outputText>
+     </f:facet>
+     <rich:panel style="width: 720px;">
+     <h:panelGrid columns="4"  style="margin: auto;">
+       <h:panelGroup>
+       	<h:outputText value="Fecha Inicio: " styleClass="bold"/>
+       	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+       </h:panelGroup>
+       <rich:calendar id="fec1" value="#{reviewManualTransaction.initDate}"
+        	datePattern="dd/MM/yyyy"
+            showApplyButton="false"
+            cellWidth="24px"
+            cellHeight="22px"
+            style="width:157px"/>
+
+      <h:panelGroup>
+      	<h:outputText value="Fecha Fin: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <rich:calendar id="fec2" value="#{reviewManualTransaction.endDate}"
+            datePattern="dd/MM/yyyy"
+            showApplyButton="false"
+            cellWidth="24px"
+            cellHeight="22px"
+            style="width:157px"/>
+
+      <h:panelGroup>
+		<h:outputText value="Concesión: " styleClass="bold"/>
+        <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+
+      <h:selectOneMenu id="conces" value="#{reviewManualTransaction.conce}" style="width: 157px;">
+        <f:selectItems value="#{reviewManualTransaction.conceList}"/>
+        <a4j:support event="onchange" reRender="stations,lanes" ajaxSingle="true"/>
+      </h:selectOneMenu>
+
+      <h:outputText value="Estación: " styleClass="bold"/>
+      <h:selectOneMenu id="stations" value="#{reviewManualTransaction.stationId}" style="width: 157px;">
+        <f:selectItems value="#{reviewManualTransaction.stationList}"/>
+        <a4j:support event="onchange" reRender="lanes" ajaxSingle="true"/>
+      </h:selectOneMenu>
+
+      <h:outputText value="Carril: " styleClass="bold"/>
+      <h:selectOneMenu id="lanes" value="#{reviewManualTransaction.laneId}" style="width:157px;">
+        <f:selectItems value="#{reviewManualTransaction.laneList}"/>
+      </h:selectOneMenu>
+
+      <h:panelGroup>
+      	<h:outputText value="Tipo Doc: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:selectOneMenu id="typesDoc" value="#{reviewManualTransaction.codeType}" style="width:157px;">
+        <f:selectItems value="#{reviewManualTransaction.codeTypesList}"/>
+        <a4j:support event="onchange" action="#{reviewManualTransaction.changeTypeDoc}" reRender="client,m"/>
+      </h:selectOneMenu>
+
+      <h:panelGroup>
+      	<h:outputLabel value="#{msg.NumDoc}: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:inputText id="client" value="#{reviewManualTransaction.codClient}" onkeypress="return numOnly(event)" style="width:155px;">
+       <a4j:support event="onkeypress"  action="#{reviewManualTransaction.ocult}" reRender="accounts,devices,boton,panelData,dtable" ajaxSingle="true"/>
+       <a4j:support event="onmousedown"  action="#{reviewManualTransaction.ocult}" reRender="accounts,devices,boton,panelData,dtable" ajaxSingle="true"/>
+      </h:inputText>
+      
+      <h:panelGroup></h:panelGroup>
+
+      <h:commandButton value="Buscar"  action="#{reviewManualTransaction.search}" >
+        <a4j:support event="oncomplete"  reRender="accounts,panelM,panel" />
+      </h:commandButton>
+    
+
+      <h:outputText value="Cuenta FacilPass: " styleClass="bold"/>
+      <h:selectOneMenu id="accounts" value="#{reviewManualTransaction.accountId}" disabled="#{reviewManualTransaction.disabled}" style="width:157px;">
+        <f:selectItems value="#{reviewManualTransaction.accountList}"/>
+         <a4j:support event="onclick"  reRender="devices" ajaxSingle="true"/>
+      </h:selectOneMenu>
+
+      <h:outputText value="Dispositivos: " styleClass="bold"/>
+      <h:selectOneMenu id="devices" value="#{reviewManualTransaction.deviceId}" disabled="#{reviewManualTransaction.disabled}" style="width:157px;">
+        <f:selectItems value="#{reviewManualTransaction.deviceList}"/>
+      </h:selectOneMenu>
+
+      <h:commandButton id="boton" value="Listar" action="#{reviewManualTransaction.getTransactions}" disabled="#{reviewManualTransaction.disabled}"></h:commandButton> 
+      <h:panelGroup/><h:panelGroup/><h:panelGroup/>
+     </h:panelGrid>
+     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+	 <h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+    </rich:panel> 
+   
+    <a4j:outputPanel id="panelData" layout="inline">
+      <rich:panel id="r2" rendered="#{reviewManualTransaction.showData}" style="width: 720px;" >
+       <f:facet name="header"><h:outputText value="Lista De Transacciones"/></f:facet>
+          <div id="scroll_horizontal">
+          <rich:dataTable  border="1" id="dtable" width="950px"  value="#{reviewManualTransaction.details}" var="list" 
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+					rowClasses="white,grey" rows="10" style="width: 810px; margin:auto; border:1px; border-style:solid;">
+                
+           <rich:column width="30" style="text-align:center; border:1px; border-style:solid; padding:1px;">
+            <f:facet name="header">
+              <h:outputText value="Fecha Transacción"/>
+            </f:facet>
+            <h:outputText value="#{list.dateTransaction}"/>
+           </rich:column>  
+            <rich:column width="15" style="text-align:center; border:1px; border-style:solid; padding:1px;height:40px;">
+            <f:facet name="header">
+              <h:outputText value="Cat."/>
+            </f:facet>
+            <h:outputText value="#{list.cate}"/>
+           </rich:column> 
+           <rich:column width="120" style="text-align:center; border:1px; border-style:solid; padding:1px;height:40px;">
+            <f:facet name="header">
+              <h:outputText value="Concesión"/>
+            </f:facet>
+            <h:outputText value="#{list.company}" style="font-size: 10px;"/>
+           </rich:column>  
+           <rich:column width="100" style="text-align:center; border:1px; border-style:solid; padding:1px;height:40px;">
+            <f:facet name="header">
+              <h:outputText value="Estación"/>
+            </f:facet>
+            <h:outputText value="#{list.station}" style="font-size: 10px;"/>
+           </rich:column> 
+           <rich:column width="35" style="text-align:center; border:1px; border-style:solid; padding:1px;height:40px;">
+            <f:facet name="header">
+              <h:outputText value="Carril"/>
+            </f:facet>
+            <h:outputText value="#{list.lane}"/>
+           </rich:column> 
+           <rich:column width="80" style="text-align:center; border:1px; border-style:solid; padding:1px;height:40px;">
+            <f:facet name="header">
+              <h:outputText value="Tag"/>
+            </f:facet>
+            <h:outputText value="#{list.device}"/>
+           </rich:column>
+           <rich:column width="80" style="text-align:center; border:1px; border-style:solid; padding:1px;height:40px;">
+            <f:facet name="header">
+              <h:outputText value="Placa"/>
+            </f:facet>
+            <h:outputText value="#{list.plate}"/>
+           </rich:column>
+           <rich:column width="80" style="text-align:center; border:1px; border-style:solid; padding:1px;height:40px;">
+            <f:facet name="header">
+              <h:outputText value="Valor"/>
+            </f:facet>
+            <h:outputText value="#{list.value}"/>
+           </rich:column>
+           <rich:column width="80" style="text-align:center; border:1px; border-style:solid; padding:1px;height:40px;">
+            <f:facet name="header">
+              <h:outputText value="Validación"/>
+            </f:facet>
+            <h:commandLink value="#{list.validate}" style="color:green; font-size: 10px;" rendered="#{list.validate=='COINCIDENTE'}" 
+                  action="#{reviewManualTransaction.showInfo}">
+                   <f:setPropertyActionListener target="#{reviewManualTransaction.transactionId2}" value="#{list.transactionId}"/>
+            </h:commandLink>
+            
+            <h:commandLink value="#{list.validate}" style="color:red; font-size: 10px;" rendered="#{list.validate!='COINCIDENTE' and list.validate!='Sin Validar'}"
+                  action="#{reviewManualTransaction.showInfo}">
+                   <f:setPropertyActionListener target="#{reviewManualTransaction.transactionId2}" value="#{list.transactionId}"/>
+            </h:commandLink>
+            
+            <h:commandLink value="#{list.validate}" style="color:black; font-size: 10px;" rendered="#{list.validate=='Sin Validar'}"
+                  action="#{reviewManualTransaction.showInfo}">
+                   <f:setPropertyActionListener target="#{reviewManualTransaction.transactionId2}" value="#{list.transactionId}"/>
+            </h:commandLink>
+           </rich:column>
+           
+           <rich:column width="70" style="text-align:center; border:1px; border-style:solid; padding:1px;">
+            <f:facet name="header">
+              <h:outputText value="Acción"/>
+            </f:facet>
+            <h:commandLink value="Validar" action="#{reviewManualTransaction.getPictures3}" disabled="#{list.disabled}">
+              <f:setPropertyActionListener target="#{reviewManualTransaction.transactionId}" value="#{list.transactionId}"/>
+              <f:setPropertyActionListener target="#{reviewManualTransaction.dateTransaction}" value="#{list.dateTransaction}"/>
+            </h:commandLink> <br/>
+            <h:commandLink value="Actualizar" action="#{reviewManualTransaction.getPictures3}" disabled="#{list.disabled==false}">
+              <f:setPropertyActionListener target="#{reviewManualTransaction.transactionId}" value="#{list.transactionId}"/>
+              <f:setPropertyActionListener target="#{reviewManualTransaction.dateTransaction}" value="#{list.dateTransaction}"/>
+            </h:commandLink>
+            
+           </rich:column> 
+           <f:facet name="footer">
+            	<rich:datascroller for="dtable"/>
+           	</f:facet>
+         </rich:dataTable>
+         </div>
+      </rich:panel>
+    </a4j:outputPanel>    
+
+
+    <rich:spacer height="10"/>	
+    </rich:panel>
+    </h:form>
+
+    <rich:modalPanel id="richpanel1" width="900" height="620" showWhenRendered="#{reviewManualTransaction.showImages}"
+         moveable="false" resizeable="true" style="overflow: scroll">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Certificación de Primer Paso" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{reviewManualTransaction.hideModal2}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+        </f:facet>
+        <h:form id="form1">
+        <div id="scroll_horizontal">
+          <h:panelGrid width="500px" styleClass="tableBO" columns="2" style="margin: auto; padding:15px; ">
+            <table>
+              <tr><td><h:outputText value="Transacción sin fotos" styleClass="bold" style="border: 1px; color:grey;" rendered="#{reviewManualTransaction.noPhotos}"/></td>
+                <ui:repeat value="#{reviewManualTransaction.images}" var="photo">   
+                  <td width="300px" height="280px"><h:graphicImage url="#{photo.name}" value="#{photo.name}" width="300px"></h:graphicImage> 
+                  </td>  
+                </ui:repeat>
+              </tr>
+            </table> 
+          </h:panelGrid>
+        </div>
+         <rich:jQuery name="enlargePic" timing="onJScall" query="animate({width:param.pwidth})" />
+         <rich:jQuery name="releasePic" timing="onJScall" query="animate({width:'300px'})"/>
+         <rich:jQuery name="enlargePic2" timing="onJScall" query="animate({height:'10px'})"/>
+
+         <br style="clear:both" />
+       
+         <rich:panel id="r5" rendered="#{reviewManualTransaction.showImages}">
+           <f:facet name="header" >
+            <h:outputText value="Certificación de Primer Paso" styleClass="bold"></h:outputText>
+           </f:facet>
+
+          <h:panelGrid styleClass="tableBO" columns="2" style="size:550px; margin: auto; padding:10px; ">
+          
+            <rich:panel id="r3" style="width:240px;height:150px">
+              <f:facet name="header" >
+                <h:outputText value="Información Del Tag" styleClass="bold"></h:outputText>
+              </f:facet>
+		      <h:panelGrid styleClass="tableBO" columns="2" style="size:150px; margin: auto; padding:5px; ">
+		        <h:outputText value="Placa:" styleClass="bold"/>
+		        <h:inputText id="plac" value="#{reviewManualTransaction.plate}" disabled="true" styleClass="bold" size="15"/>
+		        <h:outputText value="Categoria:" styleClass="bold"/>
+		        <h:inputText id="cat" value="#{reviewManualTransaction.category}" disabled="true" styleClass="bold" size="15"/>
+		       </h:panelGrid>
+            </rich:panel>
+            <rich:panel id="rich" style="width:330px;height:150px">
+              <f:facet name="header" >
+                <h:outputText value="Cambiar Información" styleClass="bold"></h:outputText>
+              </f:facet>
+		      <h:panelGrid styleClass="tableBO" columns="2" style="size:150px; margin:auto; padding:5px; ">
+		        <h:outputText value="Nueva Placa:" styleClass="bold"/>
+		        <h:inputText id="nplac" value="#{reviewManualTransaction.newPlate}"  maxlength="12" style="text-transform:uppercase;" onkeypress="return alphaNumOnly2(event)" styleClass="bold" size="15"/>
+		        <h:outputText value="Nueva Categoría:" styleClass="bold"/>
+		        <h:inputText id="ncat" value="#{reviewManualTransaction.newCate}"  styleClass="bold" size="15" onkeypress="return numOnly(event)"/>
+		        <h:commandButton value="Confirmar Cambio" action="#{reviewManualTransaction.change}">
+		        </h:commandButton>
+		       </h:panelGrid>
+            </rich:panel>
+          </h:panelGrid>
+          
+         <h:panelGrid styleClass="tableBO" columns="2" style="size:550px; margin: auto; padding:10px; ">
+         <rich:panel id="r4" >
+         <f:facet name="header" >
+          <h:outputText value="Clasificación De La Transacción" styleClass="bold"></h:outputText>
+         </f:facet>
+         <h:panelGrid styleClass="tableBO" columns="2" style="size:250px; margin: auto; padding:10px; ">
+         <h:outputText value="Tipo Clasificación:" styleClass="bold"/>
+         <h:selectOneMenu id="types" value="#{reviewManualTransaction.typeId}">
+         <f:selectItems value="#{reviewManualTransaction.types}"/>
+        </h:selectOneMenu>
+         <h:outputText value="Observación:" styleClass="bold"/>
+         <h:inputTextarea id="note" value="#{reviewManualTransaction.notification}" >
+            <f:validateLength maximum="200" />
+        </h:inputTextarea>
+         <h:outputText value="Usuario:" styleClass="bold"/>
+        <h:inputText value="#{reviewManualTransaction.document}" disabled="true" styleClass="bold" size="15"/>
+        
+        <h:commandButton value="Guardar" action="#{reviewManualTransaction.saveValidation}" styleClass="bold"></h:commandButton>
+        <h:commandButton value="Cancelar" action="#{reviewManualTransaction.hideModal2}" styleClass="bold"></h:commandButton>
+        </h:panelGrid>
+        </rich:panel>
+        
+       </h:panelGrid>
+       
+       
+        </rich:panel>
+      <a4j:outputPanel id="panel9" layout="inline">
+     <rich:panel id="r7" rendered="#{reviewManualTransaction.showMessageNotification}" styleClass="richPanel">
+       <h:outputText id="m1" value="El campo notificación no será tenido en cuenta" styleClass="bold"/>
+     </rich:panel>
+    </a4j:outputPanel>
+    </h:form>
+   </rich:modalPanel>
+
+       <rich:modalPanel id="panel" width="350" height="115"  showWhenRendered="#{reviewManualTransaction.showNotification}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Certificación de Primer Paso" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{reviewManualTransaction.hideModal2}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{reviewManualTransaction.messageNotification}" styleClass="normal"/>
+         <rich:spacer height="10"/>
+         <h:form>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+		    <h:commandButton value="Aceptar" action="#{reviewManualTransaction.hideModal2}"/>
+        </h:panelGrid>
+        </h:form>
+        <br /> 
+	</rich:modalPanel>
+    
+    <rich:modalPanel id="panelM" width="350" height="115"  showWhenRendered="#{reviewManualTransaction.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Certificación de Primer Paso" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{reviewManualTransaction.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{reviewManualTransaction.messageModal}" styleClass="normal"/>
+         <rich:spacer height="10"/>
+         <h:form>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+		    <h:commandButton value="Aceptar" action="#{reviewManualTransaction.hideModal}"/>
+        </h:panelGrid>
+        </h:form>
+        <br /> 
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panelC1" width="350" height="115"  showWhenRendered="#{reviewManualTransaction.showMessageC}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Certificación de Primer Paso" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{reviewManualTransaction.hideModalC}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{reviewManualTransaction.messageModal}" styleClass="normal"/>
+         <rich:spacer height="10"/>
+         <h:form>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+		    <h:commandButton value="Aceptar" action="#{reviewManualTransaction.hideModalC}"/>
+        </h:panelGrid>
+        </h:form>
+        <br /> 
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panelI" width="500" height="250"  showWhenRendered="#{reviewManualTransaction.showModalInfo}" onresize="return false;"
+	             moveable="false" style="overflow:auto;">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Visualizar Información" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{reviewManualTransaction.hideModalI}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+         <h:form>
+        <h:panelGrid columns="1" style="width:400px; margin: auto; padding:5px; ">
+            <rich:dataTable  border="1" id="dtable2"   value="#{reviewManualTransaction.listInfo}" var="lista" 
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+					rowClasses="white,grey" rows="5" style="margin:auto; border:1px; border-style:solid;">
+                
+              <rich:column style="text-align:center; border:1px; border-style:solid; padding:1px;">
+                <f:facet name="header">
+                  <h:outputText value="Detalle Clasificación"/>
+                </f:facet>
+                <h:outputText value="#{lista}"/>
+              </rich:column>  
+            
+              <f:facet name="footer">
+            	<rich:datascroller for="dtable2"/>
+           	  </f:facet>
+           </rich:dataTable>
+         </h:panelGrid>
+         <h:panelGrid columns="1" style="width: 100px; margin: auto; padding-left:12px;">
+           <h:commandButton value="Aceptar" action="#{reviewManualTransaction.hideModalI}" style="align:center;"/>
+        </h:panelGrid>
+        </h:form>
+        <br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{reviewManualTransaction.showConfirmation}" onresize="return true;" moveable="true">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{reviewManualTransaction.hideModalC}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{reviewManualTransaction.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form id="formC">
+		<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     	  <a4j:commandButton id="aceptar" value="Aceptar" action="#{reviewManualTransaction.changeOldTag}">
+	     	    <a4j:support event="onclick"  
+	                  onsubmit="document.getElementById('formC:aceptar').disabled=true;document.getElementById('formC:cancelar').disabled=true" />
+	            <a4j:support event="oncomplete" reRender="panelC1"/>
+	            <rich:componentControl for="confirmacion" attachTo="hidelink" operation="hide" event="onclick" />
+	     	  </a4j:commandButton>
+	     	  
+	     	</h:panelGroup>   	
+	     	<h:panelGroup>
+	     	  <h:commandButton id="cancelar" value="Cancelar" action="#{reviewManualTransaction.hideModalC}"/>
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<metadatadoc version="2.0">
+	<object type="FKIndexAssociation" id="511D13C9-51CB-719F-12BA-AEC6433FC5E0" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="true" tableid="954EE0F7-4631-ED5A-4731-351A2DA54C01" reftableid="A3C7E632-220C-B54B-6958-F113B6F0B0D8" references="C5624A69-120D-ECC0-332B-B6CE05A594FA" localindexid="4088B8B3-C860-26ED-570C-5DBF1F5C176D" delrule="RESTRICT" mandatory="true" transferable="true" use_default_color="true" background_color="null" foreground_color="null">
+		<name>TRANSACTION_NOTIFIER</name>
+		<comment></comment>
+		<notes></notes>
+		<alter type="created">
+			<user>root</user>
+			<timestamp>2010-06-10 10:42:04</timestamp>
+		</alter>
+		<alter type="changed">
+			<user>root</user>
+			<timestamp>2010-06-10 10:42:04</timestamp>
+		</alter>
+		<generator>BB1109A1-35FE-4320-57BB-44256BE6E0F6</generator>
+		<properties>
+			<parameter name="design.owner" value="bo" />
+			<parameter name="object.existsinrepository" value="true" />
+			<parameter name="property.comment.rdbms" value="" />
+		</properties>
+		<engineering should="true" />
+		<des_obj_version version="1.0" />
+		<documents />
+		<parties />
+		<changerequests />
+		<measurements />
+	</object>
+</metadatadoc>

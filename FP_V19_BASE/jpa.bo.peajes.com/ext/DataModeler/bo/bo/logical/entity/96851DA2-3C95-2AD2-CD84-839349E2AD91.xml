@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<metadatadoc version="2.0">
+	<object type="Entity" id="96851DA2-3C95-2AD2-CD84-839349E2AD91" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="true" entitytype="" allow_type_substitution="true" strategy="Single Table" minVolumes="0" expectedVolumes="0" maxVolumes="9999999" growthPercent="0" growthType="Year" normalForm="Third" adequatelyNormalized="NO" use_default_color="true" background_color="null" foreground_color="null">
+		<name>RE_DE_REGISTRATION</name>
+		<comment></comment>
+		<notes></notes>
+		<alter type="created">
+			<user>root</user>
+			<timestamp>2010-06-09 09:51:08</timestamp>
+		</alter>
+		<alter type="changed">
+			<user>root</user>
+			<timestamp>2010-06-10 09:28:15</timestamp>
+		</alter>
+		<properties>
+			<parameter name="design.owner" value="bo" />
+			<parameter name="object.existsinrepository" value="true" />
+			<parameter name="property.comment.rdbms" value="" />
+		</properties>
+		<parent inherits="false" />
+		<engineering>
+			<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+		</engineering>
+		<des_obj_version version="1.0" />
+		<fonts>
+			<font_object>
+				<parameter name="fo_type" value="Title" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="1" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Attribute" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Datatype" />
+				<parameter name="font_color" value="-16744448" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="PK Element" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="FK Element" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="UK Element" />
+				<parameter name="font_color" value="-16776961" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Not Null" />
+				<parameter name="font_color" value="-65536" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+			<font_object>
+				<parameter name="fo_type" value="Key" />
+				<parameter name="font_color" value="-16777216" />
+				<parameter name="font_name" value="Dialog" />
+				<parameter name="font_size" value="10" />
+				<parameter name="font_style" value="0" />
+			</font_object>
+		</fonts>
+		<documents />
+		<parties />
+		<changerequests />
+		<measurements />
+		<contained>
+			<object type="Attribute" id="1912DF30-C050-DA71-E9B6-122C20A5074C" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="false">
+				<name>RE_DE_REGISTRATION_ID</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-09 09:52:19</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-09 15:38:59</timestamp>
+				</alter>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="property.comment.rdbms" value="" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="19" scale="0" typename="NUMBER" />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<source value="" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Attribute" id="72A0510D-537E-4C16-E0B9-7EE83D2FA7A1" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="true" references="750225C3-BB66-CFB0-0CB8-C496F259FD98">
+				<name>DEVICE_ID</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-09 09:53:23</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-09 15:39:40</timestamp>
+				</alter>
+				<generator>2969BAB0-7C54-D92B-3301-C83328905AC5</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="property.comment.rdbms" value="" />
+					<parameter name="refers.attribute" value="750225C3-BB66-CFB0-0CB8-C496F259FD98" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="19" scale="0" typename="NUMBER" />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<source value="" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+			<object type="Attribute" id="0CEAAA39-A3C9-F10D-540B-1FE153487DB7" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" unique="false" allownull="false" usedomainconstraints="true" is_oid="false" structured_attribute_id="" fk="true" references="32083AE6-F5F0-9EC1-2139-DA5D69B45409">
+				<name>RECEIVER_ID</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-09 09:53:31</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-10 09:28:15</timestamp>
+				</alter>
+				<generator>8C70B657-8311-9BB4-B4CA-A4ED05BDC099</generator>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+					<parameter name="object.property.defaultvalue" value="" />
+					<parameter name="property.comment.rdbms" value="" />
+					<parameter name="refers.attribute" value="32083AE6-F5F0-9EC1-2139-DA5D69B45409" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<domain oid="DOM3000004" file="defaultdomains" />
+				<datatype dttype="packed" precision="19" scale="0" typename="NUMBER" />
+				<reference value="false" />
+				<logicaltype dttype="NUMERIC" oid="LOGDT019" />
+				<use value="logical type" />
+				<sourcetype sort="" />
+				<formula desc="" />
+				<subtypeSubstitution value="true" />
+				<restricted_substitution value="false" />
+				<source value="" />
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+		</contained>
+		<key>
+			<object type="Candidate Key" id="82414F50-22CC-E159-35A1-7AA7D729AE4F" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" visible_in_main_view="false" use_default_color="true" background_color="null" foreground_color="null" pk="true" keystate="Primary Key" synonym="">
+				<name>RE_DE_REGISTRATION_PK</name>
+				<comment></comment>
+				<notes></notes>
+				<alter type="created">
+					<user>root</user>
+					<timestamp>2010-06-09 09:52:55</timestamp>
+				</alter>
+				<alter type="changed">
+					<user>root</user>
+					<timestamp>2010-06-09 09:54:03</timestamp>
+				</alter>
+				<properties>
+					<parameter name="design.owner" value="bo" />
+					<parameter name="object.existsinrepository" value="true" />
+				</properties>
+				<engineering>
+					<relational_design id="8FE0DC1F-C433-69FE-B6BE-F6927A91523B" should="true" />
+				</engineering>
+				<des_obj_version version="1.0" />
+				<contains type="Attribute">1912DF30-C050-DA71-E9B6-122C20A5074C</contains>
+				<documents />
+				<parties />
+				<changerequests />
+				<measurements />
+			</object>
+		</key>
+	</object>
+</metadatadoc>

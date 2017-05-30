@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<div> 
+    <f:loadBundle basename="staticText.messages" var="msg" />
+	<h:form id="Formulario">
+		<rich:panel style="width:350px;">
+			<table width="100%">
+				<tr>
+					<td width="40%">
+						<h:outputLabel value="#{msg.CtaFP}: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>						
+				    <td width="50%">
+						<h:selectOneMenu id="types1" value="#{electronicRechargeBean.idClientAccount}">
+				           <f:selectItems value="#{electronicRechargeBean.clientAccounts}"></f:selectItems>
+				        </h:selectOneMenu>
+                   </td>
+				</tr>
+				<tr>
+					<td width="40%">
+						<h:outputText value="#{msg.FechaI}: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="60%">						
+					    <rich:calendar id="date_rech" value="#{electronicRechargeBean.dateRecharge}"                 		
+							 cellWidth="26px" cellHeight="22px" style="width:150px" 
+							 datePattern="MM/dd/yyyy" popup="true"> 	
+					    </rich:calendar>
+					</td>
+				</tr>
+				<tr>
+					<td width="40%">
+						<h:outputLabel value="#{msg.VrRecarga}: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="50%">
+					   	<h:inputText id="valueRecharge" value="#{electronicRechargeBean.valueRechText}" styleClass="normal" style="width:140px" 
+					   	 onkeypress="return solonumeros(event)" maxlength="15" onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">	   
+	                   </h:inputText> 
+					</td>
+				</tr>
+				<tr>
+					<td width="40%">
+						<h:outputText value="#{msg.FrecVrRec}: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="50%">
+						<h:selectOneMenu value="#{electronicRechargeBean.frecuencySelect}">
+							<f:selectItems value="#{electronicRechargeBean.frecuecyList}"/>
+						</h:selectOneMenu>	
+				    </td>
+				</tr>
+				<tr>
+				<td width="20%">
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				</td>
+				<td width="30%"><h:commandButton value="#{msg.Crear}" action="#{electronicRechargeBean.showConfirm}" styleClass="normal"/></td>	
+			</tr>
+			<tr>
+				<td width="20%"></td>
+				<td width="30%"></td>	
+			</tr>
+			</table>
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="160"/>	
+	
+	<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{electronicRechargeBean.showConfirmation}" onresize="return false;" moveable="false"> 
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<a4j:commandLink action="#{electronicRechargeBean.hideModal}">
+						<h:graphicImage value="/img/close.png" styleClass="hidelink" id="hidelink" />
+					</a4j:commandLink>
+					<rich:componentControl for="confirmacion" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{electronicRechargeBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form> 
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+			<h:panelGroup>
+				<a4j:region id="editando">
+	     			<a4j:commandButton id="send" value="Aceptar" action="#{electronicRechargeBean.addElectronicRecharge}">
+		                <a4j:support event="oncomplete" reRender="panelm"/>
+			           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+	               </a4j:commandButton>
+	            </a4j:region>
+	        </h:panelGroup>      
+	     	<h:panelGroup>
+	     		<h:commandButton value="Cancelar" action="#{electronicRechargeBean.hideModal}"/>
+	     	</h:panelGroup>	     	 
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+	</rich:modalPanel> 
+	
+</div>
+</f:view>
+</div>
+</body>
+</html>

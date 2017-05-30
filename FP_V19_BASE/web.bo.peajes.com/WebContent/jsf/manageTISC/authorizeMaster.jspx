@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Autorización</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5"><ui:include src="../menu/sideMenu.jsp"/></div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;"/>
+	<h:form>
+		<rich:panel styleClass="richPanel" >
+			<f:facet name="header">
+				<h:outputText value="Autorización" styleClass="bold"/>
+			</f:facet>
+			<a4j:outputPanel id="opanel">
+				<rich:spacer height="5"/>
+				<h:outputText value="No Hay Datos Para Autorizar" styleClass="bold" style="color: red;"
+					rendered="#{authorizeVipsa.showMessage}"/>
+				<rich:panel style="background-color: #FBFBFB" rendered="#{authorizeVipsa.showData}">
+					<h:panelGrid style="margin: auto; size: 500px;" columns="2" 
+						styleClass="tableBO">
+						<h:panelGroup>
+							<fieldset style="background-color: white;">
+								<legend>Tipo Operación</legend>
+								<h:panelGrid columns="1">
+									<h:selectOneRadio value="#{authorizeVipsa.operationTypeId}" styleClass="bold">
+										<f:selectItems value="#{authorizeVipsa.operationTypes}"/>
+									</h:selectOneRadio>
+								</h:panelGrid>
+							</fieldset>	
+						</h:panelGroup>
+						<h:panelGroup>
+							<fieldset style="background-color: white;">
+								<legend>Tipo Personalización</legend>
+								<h:panelGrid columns="1">
+									<h:selectOneRadio value="#{authorizeVipsa.idType}" styleClass="bold">
+										<f:selectItems value="#{authorizeVipsa.typeList}"/>
+									</h:selectOneRadio>
+								</h:panelGrid>
+							</fieldset>
+						</h:panelGroup>
+						<h:outputText value="Buscar por Placa: " styleClass="bold"/>
+						<h:inputText value="#{authorizeVipsa.plate}" styleClass="normal"/>
+						<h:outputText value="Buscar por Chasis: " styleClass="bold"/>
+						<h:inputText value="#{authorizeVipsa.chassis}" styleClass="normal"/>
+						<h:outputText/>
+						<h:commandButton value="Buscar" 
+							action="#{authorizeVipsa.searchByPlate}" styleClass="bold" style="width: 125px"/>
+						<h:outputText/>
+						<h:commandButton value="Listar Todas" 
+							action="#{authorizeVipsa.listAll}" styleClass="bold" style="width: 125px"/>
+					</h:panelGrid>
+				</rich:panel>
+				<rich:spacer height="5"/>
+				<rich:panel style="background-color: #FBFBFB" rendered="#{authorizeVipsa.showData}">
+					<rich:dataTable id="datalist" value="#{authorizeVipsa.cusList}" 
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+						onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+						var="list" rows="10" width="650px" rowClasses="white,white">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Tipo"/>
+							</f:facet>
+							<h:outputText value="#{list.tbOperationType.operationTypeName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Placa"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.vehiclePlate}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Chasis"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.vehicleChassis}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Cód Interno"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.vehicleInternalCode}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Tip. Vehículo"/>
+							</f:facet>
+							<h:outputText value="#{list.tbSpecialExemptType.tbDeviceType.deviceTypeName} - #{list.tbSpecialExemptType.specialExemptTypeName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Cliente"/>
+							</f:facet>
+							<h:outputText value="#{list.tbAccount.tbSystemUser.userNames}" styleClass="normal"
+								rendered="#{list.tbAccount.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+							<h:outputText value="#{list.tbAccount.tbSystemUser.userNames} #{list.tbAccount.tbSystemUser.userSecondNames}" styleClass="normal"
+								rendered="#{list.tbAccount.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="No. Rad"/>
+							</f:facet>
+							<h:outputText value="#{list.filingNumber}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Estado"/>
+							</f:facet>
+							<h:outputText value="#{list.tbDeviceCustomizationState.customizationStateName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="" styleClass="bold"/>
+							</f:facet>
+							<h:commandLink value="Confirmar" action="#{authorizeVipsa.initConfirm}" styleClass="bold">
+								<f:setPropertyActionListener target="#{authorizeVipsa.cusId}" value="#{list.deviceCustomizationId}"/>
+							</h:commandLink>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="" styleClass="bold"/>
+							</f:facet>
+							<h:commandLink value="Rechazar" action="#{authorizeVipsa.initReject}" styleClass="bold"
+								rendered="#{list.tbOperationType.operationTypeId != 3}">
+								<f:setPropertyActionListener target="#{authorizeVipsa.cusId}" value="#{list.deviceCustomizationId}"/>
+							</h:commandLink>
+						</rich:column>
+						<f:facet name="footer">
+							<rich:datascroller/>
+						</f:facet>
+					</rich:dataTable>
+				</rich:panel>
+			</a4j:outputPanel>
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>
+	
+	<rich:modalPanel id="confirmacionsR" width="350" height="150" showWhenRendered="#{authorizeVipsa.confirmReject}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Rechazar Transacción" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{authorizeVipsa.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{authorizeVipsa.confirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{authorizeVipsa.reject}"/>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{authorizeVipsa.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{authorizeVipsa.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Autorizaciones" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{authorizeVipsa.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{authorizeVipsa.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacionsOK" width="350" autosized="true" showWhenRendered="#{authorizeVipsa.confirm}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Verificación de Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{authorizeVipsa.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<rich:spacer height="10"/>
+		<h:form>
+		<fieldset style="background-color: white;">
+			<legend>Datos Base</legend>
+			<h:panelGrid columns="6" styleClass="tableBO">
+				<h:outputText value="Placa" styleClass="bold"/>
+				<h:inputText value="#{authorizeVipsa.vehicle.vehiclePlate}"
+					 styleClass="bold" disabled="true"/>
+				<h:outputText value="Chasis" styleClass="bold"/>
+				<h:inputText value="#{authorizeVipsa.vehicle.vehicleChassis}" styleClass="bold"
+					disabled="true"/>
+				<h:outputText value="Cód. Interno" styleClass="bold"/>
+				<h:inputText value="#{authorizeVipsa.vehicle.vehicleInternalCode}" 
+					styleClass="bold" disabled="true"/>
+			</h:panelGrid>
+		</fieldset>
+		<fieldset style="background-color: white; width: 500px;">
+			<legend>Documentos Requeridos</legend>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<h:selectBooleanCheckbox value="#{authorizeVipsa.office}" label="Oficio"/>
+					<h:outputText value="Oficio" styleClass="bold"/>
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:selectBooleanCheckbox value="#{authorizeVipsa.property}" label="Documento de Propiedad"/>
+					<h:outputText value="Documento de Propiedad" styleClass="bold"/>
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:selectBooleanCheckbox value="#{authorizeVipsa.consig}" label="Consignación"/>
+					<h:outputText value="Consignación" styleClass="bold"/>
+				</h:panelGroup>
+			</h:panelGrid>
+		</fieldset>
+		<h:panelGrid style="margin: auto; size: 500px;" columns="2" styleClass="tableBO">
+			<h:commandButton value="Confirmar" action="#{authorizeVipsa.confirmT}" styleClass="bold">
+				<a4j:support event="oncomplete" focus="panel"/>
+			</h:commandButton>
+			<h:commandButton value="Salir" action="#{authorizeVipsa.hideModal}"  />
+		</h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

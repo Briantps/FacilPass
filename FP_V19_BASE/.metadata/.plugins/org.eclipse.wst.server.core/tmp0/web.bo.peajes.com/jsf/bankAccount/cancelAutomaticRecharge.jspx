@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+<title>Desactivar Recursos Programados</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="menuheader"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="../menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+	<rich:panel style="width:600 px;margin:auto;">
+	<f:facet name="header"><h:outputText value="Lista Recargas/Asignaciones de recursos programados" styleClass="bold"/></f:facet>
+		<h:form>
+		<div id="scroll_horizontal">
+		<rich:dataTable value="#{electronicRechargeBean.automaticRechargeList}" var="list" id="lista" rows="15" width="800px">
+			
+			<!-- <rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Fecha Inicial"/></f:facet>
+				<h:outputText value="#{list.automaticRechargeDate}" styleClass="normal"/>
+			</rich:column>		
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Banco"/></f:facet>
+				<h:outputText value="#{list.bankName}" styleClass="normal"/>
+			</rich:column>
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Producto Bancario"/></f:facet>
+				<h:outputText value="#{list.bankAccountNumber}" styleClass="normal"/>
+			</rich:column>
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Valor a Asignar"/></f:facet>
+				<h:outputText value="#{list.automaticRechargeValue}" styleClass="normal">
+				 <f:convertNumber currencySymbol="$" groupingUsed="true" maxFractionDigits="0" type="currency" />
+				</h:outputText>
+			</rich:column>
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Frecuencia"/></f:facet>
+				<h:outputText value="#{list.frequencyDescript}" styleClass="normal"/>
+			</rich:column>
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Cuenta FacilPass"/></f:facet>
+				<h:outputText value="#{list.accountId}" styleClass="normal"/>
+			</rich:column> -->
+			
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Fecha Creación"/></f:facet>
+				<h:outputText value="#{list.automaticRechargeDate}" styleClass="normal"/>
+			</rich:column>
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Tipo Programación"/></f:facet>
+				<h:outputText value="#{list.programmingType} " styleClass="normal">
+				  <f:converter converterId="programmingConverter"/>
+				</h:outputText> 
+			</rich:column>	
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Cuenta FacilPass"/></f:facet>
+				<h:outputText value="#{list.accountId}" styleClass="normal"/>
+			</rich:column>
+			
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Valor a Recargar/Asignar"/></f:facet>
+				<h:outputText value="#{list.automaticRechargeValue}" styleClass="normal">
+				 <f:convertNumber currencySymbol="$" groupingUsed="true" maxFractionDigits="0" type="currency" />
+				</h:outputText>
+			</rich:column>
+			
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Saldo Mínimo"/></f:facet>
+				<h:outputText value="#{list.minimumBalance}" styleClass="normal"> <!-- HEY MODIFY THIS AFTER TEST THE FORM -->
+				 <f:convertNumber currencySymbol="$" groupingUsed="true" maxFractionDigits="0" type="currency" />
+				</h:outputText>
+			</rich:column>
+			
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Frecuencia"/></f:facet>
+				<h:outputText value="#{list.frequencyDescript}" styleClass="normal"/>
+			</rich:column>
+			
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Entidad"/></f:facet>
+				<h:outputText value="#{list.bankName}" styleClass="normal"/>
+			</rich:column>
+			
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Producto Bancario"/></f:facet>
+				<h:outputText value="#{list.bankAccountNumber}" styleClass="normal"/>
+			</rich:column>
+			
+			<rich:column width="100px" style="text-align:center;">
+				<f:facet name="header"><h:outputText styleClass="bold" value="Desactivar"/></f:facet>
+				<h:commandLink value="Eliminar" action="#{electronicRechargeBean.showConfirmRemove}" styleClass="bold" id="deleteLink">
+					<f:setPropertyActionListener value="#{list.automaticRechargeId}" target="#{electronicRechargeBean.automaticRechargeId}"/>
+					<rich:toolTip event="onmouseover" 
+								  						style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;word-break: break-all;"
+								  						horizontalOffset="40" followMouse="false"
+								  						direction="top-right" showDelay="500" styleClass="normal"
+								  						value="#{electronicRechargeBean.linkDeletetooltip}" for="deleteLink"/>
+				</h:commandLink>
+		    </rich:column>
+		    
+		</rich:dataTable>
+		<rich:datascroller align="center" for="lista" />
+		</div>
+		</h:form>
+	</rich:panel>
+	
+	<rich:spacer height="20"/>
+	
+	<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{electronicRechargeBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Desactivar Recursos Programados" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{electronicRechargeBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{electronicRechargeBean.modalMessage}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{electronicRechargeBean.hideModal}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+	    </h:form>	
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{electronicRechargeBean.showConfirmation}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{electronicRechargeBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{electronicRechargeBean.corfirmMessage}" styleClass="normal"/>
+		<a4j:form id="form">
+		<h:message for="send"/>
+		<rich:spacer height="10"/>
+		  <div align="center">
+			<a4j:region id="editando">
+	     			<a4j:commandButton id="send" value="Aceptar" action="#{electronicRechargeBean.cancelElectronicRecharge}" style="width: 80px">
+		                <a4j:support event="oncomplete" reRender="panelm"/>
+			           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+	               </a4j:commandButton>
+	        </a4j:region>
+	     	<rich:spacer width="20"/> 
+	     		<h:commandButton value="Cancelar" action="#{electronicRechargeBean.hideModal}" style="width: 80px"/>
+	      </div>
+	    </a4j:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+	</rich:modalPanel> 
+
+</div>
+<f:subview id="footer">
+	<ui:include src="../content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

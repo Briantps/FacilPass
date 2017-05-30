@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+			<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+			<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+			<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		    <script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Preguntas de Seguridad</title>
+	</head>
+	<script type="text/javascript">
+	function getFocus(numero) {
+		if(numero==1){
+	    	setTimeout(function(){document.getElementById("formulario:idPgr1").focus()},1000);
+	    }
+	    else if(numero==2){
+	    	setTimeout(function(){document.getElementById("formulario:rp1").focus()},1000);
+	    }
+	    else if(numero==3){
+	    	setTimeout(function(){document.getElementById("formulario:idPgr2").focus()},1000);
+	    }
+	    else if(numero==4){
+	    	setTimeout(function(){document.getElementById("formulario:rp2").focus()},1000);
+	    }
+	    else if(numero==5){
+	    	setTimeout(function(){document.getElementById("formulario:idPgr3").focus()},1000);
+	    }
+	    else if(numero==6){
+	    	setTimeout(function(){document.getElementById("formulario:rp3").focus()},1000);
+	    }
+	    else if(numero==7){
+	    	setTimeout(function(){document.getElementById("formulario:idPgr4").focus()},1000);
+	    }
+	     else if(numero==8){
+	    	setTimeout(function(){document.getElementById("formulario:rp3").focus()},1000);
+	    }
+	    else if(numero==9){
+	    	setTimeout(function(){document.getElementById("formulario:p5").focus()},1000);
+	    }
+	    else if(numero==10){
+	    	setTimeout(function(){document.getElementById("formulario:rp5").focus()},1000);
+	    }
+	 }
+	</script>	
+	<body onload="getFocus(#{securityQuestionsBean.numero})">
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader"><ui:include src="../menu/menu.jsp"/></f:subview>
+				</div>			
+				<div class="bkContents span-24">
+					<h:form id="formulario">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Preguntas de Seguridad" styleClass="bold"/>
+							</f:facet>
+								<h:panelGrid styleClass="tableBO" columns="1" style="size 350px; margin: auto; padding:10px; ">
+									<h:panelGroup>
+								   		<h:outputText value="Pregunta 1" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								   		<h:selectOneMenu id="idPgr1" value="#{securityQuestionsBean.idPrg1}" style="width: 650px; font-size: 12px;">
+		                					<f:selectItems value="#{securityQuestionsBean.listaPrg1}"/>
+		                	  				<a4j:support event="onchange" ajaxSingle="true" reRender="idEst, fecIni, fecFin"/>
+		              					</h:selectOneMenu>
+		              					<h:outputText styleClass="bold" value="Respuesta Pregunta 1" />
+		              					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp1"  value="#{securityQuestionsBean.rp1}" onkeypress="return Observation(event)" style="width: 645px;"/>
+							      	</h:panelGroup>
+							      	
+							      	<h:panelGroup>
+								   		<h:outputText value="Pregunta 2" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								   		<h:selectOneMenu id="idPgr2" value="#{securityQuestionsBean.idPrg2}" style="width: 650px; font-size: 12px;">
+		                					<f:selectItems value="#{securityQuestionsBean.listaPrg2}"/>
+		                	  				<a4j:support event="onchange" ajaxSingle="true" reRender="idEst, fecIni, fecFin"/>
+		              					</h:selectOneMenu>
+		              				</h:panelGroup>
+		              			    <h:panelGroup>
+		              					<h:outputText styleClass="bold" value="Respuesta Pregunta 2"/>
+		              					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp2"  value="#{securityQuestionsBean.rp2}"  onkeypress="return Observation(event)" style="width: 645px;"/>
+							      	</h:panelGroup>
+							      	
+							      	<h:panelGroup>
+								   		<h:outputText value="Pregunta 3" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								   		<h:selectOneMenu id="idPgr3" value="#{securityQuestionsBean.idPrg3}" style="width: 650px; font-size: 12px;">
+		                					<f:selectItems value="#{securityQuestionsBean.listaPrg3}"/>
+		                	  				<a4j:support event="onchange" ajaxSingle="true" reRender="idEst, fecIni, fecFin"/>
+		              					</h:selectOneMenu>
+		              				</h:panelGroup>
+		              			    <h:panelGroup>
+		              					<h:outputText styleClass="bold" value="Respuesta Pregunta 3"/>		              					
+		              					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>		              					
+		              					<h:inputText id="rp3"  value="#{securityQuestionsBean.rp3}"  onkeypress="return Observation(event)" style="width: 645px;"/>
+							      	</h:panelGroup>
+							      	
+							      								      	
+							      	<h:panelGroup>
+								   		<h:outputText value="Pregunta 4" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								   		<h:selectOneMenu id="idPgr4" value="#{securityQuestionsBean.idPrg4}" style="width: 650px; font-size: 12px;">
+		                					<f:selectItems value="#{securityQuestionsBean.listaPrg4}"/>
+		                	  				<a4j:support event="onchange" ajaxSingle="true" reRender="idEst, fecIni, fecFin"/>
+		              					</h:selectOneMenu>
+		              					<h:outputText styleClass="bold" value="Respuesta Pregunta 4"/>
+		              					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp4"  value="#{securityQuestionsBean.rp4}"  onkeypress="return Observation(event)" style="width: 645px;"/>
+							      	</h:panelGroup>
+
+		              				
+		              				<h:panelGroup>
+		              					<h:outputText styleClass="bold" value="Ingresa Pregunta 5"/>
+		              					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="p5"  value="#{securityQuestionsBean.p5}" onkeyup="return checkMaxLength(event, this, 91);" style="width: 645px; font-size: 12px;"/>
+		              				</h:panelGroup>
+		              			    <h:panelGroup>
+		              					<h:outputText styleClass="bold" value="Respuesta Pregunta 5"/>
+		              					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp5"  value="#{securityQuestionsBean.rp5}"  onkeypress="return Observation(event)" style="width: 645px;"/>
+							      	</h:panelGroup>
+								</h:panelGrid>
+								
+								<table width="100px">
+									<rich:spacer height="5"/>	
+									<div align="center">
+										<h:panelGroup>
+										 	<h:commandButton value="Aceptar"  action="#{securityQuestionsBean.validateResponse}" styleClass="center" style="width: 100px"/>
+										 	<rich:spacer width="10"/>	
+										 	<h:commandButton value="Cancelar" action="#{securityQuestionsBean.cancelResponse}" styleClass="center" style="width: 100px"/>
+										</h:panelGroup>
+									</div>
+									<h:panelGroup>
+					                 	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+					                </h:panelGroup>	
+								</table>  	
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>  
+					 
+					
+					<rich:modalPanel id="panelNew" width="350" height="115" showWhenRendered="#{securityQuestionsBean.showModalNew}" onresize="return false" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText styleClass="bold" value="Mensaje - Administración Preguntas de Seguridad"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup> 
+								<a4j:form>
+									<h:commandButton action="#{securityQuestionsBean.hideModalNew}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{securityQuestionsBean.modalMessage}"/>
+						<rich:spacer width="5"/>
+						<h:form>
+						   <div align="center">	
+	     					<h:commandButton value="Aceptar" action="#{securityQuestionsBean.hideModalNew}" style="width: 80px"/>
+						   </div>
+					    </h:form>
+					</rich:modalPanel>
+										
+					<rich:modalPanel id="panelModalValidate" width="350" height="115" 
+					showWhenRendered="#{securityQuestionsBean.showModalValidate}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración Preguntas de Seguridad" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{securityQuestionsBean.hideModal3}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{securityQuestionsBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+						    <div align="center" style="padding: 0.5cm">
+						     	<h:commandButton value="Aceptar" action="#{securityQuestionsBean.hideModal3}" onclick="getFocus(#{securityQuestionsBean.numero})" style="width: 80px;"/>
+						    </div>
+					    </h:form>
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="confirmacionInsert" width="350" height="115" showWhenRendered="#{securityQuestionsBean.showConfirmation}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{securityQuestionsBean.hideModal3}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{securityQuestionsBean.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form> 
+						<h:panelGrid columns="4" styleClass="tableBO">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+							<h:panelGroup>
+					     		<a4j:region id="editando">
+						     		<a4j:commandButton id="send" value="Aceptar" action="#{securityQuestionsBean.saveNew}" style="width: 80px">
+					                	<a4j:support event="oncomplete" reRender="panelNew,panelModalClose"/>
+							           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+					                </a4j:commandButton>
+				                </a4j:region>
+				                <rich:spacer width="10"/>
+				                <h:commandButton value="Cancelar" action="#{securityQuestionsBean.hideModal3}" style="width: 80px"/>
+					     	</h:panelGroup>   	 
+						</h:panelGrid>
+				    	</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="confirmacionCancel" width="350" height="115" 
+					showWhenRendered="#{securityQuestionsBean.showConfirmationCancel}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{securityQuestionsBean.hideModal3}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{securityQuestionsBean.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form> 
+						<h:panelGrid columns="4" styleClass="tableBO">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+							<h:panelGroup>
+						     	<h:commandButton id="send" value="Aceptar" action="#{securityQuestionsBean.logout}" style="width: 80px"/>
+				                <rich:spacer width="10"/>
+				                <h:commandButton value="Cancelar" action="#{securityQuestionsBean.hideModal3}" style="width: 80px"/>
+					     	</h:panelGroup>   	 
+						</h:panelGrid>
+				    	</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panelModalClose" width="350" height="115" 
+					showWhenRendered="#{securityQuestionsBean.showMsjClose}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración Preguntas de Seguridad" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{loginMBean.logout}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{securityQuestionsBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{loginMBean.logout}" style="width: 80px"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+				
+				<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+  						<h:outputText value="Por favor espere ..."  style="font-size:12px;"/>
+				</rich:modalPanel> 
+					
+				</div>		
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

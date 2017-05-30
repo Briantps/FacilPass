@@ -1,0 +1,475 @@
+package mBeans;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
+import jpa.TbTypeConfAutoRechar;
+
+import org.jsoup.Jsoup;
+
+import security.UserLogged;
+import validator.Validation;
+import constant.CommonConstant;
+import ejb.IConfAutomaticProgramming;
+import ejb.TextEditorManager;
+
+/**
+ * @author Jgomez
+ */
+/**
+ * @author jeisson.gomez
+ *
+ */
+public class ConfAutomaticProgrammingBean implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@EJB(mappedName = "ejb/IConfAutomaticProgramming")
+	private IConfAutomaticProgramming confAutomaticProgrammingEJB;
+
+	@EJB(mappedName = "ejb/TextEditorManager")
+	private TextEditorManager textEditorManagerEJB;
+
+	private UserLogged usrs;	
+	private List <SelectItem> listTypeConfAutRechar;
+
+	private boolean panelEdit;
+	private boolean modal;
+	private boolean modalOption;	
+	private boolean panelEditor=false;
+	private boolean panelRadio=false;
+	public boolean validateEditorOne = true;
+
+	private long validateString=0;
+	private long typeConfAutoRecharId;
+	private long typeMessageWysiwyg;
+
+	private String themeFont;
+	private String textHtml;
+	private String respRadio="1";
+	private String msnModalOK;
+	private String themeOne = "";
+	private String themeTwo = "";
+	private String themeTree = "";
+	private String themeFour = "";
+
+	public int count = 1;
+	
+	private boolean errorCharacterW = false;
+	
+	
+	//Cristhian Buchely: vars added:
+	
+	private boolean modalOption1;
+	private String msnModalOK1;
+	private String initHtmlValue;
+	private String initRadioValue;
+	
+	public String getMsnModalOK1(){ return msnModalOK1; }
+	public void setMsnModalOK1(String var){ msnModalOK1=var; }
+	
+	public boolean isModalOption1(){ return modalOption1; }
+	public void setModalOption1(boolean var){ modalOption1=var; }
+	
+	public void hideModal1(){modalOption1=false;}
+	
+	
+	//Copnstructor que consulta el usuario log
+	public ConfAutomaticProgrammingBean() {
+		usrs = (UserLogged) FacesContext.getCurrentInstance()
+		.getExternalContext().getSessionMap().get("user");				
+	}
+	//Se obtiene los temas para los tipos de letras
+
+	public void init(){
+		themeFont = textEditorManagerEJB.getThemefont();
+	}
+
+	public void cancelEdit() {
+		panelEditModal();
+	}
+
+	public String getTextHtml() {
+		return textHtml;
+	}
+
+	public void setTextHtml(String textHtml) {
+		this.textHtml = textHtml;
+	}
+
+	public boolean isPanelEdit() {
+		return panelEdit;
+	}
+
+	public void setPanelEdit(boolean panelEdit) {
+		this.panelEdit = panelEdit;
+	}
+
+	public String getMsnModalOK() {
+		return msnModalOK;
+	}
+
+	public void setMsnModalOK(String msnModalOK) {
+		this.msnModalOK = msnModalOK;
+	}
+	
+		
+	//Se determina cual es la barra de herramientas y se ubica en la primera linea
+	public String getThemeOne() {
+					
+		System.out.println("getThemeOne:");
+		ArrayList<String> list = new ArrayList<String>();
+		while (themeOne.equals("") && count <= 3 && typeMessageWysiwyg != CommonConstant.TYPE_TOOLTIP) {
+			list = (textEditorManagerEJB.getOptionToolBarrEditorText(count,
+					CommonConstant.CONFAUTOMATICPROGRAMMING));
+			if (list.size() > 1) {
+				themeOne = list.get(0);
+				themeFour = list.get(1);
+			} else {
+				themeOne = list.get(0);
+			}
+			System.out.println("Contador themeone: " + count);
+			count++;
+		}
+		if(themeOne.equals("") && typeMessageWysiwyg == CommonConstant.TYPE_TOOLTIP){			
+			themeOne = textEditorManagerEJB.getThemeTooltip();
+		}
+		return themeOne;
+	}
+
+	public void setThemeOne(String themeOne) {
+		this.themeOne = themeOne;
+	}
+	//Se determina cual es la barra de herramientas y se ubica en la segunda linea
+	public String getThemeTwo() {
+		System.out.println("getThemeTwo:");
+		ArrayList<String> list = new ArrayList<String>();
+		while (themeTwo.equals("") && count <= 3 && typeMessageWysiwyg != CommonConstant.TYPE_TOOLTIP) {
+			list = (textEditorManagerEJB.getOptionToolBarrEditorText(count,
+					CommonConstant.CONFAUTOMATICPROGRAMMING));
+
+			for (String a : list) {
+				themeTwo = a;
+			}
+			System.out.println("Contador themeTwo: " + count);
+			count++;
+		}
+		return themeTwo;
+	}
+
+	public void setThemeTwo(String themeTwo) {
+		this.themeTwo = themeTwo;
+	}
+	//Se determina cual es la barra de herramientas y se ubica en la tercera linea
+	public String getThemeTree() {
+		System.out.println("getThemeTree:");
+		ArrayList<String> list = new ArrayList<String>();
+		while (themeTree.equals("") && count <= 3 && typeMessageWysiwyg != CommonConstant.TYPE_TOOLTIP) {
+			list = (textEditorManagerEJB.getOptionToolBarrEditorText(count,
+					CommonConstant.CONFAUTOMATICPROGRAMMING));
+			System.out.println("Contador themeTree: " + count);
+			themeTree = list.get(0);
+			System.out.println("datos traido de la barra 3" + themeTree);
+
+			count++;
+		}
+		return themeTree;
+	}
+
+	public void setThemeTree(String themeTree) {
+		this.themeTree = themeTree;
+	}
+	//Se determina cual es la barra de herramientas y se ubica en la cuarta linea
+	public String getThemeFour() {
+
+		System.out.println("getThemeFour:");
+		ArrayList<String> list = new ArrayList<String>();
+		if (themeFour.equals("") && count <= 3 && typeMessageWysiwyg != CommonConstant.TYPE_TOOLTIP) {
+			list = (textEditorManagerEJB.getOptionToolBarrEditorText(count,
+					CommonConstant.CONFAUTOMATICPROGRAMMING));
+			System.out.println("Contador themeFour: " + count);
+			themeFour = list.get(0);
+			count++;
+		}
+		return themeFour;
+	}
+
+	public void setThemeFour(String themeFour) {
+		this.themeFour = themeFour;
+	}
+	//se utiliza libreria para quitar los elementos TAG en el documeto HTML
+	public static String html2text(String html) {
+		return Jsoup.parse(html).text();
+	}
+
+	public boolean isModal() {
+		return modal;
+	}
+
+	public void setModal(boolean modal) {
+		this.modal = modal;
+	}
+
+	public boolean isModalOption() {
+		return modalOption;
+	}
+
+	public void setModalOption(boolean modalOption) {
+		this.modalOption = modalOption;
+	}
+
+	public String getThemeFont() {
+		return themeFont;
+	}
+
+	public void setThemeFont(String themeFont) {
+		this.themeFont = themeFont;
+	}
+
+	public void setTypeConfAutoRecharId(long typeConfAutoRecharId) {
+		this.typeConfAutoRecharId = typeConfAutoRecharId;
+	}
+
+	public long getTypeConfAutoRecharId() {
+		return typeConfAutoRecharId;
+	}
+
+	public void setValidateString(long validateString) {
+		this.validateString = validateString;
+	}
+
+	public long getValidateString() {
+		return validateString;
+	}
+
+	public void setRespRadio(String respRadio) {
+		this.respRadio = respRadio;
+	}
+
+	public String getRespRadio() {
+		return respRadio;
+	}
+
+	public void setPanelEditor(boolean panelEditor) {
+		this.panelEditor = panelEditor;
+	}
+
+	public boolean isPanelEditor() {
+		return panelEditor;
+	}
+
+	public void setPanelRadio(boolean panelRadio) {
+		this.panelRadio = panelRadio;
+	}
+
+	public boolean isPanelRadio() {
+		return panelRadio;
+	}	
+	//Se obtienen los tipos de mensajes de configuracion
+	public List<SelectItem> getListTypeConfAutRechar() {
+		if (listTypeConfAutRechar == null) {
+			listTypeConfAutRechar = new ArrayList<SelectItem>();
+		} else {
+			listTypeConfAutRechar.clear();
+		}
+		
+		
+		listTypeConfAutRechar.add(new SelectItem(-1L, "--Seleccione Uno--"));
+		for (TbTypeConfAutoRechar tt : confAutomaticProgrammingEJB.getListTypeAutoRecharge()) {
+
+			if (tt.getTypeConfAutoRecharId() != -1L) {				
+				listTypeConfAutRechar.add(new SelectItem(tt.getTypeConfAutoRecharId(), tt.getTypeConfAutoRecharName()));
+			}
+
+		}			
+		return listTypeConfAutRechar;
+	}
+
+	public void setListTypeConfAutRechar(List<SelectItem> listTypeConfAutRechar) {
+		this.listTypeConfAutRechar = listTypeConfAutRechar;
+	}
+
+	//Al momento de seleccionar un tipo, se determina si se muestra el el editor de texto o los radio Button
+	public void panelEditModal() {
+		setThemeOne("");
+		setThemeFour("");
+		setThemeTwo("");
+		setThemeTree("");
+		count=1;
+		if (typeConfAutoRecharId > 0L) {
+			String [] respu = confAutomaticProgrammingEJB.getTextHTML(typeConfAutoRecharId);
+			initHtmlValue=respu[0];
+			setTextHtml(respu[0]);
+			initRadioValue=respu[1];
+			setRespRadio(respu[1]);
+			setTypeMessageWysiwyg(Long.parseLong(respu[2]));
+			setValidateString(confAutomaticProgrammingEJB.getLengthValidate(typeConfAutoRecharId));
+			setPanelEdit(true);	
+			
+			if (typeMessageWysiwyg == CommonConstant.TYPE_RADIOBUTTON){
+				setPanelEditor(false);
+				setPanelRadio(true);				
+			}else{
+				setPanelRadio(false);
+				setPanelEditor(true);
+			}
+		} else {
+			ocult();
+		}
+	}
+	//Metodo para restaurar la parte grafica, oculta paneles.
+	
+	public void ocult() {		
+		if (errorCharacterW == true) {			
+			setPanelEditor(true);
+			setModal(false);
+		} else {
+			setPanelEdit(false);
+			setPanelRadio(false);
+			setPanelEditor(false);
+			setTextHtml("");
+			hideModal();
+			setTypeConfAutoRecharId(-1L);
+			hideModal1();	 
+			setModal(false);		 
+		}
+	}
+	
+	
+	public void ocult1()
+	{
+		String fromString=null;
+		String compareString=null;
+		
+	 if(typeMessageWysiwyg != CommonConstant.TYPE_RADIOBUTTON)
+	 {
+		 fromString=textHtml;
+		 compareString=initHtmlValue;
+	 }
+	 else
+	 {
+	 	fromString=respRadio;
+	 	compareString=initRadioValue;
+	 }
+	 
+	 if(fromString!=compareString  && !(fromString!=null && compareString!=null && fromString.equals(compareString)) ) 
+	 {
+	  setMsnModalOK1("¿Está seguro de Cancelar?");
+	  modalOption1=true;	 
+	 }
+	 else{
+	  ocult();
+	 }
+	}
+	
+	//crea el registro en la base de datos
+	public void createConfAuto() {
+		hideModal();
+		
+		//Se ajusta incidencia 5267
+		switch((int)typeMessageWysiwyg)
+		{
+		 case (int)CommonConstant.TYPE_RADIOBUTTON:
+		     setMsnModalOK(confAutomaticProgrammingEJB.setUpdateTypePerson(typeConfAutoRecharId,Long.parseLong(respRadio),usrs.getUserId()));
+		     break;
+		 case (int)CommonConstant.TYPE_TOOLTIP:
+			 setMsnModalOK(confAutomaticProgrammingEJB.setCreateTXT(usrs.getUserId(), html2text(textHtml), typeConfAutoRecharId));
+			 break;
+		 default:
+			 setMsnModalOK(confAutomaticProgrammingEJB.setCreateTXT(usrs.getUserId(), textHtml, typeConfAutoRecharId));
+			 break;
+		}
+		
+		/**
+		if(typeMessageWysiwyg != CommonConstant.TYPE_RADIOBUTTON){
+			setMsnModalOK(confAutomaticProgrammingEJB.setCreateTXT(usrs.getUserId(), textHtml, typeConfAutoRecharId));
+		}else{
+			setMsnModalOK(confAutomaticProgrammingEJB.setUpdateTypePerson(typeConfAutoRecharId,Long.parseLong(respRadio),usrs.getUserId()));
+		} */
+		
+		setModalOption(false);
+		setMsnModalOK("Se han guardado los cambios con éxito");
+		setModal(true);
+		errorCharacterW = false;
+	}
+
+	public boolean preValidate(String html) {
+		String Text;
+		try {			
+			html=html.replaceAll("(&nbsp;)+","").trim();						
+			Text = html2text(html);
+			System.out.println("El texto es ----------> " + Text);
+			if (Text.length() > validateString) {
+				setMsnModalOK("El mensaje no debe contener más de "+validateString+" caracteres");
+				errorCharacterW = true;
+				return false;
+			} else if (!Validation.isObservationEditorText(Text)) {
+				setMsnModalOK("El mensaje contiene caracteres Inválidos");
+				errorCharacterW = true;
+				return false;
+			} else if (Text.equals(" ") || Text.equals(null) || Validation.containSpace(Text)) {
+				setMsnModalOK("El mensaje no puede estar vacío");
+				errorCharacterW = true;
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error en DataPoliciesBean.preValidate");
+			return false;
+		}
+		return true;
+	}
+
+	public void hideModal() {
+		setModal(false);
+		setModalOption(false);
+		setMsnModalOK("");
+	}
+
+	public void confirmation() {
+		String beforeText = textHtml.replaceAll("&nbsp;", "");
+		String text = html2text(beforeText);
+
+		text.replaceAll("^\\s", "").replaceAll("  ", "");
+		text.replaceAll("&nbsp;", "");
+		System.out.print("mensaje es ::::" + text + " tamaño del texto "
+				+ text.length());
+
+		if (text.toString().trim().length() == 0 && typeMessageWysiwyg != CommonConstant.TYPE_RADIOBUTTON) {
+			setMsnModalOK("El mensaje no puede estar vacío.");
+			errorCharacterW = true;
+			setModal(true);
+		} else {
+
+			if (typeMessageWysiwyg == 3) {
+				System.out
+				.println("Entre a Confirmar los cambios para guardar");
+				hideModal();
+				setMsnModalOK("¿Está seguro de guardar los cambios?");
+				setModalOption(true);
+				errorCharacterW = false;
+			} else if(preValidate(textHtml)) {
+				hideModal();
+				setMsnModalOK("¿Está seguro de guardar los cambios?");
+				setModalOption(true);
+				errorCharacterW = false;
+			}else{
+				setModal(true);
+			}
+
+		}
+
+	}
+
+	public void setTypeMessageWysiwyg(long typeMessageWysiwyg) {
+		this.typeMessageWysiwyg = typeMessageWysiwyg;
+	}
+
+	public long getTypeMessageWysiwyg() {
+		return typeMessageWysiwyg;
+	}
+}

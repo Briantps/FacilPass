@@ -1,0 +1,66 @@
+/* CSS Document */
+
+.inputError
+{
+	border:1px solid #FF0000;
+	background-color:#FFF4F0;
+	color:#FF0000;
+}
+
+/* Capas de transparencia y mensajes de confirmacion */
+inputX 
+{
+
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:13px;
+	border:1px solid;
+}
+
+
+#transparenciaMensaje
+{
+	position:absolute;
+	width:600px;
+	height:250px;
+	margin-top:-50px;
+	margin-left:-150px;
+	top:50%;
+	left:50%;
+	z-index: 31;
+}
+
+/* Mensajes de ayuda */
+
+#mensajesAyuda
+{
+	width:160px;
+	font-family:Verdana;
+	font-size:10px;
+	border:1px solid #264b3f;
+	position:absolute;
+	top:0px;
+	left:0px;
+	display:none;
+	text-align:center;
+	z-index: 30;
+	background-color: #dcf3ec;
+}
+
+#ayudaTitulo
+{
+	background-color:#264b3f; 
+	color:#FFFFFF; 
+	padding:1px;
+}
+
+#ayudaTexto
+{
+	vertical-align:middle;
+	padding:2px;
+	color:#264b3f;
+}
+.tablaReserva {
+	width: 250px;
+	font-family: Tahoma;
+	font-size: 11px;
+}

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Aprobar Consignaciones</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<a4j:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Aprobar Consignacines" styleClass="bold"/>
+							</f:facet>				
+							<h:outputText value="No hay Consignaciones pendientes por Aprobar."
+								style="color: #FF0000; font-size: 17px; " styleClass="bold"
+								rendered="#{!approveConsignment.showData}"/>
+							<rich:dataGrid value="#{approveConsignment.conList}" var="con" columns="1" 
+								elements="1" width="600px" rendered="#{approveConsignment.showData}">
+								<h:panelGrid style="width: 500px; margin: auto; padding:10px; " styleClass="tableBO" columns="2">										
+									<h:outputText value="Cliente: " styleClass="bold"></h:outputText>
+				                    <h:panelGroup>
+				                    	<h:outputText value="#{con.tbAccount.tbSystemUser.userNames} #{con.tbAccount.tbSystemUser.userSecondNames}" styleClass="normal" 
+			                    			rendered="#{con.tbAccount.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+				                    	<h:outputText value="#{con.tbAccount.tbSystemUser.userNames}" styleClass="normal" 
+				                    		rendered="#{con.tbAccount.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+				                    </h:panelGroup>
+				                    <h:outputText value="#{msg.NumDoc}: " styleClass="bold"></h:outputText>
+				                    <h:outputText value="#{con.tbAccount.tbSystemUser.userCode} - #{con.tbAccount.tbSystemUser.tbCodeType.codeTypeDescription}" styleClass="normal"/>							
+									<h:outputText value="No. Cuenta cliente: " styleClass="bold"/>
+									<h:outputText value="#{con.tbAccount.accountId}" styleClass="bold"/>
+									<h:outputText value="Tipo de Consignación: " styleClass="bold"/>
+									<h:outputText value="#{con.tbPayType.payTypeName}" styleClass="normal"/>
+									<h:outputText value="Fecha Consignación: " styleClass="bold" 
+										rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3 || con.tbPayType.payTypeId == 2}"/>
+									<h:outputText value="#{con.consignmentDate}" styleClass="normal" converter="TimestampConverter" 
+										rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3 || con.tbPayType.payTypeId == 2}"/>
+									<h:outputText value="Cuenta: " styleClass="bold" rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3 || con.tbPayType.payTypeId == 2}"/>
+									<h:outputText value="#{con.tbBankAccount.bankAccountNumber}"
+										styleClass="normal" rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3 || con.tbPayType.payTypeId == 2}"/>
+									<h:outputText value="Valor Pago: " styleClass="bold"/>
+									<h:outputText value="#{con.consignmentValue}" styleClass="normal" >
+										<f:convertNumber pattern="$#,##0.00"/>
+									</h:outputText>									
+									<h:outputText value="No. Cheque: " styleClass="bold" 
+										rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 }"/>
+									<h:outputText value="#{con.consignmentCheckNumber}" styleClass="normal"
+										rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 }"/>										
+									<h:outputText value="Banco Emisor: " styleClass="bold"
+										rendered="#{con.tbPayType.payTypeId == 1  || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 2}"/>
+									<h:outputText value="#{con.tbBank.bankName}" styleClass="normal"
+										rendered="#{con.tbPayType.payTypeId == 1  || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 2}"/>										
+									<h:outputText value="Oficina Consignación: " styleClass="bold"
+										rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3}"/>
+									<h:outputText value="#{con.consignmentOffice}" styleClass="normal"
+										rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3}"/>										
+									<h:outputText value="Número Consignación: " styleClass="bold"
+										rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3}"/>
+									<h:outputText value="#{con.consignmentNumber}" styleClass="normal"
+										rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3}"/>										
+									<h:outputText value="Número Cuenta de Origen: " styleClass="bold" rendered="#{con.tbPayType.payTypeId == 2}"/>
+									<h:outputText value="#{con.originAccountNumber}" styleClass="normal" rendered="#{con.tbPayType.payTypeId == 2}"/>									
+									<h:outputText value="Concepto: " styleClass="bold"/>
+									<h:outputText styleClass="bold" value="#{con.consignmentConcept}"/>		
+									<h:outputText/>
+									<h:commandLink value="Aprobar" action="#{approveConsignment.initApprove}" styleClass="bold">
+										<f:setPropertyActionListener value="#{con.consignmentId}" 
+											target="#{approveConsignment.idConsig}"/>
+									</h:commandLink>
+									<h:outputText/>
+									<h:commandLink value="Rechazar" action="#{approveConsignment.initReject}" styleClass="bold">
+										<f:setPropertyActionListener value="#{con.consignmentId}" 
+											target="#{approveConsignment.idConsig}"/>
+									</h:commandLink>
+								</h:panelGrid>
+								<f:facet name="footer">
+									<rich:datascroller/>
+				            	</f:facet>
+							</rich:dataGrid>
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>						
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{approveConsignment.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Aprobar Consignaciones" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{approveConsignment.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{approveConsignment.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{approveConsignment.hideModal}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>		
+						<br />
+					</rich:modalPanel>					
+					<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{approveConsignment.confirmationShow}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Aprobar Consignación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{approveConsignment.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{approveConsignment.corfirmMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{approveConsignment.approve}"/>
+					     		</h:panelGroup>   	
+					     		<h:panelGroup>
+					     			<h:commandButton value="Cancelar" action="#{approveConsignment.hideModal}"  />
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </h:form>
+						<br />
+					</rich:modalPanel>					
+					<rich:modalPanel id="rejection" width="350" height="115" showWhenRendered="#{approveConsignment.confirmationShowR}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Aprobar Consignación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{approveConsignment.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{approveConsignment.corfirmMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{approveConsignment.reject}"/>
+					     		</h:panelGroup>   	
+					     		<h:panelGroup>
+					     			<h:commandButton value="Cancelar" action="#{approveConsignment.hideModal}"  />
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </h:form>
+						<br />
+					</rich:modalPanel>					
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

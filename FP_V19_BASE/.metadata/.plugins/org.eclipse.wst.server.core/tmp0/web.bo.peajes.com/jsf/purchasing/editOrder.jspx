@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Orden de Pedido</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;" styleClass="bold"/>
+	<a4j:form>
+		<rich:panel styleClass="richPanel">
+			
+				<h:outputText styleClass="warn"
+					value="Sólo se podrán Editar las Ordenes a las cuales no se les ha Hecho la solicitud." />
+			
+			<f:facet name="header"><h:outputText value="Editar Orden de Pedido" styleClass="bold"/></f:facet>				
+			<rich:panel>
+				<h:panelGrid styleClass="tableBO" columns="3" style="size 300px; margin: auto; padding:10px; ">
+					<h:panelGroup>
+						<h:outputText value="Número de Orden de Pedido: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:inputText id="numO" value="#{editOrderBean.orderNumber}" styleClass="normal"
+							converterMessage="Debe digitar el Número de La Orden." required="true"
+							onkeypress="return numOnly(event)" maxlength="50"
+							requiredMessage="Debe Digitar el Número de Orden.">
+							<f:convertNumber integerOnly="true"/>
+							<f:validator validatorId="blank"/>
+						</h:inputText>
+					</h:panelGroup>
+					<h:commandButton value="Buscar" action="#{editOrderBean.search}"/>
+				</h:panelGrid>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+			</rich:panel>
+			
+			<rich:spacer height="5"/>
+
+			<a4j:outputPanel id="panelMessage" layout="inline">
+			 	<rich:panel id="pm" rendered="#{editOrderBean.showMessage}">
+			 		<h:outputText id="message" value="No hay información para la Orden de Pedido Digitada o Se ha realizado la Solicitud." 
+						styleClass="bold" style="color: red; font-size: 16"/>
+				</rich:panel>
+			</a4j:outputPanel>
+			
+			<a4j:outputPanel id="panelData" layout="inline">
+			 	<rich:panel id="pd" rendered="#{editOrderBean.showData}">
+			 		<h:panelGrid styleClass="tableBO" columns="4" style="margin: auto; size: 300px; padding:10px;">
+	                    <h:outputText value="Cliente: " styleClass="bold"></h:outputText>
+	                    <h:panelGroup>
+	                    	<h:outputText value="#{editOrderBean.order.order.tbUserData.tbSystemUser.userNames} #{editOrderBean.order.order.tbUserData.tbSystemUser.userSecondNames}" styleClass="normal" 
+	                    			rendered="#{editOrderBean.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+	                    	<h:outputText value="#{editOrderBean.order.order.tbUserData.tbSystemUser.userNames}" styleClass="normal" 
+	                    			rendered="#{editOrderBean.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+	                    </h:panelGroup>
+	                    <h:outputText value="#{msg.NumDoc}: " styleClass="bold"></h:outputText>
+	                    <h:outputText value="#{editOrderBean.order.order.tbUserData.tbSystemUser.userCode} - #{editOrderBean.order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+               			<h:outputText value="Dependencia: " styleClass="bold"/>
+               			<h:outputText value="#{editOrderBean.order.order.tbUserData.userDataOfficeName}" styleClass="normal"/>
+               			<h:outputText  value="Ciudad: " styleClass="bold"/>
+               			<h:outputText id="city" value="#{editOrderBean.order.order.tbUserData.tbMunicipality.municipalityName}" styleClass="normal"/>
+               			<h:outputText value="Dirección: " styleClass="bold"/>
+               			<h:outputText id="adre" value="#{editOrderBean.order.order.tbUserData.userDataAddress}" styleClass="normal"/>
+               			<h:outputText value="Teléfono: " styleClass="bold"/>
+               			<h:outputText id="pho" value="#{editOrderBean.order.order.tbUserData.userDataPhone}" styleClass="normal"/>
+               			<h:outputText value="Teléfono Opcional: " styleClass="bold"/>
+               			<h:outputText id="phoo" value="#{orderBean.data.userDataOptionalPhone}" styleClass="normal"/>
+               			<h:outputText value="Contacto: " styleClass="bold"/>
+               			<h:outputText id="con" value="#{editOrderBean.order.order.tbUserData.userDataContact}" styleClass="normal"/>
+               			<h:outputText/><h:outputText/><h:outputText/>
+               			<h:commandLink value="Cambiar Dependencia" action="#{editOrderBean.initChangeOffice}" styleClass="bold"/>
+               		</h:panelGrid>
+               		<rich:spacer height="5"/>
+               		<rich:separator lineType="double" height="3"/>
+               		<rich:spacer height="5"/>
+               		<h:panelGrid columns="2" styleClass="tableBO">
+               			<h:outputText value="Número de Operaciones: #{editOrderBean.numOper}" 
+               				styleClass="bold" style="font-size: 15px; color: green;"/>
+               			<h:commandButton value="Crear Nuevo Detalle" action="#{editOrderBean.initNew}"/>
+               		</h:panelGrid>
+               		<rich:spacer height="5"/>
+               		<rich:dataTable id="datalist" value="#{editOrderBean.order.toDetailList}"
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+						onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+						var="list" rows="20" width="600px" rowClasses="white,white">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Tipo de Operación" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value=" #{list.detail.tbOperationType.operationTypeName}" 
+								styleClass="normal" style="font-size: 15px;"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Valor Operación" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value="#{list.detail.detailOperationValue}" 
+								styleClass="normal" style="font-size: 15px;">
+								<f:convertNumber pattern="$#,##0.00"/>
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="" styleClass="bold"/>
+							</f:facet>
+							<h:commandLink value="Eliminar" action="#{editOrderBean.deleteDetail}" styleClass="bold"
+								rendered="#{list.detail.detailState != 3}">
+								<f:setPropertyActionListener value="#{list.detail.purchaseOrderDetailId}" 
+									target="#{editOrderBean.idDetail}"/>
+							</h:commandLink>
+						</rich:column>
+						<f:facet name="footer">
+							<rich:datascroller/>
+						</f:facet>
+					</rich:dataTable>
+				</rich:panel>
+			</a4j:outputPanel>
+		</rich:panel>
+	</a4j:form>
+	<rich:spacer height="20"/>	
+		
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{editOrderBean.showModal}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Orden de Pedido" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{editOrderBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{editOrderBean.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="paneln" width="350" height="200" showWhenRendered="#{editOrderBean.showNewDetail}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Orden de Pedido" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{editOrderBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<rich:panel>
+				<h:panelGrid columns="2" styleClass="tableBO">
+               		<h:outputText value="Seleccione el Tipo de Detalle: " styleClass="bold"/>
+               		<h:selectOneMenu value="#{editOrderBean.type}" styleClass="normal">
+               			<f:selectItems value="#{editOrderBean.listTypes}"/>
+               		</h:selectOneMenu>
+               		<h:outputText value=""/>
+               		<h:commandButton value="Guardar" action="#{editOrderBean.saveDetail}"/>
+               	</h:panelGrid>
+			</rich:panel>
+		</h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panelo" width="350" height="200" showWhenRendered="#{editOrderBean.showChangeOffice}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Cambiar Dependencia" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{editOrderBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<rich:panel>
+				<h:panelGrid columns="1" styleClass="tableBO">
+               		<h:outputText value="Seleccione la nueva Dependencia: " styleClass="bold"/>
+               		<h:selectOneMenu value="#{editOrderBean.clientDataId}" styleClass="normal">
+               			<f:selectItems value="#{editOrderBean.clientDataList}"/>
+               		</h:selectOneMenu>
+               		<h:commandButton value="Guardar Cambios" action="#{editOrderBean.saveChangeOffice}"/>
+               	</h:panelGrid>
+			</rich:panel>
+		</h:form>
+		<br />
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

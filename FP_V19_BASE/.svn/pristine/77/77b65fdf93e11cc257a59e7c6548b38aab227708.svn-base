@@ -1,0 +1,410 @@
+package ejb;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import constant.LogAction;
+import constant.LogReference;
+import constant.ProcessTrackDetailType;
+import constant.ProcessTrackType;
+
+import jpa.TbAccount;
+import jpa.TbAutomaticRecharge;
+//import jpa.TbAutomaticRechargeDeta;
+import jpa.ReAccountBank;
+import jpa.TbFrequency;
+import jpa.TbProcessTrack;
+
+import util.ReElectronicRecharge;
+import util.ClientRecharge;
+import crud.ObjectEM;
+
+
+@Stateless(mappedName = "ejb/ElectronicRecharge")
+public class ElectronicRechargeEJB implements ElectronicRecharge {
+	
+	@PersistenceContext(unitName = "bo")
+	private EntityManager em;
+	
+	@EJB(mappedName="ejb/Process")
+	private Process process;
+				
+	@EJB(mappedName="ejb/Log")
+	private Log log;
+	
+	private ObjectEM objectEM;
+	
+    /**
+     * Default constructor. 
+     */
+    public ElectronicRechargeEJB() {
+    }
+
+
+    /**
+	 * Método creado para listar las cuentas asociadas del cliente en sesión
+	 * @author psanchez
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ReElectronicRecharge> getAccountAsociatesByClient(Long userCode) {
+		List<ReElectronicRecharge> list = new ArrayList<ReElectronicRecharge>();
+		
+		try {
+			Query q= em.createNativeQuery("select distinct rab.account_bank_id, rab.account_id, rab.bank_account_id, rab.date_association, ta.account_state_type_id from tb_bank_account tba "
+                                        + "inner join re_account_bank rab on tba.bank_account_id= rab.bank_account_id "
+                                        + "left join tb_account ta on rab.account_id= ta.account_id "
+                                        + "inner join tb_bank tb on tba.product= tb.bank_id "
+		                                + "WHERE ta.user_id=?1 AND ta.account_state_type_id <>2 ").setParameter(1,userCode);
+			                                
+			    		List<Object> lis= (List<Object>)q.getResultList();
+			    		
+						for(int i=0;i<lis.size();i++){
+							Object[] o=(Object[]) lis.get(i);
+							
+							ReElectronicRecharge rab= new ReElectronicRecharge();
+							
+							if(rab!=null){
+							rab.setAccountBankId(o[0].toString());
+							rab.setAccountId(o[1].toString());
+							rab.setBankAccountId(o[2].toString());
+							rab.setDateAssociation(o[3].toString());
+							list.add(rab);
+						}
+					 }			
+				} catch (Exception e) {
+					System.out.println(" [ Error en ElectronicRechargeEJB.getAccountAsociatesByClient. ] ");
+					e.printStackTrace();
+				}
+				return list;
+		}
+    
+	/**
+	 * Método creado para guardar la recarga automáticas del cliente en sesión
+	 * @author psanchez
+	 */
+	@SuppressWarnings("unused")
+	@Override
+	public Long insertElectronicRecharge(Long userId, Long idClientAccount, Long valueRecharge, 
+		   Long frecuencySelect, String ip, Long creationUser, Date dateRecharge) {
+	 try {
+			Query q = 
+			em.createNativeQuery("SELECT tar.automatic_recharge_id, tb.bank_name, tba.bank_account_number, tar.automatic_recharge_value, tar.account_id, tf.frequency_description, tar.automatic_recharge_date " +
+					             "FROM tb_automatic_recharge tar " +
+		                         "INNER JOIN re_account_bank rab ON tar.account_id= rab.account_id "  +
+		                         "INNER JOIN tb_bank_account tba ON rab.bank_account_id = tba.bank_account_id "  +
+		                         "INNER JOIN tb_bank tb ON tba.product= tb.bank_id "  +
+		                         "INNER JOIN tb_frequency tf ON tar.frecuency_id = tf.frequency_id "  +
+		                         "WHERE tar.account_id=?1 AND tar.estado <>2 "+
+		                         "and rab.STATE_ACCOUNT_BANK=1");
+	
+			q.setParameter(1, idClientAccount);
+			q.getSingleResult();
+			return -1L;
+			
+		} catch (NoResultException e) {
+			// creating the bank account.
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			String dateRec = sdf.format(dateRecharge);
+			
+			//Query paramH = em.createNativeQuery("Select SYSTEM_PARAMETER_VALUE from TB_SYSTEM_PARAMETER where SYSTEM_PARAMETER_ID=42");
+			Query paramH =em.createQuery("select systemParameterValue from TbSystemParameter where systemParameterId in (42L)");
+			String timeRec = (String) (paramH.getSingleResult()!=null?paramH.getSingleResult():"02:00:00");
+			
+			String fullDateRec = dateRec+" "+timeRec;
+			
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			Date parsedDate=null;
+			try {
+				parsedDate = dateFormat.parse(fullDateRec);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			Timestamp tm = new Timestamp(parsedDate.getTime());
+			
+			Long difMillisecons = tm.getTime()-dateRecharge.getTime();
+			
+			
+			Calendar dateRechageCal = new GregorianCalendar();
+			dateRechageCal.setTime(dateRecharge);
+			dateRechageCal.add(Calendar.MILLISECOND, difMillisecons.intValue());
+			TbAccount account      =em.find(TbAccount.class, idClientAccount);
+			TbFrequency frequency  =em.find(TbFrequency.class, frecuencySelect);	
+			TbAutomaticRecharge re = new TbAutomaticRecharge();
+			Timestamp nextExecution= new Timestamp(dateRechageCal.getTimeInMillis());
+			System.out.println("nextExecution: "+nextExecution);
+			
+			Calendar frecuenciaCalendar=Calendar.getInstance();
+			frecuenciaCalendar.setTimeInMillis(frequency.getFrequencyEquiv().longValue());
+			
+			Calendar cLastexecution = this.returnCalendarLastExecution(frecuenciaCalendar, dateRechageCal);
+			Timestamp lastexecution = new Timestamp(cLastexecution.getTimeInMillis());
+			
+			System.out.println("lastexecution: "+lastexecution);
+			
+			re.setAccountId(account);
+			re.setAutomaticRechargeValue(valueRecharge);
+			re.setFrequencyId(frequency);
+			re.setAutomaticRechargeDate(dateRecharge);
+			re.setNextExecution(nextExecution);
+			re.setLastExecution(lastexecution);
+			re.setEstado(0); // Activo = 0
+			re.setProceso(0);
+	
+			objectEM = new ObjectEM(em);	
+			if(objectEM.create(re)){
+				log.insertLog("Crear Recursos Programados | Se ha creado Recursos Programados ID " + re.getAutomaticRechargeId()+ ", " +
+							  "Pendiente por autorizar la asignación de recursos programados para la Cuenta FacilPass No. " + re.getAccountId().getAccountId() + 
+				              " por Valor de $" + new DecimalFormat("#,###,###,###").format(re.getAutomaticRechargeValue())+ " y Frecuencia " + re.getFrequencyId().getFrequencyDescript() ,
+					           LogReference.AUTOMATICRECHARGE, LogAction.CREATE, ip, creationUser);
+					
+				/*TbAutomaticRechargeDeta tad = new TbAutomaticRechargeDeta();
+				tad.setAutomaticRechargeId(re);
+				tad.setLastExecution(re.getLastExecution());		
+				tad.setEstado(1);
+				em.persist(tad);
+				em.flush();*/
+				
+				//proceso administrador
+		        TbProcessTrack pt = process.searchProcess(ProcessTrackType.CLIENT, userId);
+				Long idPTA;
+					if(pt==null){
+						idPTA=process.createProcessTrack(ProcessTrackType.CLIENT, userId, ip, creationUser);
+						System.out.println("pt es null");
+					}else{
+						idPTA=pt.getProcessTrackId();
+						System.out.println("pt no es null");
+					}
+				System.out.println("idPTA "+ idPTA);
+				Long detailA=process.createProcessDetail(idPTA,ProcessTrackDetailType.AUTHOMATHIC_RECHARGE, 
+						  "Se realizó la asignación de recursos programados a su Cuenta FacilPass No " + 
+						  re.getAccountId().getAccountId() + " por Valor de $" + 
+						  new DecimalFormat("#,###,###,###").format(re.getAutomaticRechargeValue())+ 
+						  " y Frecuencia " + re.getFrequencyId().getFrequencyDescript()+".", creationUser, ip, 1, "", null,null,null,null);
+				
+				//proceso cliente
+				TbProcessTrack ptc = process.searchProcess(ProcessTrackType.MY_CLIENT_PROCESS, userId);
+				Long idPTC;
+					if(ptc==null){
+						idPTC=process.createProcessTrack(ProcessTrackType.MY_CLIENT_PROCESS, userId, ip, creationUser);
+						System.out.println("ptc es null");
+					}else{
+						idPTC=ptc.getProcessTrackId();
+						System.out.println("ptc no es null");
+					}
+				Long detailC=process.createProcessDetail(idPTC,ProcessTrackDetailType.AUTHOMATHIC_RECHARGE, 
+						  "Se realizó la asignación de recursos programados a su Cuenta FacilPass No " + 
+						  re.getAccountId().getAccountId() + " por Valor de $" + 
+						  new DecimalFormat("#,###,###,###").format(re.getAutomaticRechargeValue())+ 
+						  " y Frecuencia " + re.getFrequencyId().getFrequencyDescript()+".", creationUser, ip, 1, "",null,null,null,null);
+				return re.getAutomaticRechargeId();	 	  
+			  }
+		} catch (Exception e) {
+			System.out.println(" [ Error en ElectronicRechargeEJB.insertElectronicRecharge. ] ");
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	
+	/**
+	 * Método creado para listar las recargas automáticas de cliente en sesión
+	 * @author psanchez
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClientRecharge> getAutomaticRechargebyClient(Long userId) {
+		List<ClientRecharge> list = new ArrayList<ClientRecharge>();
+		
+		try {	
+            Query q= em.
+            createNativeQuery("SELECT tar.automatic_recharge_id, tb.bank_name, tba.bank_account_number, tar.automatic_recharge_value, tar.account_id, tf.frequency_description, tar.automatic_recharge_date from tb_automatic_recharge tar "
+		                    + "INNER JOIN re_account_bank rab ON tar.account_id= rab.account_id "
+		                    + "INNER JOIN tb_bank_account tba ON rab.bank_account_id = tba.bank_account_id "
+		                    + "INNER JOIN tb_bank tb ON tba.product= tb.bank_id "
+		                    + "INNER JOIN tb_frequency tf ON tar.frecuency_id = tf.frequency_id "
+		                    + "WHERE tba.usrs=?1 " 
+		                    + "AND rab.state_account_bank =1 "
+		                    + "AND tar.estado=0 " 
+		                    + "AND tf.frequency_state=1 ").setParameter(1,userId);
+                
+                    		List<Object> lis= (List<Object>)q.getResultList();
+                			for(int i=0;i<lis.size();i++){
+                				Object[] o=(Object[]) lis.get(i);
+                						                                       					
+                				ClientRecharge cr = new ClientRecharge();
+                				if(cr!=null){	
+                                
+                			    cr.setAutomaticRechargeId(Long.parseLong(o[0].toString()));
+                				cr.setBankName(o[1].toString());	
+                				cr.setBankAccountNumber(o[2].toString());
+                				cr.setAutomaticRechargeValue(Long.parseLong(o[3].toString()));
+                				cr.setAccountId(Long.parseLong(o[4].toString()));
+                				cr.setFrequencyDescript(o[5].toString());
+                				cr.setAutomaticRechargeDate(o[6].toString());
+                			
+                    			list.add(cr);
+            			}
+            		  }
+            		} catch (Exception e) {
+            			System.out.println(" [ Error en ElectronicRechargeEJB.getAutomaticRechargebyClient. ] ");
+            			e.printStackTrace();
+            		}
+    		return list;
+    	}
+	
+	/**
+	 * Método creado para cancelar las recargas automáticas del cliente en sesión
+	 * @return return true si la recarga fué anulada o false en otro caso.
+	 * @author psanchez
+	 */
+	@SuppressWarnings("unused")
+	@Override
+	public boolean undoElectronicRecharge(Long automaticRechargeId, String ip, Long creationUser) {
+        Long accountId = null;
+		try {	   
+			TbAutomaticRecharge tar= em.find(TbAutomaticRecharge.class, automaticRechargeId);
+			accountId = tar.getAccountId().getAccountId();
+            tar.setEstado(2);
+            objectEM = new ObjectEM(em);	
+			if(objectEM.create(tar)){
+				log.insertLog("Desactivación Recursos Programados | Se ha desactivado Recursos Programados ID: " + tar.getAutomaticRechargeId()+ 
+				              " por valor de $ " + new DecimalFormat("#,###,###,###").format(tar.getAutomaticRechargeValue())+ " para la Cuenta FacilPass No." + accountId + ", Frecuencia: " + tar.getFrequencyId().getFrequencyDescript() + 
+				              ", última ejecución: " + tar.getLastExecution(),LogReference.AUTOMATICRECHARGE, LogAction.DELETE, ip, creationUser);
+				
+				   //proceso administrador
+		        TbProcessTrack pt = process.searchProcess(ProcessTrackType.CLIENT, creationUser);
+				Long idPTA;
+					if(pt==null){
+						idPTA=process.createProcessTrack(ProcessTrackType.CLIENT,  creationUser, ip, creationUser);
+					}else{
+						idPTA=pt.getProcessTrackId();
+					}
+				Long detailA=process.createProcessDetail(idPTA,ProcessTrackDetailType.AUTHOMATHIC_RECHARGE,  
+						     "Se desactivó la asignación de recursos programados para su Cuenta FacilPass No "+tar.getAccountId().getAccountId()+".", creationUser, ip, 1, "", null,null,null,null);
+									
+				//proceso cliente
+				TbProcessTrack ptc = process.searchProcess(ProcessTrackType.MY_CLIENT_PROCESS,creationUser);
+				Long idPTC;
+					if(ptc==null){
+						idPTC=process.createProcessTrack(ProcessTrackType.MY_CLIENT_PROCESS, creationUser, ip, creationUser);
+					}else{
+						idPTC=ptc.getProcessTrackId();
+					}
+				Long detailC=process.createProcessDetail(idPTC,ProcessTrackDetailType.AUTHOMATHIC_RECHARGE,  
+							"Se desactivó la asignación de recursos programados para su Cuenta FacilPass No "+tar.getAccountId().getAccountId()+ ".", creationUser, ip, 1, "", null,null,null,null);
+				return true;
+			} else {
+				log.insertLog("Desactivación Recursos Programados | No se ha desactivado Recursos Programados ID: " + tar.getAutomaticRechargeId()+ 
+						      " por valor de $" + new DecimalFormat("#,###,###,###").format(tar.getAutomaticRechargeValue())+ " para la Cuenta FacilPass No." + accountId + ", Frecuencia: " + tar.getFrequencyId().getFrequencyDescript() + 
+						      ", última ejecución " + tar.getLastExecution(),LogReference.AUTOMATICRECHARGE, LogAction.DELETEFAIL, ip, creationUser);
+				return false;
+			}
+			
+	   } catch (Exception e) {
+			System.out.println(" [ Error en ElectronicRechargeEJB.undoElectronicRecharge ] ");
+			e.printStackTrace();
+			return false;
+		}	
+	}
+ 	
+	public List<TbFrequency> getListFrequency() {
+		List<TbFrequency> list = new ArrayList<TbFrequency>();
+		try{
+		  Query q = em.createQuery("Select fq From TbFrequency fq where frequencyState=1 ");
+		  for (Object obj : q.getResultList()) {
+  			  list.add((TbFrequency) obj);
+		  }
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	/**
+	 * Método creado para obtener los productos disociados del cliente en sesión
+	 * @return return true si la cuenta fué disociada o false en otro caso.
+	 * @author psanchez
+	 */
+	@Override
+	public boolean haveProductDissociation(Long idClientAccount) {
+		BigDecimal id=null;
+		boolean res=false;
+		
+		try{
+			Query q = em.createNativeQuery("select account_bank_id from (select * from RE_ACCOUNT_BANK where ACCOUNT_ID=?1 order by DATE_ASSOCIATION desc) where ROWNUM=1");
+			q.setParameter(1, idClientAccount);
+			
+			id = (BigDecimal) q.getSingleResult();
+			
+			if(id==null){
+				res= true;
+			}else{
+				ReAccountBank rab = em.find(ReAccountBank.class, id.longValue());
+				if(rab.getState_account_bank().equals(1)){
+					res= false;
+				}else if(rab.getState_account_bank().equals(3)){
+					res= true;
+				}else if(rab.getState_account_bank().equals(2)){
+					res= true;
+				}
+			}
+			/*Query q= 
+				em.createNativeQuery("SELECT account_bank_id FROM re_account_bank WHERE account_id=?1 " +
+									 "AND state_account_bank <> 1").setParameter(1, idClientAccount);
+			id= (BigDecimal) q.getSingleResult();
+			if(id!=null){
+				res=true;
+			}
+			else{
+				res=false;
+			}*/
+		}catch(NoResultException ex){
+			res=false;
+		}
+		return res;
+	}
+	
+	private Calendar returnCalendarLastExecution(Calendar frecuencia,Calendar calendarNextExecution){
+	      int days=frecuencia.get(Calendar.DAY_OF_YEAR);
+	      if(frecuencia.getTimeInMillis()<86400000){
+	            calendarNextExecution.add(Calendar.MILLISECOND,-((int) frecuencia.getTimeInMillis()));
+	      }else if(days==7||days==8){
+	            calendarNextExecution.add(Calendar.WEEK_OF_YEAR, -1);
+	      }else if(days==14||days==15){
+	            calendarNextExecution.add(Calendar.WEEK_OF_YEAR, -2);
+	      }else if(days==30||days==31){
+	            calendarNextExecution.add(Calendar.MONTH, -1);
+	      }else if(days==90){
+	            calendarNextExecution.add(Calendar.MONTH, -3);
+	      }else if(days==180){
+	            calendarNextExecution.add(Calendar.MONTH, -6);
+	      }else if(days>=360&&days<=365){
+	            calendarNextExecution.add(Calendar.YEAR, -1);
+	      }else{
+	            calendarNextExecution.add(Calendar.DATE, -days);
+	      }
+	      return calendarNextExecution;
+	}
+
+}

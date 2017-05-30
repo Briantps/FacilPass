@@ -1,0 +1,315 @@
+/**
+ * Gerencia Tecnica - VIPSA 2004.
+ * (c) Todos los derechos reservados 2008.
+ * Creado: 15/12/2008
+ */
+package mBeans;
+
+import java.io.Serializable;
+
+
+/**
+ * @author gt-erosas
+ */
+public class VersionBean implements Serializable{
+	private static final long serialVersionUID = -4587785919942966126L;
+	private String versionMsg;
+
+	/**
+	 * Constructor
+	 */
+	public VersionBean() {
+	}
+
+	/**
+	 * @return versionMsg   
+	 */
+	public String getVersionMsg() {
+		//this.setVersionMsg("8.1.14.279.250413 BETA");
+		//this.setVersionMsg("8.1.21.300.260413 BETA");
+		//this.setVersionMsg("8.1.28.307.260413 BETA");
+		//this.setVersionMsg("9.1.20.327.210513");
+		//this.setVersionMsg("9.1.61.368.270513");
+		//this.setVersionMsg("9.1.68.375.290513");
+		//this.setVersionMsg("9.1.75.382.040613");
+		//this.setVersionMsg("9.1.75.383.050613");
+		//this.setVersionMsg("9.1.7.390.050613");
+		//this.setVersionMsg("9.1.4.394.060613");
+		//this.setVersionMsg("9.1.4.396.210613");
+		//this.setVersionMsg("9.1.6.402.040713");
+		//this.setVersionMsg("9.1.14.416.150713");
+		//this.setVersionMsg("10.1.2.418.190713");
+		//this.setVersionMsg("10.1.2.426.250713");
+		//this.setVersionMsg("10.1.5.431.290713");
+		//this.setVersionMsg("10.1.5.436.300713");
+		//this.setVersionMsg("11.1.4.440.020813");
+		//this.setVersionMsg("11.1.1.441.060813");
+		//this.setVersionMsg("11.1.1.442.090813");
+		//this.setVersionMsg("11.1.11.453.140813");
+		//this.setVersionMsg("11.1.3.456.150813");
+		//this.setVersionMsg("12.1.11.467.170913");
+		//this.setVersionMsg("12.1.1.468.180913");
+		//this.setVersionMsg("12.1.1.468.190913");
+		//this.setVersionMsg("12.1.1.468.200913");
+		//this.setVersionMsg("12.1.45.513.250913");
+		//this.setVersionMsg("12.1.14.527.260913");
+		//this.setVersionMsg("12.1.2.529.260913");
+		//this.setVersionMsg("12.1.10.537.031013");
+		//this.setVersionMsg("12.1.11.538.041013");
+		//this.setVersionMsg("12.1.12.539.041013");
+		//this.setVersionMsg("13.1.8.537.011013");
+		//this.setVersionMsg("13.1.8.547.041013");
+		//this.setVersionMsg("13.1.11.550.091013");
+		//this.setVersionMsg("13.1.24.563.171013");
+		//this.setVersionMsg("13.1.34.573.171013");
+		//this.setVersionMsg("13.1.35.574.211013");
+		//this.setVersionMsg("13.1.43.582.241013");
+		//this.setVersionMsg("13.1.52.591.251013");
+		//this.setVersionMsg("13.1.59.598.251013");
+		//this.setVersionMsg("13.1.67.606.281013");
+		//this.setVersionMsg("13.1.89.628.311013");
+		//this.setVersionMsg("13.1.94.633.011113");
+		//this.setVersionMsg("13.1.102.641.051113");
+		//this.setVersionMsg("13.1.108.647.051113");
+		//this.setVersionMsg("13.1.116.655.071113");
+		//this.setVersionMsg("13.1.136.675.121213");
+		//this.setVersionMsg("13.1.150.689.121713");
+		//this.setVersionMsg("13.1.158.697.191213");
+		//this.setVersionMsg("13.1.160.699.201213");
+		//this.setVersionMsg("13.1.161.700.261213");
+		//this.setVersionMsg("13.1.162.701.271213");
+		//this.setVersionMsg("13.1.166.705.020114");
+		//this.setVersionMsg("13.1.177.716.030114");
+		//this.setVersionMsg("13.1.187.726.070114");
+		//this.setVersionMsg("13.1.198.737.090114");
+		//this.setVersionMsg("13.1.217.756.140114");
+		//this.setVersionMsg("13.1.225.764.150114");
+		//this.setVersionMsg("13.1.238.777.160114"); -- ultima version con la numeracion correcta
+		//this.setVersionMsg("13.1.2.779.170114");
+		//this.setVersionMsg("13.1.1.780.170114");
+		//this.setVersionMsg("13.1.13.812.230114");
+		//this.setVersionMsg("13.1.255.794.240114");  // se genera version basada en la version del 16/01/2014
+		//this.setVersionMsg("13.1.258.797.240114");
+		//this.setVersionMsg("13.1.308.847.070214");
+		//this.setVersionMsg("13.1.359.898.120214");
+		//this.setVersionMsg("13.1.376.915.140214");
+		//this.setVersionMsg("13.1.418.957.190214");
+		//this.setVersionMsg("13.1.440.979.200214");
+		//this.setVersionMsg("13.1.441.980.200214");
+		//this.setVersionMsg("13.1.443.982.210214");
+		//this.setVersionMsg("13.1.455.994.210214");
+		//this.setVersionMsg("13.1.456.995.210214");
+		//this.setVersionMsg("13.1.458.997.210214");
+		//this.setVersionMsg("13.1.489.1028.250214");
+		//this.setVersionMsg("13.1.494.1033.250214");
+		//this.setVersionMsg("13.1.495.1034.260214");
+		//this.setVersionMsg("13.1.505.1044.030314");
+		//this.setVersionMsg("13.1.542.1081.060314");
+		//this.setVersionMsg("13.1.601.1140.140314");
+		//this.setVersionMsg("13.1.603.1142.140314");
+		//this.setVersionMsg("13.1.629.1168.180314");
+		//this.setVersionMsg("13.1.630.1169.190314");
+		//this.setVersionMsg("13.1.641.1180.200314");
+		//this.setVersionMsg("13.1.652.1191.250314");
+		//this.setVersionMsg("13.1.659.1198.270314");
+		//this.setVersionMsg("13.1.662.1201.280314");
+		//this.setVersionMsg("13.1.668.1207.300314");
+		//this.setVersionMsg("13.1.671.1210.310314");
+		//this.setVersionMsg("13.1.672.1211.310314");
+		//this.setVersionMsg("14.1.14.1225.260514");
+		//this.setVersionMsg("14.1.20.1231.290514");
+		//this.setVersionMsg("14.1.21.1232.300514");
+		//this.setVersionMsg("14.1.37.1248.040614");
+		//this.setVersionMsg("14.1.39.1250.050614");
+		//  this.setVersionMsg("15.1.38.1288.120814");
+		//  this.setVersionMsg("15.1.145.1395.270814");
+		 //this.setVersionMsg("15.1.206.1456.160914");
+		//this.setVersionMsg("15.1.253.1503.011014");
+		//this.setVersionMsg("15.1.255.1505.021014");
+		//this.setVersionMsg("15.1.273.1523.071014");
+		//this.setVersionMsg("15.1.279.1529.091014");
+		//this.setVersionMsg("15.1.303.1553.131014");
+		//this.setVersionMsg("15.1.319.1569.161014");
+		//this.setVersionMsg("15.1.322.1572.171014");
+		//this.setVersionMsg("15.1.326.1576.171014");
+		//this.setVersionMsg("15.1.327.1577.201014");
+		//this.setVersionMsg("15.1.336.1586.221014");
+		//this.setVersionMsg("15.1.337.1587.221014");
+		//this.setVersionMsg("15.1.365.1615.311014");
+		//this.setVersionMsg("15.1.371.1621.031114");
+		//this.setVersionMsg("15.1.387.1637.051114");
+		//this.setVersionMsg("15.1.393.1643.061114");
+		//this.setVersionMsg("15.1.396.1646.071114");
+		//this.setVersionMsg("15.1.397.1647.071114");
+		//this.setVersionMsg("15.1.401.1651.101114");
+		//this.setVersionMsg("15.1.402.1652.101114");
+		//this.setVersionMsg("15.1.407.1657.191114");
+		//this.setVersionMsg("15.1.414.1664.241114");
+		//this.setVersionMsg("15.1.416.1666.251114");
+		//this.setVersionMsg("15.1.418.1668.251114");
+		//this.setVersionMsg("15.1.421.1671.261114");
+		//this.setVersionMsg("15.1.423.1673.271114");
+		//this.setVersionMsg("15.1.424.1674.271114");
+		//this.setVersionMsg("15.1.426.1676.260115"); 	// Se genera version para el modulo activacion de Dispositivos
+		//this.setVersionMsg("15.1.429.1679.170215"); 	// Validacion de Documentos y paginador para descarga de archivos Us Ad JG
+		//this.setVersionMsg("15.1.431.1681.170215"); 	// Manejo de estados en plantillas de Gestor de Correos XB
+		//this.setVersionMsg("15.1.433.1683.200215");  //La activacion de dispositivos evalua el estado para estos
+		//this.setVersionMsg("15.1.437.1687.250215");  //Modificación del incidente de registro date_transaction en desactivación de dispositivo
+		//this.setVersionMsg("15.1.438.1688.170315");//Consolidación de la versión
+		//this.setVersionMsg("15.1.441.1691.080515");// Modificacion consulta y renderizacion de validacion de documentos, Cierres de cuenta e imagen de procesando asociacion
+		//this.setVersionMsg("15.1.448.1698.180815");// Modificacion contrato FacilPass
+		//this.setVersionMsg("16.1.18.1706.240415");  //FRD 121, FRD 123, FRD 132, FRD 133, FRD 134 
+		//this.setVersionMsg("16.1.21.1709.270415");  //correccion ortografica Editor Politica, correccion activacion de dispositivos y correccion mensaje de espera Saldo Minimo
+		//this.setVersionMsg("16.1.52.1740.220515"); //Envio de Notificaciones Saldo Minimo, Saldo Bajo,  Politicas y datos personales, Creacion de vehiculos ya existente y Solucion de de noivedades Matis relacionadas en el formato de liberacopn
+		//this.setVersionMsg("16.1.104.1792.220615"); //Envio de Notificaciones Saldo Minimo, Saldo Bajo,  Politicas y datos personales, Creacion de vehiculos ya existente y Solucion de de noivedades Matis relacionadas en el formato de liberacopn
+		//this.setVersionMsg("16.1.132.1820.030715");   //FRD 122 Asociación producto PSE y Solución incidentes mantis
+		//this.setVersionMsg("16.1.172.1992.230715");   //FRD 124 Autogestion de Password y FRD128 Contrato On line
+		//this.setVersionMsg("16.1.175.1995.240715");		
+		//this.setVersionMsg("16.1.205.2025.030815");
+		//this.setVersionMsg("16.1.206.2026.120815");
+		//this.setVersionMsg("16.1.238.2058.170815");
+		 //this.setVersionMsg("16.1.243.2063.210815");
+		 // this.setVersionMsg("16.1.267.2087.270815");
+		  //this.setVersionMsg("16.1.294.2114.020915");
+		//this.setVersionMsg("16.1.304.2124.030915");
+		//this.setVersionMsg("16.1.333.2153.080915");
+		//this.setVersionMsg("16.1.353.2173.110915");
+		//this.setVersionMsg("16.1.359.2179.120915");
+		//this.setVersionMsg("16.1.363.2183.140915");
+		//this.setVersionMsg("16.1.364.2184.160915");
+		//this.setVersionMsg("16.1.381.2201.160915");
+		//this.setVersionMsg("16.1.389.2209.170915");
+		//this.setVersionMsg("16.1.397.2217.210915");
+		//this.setVersionMsg("16.1.407.2227.210915");
+		//this.setVersionMsg("16.1.422.2242.230915");
+		//this.setVersionMsg("16.1.429.2249.250915");
+		//this.setVersionMsg("16.1.432.2252.280915");
+		//this.setVersionMsg("16.1.436.2256.290915");
+		//this.setVersionMsg("16.1.446.2266.131015");
+		//this.setVersionMsg("16.1.448.2268.151015");
+		//this.setVersionMsg("16.1.452.2272.201015");
+		//this.setVersionMsg("16.1.453.2273.211015");
+		//this.setVersionMsg("16.1.456.2276.221015");
+		//this.setVersionMsg("16.1.458.2278.221015");
+		//this.setVersionMsg("16.1.459.2279.221015");
+		//this.setVersionMsg("16.1.462.2282.281015");
+		//this.setVersionMsg("16.1.467.2287.291015");
+		//this.setVersionMsg("16.1.470.2290.031115");
+		//this.setVersionMsg("16.1.471.2291.061115");
+		//this.setVersionMsg("16.1.473.2293.171115");
+		//this.setVersionMsg("16.1.474.2294.181115");
+		//this.setVersionMsg("16.1.481.2301.241115");
+		//this.setVersionMsg("16.1.490.2310.261115");
+		//this.setVersionMsg("16.1.492.2312.261115");
+		//this.setVersionMsg("16.1.493.2313.261115");
+		//this.setVersionMsg("16.1.495.2315.271115");
+		//this.setVersionMsg("16.1.497.2317.291115");
+		//this.setVersionMsg("17.1.5.2322.101215");
+		//this.setVersionMsg("17.1.13.2330.231215");
+		//this.setVersionMsg("17.1.14.2331.241215");
+		//this.setVersionMsg("17.1.16.2333.281215");
+		//this.setVersionMsg("17.1.19.2336.291215");
+		//this.setVersionMsg("17.1.24.2341.040116");
+		//this.setVersionMsg("17.1.25.2342.060116");
+		//this.setVersionMsg("17.1.31.2348.110116");
+		//this.setVersionMsg("17.1.34.2351.130116");
+		//this.setVersionMsg("17.1.36.2353.140116");
+		//this.setVersionMsg("17.1.37.2354.140116");
+	    //this.setVersionMsg("17.1.38.2355.030216");
+		//this.setVersionMsg("17.1.41.2358.090216");
+		// this.setVersionMsg("17.1.42.2359.100216");
+		// this.setVersionMsg("17.1.45.2362.160216");
+		//this.setVersionMsg("17.1.46.2363.170216");
+		//this.setVersionMsg("17.1.47.2364.230216");
+		//  this.setVersionMsg("17.1.49.2366.260216");
+		//this.setVersionMsg("17.1.50.2367.030316");
+		//this.setVersionMsg("17.1.50.2367.040316");
+		//this.setVersionMsg("17.1.60.2377.080316");
+		//this.setVersionMsg("17.1.62.2379.090316");
+		//this.setVersionMsg("17.1.68.2385.150316");
+		//this.setVersionMsg("17.1.71.2388.170316");
+		//this.setVersionMsg("17.1.72.2389.180316");
+		//this.setVersionMsg("17.1.73.2390.180316");
+		//this.setVersionMsg("17.1.76.2393.280316");
+		//this.setVersionMsg("17.1.77.2394.290316");
+		//this.setVersionMsg("17.1.86.2403.040416");
+		//this.setVersionMsg("17.1.89.2406.050416");
+		//this.setVersionMsg("17.1.90.2407.060416");
+		//this.setVersionMsg("17.1.103.2420.060416");
+		//this.setVersionMsg("17.1.104.2421.070416");
+		//this.setVersionMsg("17.1.109.2426.120416");
+		//this.setVersionMsg("17.1.111.2428.130416");
+		//this.setVersionMsg("17.1.118.2435.150416");
+		//this.setVersionMsg("17.1.119.2436.180416");
+		//this.setVersionMsg("17.1.126.2443.180416");
+		//this.setVersionMsg("17.1.127.2444.190416");
+		//this.setVersionMsg("17.1.130.2447.200416");
+		//this.setVersionMsg("17.1.132.2449.210416");
+		//this.setVersionMsg("17.1.138.2455.210416");
+		//this.setVersionMsg("17.1.139.2456.220416");
+		//this.setVersionMsg("17.1.143.2460.250416");
+		//this.setVersionMsg("17.1.147.2464.260416");
+		//this.setVersionMsg("17.1.149.2466.270416");
+		//this.setVersionMsg("17.1.154.2471.280416");
+		//this.setVersionMsg("17.1.155.2472.280416");
+		//this.setVersionMsg("17.1.158.2475.020516");
+		//this.setVersionMsg("17.1.159.2476.030516");
+		//this.setVersionMsg("17.1.166.2483.060516");
+		//this.setVersionMsg("17.1.167.2484.060516");
+		//this.setVersionMsg("17.1.171.2488.120516");
+		//this.setVersionMsg("17.1.173.2490.130516");
+		//this.setVersionMsg("17.1.182.2499.170516");
+		//this.setVersionMsg("17.1.191.2508.230516");
+		//this.setVersionMsg("17.1.196.2513.240516");
+		//this.setVersionMsg("17.1.197.2514.310516");
+		//this.setVersionMsg("17.1.198.2515.310516");
+		//this.setVersionMsg("17.1.202.2519.020616");
+		//this.setVersionMsg("17.1.203.2520.030616");
+		//this.setVersionMsg("18.1.004.2524.280616");
+		//this.setVersionMsg("18.1.006.2527.050716");
+		//this.setVersionMsg("18.1.008.2529.070716");----
+		//this.setVersionMsg("18.1.011.2532.080716");----
+		//this.setVersionMsg("18.1.013.2534.120716");
+		//this.setVersionMsg("18.1.014.2535.150716");
+		//this.setVersionMsg("18.1.018.2539.260716");
+		//this.setVersionMsg("18.1.019.2540.270716");
+		//this.setVersionMsg("18.1.021.2542.020816");
+		//this.setVersionMsg("18.1.031.2552.050816");
+		//this.setVersionMsg("18.1.037.2558.100816");
+		//this.setVersionMsg("18.1.039.2560.250816");
+		//this.setVersionMsg("18.1.046.2567.290816");
+		//this.setVersionMsg("18.1.048.2569.300816");
+		//this.setVersionMsg("18.1.063.2584.080916");//se libera versión conajustes reportados del Area de QA
+		//this.setVersionMsg("18.1.067.2588.120916");
+		//this.setVersionMsg("18.1.071.2592.210916");
+		//this.setVersionMsg("18.1.089.2610.270916");
+		//this.setVersionMsg("18.1.094.2615.041016");
+		//this.setVersionMsg("18.1.097.2618.061016");
+		//this.setVersionMsg("18.1.099.2620.071016");
+		//this.setVersionMsg("18.1.101.2622.101016");
+		//this.setVersionMsg("19.1.018.2640.181116");
+		//this.setVersionMsg("19.1.043.2665.281216");
+		//this.setVersionMsg("19.1.044.2666.010217");//Srcipt FRD155
+		//this.setVersionMsg("19.1.045.2667.030217");//Srcipt FRD155
+		//this.setVersionMsg("19.1.046.2668.030217");//Srcipt FRD155
+		//this.setVersionMsg("19.1.065.2687.100317");
+		//this.setVersionMsg("19.1.065.2687.130317");
+		//this.setVersionMsg("19.1.05.2627.280417");//Script FR152 - TPS
+		//this.setVersionMsg("19.1.18.2640.090517");//Script FR152 - TPS
+		//this.setVersionMsg("19.1.20.2642.090517");//Script FR152 - TPS
+		//this.setVersionMsg("19.1.21.2643.090517");//Script FR151 - TPS
+		//this.setVersionMsg("19.1.31.2653.170517");//Script FR152 - TPS
+		//this.setVersionMsg("19.1.47.2669.190517");//Script FR152 - TPS
+		//this.setVersionMsg("19.1.61.2683.200517");//Script FR152 - TPS
+		this.setVersionMsg("19.1.85.2707.220517");//Script FR152 - TPS
+				
+		return this.versionMsg; 
+	}
+
+	/**
+	 * @param versionMsg
+	 */
+	public void setVersionMsg(String versionMsg) {
+		this.versionMsg = versionMsg;
+	}
+}

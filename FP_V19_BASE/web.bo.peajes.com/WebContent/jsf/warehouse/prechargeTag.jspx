@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Precarga de Tags</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>			
+				<div class="bkContents span-18 prepend-1">			
+					<rich:spacer height="5"/>	
+					<h:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Precarga de Tags" styleClass="bold"/>
+							</f:facet>						
+							<rich:messages styleClass="bold" style="color: red;"/>
+							<rich:panel>
+								<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+									<h:outputText value="Tipo de Tag: " styleClass="bold"/>
+									<h:selectOneMenu value="#{prechargeBean.tagTypeId}">
+										<f:selectItems value="#{prechargeBean.typeList}"/>
+										<a4j:support event="onchange" action="#{prechargeBean.reload}" reRender="upanel"/>
+									</h:selectOneMenu>
+								</h:panelGrid>
+								<a4j:outputPanel id="upanel">
+									<rich:panel rendered="#{prechargeBean.showUpload}">
+										<rich:panel>
+											<rich:fileUpload id="upload"
+												fileUploadListener="#{prechargeBean.listener}" maxFilesQuantity="100"
+												immediateUpload="false" listWidth="300px" acceptedTypes="dat,txt"
+												allowFlash="false">
+												<a4j:support event="onuploadcomplete" reRender="upload,panel" />
+											</rich:fileUpload>
+										</rich:panel>
+									</rich:panel>
+								</a4j:outputPanel>
+							</rich:panel>
+							<rich:spacer height="20"/>
+						</rich:panel>
+					</h:form>				
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{prechargeBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Precarga de Tags" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{prechargeBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{prechargeBean.message}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{prechargeBean.hideModal}"  />
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+				    	</h:form>
+						<br/>
+					</rich:modalPanel>				
+					<rich:spacer height="20"/>	
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head/>
+<body>
+<f:view>
+<div>		
+	<rich:panel>
+		<h:panelGrid style="width: 500px; margin: auto; padding:10px; " styleClass="tableBO" columns="2">
+				
+			<h:outputText value="Cuenta: " styleClass="bold" />
+			<h:outputText value="#{purchaseBean.order.tbAccount.accountId}"
+				styleClass="normal"/>
+				
+			<h:outputText value="Saldo de Cuenta: " styleClass="bold"/>
+			<h:outputText value="#{purchaseBean.order.tbAccount.accountBalance}" styleClass="normal" >
+				<f:convertNumber pattern="$#,##0.00"/>
+			</h:outputText>
+					
+		</h:panelGrid>
+	</rich:panel>
+	<rich:spacer height="10"/>
+</div>
+</f:view>
+</body>
+</html>

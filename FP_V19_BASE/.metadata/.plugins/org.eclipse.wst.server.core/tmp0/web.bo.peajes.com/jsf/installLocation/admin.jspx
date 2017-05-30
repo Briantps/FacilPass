@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administración de Ubicaciones de Instalación</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>			
+				<div class="bkContents span-18 prepend-1">			
+					<rich:spacer height="5"/>	
+					<h:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Administración Ubicaciones de Instalación" styleClass="bold"/>
+							</f:facet>						
+							<rich:messages styleClass="bold" style="color: red;"/>
+							<rich:panel>
+								<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+									<h:commandButton value="Agregar Ubicación de Instalación" action="#{installationLocationBean.initAddLocation}"/>
+								</h:panelGrid>
+							</rich:panel>			
+							<rich:spacer height="20"/>						
+							<a4j:outputPanel id="panelData" layout="inline">
+								<rich:panel id="pd">
+									<f:facet name="header">
+										<h:outputText styleClass="bold" value="Ubicaciones de Instalación"/>
+									</f:facet>								
+									<rich:spacer height="10"/>							
+									<rich:extendedDataTable id="datalist" value="#{installationLocationBean.locationList}" 
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#FFFFFF'" styleClass="bold"
+										var="list" rows="20" width="650px" rowClasses="white,white"
+										height="300px" enableContextMenu="false" noDataLabel="No hay Ubicaciones de Instalación">
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Ubicación"/>
+											</f:facet>
+											<h:outputText value="#{list.installationLocationName}" styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value=""/>
+											</f:facet>
+											<h:commandLink value="Editar" action="#{installationLocationBean.initEditLocation}"
+												styleClass="bold">
+												<f:setPropertyActionListener value="#{list.installationLocationId}" target="#{installationLocationBean.locationId}"/>
+											</h:commandLink>
+										</rich:column>
+									</rich:extendedDataTable>								
+								</rich:panel>
+							</a4j:outputPanel>						
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>				
+					<rich:modalPanel id="panel" width="375" height="180" showWhenRendered="#{installationLocationBean.showInsert}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Crear Ubicación de Instalación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{installationLocationBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="insertLocation">
+							<ui:include src="insertLocation.jspx"/>
+						</f:subview>
+						<br />
+					</rich:modalPanel>				
+					<rich:modalPanel id="panele" width="375" height="180" showWhenRendered="#{installationLocationBean.showEdit}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Editar Ubicación de Instalación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{installationLocationBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="editLocation">
+							<ui:include src="updateLocation.jspx"/>
+						</f:subview>
+						<br />
+					</rich:modalPanel>				
+					<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{installationLocationBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Ubicaciones de Instalación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{installationLocationBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{installationLocationBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{installationLocationBean.hideModal}"  />
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+						</h:form>
+						<br />
+					</rich:modalPanel>				
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

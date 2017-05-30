@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet"
+			href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+			media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+			type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+			type="text/css" media="screen, projection" />
+		<title>Verificador</title>
+		<style type="text/css">
+			.rich-spinner-c {
+				width: 103px;
+				margin: 0 0 5px 0;
+			}
+		</style>
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header2">
+					<ui:include src="/jsf/content/header.jsp" />
+				</f:subview>
+				<div class="span-24">
+				</div>
+				<div class="span-5">
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<rich:spacer height="5" />
+					<h:form>
+					<h:outputText value="#{verificatorBean.message}" styleClass="normal" />
+					</h:form>
+					<rich:spacer height="20"/>		
+				
+				<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+				  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+				  	<h:form>
+       				<h:commandLink>
+       				<h:graphicImage value="/img/procesando.gif" />
+     					</h:commandLink>
+    					</h:form>
+				</rich:modalPanel> 
+				
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp" />
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

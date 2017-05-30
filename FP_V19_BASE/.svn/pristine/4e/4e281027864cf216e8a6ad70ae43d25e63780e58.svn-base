@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml" 
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html" 
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta content="no-cache" http-equiv="Pragma" />
+		<meta content="no-cache" http-equiv="Cache-Control" />
+		<meta content="no-store" http-equiv="Cache-Control" />
+		<meta content="max-age=0" http-equiv="Cache-Control" />
+		<meta content="-1" http-equiv="Expires" />
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Recuperar Contraseña</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader"><ui:include src="../menu/menu.jsp"/></f:subview>
+				</div>			
+				<div class="bkContents span-24" align="center">
+					<h:form id="Formulario">
+						<rich:panel style="width:600px;margin:auto; background-color: #ffffff;" id="panelpp">
+							<f:facet name="header">
+								<h:outputText value="Recuperar Contraseña" styleClass="bold"/>
+							</f:facet>
+								<h:panelGrid styleClass="tableBO" columns="1" style="size 420px; margin: auto; padding:10px; ">								
+								<h:outputText value="Para restablecer la contraseña ingrese el usuario con el cual ingresa a la aplicación " styleClass="bold"/>
+								<h:inputText id="userVal" onblur="textArea_blur(this,'mysuper@mail.com')"  value="#{userValidationBean.userEmail}" style="width: 550px" />
+							</h:panelGrid>
+							<h:panelGrid style="width: 200px; margin: auto; padding:10px;" columns="2">
+								<h:commandButton value="Validar" action="#{userValidationBean.validate}" styleClass="center" style="width: 80px" onkeypress="return emailValidation(event)"/>
+		              					<a4j:commandButton value="Cancelar" style="width:80px" >
+                                	<a4j:support event="onclick" action="#{logoutMBean.logout}"/>
+									<a4j:support event="oncomplete" action="successOut"/> 
+                            	</a4j:commandButton>  
+							</h:panelGrid>
+						</rich:panel>
+					</h:form>
+					
+					<!--Modal que muestra mensajes de validación. -->
+					<rich:modalPanel id="pMsj" width="350" height="115" showWhenRendered="#{userValidationBean.showMsj}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText styleClass="bold" value="Mensaje - Restablecimiento de contraseña"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{userValidationBean.hideModal}" image="/img/close.png" />	
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{userValidationBean.modalMessage}"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{userValidationBean.noRedirect}" style="width: 80px"/>
+						     	</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </h:form>			
+					</rich:modalPanel>
+					
+					<!--Modal que muestra mensajes ingreso OTP como password. -->
+					<rich:modalPanel id="pMsjPass" width="350" height="125" showWhenRendered="#{userValidationBean.showMsjPass}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText styleClass="bold" value="Mensaje - Restablecimiento de contraseña"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{userValidationBean.hideModal}" image="/img/close.png" />	
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{userValidationBean.modalMessage}"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{userValidationBean.redirect}" style="width: 80px"/>
+						     	</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </h:form>			
+					</rich:modalPanel>		
+					<div style="height: 35px;width: 40px"></div>
+				
+				</div> 
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview> 		
+			</f:view>
+		</div>		
+	</body>
+</html>

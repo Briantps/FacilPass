@@ -1,0 +1,36 @@
+log4j.logger.Notifications=INFO,HL
+log4j.appender.HL=org.apache.log4j.RollingFileAppender
+log4j.appender.HL.Threshold=DEBUG
+log4j.appender.HL.ImmediateFlush=true
+log4j.appender.HL.file=logs\\Notification\\notification.log
+log4j.appender.HL.MaxFileSize=10MB
+log4j.appender.HL.MaxBackupIndex=800
+log4j.appender.HL.layout=org.apache.log4j.PatternLayout
+log4j.appender.HL.layout.ConversionPattern=[%-5p]-%d - %m (%C{1}.%M:%L)%n
+log4j.appender.HL.append=true
+
+log4j.logger.Errors=WARN,ER
+log4j.appender.ER=org.apache.log4j.RollingFileAppender
+log4j.appender.ER.Threshold=DEBUG
+log4j.appender.ER.ImmediateFlush=true
+log4j.appender.ER.file=logs\\Error\\error.log
+log4j.appender.ER.MaxFileSize=10MB
+log4j.appender.ER.MaxBackupIndex=800
+log4j.appender.ER.layout=org.apache.log4j.PatternLayout
+log4j.appender.ER.layout.ConversionPattern=[%-5p]-%d - %m (%C{1}.%M:%L)%n
+log4j.appender.ER.append=true
+
+log4j.logger.org.hibernate=INFO, HIB
+log4j.appender.HIB=org.apache.log4j.RollingFileAppender
+log4j.appender.HIB.Threshold=DEBUG
+log4j.appender.HIB.ImmediateFlush=true
+log4j.appender.HIB.file=logs\\system\\hibernate.log
+log4j.appender.HIB.MaxFileSize=10MB
+log4j.appender.HIB.MaxBackupIndex=1
+log4j.appender.HIB.layout=org.apache.log4j.PatternLayout
+log4j.appender.HIB.layout.ConversionPattern=[%-5p]-%d - %m (%C{1}.%M:%L)\n
+
+
+
+
+

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Dispositivos Asociados a Cuenta</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+				    <f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<a4j:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Ver Dispositivos" styleClass="bold"/>
+							</f:facet>
+							<h:panelGrid styleClass="tableBO" columns="2" 
+								style="size 300px; margin: auto; padding:10px; ">
+								<h:panelGroup>
+									<h:outputText value="#{msg.CtaFP}: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:selectOneMenu value="#{accountDeviceBean.idClientAccount}" 
+									style="width: 200px;" styleClass="normal">
+									<f:selectItems value="#{accountDeviceBean.myClientAccounts}"/>
+								</h:selectOneMenu>
+				               	<h:panelGroup>
+				               		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+								</h:panelGroup>
+				                <h:commandButton value="#{msg.Buscar}" action="#{accountDeviceBean.search}">
+				                	<a4j:support event="oncomplete" reRender="panelData"/>
+				                </h:commandButton>
+							</h:panelGrid>
+							<rich:spacer height="5"/>							
+							<a4j:outputPanel id="panelData">
+								<rich:panel rendered="#{accountDeviceBean.showData}">
+								  <h:panelGrid styleClass="tableBO" columns="2" 
+										style="size 300px; margin: auto; padding:10px; width: 400px; background-color: #F3F3F3; border-top-style: dashed; border-bottom-width: thin; border-bottom-style: dashed; border-left-color: #B1B1B1; border-top-color: #B1B1B1; border-right-color: #B1B1B1; border-left-style: dashed; border-right-width: thin; border-right-style: dashed; border-left-width: thin; border-bottom-color: #B1B1B1; border-top-width: thin">
+										<h:outputText styleClass="bold" value="Saldo Disponible:"/>
+										<h:outputText styleClass="bold" value="#{accountDeviceBean.availableBalance}" style="color: #005E2F; font-size: 18px">
+											<f:convertNumber pattern="$#,##0" />
+										</h:outputText>
+									</h:panelGrid>
+									<rich:spacer height="10"/>
+				                    <div id="scroll_horizontal">
+										<rich:extendedDataTable height="150px" width="750px" value="#{accountDeviceBean.devicesList}" var="list" 
+											onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+											rowClasses="white,grey" enableContextMenu="false" noDataLabel="La cuenta no tiene dispositivos asociados." 
+											style="vertical-align: middle; margin: auto; ">
+											<rich:column width="140px" sortBy="#{list.deviceCode}" sortable="true">
+												<f:facet name="header">
+													<h:outputText value="ID Interno" styleClass="bold"/>
+												</f:facet>
+												<h:outputText value=" #{list.deviceCode}" 
+													styleClass="normal" style="font-size: 12px;"/>
+											</rich:column>
+											<rich:column width="180px">
+												<f:facet name="header">
+													<h:outputText value="ID Facial" styleClass="bold"/>
+												</f:facet>
+												<h:outputText value=" #{list.deviceFacialId}" 
+													styleClass="normal" style="font-size: 12px;">
+												</h:outputText>
+											</rich:column>						
+											<rich:column width="150px">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Estado de Compra"/>
+												</f:facet>
+												<h:outputText value="PAGADO" styleClass="bold"
+													rendered="#{list.devicePaid}"/>
+												<h:outputText value="SIN PAGO REGISTRADO" styleClass="bold"
+													rendered="#{!list.devicePaid}"/>
+											</rich:column>
+											<rich:column width="100px">
+												<f:facet name="header">
+													<h:outputText value="Saldo Actual" styleClass="bold"/>
+												</f:facet>
+												<h:outputText value="#{accountDeviceBean.result}"
+													styleClass = "normal" style = "font-size: 12px;" rendered="#{!accountDeviceBean.showManualDistribution and (list.tbDeviceState.deviceStateId!=7 and list.tbDeviceState.deviceStateId!=9)}">
+													<f:convertNumber pattern="$#,##0" />
+												</h:outputText>
+                                                <h:outputText value = "#{list.deviceCurrentBalance}"
+													styleClass = "normal" style = "font-size: 12px;" rendered="#{!accountDeviceBean.showManualDistribution and (list.tbDeviceState.deviceStateId==7 or list.tbDeviceState.deviceStateId==9)}">
+													<f:convertNumber pattern="$#,##0" />
+												</h:outputText>
+												<h:outputText value="#{list.deviceCurrentBalance}" 
+													styleClass="normal" style="font-size: 12px;" rendered="#{accountDeviceBean.showManualDistribution}">
+													<f:convertNumber pattern="$#,##0" />
+												</h:outputText>
+											</rich:column>
+											<rich:column width="180px">
+												<f:facet name="header">
+													<h:outputText value="Estado" styleClass="bold"/>
+												</f:facet>
+												<h:outputText value=" #{list.tbDeviceState.deviceStateDescription}" 
+													styleClass="normal" style="font-size: 12px;">
+												</h:outputText>
+											</rich:column>
+										</rich:extendedDataTable>	
+				                   	</div>			
+								</rich:panel>
+							</a4j:outputPanel>
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>					
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{accountDeviceBean.showMessageError}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Dispositivos asociados a cuenta" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{accountDeviceBean.init}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{accountDeviceBean.messageError}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{accountDeviceBean.init}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>		
+						<br />
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

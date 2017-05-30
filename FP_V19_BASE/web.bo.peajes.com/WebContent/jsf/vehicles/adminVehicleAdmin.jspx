@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet"
+			href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+			media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+			type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+			type="text/css" media="screen, projection" />
+		<title>Administración de vehículos</title>
+		<style type="text/css">
+			.rich-spinner-c {
+				width: 103px;
+				margin: 0 0 5px 0;
+			}
+		</style>
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header2">
+					<ui:include src="../content/header.jsp" />
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="header">
+						<ui:include src="../menu/menu.jsp" />
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp" />
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<rich:spacer height="5" />
+					<a4j:form>
+						<rich:panel style="width:700px;margin:auto;">
+							<f:facet name="header">
+								<h:outputText value="Lista de vehículos" styleClass="bold" />
+							</f:facet>
+							<rich:panel style="width:600 px;margin:auto;">    
+								<f:facet name="header">
+									<h:outputText value="Filtrar por" styleClass="bold"/>   
+								</f:facet>
+								<h:panelGrid styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px; ">
+									<h:outputText value="Tipo Identificación:"  styleClass="bold"/>
+									<h:selectOneMenu value="#{adminVehicleAdmin.codeType}" 
+										style="width: 145px;" styleClass="normal">
+										<f:selectItems value="#{adminVehicleAdmin.codeTypesList}"/>		
+			 						</h:selectOneMenu>        
+			 						<h:outputText value="No. Identificación:"  styleClass="bold"/>
+			 						<h:inputText value="#{adminVehicleAdmin.numberDoc}" styleClass="normal" style="width:140px" onkeypress="return numOnly(event)" maxlength="15" />
+			 						<h:outputText value="Nombre:"  styleClass="bold"/>
+			 						<h:inputText value="#{adminVehicleAdmin.firstName}" styleClass="normal" style="width:140px; text-transform: uppercase" onkeypress="return noEspecialRazSol(event)"/>
+			 						<h:outputText value="Apellidos:"  styleClass="bold"/>
+			 						<h:inputText value="#{adminVehicleAdmin.lastName}" styleClass="normal" style="width:140px; text-transform: uppercase" onkeypress="return alphaSpaceWithoutPoint(event)"/>
+									<h:outputText value="Placa:"  styleClass="bold"/> 
+			 						<h:inputText value="#{adminVehicleAdmin.placaFil}" styleClass="normal" style="width:140px; text-transform: uppercase" onkeypress="return alphaNumOnly2(event)"  maxlength="12"/>
+			 						<h:outputText value="Categoría:"  styleClass="bold"/>
+			 						<h:selectOneMenu value="#{adminVehicleAdmin.categoryType}" styleClass="normal"
+										converter="RowIdToNameConverter" style="width: 145px;">
+										<f:selectItems value="#{adminVehicleAdmin.listCategories}"/>
+									</h:selectOneMenu>
+			 						<h:outputText value="Adicional 1:"  styleClass="bold"/>
+			 						<h:inputText value="#{adminVehicleAdmin.ad1Fil}" styleClass="normal" style="width:140px" onkeypress="return alphaNumSpaceSimple(event)"/>
+			 						<h:outputText value="Adicional 2:"  styleClass="bold"/>
+			 						<h:inputText value="#{adminVehicleAdmin.ad2Fil}" styleClass="normal" style="width:140px" onkeypress="return alphaNumSpaceSimple(event)"/>
+			 						<h:outputText value="Adicional 3:"  styleClass="bold"/>   
+			 						<h:inputText value="#{adminVehicleAdmin.ad3Fil}" styleClass="normal" style="width:140px" onkeypress="return alphaNumSpaceSimple(event)"/>
+			 						<rich:spacer height="5"/>   
+  
+								</h:panelGrid>
+								<table width="100px">
+									<rich:spacer height="5"/>	
+									<div align="center">
+										<h:panelGroup>
+										 <h:commandButton value="Buscar" action="#{adminVehicleAdmin.searchFilter}" style="width: 80px">
+											<a4j:support event="oncomplete" reRender="vehicleTable"/>
+										 </h:commandButton>	
+										 <rich:spacer width="20"/>
+										 <h:commandButton value="Limpiar" action="#{adminVehicleAdmin.clearFilter}" style="width: 80px">
+											<a4j:support event="oncomplete" reRender="vehicleTable"/>
+										 </h:commandButton>
+										</h:panelGroup>
+									</div>
+								</table>	
+				 			</rich:panel>
+							<rich:spacer height="15" />
+							<div id="btnAddVehicleAlign">
+								<h:commandButton value="Agregar Vehículo" rendered="#{adminVehicleAdmin.showCreate}" action="#{adminVehicleAdmin.addVehicle}"/>
+							</div>
+							<rich:spacer height="15" />
+                            <div id="scroll_horizontal">
+							<rich:dataTable id="vehicleTable" var="item" value="#{adminVehicleAdmin.listVehicles}" rows="15">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Placa" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.vehiclePlate}" styleClass="normal" id="brId" />
+								</rich:column>
+								<rich:column style="text-align:center;min-width: 80px;">
+									<f:facet name="header">
+										<h:outputText value="Modelo de Vehículo" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.vehicleBeginingDate}" styleClass="normal" 
+										converter="TimeStampToStringDateConverter"/>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Chasis" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.vehicleChassis}" styleClass="normal"/>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Color" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.colorId}" styleClass="normal">
+										<f:converter converterId="ColorIdToNameConverter"/>
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Marca" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.brandId}" styleClass="normal">
+										<f:converter converterId="BrandIdToNameConverter"/>
+									</h:outputText>
+								</rich:column>
+								<rich:column style="text-align:center;min-width: 80px;">
+									<f:facet name="header">
+										<h:outputText value="Categoría" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.categoryId}" styleClass="normal">
+										<f:converter converterId="CatIdToNameConverter"/>
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Código Interno" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.vehicleInternalCode}" styleClass="normal">
+									</h:outputText>
+								</rich:column>
+                                <rich:column>
+									<f:facet name="header">
+										<h:outputText value="Línea" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.line}" styleClass="normal">
+									</h:outputText>
+								</rich:column>
+                                <rich:column>
+									<f:facet name="header">
+										<h:outputText value="Adicional 1" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.aditional1}" styleClass="normal">
+									</h:outputText>
+								</rich:column>
+                                <rich:column>
+									<f:facet name="header">
+										<h:outputText value="Adicional 2" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.aditional2}" styleClass="normal">
+									</h:outputText>
+								</rich:column>
+                                <rich:column>
+									<f:facet name="header">
+										<h:outputText value="Adicional 3" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.aditional3}" styleClass="normal">
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Especial" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.especialPlate}" styleClass="normal">
+									</h:outputText>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Observación" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.vehicleObservation}" styleClass="normal">
+									</h:outputText>
+								</rich:column>
+								<rich:column style="text-align:center;">   
+									<f:facet name="header">
+										<h:outputText value="Modificar" styleClass="bold"/>
+									</f:facet>
+									<h:commandLink value="Modificar" action="#{adminVehicleAdmin.showModalEdit}" styleClass="normal2">
+										<f:setPropertyActionListener value="#{item.vehiclePlate}" target="#{adminVehicleAdmin.vehiclePlate}"/>
+										<f:setPropertyActionListener value="#{item.vehicleId}" target="#{adminVehicleAdmin.vehicleID}"/>  
+									</h:commandLink>
+								</rich:column>
+								<rich:column style="text-align:center;">   
+									<f:facet name="header">
+										<h:outputText value="Eliminar" styleClass="bold"/>
+									</f:facet>
+									<h:commandLink value="Eliminar" action="#{adminVehicleAdmin.showDeleteVehicle}" styleClass="normal2"
+										rendered="#{item.eliminable}">
+										<f:setPropertyActionListener value="#{item.vehiclePlate}" target="#{adminVehicleAdmin.vehiclePlate}"/>
+										<f:setPropertyActionListener value="#{item.vehicleId}" target="#{adminVehicleAdmin.vehicleID}"/>  
+									</h:commandLink>
+								</rich:column> 
+							</rich:dataTable>	
+							<rich:dataTable id="ws"
+								value="#{adminVehicleAdmin.listaScroll}"							
+								var="item" rows="15">	
+							</rich:dataTable>															
+							<rich:datascroller for="ws" id="PTScroll" 
+								page="#{adminVehicleAdmin.page}"
+								reRender="vehicleTable, PTScroll"
+								actionListener="#{adminVehicleAdmin.dataScroller}">
+							</rich:datascroller>
+                            </div>	
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>		
+					<rich:modalPanel id="editPanel" width="700" height="425" onresize="return false;" moveable="false" showWhenRendered="#{adminVehicleAdmin.showEdit}">
+						<f:facet name="header">
+							<h:outputText value="Editar vehículo" />
+						</f:facet>
+						<f:facet name="controls">  
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminVehicleAdmin.hideModalAll}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="dm1">
+							<ui:include src="/jsf/vehicles/editVehicleAdmin.jspx"/>    
+						</f:subview>			
+					</rich:modalPanel>
+				<rich:modalPanel id="addPanel" width="700" height="425" onresize="return false;" moveable="false" showWhenRendered="#{adminVehicleAdmin.showNew}">
+						<f:facet name="header">
+							<h:outputText value="Agregar vehículo" />
+						</f:facet>
+						<f:facet name="controls">  
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminVehicleAdmin.hideModalAll}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="dm">
+							<ui:include src="/jsf/vehicles/newVehicleAdmin.jspx"/>    
+						</f:subview>			
+					</rich:modalPanel>		
+					
+					<rich:modalPanel id="panel3" width="350" height="115" showWhenRendered="#{adminVehicleAdmin.showModalConD}" onresize="return false;" moveable="false"
+				zindex="3000">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Mensaje - Administrar Vehículos" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">   
+						<h:panelGroup>
+							<a4j:form id="frmX">
+								<h:commandButton id="closeX" action="#{adminVehicleAdmin.hideModalAll}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{adminVehicleAdmin.msg}" styleClass="normal"/>
+					<a4j:form id="form">
+					<h:message for="send"/>
+					<rich:spacer height="10"/>
+					  <div align="center">
+						<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{adminVehicleAdmin.deleteVehicle}"
+					     		 oncomplete="#{rich:component('wait')}.hide()" style="width: 80px">
+				                  <a4j:support event="onclick"  
+				                  onsubmit="document.getElementById('form:send').disabled=true;document.getElementById('form:cancel').disabled=true;document.getElementById('frmX:closeX').disabled=true;" />
+				                  <a4j:support event="oncomplete" reRender="panel" 
+				                  oncomplete="document.getElementById('form:send').disabled=false;document.getElementById('form:cancel').disabled=false;document.getElementById('frmX:closeX').disabled=false;"/>
+				                </a4j:commandButton>
+				                <a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+								</a4j:status>
+			                </a4j:region>
+				     	 <rich:spacer width="20"/>  	
+				     	<h:commandButton id="cancel" value="Cancelar" action="#{adminVehicleAdmin.hideModalAll}" style="width: 80px"/>
+				      </div>
+				    </a4j:form>
+				</rich:modalPanel>   
+				
+				
+				<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false" zindex="5000">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+				  	<h:outputText value="Transacción en proceso..."  style="font-size:12px;"/>
+				</rich:modalPanel>
+				
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp" />
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

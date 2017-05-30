@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+    <script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Diccionario De Contraseñas</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="menuheader"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="../menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>
+	<h:form>
+	<rich:panel id="r1" style="width:670px;margin:auto;">
+	  <f:facet name="header">
+	    <h:outputText value="Diccionario De Contraseñas Inválidas" styleClass="bold"/>
+	  </f:facet>
+	  
+	  <rich:panel>
+	   <rich:spacer height="5"/>
+	    <h:panelGrid columns="2">
+	    <h:outputText value="Digite Nueva Contraseña: " styleClass="bold"/>
+	    <h:inputText id="np" value="#{passwordDictionaryBean.newPassword}" maxlength="20" onkeypress="return noWhiteSpace(event);">
+        </h:inputText>
+	    <h:commandButton value="Agregar Contraseña" action="#{passwordDictionaryBean.save}" >
+	    </h:commandButton>
+	    </h:panelGrid>
+	   </rich:panel>
+	   
+	   <rich:spacer height="10"/>
+	   
+	   <rich:panel style="margin:auto;">
+	    <h:outputText value="Lista de Contraseñas Inválidas Almacenadas En El Diccionario" style="font-weight: bold;
+	               font-family: 'Arial'; font-size: 12px;margin-left:150px;margin-right:0px;text-align:center; border:1px;color:#848484;position:relative;"/>
+	     <rich:dataTable id="dtable" width="600" value="#{passwordDictionaryBean.lista}" var="lis" rows="10" 
+	               onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+	                  rowClasses="white,grey">
+	          <rich:column style="text-align:center;">
+	           <f:facet name="header">
+	            <h:outputText value="Contraseña Inválida"/>
+	           </f:facet>
+	           <h:outputText value="#{lis.passwordNumber}"/>
+	          </rich:column>  
+	          
+	          <rich:column style="text-align:center;">
+	           <f:facet name="header">
+	            <h:outputText value="Fecha Creación"/>
+	           </f:facet>
+	           <h:outputText value="#{lis.dateCreation}" 
+	           	converter="TimeStampToStringDateConverter"/>
+	          </rich:column> 
+	          
+	          <rich:column style="text-align:center;">
+	           <f:facet name="header">
+	            <h:outputText value="Usuario"/>
+	           </f:facet>
+	           <h:outputText value="#{lis.userId.userCode}"/>
+	          </rich:column> 
+	          
+	          <rich:column style="text-align:center;">
+	           <f:facet name="header">
+	            <h:outputText value="Acción"/>
+	           </f:facet>
+	           <h:commandLink value="Modificar" action="#{passwordDictionaryBean.update}" >
+	            <f:setPropertyActionListener target="#{passwordDictionaryBean.passwordId}" value="#{lis.passwordDictionaryId}"/>
+	             <f:setPropertyActionListener target="#{passwordDictionaryBean.newPassword2}" value="#{lis.passwordNumber}"/>
+	           </h:commandLink><rich:spacer width="10"/>
+	           <h:commandLink value="Eliminar" action="#{passwordDictionaryBean.deleteConfirm}">
+	           <f:setPropertyActionListener target="#{passwordDictionaryBean.passwordId}" value="#{lis.passwordDictionaryId}"/> 
+	           </h:commandLink>
+	          </rich:column>       
+	        <f:facet name="footer">
+	         <rich:datascroller for="dtable"/>
+	        </f:facet>
+	     </rich:dataTable>
+	   </rich:panel>
+	</rich:panel>
+    </h:form>
+    
+      <rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{passwordDictionaryBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Diccionario de Contraseñas" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{passwordDictionaryBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{passwordDictionaryBean.message}" styleClass="normal"/>
+        <rich:spacer height="10"/>
+        <h:form>
+        <h:panelGrid columns="1" style="width:80px; margin: auto; padding:5px; ">
+		    <h:commandButton value="Aceptar" action="#{passwordDictionaryBean.hideModal}"/>
+        </h:panelGrid>
+        </h:form>
+        <br />
+	</rich:modalPanel>
+	
+	 <rich:modalPanel id="panel1" width="350" height="115"  showWhenRendered="#{passwordDictionaryBean.showUpdate}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Modificar Contraseña Inválida" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{passwordDictionaryBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+		  <h:panelGrid columns="2">
+		   <h:outputText value="Digite nueva Contraseña:" styleClass="bold"/>
+		   <h:inputText id="np2" value="#{passwordDictionaryBean.newPassword2}" maxlength="20" onkeypress="return noWhiteSpace(event);"/>
+          </h:panelGrid>
+          <h:panelGrid style="width: 100px; margin: auto; padding:5px;">
+		   <h:commandButton value="Guardar Cambios" action="#{passwordDictionaryBean.updatePassword}">
+		      <a4j:support event="onclick" action="#{passwordDictionaryBean.hideModal2}" reRender="np2"></a4j:support>
+		   </h:commandButton>
+		  </h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+
+    <rich:modalPanel id="confirmacion" width="370" height="115"  showWhenRendered="#{passwordDictionaryBean.showConfirm}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{passwordDictionaryBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{passwordDictionaryBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{passwordDictionaryBean.delete}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{passwordDictionaryBean.hideModal}" /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+	</rich:modalPanel>
+	
+</div>
+<f:subview id="footer">
+	<ui:include src="../content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

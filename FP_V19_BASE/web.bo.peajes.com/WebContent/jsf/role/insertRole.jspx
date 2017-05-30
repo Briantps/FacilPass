@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Creación de Roles</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+						<rich:spacer height="5"/>	
+						<rich:messages style="color:red;"/>
+						<h:form>
+							<rich:panel style="width:700px;margin:auto;">
+								<f:facet name="header">
+									<h:outputText value="Creación de Rol" styleClass="bold"/>
+								</f:facet>					
+								<table width="100%">
+									<tr>
+										<td width="20%"></td>
+										<td width="20%">
+											<h:outputText value="#{msg.role}: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</td>
+										<td width="60%">
+											<h:inputText id="nameRol" value="#{adminRoleMBean.roleName}" 
+											onkeypress="return alphaSpaceOnly(event)" maxlength="50" style="width:163px">
+											</h:inputText>
+										</td>
+									</tr>
+													
+									<tr>  
+										<td width="20%"></td>
+										<td width="20%">
+											<h:outputText value="Tipo Rol: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</td>
+										<td width="60%">
+											<h:selectOneMenu id="types1" value="#{adminRoleMBean.typeRoleId}">
+											<f:selectItems value="#{adminRoleMBean.typeRoleList}"></f:selectItems>
+											</h:selectOneMenu>
+										</td>
+									</tr>
+									
+									<tr>
+										<td width="20%">
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+										</td>
+										<td width="20%"></td>
+										<td width="60%">
+											<h:commandButton value="Guardar"  styleClass="normal" action="#{adminRoleMBean.saveRole}"/>
+										</td>
+									</tr>
+								</table>					
+							</rich:panel>
+						</h:form>
+						<rich:spacer height="20"/>							
+						<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{adminRoleMBean.create || adminRoleMBean.error}"  onresize="return false;" moveable="false">
+							<f:facet name="header">
+								<h:panelGroup>
+									<h:outputText value="Mensaje - Creación de Rol" styleClass="bold"/>
+								</h:panelGroup>
+							</f:facet>
+							<f:facet name="controls">
+								<h:panelGroup>
+									<a4j:form>
+										<h:commandButton action="#{adminRoleMBean.hideModal}" image="/img/close.png" />
+									</a4j:form>
+								</h:panelGroup>
+							</f:facet>
+							<h:outputText value="#{adminRoleMBean.msg}" styleClass="normal"/>
+							<h:form>
+								<h:panelGrid columns="3" styleClass="tableBO">
+									<h:panelGroup>
+										<div class="span-1"></div>
+									</h:panelGroup>
+							     	<h:panelGroup>
+							     		<h:commandButton value="Aceptar" action="#{adminRoleMBean.hideModal}"  />
+							     	</h:panelGroup>	     	
+							    </h:panelGrid>
+						    </h:form>		
+							<br/>
+						</rich:modalPanel>					
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

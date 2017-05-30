@@ -1,0 +1,915 @@
+package configSystem;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+
+import org.jsoup.Jsoup;
+
+import sessionVar.SessionUtil;
+import validator.Validation;
+
+import ejb.Config;
+import ejb.Role;
+import ejb.SystemParameters;
+import ejb.TextEditorManager;
+
+import jpa.TbSystemParameter;
+
+public class SystemParameter implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
+	@EJB(mappedName="ejb/Config")
+	private Config config;
+	
+	@EJB(mappedName="ejb/Role")
+	private Role role;
+	
+	@EJB(mappedName="ejb/TextEditorManager")
+	private TextEditorManager txtEM;
+	
+	@EJB(mappedName="ejb/SystemParameters")
+	private SystemParameters sp;
+	
+	private Long parameterId;
+	
+	private String valueParameter="";
+	
+	private String message;
+	
+	private String nameParameter;
+	
+	private String clasification;
+	
+	private boolean showModal;
+	
+	private boolean showUpdate;
+	
+	private boolean showNumOnly;
+	
+	private boolean showAlphaOnly;
+	
+	private boolean showAlphaNumOnly;
+	
+	private boolean showAlphaSpaceOnly;
+	
+	private String corfirmMessage;
+	
+	private boolean showConfirm;
+	
+	private boolean showDate;
+	
+	private List<TbSystemParameter> lista;
+	
+	private String messageError;
+	
+	private boolean showModalError;
+	
+	private boolean showWysiwyg;
+	
+	private int line;
+
+	private String textHtml;
+	private String themeOne = "";
+	private String themeTwo = "";
+	private String themeTree = "";
+	private String themeFour = "";
+	private int count = 1;
+	public String nameEditor = "systemParameter";
+	private String themeFont;
+	
+	/**
+	 * Atributos para el manejo de parametros que son solo hora
+	 * @author ablasquez
+	 */
+	private boolean showHour;
+	private String hour;
+	private String minute;
+	private String second;
+	
+	public SystemParameter(){
+		
+		textHtml = this.getValueParameter();
+		themeFont = "Andale Mono=andale mono,times;"
+			+ "Arial=arial,helvetica,sans-serif;"
+			+ "Arial Black=arial black,avant garde;"
+			+ "Book Antiqua=book antiqua,palatino;"
+			+ "Comic Sans MS=comic sans ms,sans-serif;"
+			+ "Courier New=courier new,courier;"
+			+ "Georgia=georgia,palatino;" + "Helvetica=helvetica;"
+			+ "Impact=impact,chicago;" 
+			+ "Tahoma=tahoma,arial,helvetica,sans-serif;"
+			+ "Terminal=terminal,monaco;"
+			+ "Times New Roman=times new roman,times;"
+			+ "Trebuchet MS=trebuchet ms,geneva;"
+			+ "Verdana=verdana,geneva";
+	}
+	
+	@PostConstruct
+	public void init(){
+		this.obtenerLista();
+	}
+	
+	public List<TbSystemParameter> obtenerLista(){
+		List<TbSystemParameter> list= new ArrayList<TbSystemParameter>();
+		if(list!=null){
+			list.clear();
+		}
+		lista=config.getParameters();	
+		return list;
+	}
+	
+	/**
+	 * @param lista the lista to set
+	 */
+	public void setLista(List<TbSystemParameter> lista) {
+		this.lista = lista;
+	}
+
+	/**
+	 * @return the lista
+	 */
+	public List<TbSystemParameter> getLista() {
+		return lista;
+	}
+		
+	
+	/**
+	 * @param parameterId the parameterId to set
+	 */
+	public void setParameterId(Long parameterId) {
+		this.parameterId = parameterId;
+	}
+
+	/**
+	 * @return the parameterId
+	 */
+	public Long getParameterId() {
+		return parameterId;
+	}
+
+	/**
+	 * @param valueParameter the valueParameter to set
+	 */
+	public void setValueParameter(String valueParameter) {
+		this.valueParameter = valueParameter;
+	}
+
+	/**
+	 * @return the valueParameter
+	 */
+	public String getValueParameter() {
+		return valueParameter;
+	}
+
+	 /**
+	 * @param showModal the showModal to set
+	 */
+	public void setShowModal(boolean showModal) {
+		this.showModal = showModal;
+	}
+
+	/**
+	 * @return the showModal
+	 */
+	public boolean isShowModal() {
+		return showModal;
+	}
+	
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param showUpdate the showUpdate to set
+	 */
+	public void setShowUpdate(boolean showUpdate) {
+		this.showUpdate = showUpdate;
+	}
+
+	/**
+	 * @return the showUpdate
+	 */
+	public boolean isShowUpdate() {
+		return showUpdate;
+	}
+	
+	/**
+	 * @param showNumOnly the showNumOnly to set
+	 */
+	public void setShowNumOnly(boolean showNumOnly) {
+		this.showNumOnly = showNumOnly;
+	}
+
+	/**
+	 * @return the showNumOnly
+	 */
+	public boolean isShowNumOnly() {
+		return showNumOnly;
+	}
+
+	/**
+	 * @param showAlphaOnly the showAlphaOnly to set
+	 */
+	public void setShowAlphaOnly(boolean showAlphaOnly) {
+		this.showAlphaOnly = showAlphaOnly;
+	}
+
+	/**
+	 * @return the showAlphaOnly
+	 */
+	public boolean isShowAlphaOnly() {
+		return showAlphaOnly;
+	}
+
+	/**
+	 * @param showAlphaNumOnly the showAlphaNumOnly to set
+	 */
+	public void setShowAlphaNumOnly(boolean showAlphaNumOnly) {
+		this.showAlphaNumOnly = showAlphaNumOnly;
+	}
+
+	/**
+	 * @return the showAlphaNumOnly
+	 */
+	public boolean isShowAlphaNumOnly() {
+		return showAlphaNumOnly;
+	}
+	
+	/**
+	 * @param showAlphaSpaceOnly the showAlphaSpaceOnly to set
+	 */
+	public void setShowAlphaSpaceOnly(boolean showAlphaSpaceOnly) {
+		this.showAlphaSpaceOnly = showAlphaSpaceOnly;
+	}
+
+	/**
+	 * @return the showAlphaSpaceOnly
+	 */
+	public boolean isShowAlphaSpaceOnly() {
+		return showAlphaSpaceOnly;
+	}	
+	
+	/**
+	 * @param clasification the clasification to set
+	 */
+	public void setClasification(String clasification) {
+		this.clasification = clasification;
+	}
+
+	/**
+	 * @return the clasification
+	 */
+	public String getClasification() {
+		return clasification;
+	}
+
+	/**
+	 * @param nameParameter the nameParameter to set
+	 */
+	public void setNameParameter(String nameParameter) {
+		this.nameParameter = nameParameter;
+	}
+
+	/**
+	 * @return the nameParameter
+	 */
+	public String getNameParameter() {
+		return nameParameter;
+	}
+
+	public String update(){
+		this.setShowNumOnly(false);
+		this.setShowAlphaOnly(false);
+		this.setShowAlphaNumOnly(false);
+		this.setShowDate(false);
+		this.setShowHour(false);
+
+		
+		if(clasification!=null){
+			if(clasification.equals("N")){
+				this.setShowNumOnly(true);
+			}
+			else if(clasification.equals("A")){
+				this.setShowAlphaOnly(true);
+			}
+			else if(clasification.equals("AN")){
+				this.setShowAlphaNumOnly(true);
+			}
+			else if(clasification.equals("D")){
+				this.setShowDate(true);
+			}
+			else if(clasification.equals("H")){
+			     if(getValueParameter() != null ){
+			            String[] valores=separHora(getValueParameter());
+			            hour =valores[0];
+			            minute =valores[1];
+			            second =valores[2];
+			      }else {
+			            hour ="0";
+			            minute ="0";
+			            second ="0";
+			      }
+				this.setShowHour(true);
+			}
+			
+		}
+		if(clasification.equals("W")){
+			this.setShowWysiwyg(true);
+			this.setShowUpdate(false);
+		}else{
+			this.setShowUpdate(true);
+			this.setShowWysiwyg(false);
+		}
+		
+		return null;
+	}
+	
+
+	/**
+	* Perminte separar las horas dado un String
+	* Horas: Min : Seg
+	* @return
+	*/
+	private String[] separHora(String hora){      
+	      String[] horMinSec = hora.split(":");     
+	      return horMinSec;
+	}
+
+	public String updateParameter(){
+		this.setShowConfirm(false);
+    	this.setShowModal(false);
+    	this.setShowModalError(false);
+		System.out.println("parameterId: " + parameterId);
+		System.out.println("valueParameter: " + valueParameter);
+		System.out.println("Tamaño del parametro" + valueParameter.length());
+		System.out.println("clasification: " + clasification);
+		Long valueParametroLong;
+	    	if(valueParameter!="" && valueParameter!=null){
+	    		if(parameterId==43L){
+		    		 System.out.println("ingrese al parametro : " + parameterId);
+					  valueParametroLong=Long.parseLong(valueParameter);
+					  valueParameter=String.valueOf(valueParametroLong);
+					  System.out.println("valueParameter: " + valueParameter);
+					  if(valueParametroLong>0L && valueParametroLong<1501L){
+						  boolean res=config.updateParameter(parameterId, valueParameter,nameParameter,SessionUtil.sessionUser().getUserId(), SessionUtil.ip());
+				    		if(res){
+				    			this.setMessage("Transacción Exitosa.");
+				    			this.obtenerLista();
+				    		}
+				    		else{
+				    			this.setMessage("Error en la transacción.");
+				    		}
+					  }else{
+				    		this.setMessage("El rango de registros de cargue masivo tags es 1 a 1500. Verifique.");
+				      }
+				}else if(parameterId==48L){
+					String msj = sp.validateVigParameter(valueParameter);
+					if(msj.length()>0){
+						this.setMessage(msj);
+					}else if(config.updateParameter(parameterId, valueParameter,nameParameter,SessionUtil.sessionUser().getUserId(), SessionUtil.ip())){
+		    			this.setMessage("Transacción Exitosa.");
+		    			this.obtenerLista();
+		    		}
+				}else if(parameterId==51L){
+					String msj = sp.minimumResponses(Integer.parseInt(valueParameter));
+					if(msj.length()>0){
+						this.setMessage(msj);
+					}else if(config.updateParameter(parameterId, valueParameter,nameParameter,SessionUtil.sessionUser().getUserId(), SessionUtil.ip())){
+		    			this.setMessage("Transacción Exitosa.");
+		    			this.obtenerLista();
+		    		}
+				}else {
+	    			if(Validation.isNumeric(valueParameter)){
+						  valueParametroLong=Long.parseLong(valueParameter);
+						  System.out.println("valueParametroLong: " + valueParametroLong);
+						  valueParameter=String.valueOf(valueParametroLong);
+						  System.out.println("valueParameter: " + valueParameter);
+					}
+	    			boolean res=config.updateParameter(parameterId, valueParameter,nameParameter,SessionUtil.sessionUser().getUserId(), SessionUtil.ip());
+		    		if(res){
+		    			this.setMessage("Transacción Exitosa.");
+		    			this.obtenerLista();
+		    		}
+		    		else{
+		    			this.setMessage("Error en la transacción.");
+		    		}
+				}
+	    	}else{
+	    		this.setMessage("Debe digitar el valor del parámetro este no debe estar vacío.");
+	    	}
+	    	
+	    	this.setShowUpdate(false);
+	    	this.setShowConfirm(false);
+	    	this.setShowModal(true);
+	    	this.setShowWysiwyg(false);
+	    	return null;
+	    	
+	    }
+	
+	public void hideModal(){
+		this.setShowModal(false);
+		this.setShowModalError(false);
+		this.setShowUpdate(false);
+		this.setMessage("");
+		this.setValueParameter("");
+		this.setParameterId(0L);
+		this.setShowNumOnly(false);
+		this.setShowAlphaOnly(false);
+		this.setShowAlphaNumOnly(false);
+		this.setCorfirmMessage("");
+		this.setShowConfirm(false);
+		this.setShowWysiwyg(false);
+	}
+
+	public String hideModal2(){
+		this.setShowUpdate(false);
+		this.setShowNumOnly(false);
+		this.setShowAlphaOnly(false);
+		this.setShowAlphaNumOnly(false);
+		this.setShowAlphaSpaceOnly(false);
+		this.setShowWysiwyg(false);
+		return null;
+	}
+	
+	public String hideModal3(){
+		this.setShowModalError(false);
+		this.setShowModal(false);
+		
+		if(clasification.equals("W")){
+			this.setShowWysiwyg(true);
+			this.setShowUpdate(false);
+		}else{
+			this.setShowUpdate(true);
+			this.setShowWysiwyg(false);
+		}
+		
+		return null;
+	}
+
+	/**
+	 * @param corfirmMessage the corfirmMessage to set
+	 */
+	public void setCorfirmMessage(String corfirmMessage) {
+		this.corfirmMessage = corfirmMessage;
+	}
+
+	/**
+	 * @return the corfirmMessage
+	 */
+	public String getCorfirmMessage() {
+		return corfirmMessage;
+	}
+	
+	/**
+	 * @param showConfirm the showConfirm to set
+	 */
+	public void setShowConfirm(boolean showConfirm) {
+		this.showConfirm = showConfirm;
+	}
+
+	/**
+	 * @return the showConfirm
+	 */
+	public boolean isShowConfirm() {
+		return showConfirm;
+	}
+	
+	public String confirm(){
+		this.setShowNumOnly(false);
+		this.setShowAlphaOnly(false);
+		this.setShowAlphaNumOnly(false);
+		this.setShowDate(false);
+		this.setShowHour(false);
+
+		
+		if(clasification!=null){
+			if(clasification.equals("N")){
+				this.setShowNumOnly(true);
+			}
+			else if(clasification.equals("A")){
+				this.setShowAlphaOnly(true);
+			}
+			else if(clasification.equals("AN")){
+				this.setShowAlphaNumOnly(true);
+			}
+			else if(clasification.equals("D")){
+				this.setShowDate(true);
+			}
+			else if(clasification.equals("H")){
+				this.setShowHour(true);
+			}
+			
+		}
+		
+		if(clasification.equals("W")){
+			this.setShowWysiwyg(true);
+			this.setShowUpdate(false);
+		}else{
+			this.setShowUpdate(true);
+			this.setShowWysiwyg(false);
+		}
+		System.out.println("clasification: " + clasification);
+		this.setShowConfirm(false);
+		this.setShowModalError(false);
+		
+		
+		
+		String mensaje="Error en Transacción.";
+		System.out.println("valueParameter: "+valueParameter);
+		if(valueParameter!=""){
+			if(valueParameter!=null){
+				if(clasification.equals("W")){ 				 
+					this.validateTxt(valueParameter);				 
+
+				}else if(!valueParameter.trim().equals("") && !valueParameter.equals(null)){
+
+					if(valueParameter.length()<=500){
+						int flag=0;
+						//verificar informacion ingresada
+						if(clasification!=null){
+							if(clasification.equals("N")){
+								if(Validation.isNumeric(valueParameter)){
+									flag=0;	    					  
+								}
+								else{
+									flag=1;
+									mensaje="El parámetro sólo debe contener números.";
+								}
+							}
+							else if(clasification.equals("A")){
+								if(Validation.isAlpha((valueParameter))){
+									flag=0;
+								}
+								else{
+									flag=1;
+									mensaje="El parámetro sólo debe contener letras.";
+								}
+							}
+							else if(clasification.equals("D")){
+								if(Validation.isDate(valueParameter)){
+									flag=0;
+								}
+								else{
+									flag=1;
+									mensaje="El parámetro debe tener el siguiente formato: dd/MM/yyyy.";
+								}
+							}
+							else if(clasification.equals("AN")){
+								flag=0;  
+							}
+							else if(clasification.equals("H")){
+								try{
+									valueParameter = ((hour.length() == 1 ? "0" : "")+hour)+":"+((minute.length() == 1 ? "0" : "")+minute)+":"+((second.length() == 1 ? "0" : "")+second); 
+									flag=0;
+								} catch (NullPointerException e) {
+									flag=1;
+									mensaje="El parámetro debe tener el siguiente formato: hh:mm:ss";
+								}
+							}else{
+								flag=1;
+								mensaje="El parámetro debe tener el siguiente formato: hh:mm:ss";
+							}
+
+						}
+						else{
+							flag=0;
+						}
+						System.out.println("valor de la variable flag despues de la primera verificacion: " + flag);
+						if(flag==0){
+							//verificar parametro 36 de roles 
+							if(parameterId==36L){
+								System.out.println("entre a parametro 36");
+								Long cantRoles=(role.getCountRoles()!=null?role.getCountRoles().longValue():0L);
+								if(cantRoles <= Long.parseLong(valueParameter)){
+									flag=0;
+									System.out.println("cantidad de roles ok");
+								}
+								else{
+									flag=1;
+									System.out.println("cantidad de roles es mayor que el parametro ingresado");
+									mensaje="Error, Actualmente existen " +cantRoles +" roles creados, puede modificar este parámetro a una cantidad igual o superior.";
+								}
+							}
+							else{
+								flag=0;	
+							}
+
+							System.out.println("valor de la variable flag despues de la segunda verificacion: " + flag);
+						}
+						else{
+							this.setMessage(mensaje);
+						}
+
+						//se define si se pasa a actualizar el parametro o no
+						if(flag==0){
+							this.setCorfirmMessage("¿Está seguro que desea guardar los cambios?");
+							this.setShowConfirm(true);
+							this.setShowModal(false);
+							this.setShowModalError(false);
+							this.setShowUpdate(false);
+							this.setShowWysiwyg(false);
+							System.out.println("if");
+						}
+						else{
+							System.out.println("entre al else de flag=0");
+							this.setMessage(mensaje);
+							this.setShowModal(false);
+							this.setShowModalError(true);
+							this.setShowUpdate(false);
+						}
+
+					}
+					else{
+						this.setMessage("Error: El tamaño máximo para ingresar es de 500 caracteres, el valor que esta intentando ingresar es de: " +valueParameter.length());
+						this.setShowModal(false);
+						this.setShowModalError(true);
+						this.setShowUpdate(false);
+					}
+				}
+				else{
+					this.setShowConfirm(false);
+					this.setMessage("Debe digitar el valor del parámetro, éste no debe estar vacío.");
+					this.setShowModal(false);
+					this.setShowModalError(true);
+					System.out.println("else 1");
+					this.setShowUpdate(false);
+				}
+			}else{
+				this.setShowConfirm(false);
+				this.setMessage("Debe digitar el valor del parámetro, éste no debe estar vacío.");
+				this.setShowModal(false);
+				this.setShowModalError(true);
+				System.out.println("else 2");
+				this.setShowUpdate(false);
+			}
+		}
+		else{
+			this.setShowConfirm(false);
+			this.setMessage("Debe digitar el valor del parámetro, éste no debe estar vacío.");
+			this.setShowModal(false);
+			this.setShowModalError(true);
+			System.out.println("else 3");
+			this.setShowUpdate(false);
+		}
+		
+		
+		return null;
+	}
+	
+	public boolean validateTxt(String txt){
+		System.out.println("SystemParameter.validateTxt()" );
+		
+		String txtValid;
+		try {
+			txtValid = html2text(txt);
+			System.out.println("txt: " + txt);
+			if (txtValid.length()>4000){
+				this.setMessage("El mensaje no debe contener más de 4000 caracteres");
+				this.setShowModal(false);
+				this.setShowModalError(true);
+				return false;
+			}else if(txtValid.equals(" ") || txtValid.equals(null)) {
+				this.setMessage("El mensaje no puede estar vacio");
+				this.setShowModal(false);
+				this.setShowModalError(true);
+				return false;
+			}else{
+				//se define si se pasa a actualizar el parametro o no
+				this.setCorfirmMessage("¿Está seguro que desea guardar los cambios?");
+				this.setShowConfirm(true);
+				this.setShowModal(false);
+				this.setShowModalError(false);
+				this.setShowUpdate(false);
+				this.setShowWysiwyg(false);
+				System.out.println("if");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("[ Error en SystemParameter.validateTxt()]");
+			return false;
+		}		
+		return true;
+	}
+	
+	public static String html2text(String html) {
+	    return Jsoup.parse(html).text();
+	}
+
+	/**
+	 * @param showDate the showDate to set
+	 */
+	public void setShowDate(boolean showDate) {
+		this.showDate = showDate;
+	}
+
+	/**
+	 * @return the showDate
+	 */
+	public boolean isShowDate() {
+		return showDate;
+	}
+
+	/**
+	 * @param messageError the messageError to set
+	 */
+	public void setMessageError(String messageError) {
+		this.messageError = messageError;
+	}
+
+	/**
+	 * @return the messageError
+	 */
+	public String getMessageError() {
+		return messageError;
+	}
+
+	/**
+	 * @param showModalError the showModalError to set
+	 */
+	public void setShowModalError(boolean showModalError) {
+		this.showModalError = showModalError;
+	}
+
+	/**
+	 * @return the showModalError
+	 */
+	public boolean isShowModalError() {
+		return showModalError;
+	}
+	
+	
+	/**
+	 * Metodos para el manejo de parametros que son con valores de hora
+	 * @author ablasquez
+	 */
+	
+	
+	public void setShowHour(boolean showHour) {
+		this.showHour = showHour;
+	}
+
+	public boolean isShowHour() {
+		return showHour;
+	}
+
+	public void setHour(String hour) {
+		this.hour = hour;
+	}
+
+	public String getHour() {
+		return hour;
+	}
+
+	public void setMinute(String minute) {
+		this.minute = minute;
+	}
+
+	public String getMinute() {
+		return minute;
+	}
+
+	public void setSecond(String second) {
+		this.second = second;
+	}
+
+	public String getSecond() {
+		return second;
+	}
+
+	public void setShowWysiwyg(boolean showWysiwyg) {
+		this.showWysiwyg = showWysiwyg;
+	}
+
+	public boolean isShowWysiwyg() {
+		return showWysiwyg;
+	}
+
+	public void setTextHtml(String textHtml) {
+		this.textHtml = textHtml;
+	}
+
+	public String getTextHtml() {
+		return textHtml;
+	}
+	public String getThemeOne() {
+		System.out.println("getThemeOne:");
+		ArrayList<String> list=new ArrayList<String>();
+		while (themeOne.equals("") && count <= 3) {
+			list = (txtEM.getOptionToolBarrEditorText(count,
+					nameEditor));
+			if(list.size()>1){				
+				themeOne=list.get(0);	
+				themeFour=list.get(1);
+			}else{
+				themeOne=list.get(0);
+			}
+			System.out.println("Contador themeone: " + count);
+			count++;
+		}
+		return themeOne;
+	}
+
+	public void setThemeOne(String themeOne) {
+		this.themeOne = themeOne;
+	}
+	public String getThemeTwo() {
+		System.out.println("getThemeTwo:");
+		ArrayList<String> list=new ArrayList<String>();
+		while (themeTwo.equals("") && count <= 3) {
+			list=  (txtEM.getOptionToolBarrEditorText(count,
+					nameEditor));
+		
+			for(String a:list){
+				themeTwo=a;
+			}
+			System.out.println("Contador themeTwo: " + count);
+			count++;
+		}
+		return themeTwo;
+	}
+	
+
+	public void setThemeTwo(String themeTwo) {
+		this.themeTwo = themeTwo;
+	}
+
+	public String getThemeTree() {
+		System.out.println("getThemeTree:");
+		ArrayList<String> list=new ArrayList<String>();
+		while (themeTree.equals("") && count <= 3) {
+			list = (txtEM.getOptionToolBarrEditorText(
+					count, nameEditor));
+			System.out.println("Contador themeTree: " + count);
+			themeTree=list.get(0);
+			System.out.println("datos traido de la barra 3"+themeTree);
+			
+			count++;
+		}
+		return themeTree;
+	}
+
+	public void setThemeTree(String themeTree) {
+		this.themeTree = themeTree;
+	}
+
+	
+	public void setThemeFont(String themeFont) {
+		this.themeFont = themeFont;
+	}
+
+	public String getThemeFont() {
+		return themeFont;
+	}
+
+	public String getThemeFour() {	
+
+		System.out.println("getThemeFour:");
+		ArrayList<String> list=new ArrayList<String>();
+		if (themeFour.equals("") && count <=3) {
+			list = (txtEM.getOptionToolBarrEditorText(
+					count, nameEditor));
+			System.out.println("Contador themeFour: " + count);
+			themeFour=list.get(0);
+			count++;				
+		}
+		return themeFour;
+	}
+
+	public void setThemeFour(String themeFour) {
+		this.themeFour = themeFour;
+	}
+	public int getLine() {
+		setLine(html2text(valueParameter).replaceAll(" ", "").length());
+		return line;
+	}
+	public void setLine(int line) {
+		this.line = line;
+	}	
+	public void contCatac() {
+		getLine();
+		System.out.println("Caracteres: " + getLine());
+		if(line>=4000){
+			if(!isShowModalError()){
+				setMessage("Ha excedido el límite de caracteres.");				
+				this.setShowModalError(true);
+			}
+		}
+	}
+
+}

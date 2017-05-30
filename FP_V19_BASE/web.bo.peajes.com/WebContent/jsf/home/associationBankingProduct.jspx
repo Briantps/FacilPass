@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	</head>	
+	<body>
+		<f:view>		
+			<div>
+				<h:form>
+					<rich:panel style="width:600 px;margin:auto;">
+						<div id="scroll_horizontal">
+							<rich:dataTable id="listBanAso" rows="10" var="item" value="#{homeBean.list}" style="width:500px;margin:auto;">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="ID" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.typeID}" styleClass="normal"/>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="N° de Identificación" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.ID}" styleClass="normal"/>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Nombres" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.firstName}" styleClass="normal"/>
+								</rich:column>
+								<rich:column style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Apellidos" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.secondName}" styleClass="normal"/>
+								</rich:column>
+								<rich:column style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Correo Electrónico" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.email}" styleClass="normal"/>
+								</rich:column>
+								<rich:column style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="N° Cuenta" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.account}" styleClass="normal"/>
+								</rich:column>
+								<rich:column style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Fecha Asociación" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.date}" styleClass="normal">	
+										<f:convertDateTime pattern="dd/MM/yyyy hh:mm aa" timeZone="GMT-5"/>
+									</h:outputText>
+								</rich:column>
+							</rich:dataTable>
+							<rich:datascroller id="datascroller" for="listBanAso" />
+						</div>
+						<rich:spacer height="10"/>	
+					</rich:panel>
+				</h:form>
+				<rich:spacer height="20"/>			
+				<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{homeBean.modal}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Cliente Asociación Producto Bancario" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{homeBean.cancel}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{homeBean.modalMsg}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+				     		<h:panelGroup>
+				     			<h:commandButton value="Aceptar" action="#{homeBean.cancel}"  />
+				     		</h:panelGroup>	     	
+				    	</h:panelGrid>
+				    </h:form>
+				    <br/>
+				</rich:modalPanel>
+			</div>
+		</f:view>
+	</body>
+</html>

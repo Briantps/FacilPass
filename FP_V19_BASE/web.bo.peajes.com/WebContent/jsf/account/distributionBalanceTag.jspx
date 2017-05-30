@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Distribución de Saldos en Tag</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+    <f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<a4j:form>
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header">
+				<h:outputText value="Distribuir Fondos Manualmente" styleClass="bold"/>
+			</f:facet>
+			<h:panelGrid styleClass="tableBO" columns="2" 
+				style="size 300px; margin: auto; padding:10px; ">
+				<h:panelGroup>
+					<h:outputText value="#{msg.CtaFP}: " styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<h:selectOneMenu value="#{distributionTagBean.idClientAccount}" 
+					style="width: 200px;" styleClass="normal">
+					<f:selectItems value="#{distributionTagBean.clientAccounts}"/>
+				</h:selectOneMenu>
+                <h:panelGroup>
+ 					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				</h:panelGroup>
+                <h:commandButton value="#{msg.Buscar}" action="#{distributionTagBean.search}">
+                	<a4j:support event="oncomplete" reRender="panelData"/>
+                </h:commandButton>
+			</h:panelGrid>
+			<rich:spacer height="5"/>
+			
+			<a4j:outputPanel id="panelData">				
+				<rich:panel rendered="#{distributionTagBean.showData}">
+					<h:panelGrid styleClass="tableBO" columns="2" 
+						style="size 300px; margin: auto; padding:10px; width: 400px; background-color: #ffffff; border-top-style: dashed; border-bottom-width: thin; border-bottom-style: dashed; border-left-color: #B1B1B1; border-top-color: #B1B1B1; border-right-color: #B1B1B1; border-left-style: dashed; border-right-width: thin; border-right-style: dashed; border-left-width: thin; border-bottom-color: #B1B1B1; border-top-width: thin">
+						<h:outputText styleClass="bold" value="Saldo Disponible:"/>
+						<h:outputText styleClass="bold" value="#{distributionTagBean.availableBalance}" style="color: #000000; font-size: 18px">
+							<f:convertNumber pattern="$###,###,###" />
+						</h:outputText>
+					</h:panelGrid>
+					<rich:spacer height="10"/>
+					<rich:extendedDataTable height="150px" width="650px" value="#{distributionTagBean.devicesList}" var="list" 
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+						rowClasses="white,grey" enableContextMenu="false"
+						style="vertical-align: middle; margin: auto;">
+						<rich:column width="110px" sortBy="#{list.deviceCode}" sortable="true">
+							<f:facet name="header">
+								<h:outputText value="ID Interno" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value=" #{list.deviceCode}" 
+								styleClass="normal" style="font-size: 15px;"/>
+						</rich:column>
+						<rich:column width="150px">
+							<f:facet name="header">
+								<h:outputText value="Facial" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value=" #{list.deviceFacialId}" 
+								styleClass="normal" style="font-size: 15px;">
+							</h:outputText>
+						</rich:column>
+						<rich:column width="100px">
+							<f:facet name="header">
+								<h:outputText value="Saldo Actual" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value="#{list.deviceCurrentBalance}" 
+								styleClass="normal" style="font-size: 15px;">
+								<f:convertNumber pattern="$#,###,###,###" />
+							</h:outputText>
+						</rich:column>
+						<rich:column width="150px">
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Estado de Compra"/>
+							</f:facet>
+							<h:outputText value="PAGADO" styleClass="bold"
+								 rendered="#{list.devicePaid}"/>
+							<h:outputText value="SIN PAGO REGISTRADO" styleClass="bold"
+								 rendered="#{!list.devicePaid}"/>
+						</rich:column>
+ 
+						<rich:column width="100px">
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Distribuir"/>
+							</f:facet>
+							<h:commandLink value="DISTRIBUIR" styleClass="bold" action="#{distributionTagBean.initRecharge}">
+								<f:setPropertyActionListener value="#{list.deviceId}" target="#{distributionTagBean.deviceId}"/>
+							</h:commandLink>
+						</rich:column>  
+					</rich:extendedDataTable>				
+				</rich:panel>
+			</a4j:outputPanel>
+		</rich:panel>
+	</a4j:form>
+	<rich:spacer height="20"/>
+	
+	<rich:modalPanel id="rechargeWindow" width="350" height="160" showWhenRendered="#{distributionTagBean.showRechargeWindow}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Distribuir" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{distributionTagBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>		
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+			<h:outputText styleClass="bold" value="Saldo Disponible:"/>
+			<h:outputText styleClass="bold" value="#{distributionTagBean.availableBalance}" 
+				style="color: #005E2F; font-size: 18px">
+				<f:convertNumber pattern="$###,###,###" />
+			</h:outputText>
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+			<h:outputText styleClass="bold" value="Valor: "/>
+			<h:inputText value="#{distributionTagBean.valueTxt}" onkeypress="return solonumeros(event)" maxlength="15" onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+			</h:inputText>
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{distributionTagBean.initConfirm}"/>
+	     	</h:panelGroup>   	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{distributionTagBean.showConfirmation}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación - Distribuir Fondos Manualmente" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{distributionTagBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{distributionTagBean.confirmMessage}" styleClass="normal"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{distributionTagBean.saveRecharge}"/>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup>
+	     		<h:commandButton value="Cancelar" action="#{distributionTagBean.hideModal}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{distributionTagBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Distribuir Fondos Manualmente" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{distributionTagBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{distributionTagBean.modalMessage}" styleClass="normal"/>		
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{distributionTagBean.hideModal}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>	
+		<br />
+	</rich:modalPanel>
+		
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

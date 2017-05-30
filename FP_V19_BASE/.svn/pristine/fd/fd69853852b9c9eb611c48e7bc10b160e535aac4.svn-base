@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="ejbModule"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry exported="true" kind="lib" path="/web.bo.peajes.com/WebContent/WEB-INF/lib/commons-lang-2.6.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="C:/Sun/SDK/lib/hibernate3.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="C:/Sun/SDK/lib/jdom.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="C:/Sun/SDK/lib/json.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="C:/Sun/SDK/lib/org.thomas.taskEngDTOs.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/consumoSqdm.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/bcmail-jdk16-146.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/bcprov-jdk16-146.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/bctsp-jdk14-146.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/iText-5.1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/jxl-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/poi-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/poi-ooxml-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/poi-scratchpad-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/com.sun.enterprise.jst.server.runtimeTarget/GlassFish 2.1 Java EE 5">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.ejb"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/CerticamaraCommons4J-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/CerticamaraKronos-3.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/CerticamaraSign4J.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/CerticamaraVerify4J.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/axis.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/javax.wsdl_1.6.2.v201005080631.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/org.apache.commons.logging_1.0.4.v201005080501.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/saaj.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/jRandom.jar"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/xstream-1.4.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
+	<classpathentry kind="lib" path="C:/Sun/SDK/lib/ThomasConsumoPse.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

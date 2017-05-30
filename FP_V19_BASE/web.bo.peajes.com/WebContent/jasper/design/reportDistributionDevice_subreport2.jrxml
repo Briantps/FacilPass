@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DistribucionMontos2" language="groovy" pageWidth="990" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="990" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="accountId" class="java.lang.Long"/>
+	<parameter name="dateIni" class="java.sql.Timestamp"/>
+	<parameter name="dateEnd" class="java.sql.Timestamp"/>
+	<parameter name="userId" class="java.lang.Long"/>
+	<parameter name="balance" class="java.math.BigDecimal"/>
+	<parameter name="deviceId" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[select ta.account_id, td.device_id, ta.account_balance, tv.vehicle_plate,
+td.device_facial_id, td.device_current_balance, tv.vehicle_id
+from re_account_device  rad
+inner join tb_account ta on rad.account_id= ta.account_id
+inner join tb_vehicle tv on rad.vehicle_id=tv.vehicle_id
+inner join tb_device td on rad.device_id= td.device_id
+where ta.account_id=$P{accountId} and td.device_id=$P{deviceId} and ta.user_id=$P{userId}
+UNION
+select ta.account_id, td.device_id, ta.account_balance, tv.vehicle_plate ,
+td.device_facial_id, td.device_current_balance, tv.vehicle_id
+from re_account_device  rad
+inner join tb_account ta on rad.account_id= ta.account_id
+inner join tb_vehicle tv on rad.vehicle_id=tv.vehicle_id
+inner join tb_device td on rad.device_id= td.device_id
+where ta.account_id=$P{accountId} and -1=$P{deviceId} and ta.user_id=$P{userId}
+order by 1]]>
+	</queryString>
+	<field name="ACCOUNT_ID" class="java.lang.Long"/>
+	<field name="DEVICE_ID" class="java.lang.Long"/>
+	<field name="ACCOUNT_BALANCE" class="java.math.BigDecimal"/>
+	<field name="VEHICLE_PLATE" class="java.lang.String"/>
+	<field name="DEVICE_FACIAL_ID" class="java.lang.String"/>
+	<field name="DEVICE_CURRENT_BALANCE" class="java.math.BigDecimal"/>
+	<field name="VEHICLE_ID" class="java.lang.Long"/>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="990" height="50"/>
+				<subreportParameter name="accountId">
+					<subreportParameterExpression><![CDATA[$P{accountId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="placaId">
+					<subreportParameterExpression><![CDATA[$F{VEHICLE_ID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="facial">
+					<subreportParameterExpression><![CDATA[$F{DEVICE_FACIAL_ID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="dateIni">
+					<subreportParameterExpression><![CDATA[$P{dateIni}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="saldoTag">
+					<subreportParameterExpression><![CDATA[$F{DEVICE_CURRENT_BALANCE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="userId">
+					<subreportParameterExpression><![CDATA[$P{userId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="placa">
+					<subreportParameterExpression><![CDATA[$F{VEHICLE_PLATE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="device">
+					<subreportParameterExpression><![CDATA[$F{DEVICE_ID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="dateEnd">
+					<subreportParameterExpression><![CDATA[$P{dateEnd}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["reportDistributionDevice_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

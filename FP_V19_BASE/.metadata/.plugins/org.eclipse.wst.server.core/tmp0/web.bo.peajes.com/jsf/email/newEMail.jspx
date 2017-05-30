@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head/>
+
+<body>
+<div class="container">
+<f:view>
+<div>
+	<rich:messages style="color:red;" styleClass="normal"/>
+	<h:form>		
+		<rich:panel>
+			<f:facet name="header"><h:outputText value="Nueva Configuración E-Mail" styleClass="bold"/></f:facet>
+
+			<h:panelGrid border="1" columns="2" cellpadding="5">
+				
+			 	<h:panelGroup>
+			 		<h:outputText value="Tipo E-Mail" styleClass="bold"/>
+			 		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			 	</h:panelGroup>
+			 	<h:inputText value="#{emailMBean.typeMail}" size="77" required="true" label="Tipo E-Mail" styleClass="normal">
+					<f:validator validatorId="blank"/>
+				</h:inputText>
+			  	<h:panelGroup>
+			  		<h:outputText value="Nombre" styleClass="bold"/>
+			  		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			  	</h:panelGroup>
+			  	<h:inputText value="#{emailMBean.emailTypeName}" size="77" styleClass="normal" required="true" label="Nombre">
+					<f:validator validatorId="blank"/>
+				</h:inputText>
+			  	<h:panelGroup>
+			  		<h:outputText value="From Address" styleClass="bold"/>
+			  		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			  	</h:panelGroup>
+			  	<h:inputText value="#{emailMBean.emailAddressFrom}" size="77" styleClass="normal" disabled="true" label="From Address" required="true">
+					<f:validator validatorId="blank"/>
+				</h:inputText>
+			  	<h:panelGroup>
+			  		<h:outputText value="Nombre From Address" styleClass="bold"/>
+			  		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			  	</h:panelGroup>
+			  	<h:inputText value="#{emailMBean.emailAddressName}" size="77" styleClass="normal" disabled="true" label="Nombre From Address" required="true">
+					<f:validator validatorId="blank"/>
+				</h:inputText>
+			  	<h:panelGroup>
+			  		<h:outputText value="To Address" styleClass="bold"/>
+			  		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			  	</h:panelGroup>
+			  	<h:inputText value="#{emailMBean.emailAddressTo}" size="77" required="true" styleClass="normal" requiredMessage="El campo To Address es requerido.">
+					<f:validator validatorId="email" />
+				</h:inputText>
+			  	<h:panelGroup>
+			  		<h:outputText value="Prioridad" styleClass="bold"/>
+			  		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			  	</h:panelGroup>
+			  	<h:inputText value="#{emailMBean.emailPriority}" size="77" required="true" label="Prioridad" styleClass="normal"
+							 converterMessage="La prioridad es un valor numérico de 1 a 5"
+							 validatorMessage="La prioridad sólo puede ser un número de 1 a 5.">
+					<f:validateLongRange minimum="1" maximum="5"/>
+					<f:convertNumber integerOnly="true" />
+				</h:inputText>
+			  	<h:panelGroup>
+			  		<h:outputText value="Asunto" styleClass="bold"/>
+			  		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			  	</h:panelGroup>
+				<h:inputText value="#{emailMBean.emailSubject}" size="77" required="true" label="Asunto" styleClass="normal">
+					<f:validator validatorId="blank"/>
+				</h:inputText>
+				<h:panelGroup>
+					<h:outputText value="Nombre Mensaje" styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<h:inputText value="#{emailMBean.msgName}" size="77" required="true" label="Nombre Mensaje" styleClass="normal">
+					<f:validator validatorId="blank"/>
+				</h:inputText>
+				<h:panelGroup>
+					<h:outputText value="Contenido Mensaje" styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<h:inputTextarea value="#{emailMBean.msgContent}" style="width: 406px" styleClass="normal" required="true" label="Contenido Mensaje">
+					<f:validator validatorId="blank"/>
+				</h:inputTextarea>
+			</h:panelGrid>
+
+			<rich:spacer height="20" />			
+			<table width="100%">
+				<tr>
+					<td width="25%">
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+					</td>
+					<td width="25%"></td>
+					<td width="25%"></td>
+					<td width="25%"><h:commandButton value="Guardar" action="#{emailMBean.saveEMail }" styleClass="normal"/></td>
+				</tr>
+			</table>
+			
+			<rich:spacer height="20" />
+			<div class="notice"><p class="normal">Las direcciones de correo <b>(Campo To Address)</b> deben estar separadas por comas (,) y sin dejar espacios en blanco.</p></div>
+		</rich:panel>		
+	</h:form>	
+	<rich:spacer height="20" />
+</div>
+</f:view>
+</div>
+</body>
+</html>

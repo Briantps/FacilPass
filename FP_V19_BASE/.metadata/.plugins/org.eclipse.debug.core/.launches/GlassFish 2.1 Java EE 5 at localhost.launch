@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="com.sun.enterprise.jst.server.sunappsrv.SunAppServerLaunchConfigurationType">
+<stringAttribute key="server-id" value="GlassFish 2.1 Java EE 5 at localhost"/>
+</launchConfiguration>

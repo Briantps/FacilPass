@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administración de Empresas</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>			
+				<div class="bkContents span-18 prepend-1">			
+					<rich:spacer height="5"/>	
+					<h:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Administración de Empresas" styleClass="bold"/>
+							</f:facet>						
+							<rich:panel>
+								<h:panelGrid styleClass="tableBO" columns="2" style="size:300px; margin: auto; padding:10px; ">
+									<h:commandButton value="Agregar Empresa" action="#{companyBean.initAddCompany}"/>
+								</h:panelGrid>
+							</rich:panel>	
+							
+							<rich:spacer height="20"/>						
+							<a4j:outputPanel id="panelData" layout="inline">
+								<rich:panel id="pd">
+									<f:facet name="header">
+										<h:outputText styleClass="bold" value="Lista Empresas"/>   
+									</f:facet>	
+									
+									<rich:spacer height="10"/>	
+									<div id="scroll_horizontal">									
+										
+										<rich:dataTable id="dtable" width="1200px"  value="#{companyBean.companyList}" var="list"  rows="10"
+							               	onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgoundcolor='#FFFFFF'" rowClasses="white,grey"
+											style="vertical-align: middle;">
+
+                                            <rich:column style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Nit Empresa"/>
+												</f:facet>
+												<h:outputText value="#{list.companyNIT}" styleClass="normal">
+												</h:outputText>  
+											</rich:column>
+											<rich:column style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Empresa"/>
+												</f:facet>
+												<h:outputText value="#{list.companyName}" styleClass="normal">
+												</h:outputText>  
+											</rich:column>
+											<rich:column style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Tipo"/>
+												</f:facet>
+												<h:outputText value="#{list.tbCompanyType.companyTypeDescription}" styleClass="normal"/>
+											</rich:column>
+
+                                            <rich:column style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Nombre Fideicomiso"/>
+												</f:facet>
+												<h:outputText value="#{list.fideicomiso}" styleClass="normal"/>
+											</rich:column>
+
+                                            <rich:column style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Nit Fideicomiso"/>
+												</f:facet>
+												<h:outputText value="#{list.nitFideicomiso}" styleClass="normal"/>
+											</rich:column>
+
+                                            <rich:column style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Nro Contrato"/>
+												</f:facet>
+												<h:outputText value="#{list.nroContrato}" styleClass="normal"/>
+											</rich:column>
+											
+											<rich:column style="text-align:center;">
+                                                 <f:facet name="header">
+													<h:outputText value="Disclaimer"/>
+                                                  </f:facet>
+												<h:outputText value="#{list.disclaimer}"/>
+											</rich:column>
+											
+                                            <rich:column style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Acción"/>
+												</f:facet>
+												<h:commandLink value="Modificar" action="#{companyBean.update}" style="text-align:center; font-size: 11px;">
+                									<f:setPropertyActionListener target="#{companyBean.newCompanyId}" value="#{list.companyId}"/>
+                                                    <f:setPropertyActionListener target="#{companyBean.newCompanyNit}" value="#{list.companyNIT}"/>
+                                                    <f:setPropertyActionListener target="#{companyBean.newCompanyName}" value="#{list.companyName}"/>
+                                                    <f:setPropertyActionListener target="#{companyBean.newCompanyTypeId}" value="#{list.tbCompanyType.companyTypeId}"/>
+                                                    <f:setPropertyActionListener target="#{companyBean.newFideicomiso}" value="#{list.fideicomiso}"/>
+                                                    <f:setPropertyActionListener target="#{companyBean.newNitFideicomiso}" value="#{list.nitFideicomiso}"/>
+                                                    <f:setPropertyActionListener target="#{companyBean.newNroContrato}" value="#{list.nroContrato}"/>
+                                                    <f:setPropertyActionListener target="#{companyBean.newDisclaimer}" value="#{list.disclaimer}"/>
+			  									</h:commandLink>
+											</rich:column>
+											<f:facet name="footer">
+											  <rich:datascroller align="center" for="dtable"/>
+											</f:facet>
+										</rich:dataTable>
+									</div>	
+								</rich:panel>
+							</a4j:outputPanel>											
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>	
+
+					<rich:modalPanel id="panel" width="480" showWhenRendered="#{companyBean.showInsert}" 
+									 autosized = "true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Crear Empresa" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{companyBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:loadBundle basename="staticText.messages" var="msg" />
+							<h:form id="Insertar">
+								<rich:panel style="width:450px;">
+									<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+									      <h:panelGroup>
+										      <h:outputText value="Digite el Nit de la Empresa: " styleClass="bold"/>
+										      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <h:inputText value="#{companyBean.companyNit}" style="width:170px; text-transform: uppercase"
+														onkeypress="return numOnly(event)" maxlength="20" id="nitE" /> 
+									      <h:panelGroup>
+										      <h:outputText value="Digite el nombre de la Empresa: " styleClass="bold"/>
+										      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <h:inputText value="#{companyBean.companyName}" style="width:170px; text-transform: uppercase"
+														onkeypress="return noEspecialRazSol(event)" maxlength="80" id="Nombre" />
+									      <h:panelGroup>
+									      	<h:outputText value="Seleccione el tipo de Empresa: " styleClass="bold"/>
+									      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <h:selectOneMenu value="#{companyBean.companyTypeId}" valueChangeListener="#{companyBean.changeMenu}" onchange="submit()">
+												<f:selectItems value="#{companyBean.companyTypeList}"/>
+										  </h:selectOneMenu>
+										  <h:panelGroup>
+										      <h:outputText value="Digite el nombre del fideicomiso: " styleClass="bold"/>
+											  <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										  </h:panelGroup>
+									      <h:inputText value="#{companyBean.fideicomiso}" style="width:170px; text-transform: uppercase"
+			                                   		onkeypress="return noEspecialRazSol(event)" maxlength="80" id="NombreF" />
+									      <h:panelGroup>
+										      <h:outputText value="Digite el nit del fideicomiso: " styleClass="bold"/>
+											  <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										  </h:panelGroup>	  
+									      <h:inputText value="#{companyBean.nitFideicomiso}" style="width:170px; text-transform: uppercase"
+			                                  onkeypress="return numOnly(event)" maxlength="20" id="nit" />
+			                              <h:panelGroup>   
+									      	<h:outputText value="Digite el Nro. Contrato: " styleClass="bold"/>
+									      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <h:inputText value="#{companyBean.nroContrato}" style="width:170px; text-transform: uppercase"
+			                                 		   onkeypress="return isContrato(event)" maxlength="50" id="nro"/>			      
+									      <h:panelGroup> 
+									      <h:outputText value="Digite Disclaimer: " rendered="#{companyBean.showOcult}" styleClass="bold"/>
+									      <h:outputLabel value="#{msg.Asterisk}" rendered="#{companyBean.showOcult}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+								    </h:panelGrid>
+						    	 	<h:inputTextarea id="pan" value="#{companyBean.disclaimer}" rendered="#{companyBean.showOcult}" 
+						    	                 style="width:395px; height:80px; resize: none;"
+						      				   	 onkeypress="return Observation(event)">
+						      	    </h:inputTextarea>	
+						      	    <h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+						     		    <h:panelGroup>  
+									      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+									    </h:panelGroup>
+								      	<h:commandButton value="Crear"  styleClass="normal" action="#{companyBean.addCompany}" style="width: 80px"/>
+							    	</h:panelGrid>  
+							</rich:panel>
+						</h:form>
+					</rich:modalPanel>	
+								
+					<rich:modalPanel id="panelm" width="370" height="115" showWhenRendered="#{companyBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Empresa" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{companyBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{companyBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{companyBean.hideModal}"/>
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+				    	</h:form>		
+						<br />
+					</rich:modalPanel>	
+
+                    <rich:modalPanel id="panelm2" width="370" height="115" showWhenRendered="#{companyBean.showModalError}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Empresa" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{companyBean.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{companyBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{companyBean.hideModal2}"/>
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+				    	</h:form>		
+						<br />
+					</rich:modalPanel>	
+
+  					<rich:modalPanel id="panelm3" width="370" height="115" showWhenRendered="#{companyBean.showModalUpdateError}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Empresa" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{companyBean.hideModal3}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{companyBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{companyBean.hideModal3}"/>
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+				    	</h:form>		
+						<br />
+					</rich:modalPanel>	
+
+
+                    <rich:modalPanel id="panelu" width="480" showWhenRendered="#{companyBean.showUpdate}" 
+                    				 autosized = "true" onresize="return false;" moveable="false">
+                      	<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Modificar Empresa" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{companyBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+			  			<f:loadBundle basename="staticText.messages" var="msg" />
+							<h:form id="Editar">
+								<rich:panel style="width:450px;">
+								      <h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+									      <h:panelGroup>
+										      <h:outputText value="Digite el Nit de la Empresa: " styleClass="bold"/>
+										      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <h:inputText value="#{companyBean.newCompanyNit}" style="width:170px; text-transform: uppercase"
+														onkeypress="return numOnly(event)" maxlength="20" id="nitE" /> 
+									      <h:panelGroup>
+										      <h:outputText value="Digite el nombre de la Empresa: " styleClass="bold"/>
+										      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <h:inputText value="#{companyBean.newCompanyName}" style="width:170px; text-transform: uppercase"
+														onkeypress="return noEspecialRazSol(event)" maxlength="80" id="Nombre" />
+									      <h:panelGroup>
+									      	<h:outputText value="Seleccione el tipo de Empresa: " styleClass="bold"/>
+									      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <h:selectOneMenu value="#{companyBean.newCompanyTypeId}" valueChangeListener="#{companyBean.changeMenu}" onchange="submit()">
+												<f:selectItems value="#{companyBean.companyTypeList}"/>
+										  </h:selectOneMenu>
+										  <h:panelGroup>
+										      <h:outputText value="Digite el nombre del fideicomiso: " styleClass="bold"/>
+											  <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										  </h:panelGroup>
+									      <h:inputText value="#{companyBean.newFideicomiso}" style="width:170px; text-transform: uppercase"
+			                                   		onkeypress="return noEspecialRazSol(event)" maxlength="80" id="NombreF" />
+									      <h:panelGroup>
+										      <h:outputText value="Digite el nit del fideicomiso: " styleClass="bold"/>
+											  <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										  </h:panelGroup>	  
+									      <h:inputText value="#{companyBean.newNitFideicomiso}" style="width:170px; text-transform: uppercase"
+			                                  onkeypress="return numOnly(event)" maxlength="20" id="nit" />
+			                              <h:panelGroup>   
+									      	<h:outputText value="Digite el Nro. Contrato: " styleClass="bold"/>
+									      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <h:inputText value="#{companyBean.newNroContrato}" style="width:170px; text-transform: uppercase"
+			                                 		 onkeypress="return isContrato(event)" maxlength="50" id="nro" />			      
+									      <h:panelGroup> 
+									      <h:outputText value="Digite Disclaimer: " rendered="#{companyBean.showOcult}" styleClass="bold"/>
+									      <h:outputLabel value="#{msg.Asterisk}" rendered="#{companyBean.showOcult}" styleClass="asteriskMandatoryField"/>
+									      </h:panelGroup>
+									      <rich:spacer/>
+									    </h:panelGrid>
+								    	<h:inputTextarea id="pan" value="#{companyBean.newDisclaimer}" rendered="#{companyBean.showOcult}" 
+								    					 style="width:395px; height:80px; resize: none;"
+								      				   	 onkeypress="return Observation(event)">
+								      	</h:inputTextarea>	
+								      	<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+							     		 <h:panelGroup>  
+									      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+									     </h:panelGroup>
+									      	<h:commandButton value="Modificar" action="#{companyBean.updateCompany}" style="width: 80px"/>
+								    	</h:panelGrid>  
+								</rich:panel>
+							</h:form>
+					</rich:modalPanel>
+					
+				  </div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

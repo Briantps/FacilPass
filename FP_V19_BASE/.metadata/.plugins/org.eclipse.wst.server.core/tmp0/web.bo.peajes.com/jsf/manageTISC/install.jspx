@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Instalación TIES</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5"><ui:include src="../menu/sideMenu.jsp"/></div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;" styleClass="bold"/>
+	<h:form>
+		<f:loadBundle basename="staticText.messages" var="msg" />
+		<rich:panel styleClass="richPanel" >
+			<f:facet name="header">
+				<h:outputText value="Registrar Instalación" styleClass="bold"/>
+			</f:facet>
+			
+			<rich:panel style="background-color: #FBFBFB">
+			<!-- 
+				<fieldset style="background-color: white;">
+					<legend>Tipo Operación: </legend>
+					<h:panelGrid columns="1">
+						<h:selectOneRadio value="#{installationBean.operationTypeId}" styleClass="bold">
+							<f:selectItems value="#{installationBean.operationTypes}"/>
+						</h:selectOneRadio>
+					</h:panelGrid>
+				</fieldset>	 -->
+				
+				<fieldset style="background-color: white;">
+					<legend>Tipo: </legend>
+						<h:panelGrid columns="2">
+							<h:selectOneRadio value="#{installationBean.deviceTypeId}" styleClass="bold">
+								<f:selectItems value="#{installationBean.typeList}"/>
+							</h:selectOneRadio>
+						</h:panelGrid>
+				</fieldset>	
+
+				<table width="100%">
+					<tr>
+						<td width="40%">
+							<a4j:outputPanel>
+								<fieldset style="background-color: white;">
+								<legend>Buscar por: <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/></legend>
+									<h:panelGrid columns="2">
+										<h:selectBooleanCheckbox  value="#{installationBean.searchByPlate}">
+											<a4j:support event="onchange" reRender="searchPanel"/>
+										</h:selectBooleanCheckbox>
+										<h:outputText value="Placa" styleClass="normal"/>
+										<h:selectBooleanCheckbox value="#{installationBean.searchByCardFacial}">
+											<a4j:support  event="onchange" reRender="searchPanel"/>
+										</h:selectBooleanCheckbox>
+										<h:outputText value="Facial" styleClass="normal"/>
+										<h:selectBooleanCheckbox value="#{installationBean.searchByCardId}">
+											<a4j:support event="onchange" reRender="searchPanel"/>
+										</h:selectBooleanCheckbox>
+										<h:outputText value="ID Tarjeta" styleClass="normal"/>
+									</h:panelGrid>
+								</fieldset>
+							</a4j:outputPanel>
+						</td>
+						<td width="10%">
+						</td>
+						<td width="50%">
+							<a4j:outputPanel id="searchPanel">
+								<h:panelGrid columns="2" styleClass="tableBO"
+									style="width: 320px; margin: auto; padding:10px; " >
+									<h:panelGroup rendered="#{installationBean.searchByPlate}">
+										<h:outputText value="Placa: " styleClass="normal"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText styleClass="normal" value="#{installationBean.plate}"
+										rendered="#{installationBean.searchByPlate}" maxlength="6">
+									</h:inputText>
+									<h:panelGroup rendered="#{installationBean.searchByCardFacial}">
+										<h:outputText value="Facial: " styleClass="normal"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText styleClass="normal" value="#{installationBean.cardFacial}"
+										rendered="#{installationBean.searchByCardFacial}" maxlength="15">
+									</h:inputText>
+									<h:panelGroup rendered="#{installationBean.searchByCardId}">
+										<h:outputText value="ID Tarjeta: " styleClass="normal"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText styleClass="normal" value="#{installationBean.cardId}"
+										rendered="#{installationBean.searchByCardId}" maxlength="15">
+									</h:inputText>
+									<h:outputText/>
+									<h:commandButton value="Buscar" action="#{installationBean.search}" styleClass="bold">
+									</h:commandButton>
+								</h:panelGrid>
+							</a4j:outputPanel>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>							
+						</td>
+					</tr>
+				</table>	
+			</rich:panel>
+			
+			<rich:spacer height="5"/>
+				
+			<a4j:outputPanel id="sdata" >
+				<rich:panel rendered="#{installationBean.showData}">
+				<fieldset style="background-color: white;">
+					<legend>Datos: </legend>
+					<h:panelGrid columns="4">
+						<h:outputText value="Placa: " styleClass="bold"/>
+						<h:outputText value="#{installationBean.customization.tbVehicle.vehiclePlate}" styleClass="normal"/>
+						<h:outputText value="Núm Chasis: " styleClass="bold"/>
+						<h:outputText value="#{installationBean.customization.tbVehicle.vehicleChassis}" styleClass="normal"/>
+						<h:outputText value="Cód Interno: " styleClass="bold"/>
+						<h:outputText value="#{installationBean.customization.tbVehicle.vehicleInternalCode}" styleClass="normal"/>
+						<h:outputText value="Color: " styleClass="bold"/>
+						<h:outputText value="#{installationBean.customization.tbVehicle.tbColor.colorName}" styleClass="normal"/>
+						<h:outputText value="Marca: " styleClass="bold"/>
+						<h:outputText value="#{installationBean.customization.tbVehicle.tbBrand.brandName}" styleClass="normal"/>
+						<h:outputText value="Categoría: " styleClass="bold"/>
+						<h:outputText value="#{installationBean.customization.tbVehicle.tbCategory.categoryName}" styleClass="normal"/>
+						<h:outputText value="Cliente:" styleClass="bold"></h:outputText>
+	                    <h:panelGroup>
+	                    	<h:outputText value="#{installationBean.customization.tbAccount.tbSystemUser.userNames} #{installationBean.customization.tbAccount.tbSystemUser.userSecondNames}" styleClass="normal" 
+	                    			rendered="#{installationBean.customization.tbAccount.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+	                    	<h:outputText value="#{installationBean.customization.tbAccount.tbSystemUser.userNames}" styleClass="normal" 
+	                    			rendered="#{installationBean.customization.tbAccount.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+	                    </h:panelGroup>
+	                    <h:outputText value="#{msg.NumDoc}: " styleClass="bold"></h:outputText>
+	                    <h:outputText value="#{installationBean.customization.tbAccount.tbSystemUser.userCode} - #{installationBean.customization.tbAccount.tbSystemUser.tbCodeType.codeTypeDescription}" 
+	                    	styleClass="normal"/>
+						<h:outputText value="Tipo Vehiculo: " styleClass="bold"/>
+						<h:outputText styleClass="normal" value="#{installationBean.customization.tbSpecialExemptType.specialExemptTypeName}"/>
+						<h:outputText value="Dependencia: " styleClass="bold"/>
+						<h:outputText styleClass="normal" value="#{installationBean.customization.tbSpecialExemptOffice.officeName}"/>
+					</h:panelGrid>
+				</fieldset>	
+				</rich:panel>
+				<rich:spacer height="5"/>
+				<rich:panel rendered="#{installationBean.showData}">
+					<a4j:outputPanel id="errorMsg">
+						<h:outputText style="color: red;" styleClass="bold"
+							value="#{installationBean.errorMessage}" rendered="#{installationBean.showErrorMessage}"/>
+					</a4j:outputPanel>
+					<rich:spacer height="5"/>
+					<h:panelGrid columns="2" styleClass="tableBO" style="width: 600px; margin: auto; padding:10px; ">
+						<h:outputText value="Instalada: " styleClass="bold"/>
+						<h:selectOneMenu value="#{installationBean.installed}">
+							<f:selectItems value="#{installationBean.installedList}"/>
+						</h:selectOneMenu>
+						<h:outputText value="Acta de Instalación: " styleClass="bold"/>
+						<h:selectOneMenu value="#{installationBean.installationCertificate}">
+							<f:selectItems value="#{installationBean.installationCertificateOptions}"/>
+						</h:selectOneMenu>
+						<h:outputText value="Soporte Instalación: " styleClass="bold"/>
+						<h:selectOneMenu value="#{installationBean.installationSupport}">
+							<f:selectItems value="#{installationBean.iinstallationSupportOptions}"/>
+						</h:selectOneMenu>
+						<h:outputText value="Persona que Instaló (Responsable): " styleClass="bold"/>
+						<h:selectOneMenu value="#{installationBean.installationUserId}">
+							<f:selectItems value="#{installationBean.installationUsers}"/>
+						</h:selectOneMenu>
+						<h:outputText value="Lugar Instalación: " styleClass="bold"/>
+						<h:selectOneMenu value="#{installationBean.locationId}">
+							<f:selectItems value="#{installationBean.locationList}"/>
+						</h:selectOneMenu>
+						<h:outputText value="Fecha Instalación: " styleClass="bold"/>
+						<rich:calendar id="beg_date" value="#{installationBean.installationDate}" cellWidth="26px" 
+							cellHeight="22px" style="width:150px" datePattern="MM/dd/yyyy" popup="true" 
+							styleClass="normal"> 	
+						</rich:calendar>
+						<h:outputText value="Cédula Persona Recibió: " styleClass="bold"/>
+						<h:inputText value="#{installationBean.receiverIdentificationNumber}" maxlength="15"/>
+						<h:outputText value="Nombre Persona Recibió: " styleClass="bold"/>
+						<h:inputText value="#{installationBean.receiverName}" maxlength="99"/>
+						<h:outputText value="Observaciones: " styleClass="bold"/>
+						<h:inputTextarea styleClass="normal" value="#{installationBean.observation}"
+							onkeyup="this.value = this.value.substring(0, 3500);" style="height: 73px; width: 200px"/>
+						<h:outputText value=""/>
+						<h:commandButton value="Guardar" action="#{installationBean.save}">
+							<a4j:support event="oncomplete" reRender="errorMsg,sdata"/>
+						</h:commandButton>
+					</h:panelGrid>
+				</rich:panel>
+			</a4j:outputPanel>
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>
+
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{installationBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Maestro" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{installationBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{installationBean.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

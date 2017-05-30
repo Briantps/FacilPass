@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Montos Mínimos</title>
+	</head>
+	<script>
+	function getFocus() {		
+		setTimeout(function(){document.getElementById("formfocus:alertAcepts").focus()},1000);		
+	}
+	</script>
+	<body onload="getFocus()">
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />  
+			  		<rich:spacer height="5"/>			  		
+			  		<rich:panel id="panelfull" styleClass="richPanel">
+			   		 <f:facet name="header">
+					  <h:outputText value="Montos Mínimos" styleClass="bold"/>
+			   		 </f:facet>
+			   		 
+			   		 <h:form id="minimumEdit">
+			   		 	<rich:panel id="pnlCreate">
+			   		 		<f:facet name="header">
+					  				<h:outputText value="Creación o Edición" styleClass="bold"/>
+			   				 </f:facet>
+			   				 
+			   				 <h:panelGrid styleClass="tableBO" columns="2" style="size: 350px; margin-left: 100px; padding:10px; ">
+			   				 	
+			   				 	
+			   				 		<h:panelGroup>
+			   				 		<h:outputText value="Categoría:"  styleClass="bold"/>
+			   				 		<h:outputLabel value="*" styleClass="asteriskMandatoryField"/>
+			   				 		</h:panelGroup>
+			   				 		
+			   				 		<h:selectOneMenu value="#{minimumBalanceBean.categoryId}" style="width: 165px;" styleClass="normal" disabled="#{minimumBalanceBean.namebutton=='Editar' || !minimumBalanceBean.permCreate}">
+										<f:selectItems value="#{minimumBalanceBean.categoryList}"/>	
+									</h:selectOneMenu>
+									
+			 						<h:panelGroup>
+			 						<h:outputText value="Valor:"  styleClass="bold"/>
+			 						<h:outputLabel value="*" styleClass="asteriskMandatoryField"/>
+			 						</h:panelGroup>
+			 						
+			 						<h:inputText id="valor" value="#{minimumBalanceBean.valor}" styleClass="normal" style="width:160px" disabled="#{!minimumBalanceBean.permCreate}"
+			 						onkeypress="return solonumerosNoPrimerCero(event,this)" maxlength="15"
+			   	  					onkeyup="separador(this,this.value.charAt(this.value.length-1),event)"
+			   	  					onclick="return borrarCero(this)">
+			   	  					
+   							   		</h:inputText>
+									
+									<h:panelGroup>
+			   				 		<h:outputText value="Saldo Mínimo:"  styleClass="bold"/>
+			   				 		<h:outputLabel value="*" styleClass="asteriskMandatoryField"/>
+			   				 		</h:panelGroup>
+			   				 		
+			 						<h:inputText value="#{minimumBalanceBean.saldoMinimo}" styleClass="normal" style="width:160px" disabled="#{!minimumBalanceBean.permCreate}"
+			 						onkeypress="return solonumerosNoPrimerCero(event,this)" maxlength="15"  
+			   	  					onkeyup="separador(this,this.value.charAt(this.value.length-1),event)"
+			   	  					onclick="return borrarCero(this)">
+   							   		</h:inputText>
+   							   		
+   							   		<h:panelGroup >
+   							   		<h:outputText value="Observación:"  styleClass="bold"/>
+   							   		<h:outputLabel value="*" styleClass="asteriskMandatoryField"/>
+   							   		</h:panelGroup>
+   							   		
+   							   		<h:panelGroup >
+   							   		   							   					 						   							   		
+   							   		<h:inputTextarea id="descr" value="#{minimumBalanceBean.observacion}" onkeypress="return Observation(event)" disabled="#{!minimumBalanceBean.permCreate}"
+									style="width:300px; height:100px; resize: none;" onkeyup="return checkMaxLength(event, this, 201);" >											
+						      		</h:inputTextarea>
+			   				 		
+			   				 		</h:panelGroup>
+			   				 		
+			   				 </h:panelGrid>
+			   				
+			   				<div align = "center" >		
+			   				<h:commandButton id="Butoon" value="#{minimumBalanceBean.namebutton}" action="#{minimumBalanceBean.createEditCatOption}" style="width: 80px" disabled="#{!minimumBalanceBean.permCreate}" >
+								<a4j:support event="oncomplete" reRender="panelfull,minimumEdit"/>
+							</h:commandButton>
+							<rich:spacer width="20"/>
+							<h:commandButton id="Butoon2" value="Cancelar" action="#{minimumBalanceBean.cancelCat}" style="width: 80px" disabled="#{!minimumBalanceBean.permCreate}">
+								<a4j:support event="oncomplete" reRender="panelfull,minimumEdit"/>
+							</h:commandButton>
+							</div>
+			   				
+			   				<rich:spacer height="2"/>
+			   				
+			   				<h:panelGroup>
+			   						<h:outputLabel value="*" styleClass="asteriskMandatoryField"/>
+			   				 		<h:outputText value="Campos Obligatorios"  styleClass="bold"/>
+			   				 </h:panelGroup>
+			   				 
+			   		 	</rich:panel>
+			   		 </h:form>	
+			   		 	
+			   		<rich:spacer height="10"/>	
+			   				
+			   		<h:form id="minimumAdministra">
+			   		 	<rich:panel id="pnlAdministra">
+			   		 		<f:facet name="header">
+					  				<h:outputText value="Administrar" styleClass="bold"/>
+			   				 </f:facet>
+			   				 <div id="scroll_horizontal">
+			   				 <rich:dataTable id="categoryrate" var="item" value="#{minimumBalanceBean.categoryrates}" style="width:1000px;margin:auto;" rows="7">
+			   				 	 
+			   				 	 <rich:column sortBy="#{item.category}">
+			   				 	 	<f:facet name="header">
+											<h:outputText value="Categoría" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.category}" styleClass="normal" style="text-align: left"/>
+								</rich:column>
+								
+								<rich:column sortBy="#{item.categoryvalue}" width="120">
+									<f:facet name="header">
+											<h:outputText value="Valor" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value=" $ #{item.categoryvalue}" styleClass="normal" style="text-align: center;width: 120px; height: 30px;resize: none;overflow: auto;display: block;"/>
+								</rich:column>	 	   				 
+			   				 
+			   				 	<rich:column sortBy="#{item.minimumvalue}" width="120">
+									<f:facet name="header">
+											<h:outputText value="Saldo Mínimo" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value=" $ #{item.minimumvalue}" styleClass="normal" style="text-align: center;width: 120px; height: 30px;resize: none;overflow: auto;display: block;"/>
+								</rich:column>	
+								
+								<rich:column sortBy="#{item.date}">
+									<f:facet name="header">
+											<h:outputText value="Última Modificación" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.date}" styleClass="normal" style="text-align: center" converter="StringToStringDateConverter"/>
+								</rich:column>
+								
+								<rich:column sortBy="#{item.user}">
+									<f:facet name="header">
+											<h:outputText value="Usuario Modificación" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.user}" styleClass="normal" style="text-align: center"/>
+								</rich:column>	 
+								
+								<rich:column sortBy="#{item.obser}" width="350">
+								
+									<f:facet name="header">
+											<h:outputText value="Observación" styleClass="bold " />
+									</f:facet>
+									<h:outputText value="#{item.obser}" styleClass="normal" style="text-align: center;width: 250px; height: 30px;resize: none;display: block;overflow-x: hidden;overflow-y: auto; word-wrap: break-word;"/>
+								</rich:column>	 
+								
+								<rich:column sortBy="#{item.editar}" rendered="#{minimumBalanceBean.permEdita}" style="text-align: center;">
+									<f:facet name="header">
+											<h:outputText value="Acciones" styleClass="bold"/>
+									</f:facet>
+									
+									<h:commandLink value="#{item.editar}" action="#{minimumBalanceBean.editCategory}" styleClass="bold" style="text-align: center ; color: #{item.editar=='Editando' ? 'red' : #00F };">      
+												<f:setPropertyActionListener value="#{item.category}" target="#{minimumBalanceBean.categoryId}"/>
+												<f:setPropertyActionListener value="#{item.categoryvalue}" target="#{minimumBalanceBean.valor}"/>
+												<f:setPropertyActionListener value="#{item.minimumvalue}" target="#{minimumBalanceBean.saldoMinimo}"/>
+												<f:setPropertyActionListener value="#{item.idminimum}" target="#{minimumBalanceBean.idMinimum}"/>
+												<a4j:support event="oncomplete" reRender="panelfull,pnlAdministra,Butoon"/>
+									</h:commandLink> 							
+								</rich:column>
+								
+								<rich:column sortBy="#{item.state}" style="text-align: center;">
+									<f:facet name="header">
+											<h:outputText value="Estado" styleClass="bold"/>
+									</f:facet>
+									
+									<h:commandLink value="#{item.state}" action="#{minimumBalanceBean.aprobCategoryOption}" styleClass="bold" rendered="#{minimumBalanceBean.permAprueba and item.state != 'Aprobado'}" style="text-align: center" >      
+												<f:setPropertyActionListener value="#{item.category}" target="#{minimumBalanceBean.categoryId}"/>
+												<f:setPropertyActionListener value="#{item.categoryvalue}" target="#{minimumBalanceBean.valor}"/>
+												<f:setPropertyActionListener value="#{item.minimumvalue}" target="#{minimumBalanceBean.saldoMinimo}"/>
+												<f:setPropertyActionListener value="#{item.idminimum}" target="#{minimumBalanceBean.idMinimum}"/>
+												<f:setPropertyActionListener value="#{item.state}" target="#{minimumBalanceBean.state}"/>
+												<a4j:support event="oncomplete" reRender="panelfull,pnlAdministra,Butoon"/>
+									</h:commandLink> 
+									
+									<h:outputText value="#{item.state}" styleClass="normal" rendered="#{!minimumBalanceBean.permAprueba || item.state == 'Aprobado'}" style="text-align: center"/>
+								</rich:column>    
+								
+								 
+								
+			   				 	<f:facet name="footer">
+									<rich:datascroller align="center" for="categoryrate" id="ds">
+									</rich:datascroller>
+								</f:facet>
+			   				 
+			   				 
+			   				 </rich:dataTable>
+			   				 </div>
+			   		 	</rich:panel>
+			   		 </h:form>		
+			   				
+					</rich:panel>	
+					
+					<rich:modalPanel id="modalpanel" width="350" height="115" showWhenRendered="#{minimumBalanceBean.modal1}" onresize="return false;" moveable="false" onbeforeshow="getFocus()" >
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Mensaje - Montos Mínimos" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{minimumBalanceBean.ocult}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{minimumBalanceBean.msnmodal}" styleClass="normal"/>
+						<rich:spacer height="20"/>
+						<h:form id ="formfocus">
+						 <div align = "center" >
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+					     	<h:panelGroup>
+					     		<h:commandButton id="alertAcepts" value="Aceptar" action="#{minimumBalanceBean.ocult}" >
+					     		 
+					     		</h:commandButton>
+					     	</h:panelGroup>	     	
+					    </h:panelGrid>
+					    </div>
+					    </h:form>	
+						<br />
+					</rich:modalPanel>		
+					
+					<rich:modalPanel id="confirmacion" width="340" height="115" showWhenRendered="#{minimumBalanceBean.modalOption}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{minimumBalanceBean.ocult}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{minimumBalanceBean.msnmodal}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="aprob">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{minimumBalanceBean.aprobCategory}" style="width: 80px">
+				                	<a4j:support event="oncomplete" reRender="confirmacion,pnlAdministra,modalpanel"/>
+						           	<a4j:status onstart="#{rich:component('wait')}.show()" for="aprob"/>
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <h:outputLabel value="" styleClass="bold"/>
+			                <h:commandButton value="Cancelar" action="#{minimumBalanceBean.ocult}" style="width: 80px"/>
+				     	</h:panelGroup>   	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>	
+					
+					<rich:modalPanel id="confirmacionII" width="340" height="115" showWhenRendered="#{minimumBalanceBean.modalOptionCreEdit}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{minimumBalanceBean.ocult}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{minimumBalanceBean.msnmodal}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{minimumBalanceBean.createeditCat}" style="width: 80px">
+				                	<a4j:support event="oncomplete" reRender="pnlAdministra,minimumEdit,modalpanel"/>
+						           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <h:outputLabel value="" styleClass="bold"/>
+			                <h:commandButton value="Cancelar" action="#{minimumBalanceBean.ocult}" style="width: 80px"/>
+				     	</h:panelGroup>   	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel> 
+					
+					<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Por favor espere..." style="font-size:12px;" />
+				</rich:modalPanel>
+					  		
+			  	</div>	
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

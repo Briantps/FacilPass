@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Activar Dispositivos</title>
+    <script type="text/javascript">
+	function validarSize (campo, limite) {
+		if (campo.value.length > limite){
+			campo.value = campo.value.substring(0, limite);
+		} 
+	} 
+	</script> 
+</head>
+<body>
+<div class="container">
+	<f:view>
+	<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+	<div class="span-24">
+		<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+	</div>
+	<div class="span-5">
+		<ui:include src="/jsf/menu/sideMenu.jsp"/>
+	</div>
+	<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;" styleClass="bold"/>
+
+    <h:form id="form">
+	    <rich:panel id="principal">
+	     <f:facet name="header">
+	       <h:outputText value="Lista de Vehículos Activación Dispositivos"/>
+	     </f:facet>
+	       <rich:panel id="filtrosCliente">
+	         <f:facet name="header">
+	           <h:outputText value="Filtrar por"/>
+	         </f:facet>
+	         <h:panelGrid columns="4"  style="size 350px; margin: auto; padding:10px; ">
+	
+	           <h:outputText value="Placa: " styleClass="bold"/>
+	           <h:inputText value="#{activeDeviceBean.plate}" styleClass="normal" style="width:160px; text-transform: uppercase" onkeypress="return alphaNumOnly(event)"  maxlength="12">
+	           </h:inputText>
+	           
+	           <h:outputText value="Categoría: " styleClass="bold"/>
+	           <h:selectOneMenu id="cse" value="#{activeDeviceBean.category}" style="width: 163px;">
+					<f:selectItems value="#{activeDeviceBean.categoriesList}"/>
+			   </h:selectOneMenu>
+	           
+	           <h:outputText value="Adicional 1: " styleClass="bold"/>
+	           <h:inputText value="#{activeDeviceBean.aditional1}" style="width:160px; text-transform: uppercase">
+	           </h:inputText>
+	
+	           <h:outputText value="Adicional 2: " styleClass="bold"/>
+	           <h:inputText value="#{activeDeviceBean.aditional2}" style="width:160px; text-transform: uppercase">
+	           </h:inputText>
+	
+	           <h:outputText value="Adicional 3: " styleClass="bold"/>
+	           <h:inputText value="#{activeDeviceBean.aditional3}" styleClass="normal" style="width:160px; text-transform: uppercase">
+	           </h:inputText>
+	           
+	           <h:outputText value="Cuenta FacilPass: " styleClass="bold"/>
+	           <h:inputText value="#{activeDeviceBean.account}" styleClass="normal" style="width:160px;" onkeypress="return numOnly(event)" maxlength="15">
+	           </h:inputText>
+		 </h:panelGrid>
+		 
+		<table width="100px">
+			<rich:spacer height="5"/>	
+			<div align="center">
+				<h:panelGroup>
+				 <h:commandButton value="Buscar" action="#{activeDeviceBean.searchFilter}" style="width: 80px">
+					<a4j:support event="oncomplete" reRender="panelData"/>
+				 </h:commandButton>	
+				 <rich:spacer width="20"/>
+				 <h:commandButton value="Limpiar" action="#{activeDeviceBean.clearFilter}" style="width: 80px">
+					<a4j:support event="oncomplete" reRender="panelData"/>
+				 </h:commandButton>
+				</h:panelGroup>
+			</div>
+		</table>
+		</rich:panel>
+	    <rich:spacer height="20"/>   
+	       <rich:panel id="busqueda">
+	           <f:facet name="header">
+	             <h:outputText value="Activación de Dispositivos"/>
+	           </f:facet>
+			   <rich:spacer/>		
+				<h:panelGrid columns="1">
+		            <h:outputText value="Es necesario activar los TAG para que los vehículos puedan utilizar el servicio FacilPass, está activación se realiza dando clic en la casilla de verificación que se encuentra al lado de cada ID Facial del TAG asignado a la placa del vehículo y luego dar clic en el botón Activar" 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+					<rich:spacer/>
+				</h:panelGrid>
+			   <rich:spacer height="5"/>   		
+				
+	           <div id="scroll_horizontal">
+			   <rich:dataTable id="listActiveDispositive" width="800" value="#{activeDeviceBean.listActiveDispositive}" 
+			   			 var="list" rows="20" onRowMouseOver="this.style.backgroundColor='#F1F1F1'" 
+			   			 onRowMouseOut="this.style.backgroundColor='#FFFFFF'" rowClasses="white,grey">
+							
+				<rich:column width="50px">
+				  <f:facet name="header">
+					<h:outputText value="PLACA" styleClass="bold"/>
+				  </f:facet>
+				  <h:outputText value="#{list.placU}" styleClass="normal"/>
+				</rich:column>
+	            <rich:column width="120px">
+				  <f:facet name="header">
+					<h:outputText value="ADICIONAL 1" styleClass="bold"/>
+				  </f:facet>
+				  <h:outputText value="#{list.aditional1U}" styleClass="normal"/>
+				</rich:column>
+	            <rich:column width="150px" >
+				  <f:facet name="header">
+					<h:outputText value="ADICIONAL 2" styleClass="bold"/>
+				  </f:facet>
+				  <h:outputText value="#{list.aditional2U}" styleClass="normal"/>
+				</rich:column>
+	            <rich:column width="150px" >
+				  <f:facet name="header">
+					<h:outputText value="ADICIONAL 3" styleClass="bold"/>
+				  </f:facet>
+				  <h:outputText value="#{list.aditional3U}" styleClass="normal"/>
+				</rich:column>
+	            <rich:column width="100px">
+				  <f:facet name="header">
+					<h:outputText value="CATEGORÍA" styleClass="bold"/>
+				  </f:facet>
+				  <h:outputText value="#{list.categoryU}" styleClass="normal"/>
+	            </rich:column>
+				<rich:column width="150px" >
+				  <f:facet name="header">
+					<h:outputText value="ID FACIAL" styleClass="bold"/>
+				  </f:facet>
+				  <h:outputText value="#{list.deviceFacialU}" styleClass="normal"/>
+				</rich:column>
+				<rich:column style="text-align:center;">
+				<f:facet name="header">
+					<h:outputText value="ACTIVAR" styleClass="bold"/>
+				</f:facet>
+					<h:selectBooleanCheckbox value="#{list.active}"/>
+				</rich:column>
+	            <f:facet name="footer">
+	              <rich:datascroller id="datascroller" for="listActiveDispositive"/>
+	           	</f:facet>
+	           </rich:dataTable>
+	           </div>
+	         </rich:panel>
+	         <rich:spacer height="10"/>	
+		     <table width="100px">
+				<rich:spacer height="5"/>	
+				<div align="center">
+					<h:panelGroup>
+					 <h:commandButton value="Activar"  action="#{activeDeviceBean.enrolarConfirm}" style="width: 80px">
+						<a4j:support event="oncomplete" reRender="panelData"/>
+					 </h:commandButton>	
+					</h:panelGroup>
+				</div>
+			 </table>
+	    </rich:panel>
+    </h:form>
+	<rich:spacer height="20"/>
+
+     <rich:modalPanel id="panele" width="370" height="115" showWhenRendered="#{activeDeviceBean.showModalError}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Activar Dispositivos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{activeDeviceBean.hideModal2}" image="/img/close.png">
+                        <a4j:support event="onclick" action="#{activeDeviceBean.hideModal2}" reRender="panelm"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panelm" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{activeDeviceBean.message}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{activeDeviceBean.hideModal2}" style="width: 70px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+    	</h:form>	
+		<br />
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="panelm" width="370" height="115" showWhenRendered="#{activeDeviceBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Activar Dispositivos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{activeDeviceBean.hideModal}" image="/img/close.png">
+                        <a4j:support event="onclick" action="#{activeDeviceBean.hideModal2}" reRender="panelm"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panelm" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{activeDeviceBean.message}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{activeDeviceBean.hideModal2}" style="width: 70px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+    	</h:form>		
+		<br />
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="confirmacion" width="340" height="115" showWhenRendered="#{activeDeviceBean.showConfirmation}" onresize="return false;" moveable="false"> 
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{activeDeviceBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{activeDeviceBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form> 
+		<h:panelGrid columns="4" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+			<h:panelGroup>
+	     		<a4j:region id="editando">
+		     		<a4j:commandButton id="send" value="Aceptar" action="#{activeDeviceBean.enrolar}" style="width: 80px">
+	                	<a4j:support event="oncomplete" reRender="panelm"/>
+			           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+	                </a4j:commandButton>
+                </a4j:region>
+                <h:outputLabel value="" styleClass="bold"/>
+                <h:commandButton value="Cancelar" action="#{activeDeviceBean.hideModal}" style="width: 80px"/>
+	     	</h:panelGroup>   	 
+		</h:panelGrid>
+		</h:form>
+		<br /> 
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="confirmacionAll" width="340" height="115" showWhenRendered="#{activeDeviceBean.showConfirmationAll}" onresize="return false;" moveable="false"> 
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{activeDeviceBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{activeDeviceBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form> 
+		<h:panelGrid columns="4" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+			<h:panelGroup>
+	     		<a4j:region id="editando">
+		     		<a4j:commandButton id="send" value="Aceptar" action="#{activeDeviceBean.enrolarAll}" style="width: 80px">
+	                	<a4j:support event="oncomplete" reRender="panelm"/>
+			           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+	                </a4j:commandButton>
+                </a4j:region>
+                <h:outputLabel value="" styleClass="bold"/>
+                <h:commandButton value="Cancelar" action="#{activeDeviceBean.hideModal}" style="width: 80px"/>
+	     	</h:panelGroup>   	 
+		</h:panelGrid>
+		</h:form>
+		<br />
+	</rich:modalPanel>
+
+	</div>
+	<f:subview id="footer">
+		<ui:include src="/jsf/content/footer.jsp"/>
+	</f:subview>
+
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+	</rich:modalPanel> 
+				
+	</f:view>
+</div>
+</body>
+</html>

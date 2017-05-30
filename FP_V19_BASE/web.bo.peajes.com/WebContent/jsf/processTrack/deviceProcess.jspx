@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Seguimiento de Procesos de Dispositvo</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>			
+				<div class="bkContents span-18 prepend-1">			
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<h:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Seguimiento de Proceso de Dispositivo" styleClass="bold"/>
+							</f:facet>							
+							<rich:panel>
+								<h:panelGrid styleClass="tableBO" columns="4" style="size:300px; margin: auto; padding:10px; ">
+									<h:panelGroup>
+										<h:outputText value="Tipo Disp.: " styleClass="bold"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:selectOneMenu id="tyd" value="#{deviceProcessBean.typeDevId}" styleClass="normal">
+											<f:selectItems value="#{deviceProcessBean.devicesTypes}"/>
+											<a4j:support event="onchange" action="#{deviceProcessBean.changeTypeDev}" reRender="panelData,codc,sidcli"/>
+										</h:selectOneMenu>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:outputText value="Facial: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:inputText id="codc" value="#{deviceProcessBean.facial}" styleClass="normal" maxlength="20">											
+										</h:inputText>
+										<rich:spacer width="10" />
+										<h:commandButton value="Buscar" action="#{deviceProcessBean.search}">
+				                        	<a4j:support event="oncomplete" reRender="panel"/>
+				                        </h:commandButton>
+									</h:panelGroup>
+									<h:outputText/><h:outputText/>
+									<h:panelGroup>
+										<h:outputText value="Dispositivos: " styleClass="bold"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:selectOneMenu id="sidcli" value="#{deviceProcessBean.deviceId}" style="width: 290px;" styleClass="normal">
+											<f:selectItems value="#{deviceProcessBean.facials}"/>
+											<a4j:support event="onchange" action="#{deviceProcessBean.changeDevice}" reRender="panelData,codc"/>
+										</h:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGrid>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							</rich:panel>			
+							<rich:spacer height="20"/>						
+							<a4j:outputPanel id="panelData" layout="inline">
+								<rich:panel id="pd" rendered="#{deviceProcessBean.showData}">
+									<f:facet name="header">
+										<h:outputText styleClass="bold" value="Detalle de Seguimientos de Proceso"/>
+									</f:facet>								
+									<rich:spacer height="10"/>								
+									<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+				                    	<h:outputText value="ID Dispositivo: " styleClass="bold"/>
+				                    	<h:outputText value="#{deviceProcessBean.device.deviceCode} " styleClass="normal"/>
+				                    	<h:outputText value="Facial: " styleClass="bold"/>
+				                    	<h:outputText value="#{deviceProcessBean.device.deviceFacialId}" styleClass="normal"/>
+			               			</h:panelGrid>								
+									<rich:spacer height="10"/>							
+									<rich:dataTable id="datalist" value="#{deviceProcessBean.details}" 
+											onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+											onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+											var="list" rows="20" width="650px" rowClasses="grey,">
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Detalle"/>
+											</f:facet>
+											<h:outputText value="#{list.processTrackDetailMessage}" styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Fecha Detalle"/>
+											</f:facet>
+											<h:outputText value="#{list.processTrackDetailDate}" styleClass="normal" 
+												converter="TimeStampToStringDateConverter">
+											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Estado"/>
+											</f:facet>
+											<h:outputText value="Abierto" rendered="#{list.processTrackDetailState==0}" styleClass="normal"/>
+											<h:outputText value="Ok" rendered="#{list.processTrackDetailState==1}" styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Usuario de Creación"/>
+											</f:facet>
+											<h:outputText value="#{list.tbSystemUser.userNames} #{list.tbSystemUser.userSecondNames}" styleClass="normal" 
+				                    			rendered="#{list.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+				                    		<h:outputText value="#{list.tbSystemUser.userNames}" styleClass="normal" 
+				                    			rendered="#{list.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+										</rich:column>
+										<f:facet name="footer">
+											<rich:datascroller/>
+										</f:facet>
+									</rich:dataTable>								
+								</rich:panel>
+							</a4j:outputPanel>						
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>			
+			    	<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{deviceProcessBean.showMessage}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Seguimiento de Procesos de Dispositivo" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{deviceProcessBean.hideModal}" image="/img/close.png" />
+							  	</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{deviceProcessBean.message}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{deviceProcessBean.hideModal}"  />
+						     	</h:panelGroup>	     	
+							</h:panelGrid>
+						</h:form>
+					</rich:modalPanel>			
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

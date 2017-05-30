@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/gen_validation.js"></script>
+<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/report.js"></script>
+<title>Reporte de Extracto de Cuenta</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24"><f:subview id="headerMenu">
+	<ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="../menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>
+	<rich:messages style="color:red;"/>		
+		<rich:panel style="width:700px;margin:auto;">
+			<f:facet name="header"><h:outputText value="Reporte de Extracto de Cuenta por Usuario" styleClass="bold"/></f:facet>		
+			
+			<h:form id="form" target="_blank">
+
+				<h:panelGroup>
+				<h:selectOneRadio value="#{userStatementReportBean.exportOption}">
+					<f:selectItem itemValue="PDF" itemLabel="PDF"/>
+					<f:selectItem itemValue="HTML" itemLabel="HTML"/>
+				</h:selectOneRadio>
+				</h:panelGroup>
+
+				<rich:spacer height="20"/>
+				<h:panelGroup>
+					<table width="100%">
+						<tr>
+							<td width="20%"></td>
+							<td width="30%"><h:outputText value="No. de Identificación Usuario:" styleClass="bold"/></td>
+							<td width="30%">
+								<h:inputText id="id_user" value="#{userStatementReportBean.userCode}" 
+										styleClass="normal" style="width:140px" 
+										onkeypress="return alphaNumOnly(event)"/>
+								<rich:suggestionbox id="suggestionBoxId" for="id_user" suggestionAction="#{userStatementReportBean.autocomplete}"
+                                      var="result" tokens="," height="150" width="160" cellpadding="2" cellspacing="2"   shadowOpacity="4"
+                                      shadowDepth="4" minChars="1" rules="none" nothingLabel="No se encontró nada.">
+                                 	<h:column><h:outputText value="#{result}" styleClass="bold" /></h:column>
+                                 </rich:suggestionbox>
+							</td>
+							<td width="20%"></td>
+						</tr>
+					</table>
+				</h:panelGroup>
+				
+				<rich:spacer height="20"/>
+				<h:panelGroup>
+					<table width="100%">
+						<tr>
+							<td width="20%"></td>
+							<td width="30%"><h:outputText value="Fecha Inicial: " styleClass="bold"/></td>
+							<td width="30%">
+								<rich:calendar id="beg_date" value="#{userStatementReportBean.begDate}"                 		
+			                        cellWidth="26px" cellHeight="22px" style="width:150px" 
+			                        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+			                    </rich:calendar>
+							</td>
+							<td width="20%"></td>
+						</tr>
+					</table>
+				</h:panelGroup>
+
+				<rich:spacer height="20"/>
+				<h:panelGroup>
+					<table width="100%">
+						<tr>
+							<td width="20%"></td>
+							<td width="30%"><h:outputText value="Fecha Final: " styleClass="bold"/></td>
+							<td width="30%">
+								<rich:calendar id="end_date" value="#{userStatementReportBean.endDate}"                 		
+			                        	cellWidth="26px" cellHeight="22px" style="width:150px" 
+			                        	datePattern="MM/dd/yyyy" popup="true"> 	
+			                    </rich:calendar>
+							</td>
+							<td width="20%"></td>
+						</tr>
+					</table>
+				</h:panelGroup>
+				
+				<rich:spacer height="20"/>
+				<h:panelGroup>
+				<h:panelGrid style="width:400px;margin:auto;" columns="2">
+					<h:commandButton  action="#{userStatementReportBean.execute}" styleClass="normal" 
+						onclick="return validate(1);" value="Consultar" />
+				</h:panelGrid>
+				</h:panelGroup>
+			</h:form>
+	</rich:panel>
+	<rich:spacer height="20"/>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="../content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

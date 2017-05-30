@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DistribucionMontos3" language="groovy" pageWidth="990" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="970" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="accountId" class="java.lang.Long"/>
+	<parameter name="dateIni" class="java.sql.Timestamp"/>
+	<parameter name="dateEnd" class="java.sql.Timestamp"/>
+	<parameter name="userId" class="java.lang.Long"/>
+	<parameter name="balance" class="java.math.BigDecimal"/>
+	<parameter name="device" class="java.lang.Long"/>
+	<parameter name="placa" class="java.lang.String"/>
+	<parameter name="facial" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select tt.transaction_time, tt.previous_balance, decode(tt.transaction_type_id,2,tt.transaction_value,6,tt.transaction_value,4,tt.transaction_value,0) as debitos,
+decode(tt.transaction_type_id,1,tt.transaction_value,5,tt.transaction_value,0) as creditos,
+tt.new_balance, decode(tt.transaction_type_id,1,'Asignación de Recursos',4,'Crédito para dispositivos','') as transacciones, decode(tt.transaction_type_id,1,'Asignación de Recursos Aprobados por Banco',4,tt.transaction_description) as transaction_description, tt.application_date
+from tb_transaction tt
+inner join tb_account ta on tt.account_id= ta.account_id
+inner join re_account_device rad on ta.account_id = rad.account_id
+left join tb_system_user tsu on tt.user_id=tsu.user_id
+where
+tt.account_id=$P{accountId}
+and (tt.user_id=$P{userId} and tt.transaction_type_id in  (4))
+and tt.transaction_time between $P{dateIni} and $P{dateEnd}
+UNION
+select tt.transaction_time, tt.previous_balance, decode(tt.transaction_type_id,2,tt.transaction_value,6,tt.transaction_value,4,tt.transaction_value,0) as debitos,
+decode(tt.transaction_type_id,1,tt.transaction_value,5,tt.transaction_value,0) as creditos,
+tt.new_balance, decode(tt.transaction_type_id,1,'Asignación de Recursos',3,'Crédito para dispositivos','') as transacciones, decode(tt.transaction_type_id,1,'Asignación de Recursos Aprobados por Banco',4,tt.transaction_description) as transaction_description, tt.application_date
+from tb_transaction tt
+inner join tb_account ta on tt.account_id= ta.account_id
+left join tb_system_user tsu on tt.user_id=tsu.user_id
+where
+tt.account_id=$P{accountId}
+and (tt.user_id is null and tt.transaction_type_id in (1))
+and tt.transaction_time between $P{dateIni} and $P{dateEnd}
+and (tt.transaction_type_id in (1))
+order by 1]]>
+	</queryString>
+	<field name="TRANSACTION_TIME" class="java.sql.Timestamp"/>
+	<field name="PREVIOUS_BALANCE" class="java.math.BigDecimal"/>
+	<field name="DEBITOS" class="java.math.BigDecimal"/>
+	<field name="CREDITOS" class="java.math.BigDecimal"/>
+	<field name="NEW_BALANCE" class="java.math.BigDecimal"/>
+	<field name="TRANSACCIONES" class="java.lang.String"/>
+	<field name="TRANSACTION_DESCRIPTION" class="java.lang.String"/>
+	<field name="APPLICATION_DATE" class="java.util.Date"/>
+	<variable name="sumDebitos" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEBITOS}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="sumCreditos" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CREDITOS}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<title>
+		<band height="72">
+			<textField isBlankWhenNull="true">
+				<reportElement x="528" y="0" width="161" height="17"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{accountId}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="689" y="17" width="169" height="18"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo No Asignado Disponible:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="689" y="35" width="169" height="18"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Actual Dispositivos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="689" y="53" width="169" height="18"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Actual Cuenta FacilPass:]]></text>
+			</staticText>
+			<textField pattern="$  #,##0">
+				<reportElement x="858" y="17" width="109" height="18"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="3">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{balance}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="858" y="35" width="109" height="18"/>
+				<subreportParameter name="accountId">
+					<subreportParameterExpression><![CDATA[$P{accountId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["subReportSaldoDispositivos.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="173" y="0" width="355" height="17"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No de Cuenta FacilPass:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="858" y="53" width="109" height="18"/>
+				<subreportParameter name="balance">
+					<subreportParameterExpression><![CDATA[$P{balance}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="accountId">
+					<subreportParameterExpression><![CDATA[$P{accountId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["subReportSaldoTotalCuenta.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="17" width="173" height="21" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha Transacción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="283" y="17" width="114" height="21" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Débitos FacilPass]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="397" y="17" width="132" height="21" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Créditos FacilPass]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="690" y="17" width="280" height="21" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Detalle]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="529" y="17" width="161" height="21" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Transacciones]]></text>
+			</staticText>
+			<textField pattern="$  #,##0" isBlankWhenNull="true">
+				<reportElement x="173" y="0" width="224" height="17"/>
+				<box topPadding="0" leftPadding="3" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{balance}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="173" height="17"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto Disponible para Asignar:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="0" width="573" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="173" y="17" width="110" height="21" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha Aplicación Banco]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="690" y="0" width="280" height="20"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TRANSACTION_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy hh:mm:ss a">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="173" height="20"/>
+				<box rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{TRANSACTION_TIME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$  #,##0">
+				<reportElement x="283" y="0" width="114" height="20"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{DEBITOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$  #,##0">
+				<reportElement x="397" y="0" width="132" height="20"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="3">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CREDITOS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="529" y="0" width="161" height="20"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TRANSACCIONES}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="173" y="0" width="110" height="20"/>
+				<box rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{APPLICATION_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="27">
+			<staticText>
+				<reportElement x="173" y="0" width="110" height="18"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+			<textField pattern="$  #,##0">
+				<reportElement x="283" y="0" width="114" height="18"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumDebitos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$  #,##0">
+				<reportElement x="397" y="0" width="132" height="18"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCreditos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

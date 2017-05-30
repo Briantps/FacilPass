@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Formulario Inscripción Usuarios del Sistema</title>
+	</head>	
+	<script type="text/javascript"> 		
+	function textArea_blur(TxtArea,TxtInicial)  
+	{  
+		if(TxtArea.value == "")  
+		{  
+			TxtArea.value = TxtInicial;
+			TxtArea.style.color='#848484'
+		}
+	}  
+	 
+	function textArea_focus(TxtArea,TxtInicial)  
+	{  
+		if(TxtArea.value == TxtInicial)  
+		{  
+			TxtArea.value="";  
+			TxtArea.style.color = '#000000';
+		}  
+	}  
+
+	function textArea_blur2()  
+	{  
+		var TxtArea=document.getElementById("formNat:Email");
+
+		if(TxtArea.value == "")  
+		{  
+			TxtArea.value ='ejemplo@mail.com';
+			
+			TxtArea.style.color='#848484';
+
+		}	
+
+		else{
+			if(TxtArea.value== 'ejemplo@mail.com'){
+				TxtArea.style.color='#848484';
+			}
+			else{
+				TxtArea.style.color = '#000000';
+			}
+		}
+
+		var TxtArea2=document.getElementById("formNat:Email2");
+
+		if(TxtArea2.value == "")  
+		{  
+			TxtArea2.value ='ejemplo@mail.com';
+			
+			TxtArea2.style.color='#848484';
+
+		}	
+
+		else{
+			if(TxtArea2.value== 'ejemplo@mail.com'){
+				TxtArea2.style.color='#848484';
+			}
+			else{
+				TxtArea2.style.color = '#000000';
+			}
+		}
+	} 
+	
+	var formSubmitted = false;
+	function onSubmitButton() { 
+	    if (!formSubmitted) {
+	        formSubmitted = true;
+	    } else {
+	        // disable event propagation if form is already submitted
+	        event.preventDefault();
+	    }
+	}
+		 
+		</script> 
+	<body onload="textArea_blur2();">
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<rich:messages style="color:red;"/>
+					<h:form id="formNat">
+						<rich:panel style="width:700px;margin:auto; background-color: #ffffff;">
+							<f:facet name="header">
+								<h:outputText value="Formulario Inscripción Usuario" styleClass="bold"/>
+							</f:facet>				
+							<rich:panel>
+								<h:selectOneRadio styleClass="bold" value="#{formInsUserBean.STypePer}" 
+									valueChangeListener="#{formInsUserBean.changeTypePers}" immediate="true" id="s1">
+									<f:selectItem itemValue="1" itemLabel="#{msg.PerNat}" id="o1" />
+									<a4j:support event="onchange" reRender="panel"/>
+								</h:selectOneRadio>
+							</rich:panel>
+							<rich:spacer height="10"/>				
+							<rich:panel id="panel">
+								<table width="100%">
+									<tr>
+										<td width="23%">
+											<h:outputLabel value="#{msg.TipDoc}: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</td>
+										<td width="23%">
+											<h:selectOneMenu id="typeId" value="#{formInsUserBean.userCodeType}" rendered="#{formInsUserBean.typePer}" style="width: 150px;" styleClass="normal">
+												<f:selectItem itemValue="1" itemLabel="CC" />
+												<f:selectItem itemValue="2" itemLabel="CE" />
+											</h:selectOneMenu>
+										</td>
+										<td width="8%"></td>
+										<td width="23%">
+											<h:outputLabel value="No. de Identificación: " rendered="#{formInsUserBean.typePer}" id="numdoc" styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/> 
+										</td>
+										<td width="23%">
+											<h:inputText value="#{formInsUserBean.userCode}" label="Número de documento" maxlength="15" styleClass="normal" 
+												 style="width:140px" onkeypress="return numOnly(event)" autocomplete="off"/>
+										</td>
+									</tr>
+								</table>
+								<rich:spacer height="10"/>
+								<table width="100%">
+									<tr>
+										<td width="23%">
+											<h:outputLabel value="#{msg.Nombre}: " rendered="#{formInsUserBean.typePer}" id="nombretxt" styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/> 
+										</td>
+										<td width="23%">
+											<h:inputText maxlength="100" value="#{formInsUserBean.userNames}" label="Nombres" 
+												 style="width:140px" onkeypress="return alphaSpaceWithoutPoint(event)" styleClass="normal" autocomplete="off">
+											</h:inputText>
+										</td>
+										<td width="8%"></td>
+										<td width="23%">
+											<h:outputLabel value="#{msg.Apelli}: " rendered="#{formInsUserBean.typePer}" id="apellidotxt" styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/> 
+										</td>
+										<td width="23%">
+											<h:inputText value="#{formInsUserBean.userSecondNames}" styleClass="normal" 
+												 style="width:140px" onkeypress="return alphaSpaceWithoutPoint(event)" label="Apellidos" maxlength="50" autocomplete="off">
+											</h:inputText>
+										</td>
+									</tr>				
+								</table>
+							</rich:panel>
+							<rich:spacer height="10"/>	
+							<rich:panel>
+								<table width="100%">
+									<tr>
+										<td width="23%">
+											<h:outputLabel value="Usuario: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</td>
+										<td width="23%">
+											<h:inputText id="Email" value="#{formInsUserBean.userEmail}" label="Correo Electrónico"  style="width:140px" 
+												onblur="textArea_blur(this,'ejemplo@mail.com')" onfocus="textArea_focus(this,'ejemplo@mail.com')"  styleClass="normal"  maxlength="100" onkeypress="return emailValidation(event)" autocomplete="off">				
+											</h:inputText>
+                                           <rich:toolTip style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;" followMouse="false" direction="top-right" showDelay="500" styleClass="normal" value="Ingrese como Usuario el correo electrónico al cual se le harán llegar todas las notificaciones del Sistema FacilPass al usuario que desea crear." for="Email"/>
+										</td>
+                                        <td width="8%"></td>
+                                        <td width="23%">
+											<h:outputLabel value="Confirmar Usuario: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</td>
+										<td width="23%">
+											<h:inputText id="Email2" value="#{formInsUserBean.userEmail2}" label="Correo Electrónico"  style="width:140px" 
+												onblur="textArea_blur(this,'ejemplo@mail.com')" onfocus="textArea_focus(this,'ejemplo@mail.com')"  styleClass="normal"  maxlength="100" onkeypress="return emailValidation(event)" autocomplete="off">				
+											</h:inputText>
+                                            <rich:toolTip style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;" followMouse="false" direction="top-right" showDelay="500" styleClass="normal" value="Confirme el correo electrónico del usuario que desea crear." for="Email2"/>
+										</td>
+									</tr>
+								</table>
+							</rich:panel>
+							<rich:spacer height="10"/>
+							<rich:panel>	
+								<table width="100%" align="center">
+									<tr>
+										<td width="23%">
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+										</td>
+										<td width="23%"></td>
+										<td width="8%"></td>
+										<td width="23%"></td>
+										<td width="23%">
+											<h:commandButton value="Guardar" styleClass="normal" action="#{formInsUserBean.saveUser}" onclick="onSubmitButton();"/>
+										</td>
+									</tr>
+								</table>
+							</rich:panel>
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>				
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{formInsUserBean.create}"  onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Inscripción de Usuarios" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{formInsUserBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{formInsUserBean.msg}" styleClass="normal"/>
+				        <rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton value="Aceptar" action="#{formInsUserBean.hideModal}"  />
+								</h:panelGroup>	     	
+						  	</h:panelGrid>
+						</h:form>	
+						<br />		
+					</rich:modalPanel>				
+					<rich:modalPanel id="panelR" width="480" height="340" showWhenRendered="#{formInsUserBean.asigRole}"  onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Asignación de Rol" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<br />
+						<f:subview id="Roles">
+							<ui:include src="sFormInsUser.jspx"/>
+						</f:subview>
+					</rich:modalPanel>				
+				    <rich:modalPanel id="panelE" width="350" height="115" showWhenRendered="#{formInsUserBean.aigRoleEnd}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Asignación de Roles" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{formInsUserBean.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{formInsUserBean.msg}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+							    <h:panelGroup>
+							    	<h:commandButton value="Aceptar" action="#{formInsUserBean.hideModal2}"  />
+							    </h:panelGroup>	     	
+						  	</h:panelGrid>
+						</h:form>	
+						<br />        
+					</rich:modalPanel>			
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

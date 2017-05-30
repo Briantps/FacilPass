@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />  
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Fabricante</title>
+	</head>	  
+	<body>
+		<div class="container">
+			<f:view>
+				<div>
+					<h:form id="Formulario">
+						<f:loadBundle basename="staticText.messages" var="msg" />
+						<rich:panel style="width:350px;">
+						<table width="100%">
+						<tr>
+							<td width="40%">
+								<h:outputText value="Código Fabricante:" styleClass="bold"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</td>
+							<td width="60%">
+								<h:inputText id="tagTypeCode" value="#{enterFactory.tagTypeCode}" 
+									style="width:150px; text-transform: uppercase"
+									onkeypress="return numOnly(event)" maxlength="2"/>
+							</td>
+						</tr>
+						<tr>
+							<td width="40%">
+								<h:outputText value="Fabricante:" styleClass="bold"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</td>
+							<td width="60%">
+								<h:inputText id="tagTypeName" value="#{enterFactory.tagTypeName}" 
+									style="width:150px; text-transform: uppercase"
+									onkeypress="return alphaNumSpaceOnly2(event)" maxlength="50"/>
+							</td>
+						</tr>
+						<tr>
+							<td width="40%">
+								<h:outputText value="Tamaño ID Tag:" styleClass="bold"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</td>
+							<td width="60%">							
+									<h:inputText id="serialLength" value="#{enterFactory.serialLength}" 
+									style="width:150px; text-transform: uppercase"
+									onkeypress="return numOnly(event)" maxlength="2"/>
+							</td>
+						</tr>
+						<tr>
+						<td width="10%">
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+						</td>
+						<td width="10%">
+							<h:commandButton value="Guardar"  action="#{enterFactory.msgSave}" />
+							<h:outputText styleClass="bold" value="       "/>
+							<h:commandButton value="Cancelar" action="#{enterFactory.hideModal2}"/>
+						</td>
+					   </tr>
+						</table>
+						</rich:panel>
+					</h:form>
+				</div>
+			</f:view>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="util.ws.WSCreateTransactionAval"/>
+<fullyQualifiedTypeName name="constant.TPS_Constants"/>
+<fullyQualifiedTypeName name="jpa.TbBankAccount"/>
+<fullyQualifiedTypeName name="com.facilpass.ejb.ProgramaticRechargeEvaluation"/>
+<fullyQualifiedTypeName name="org.apache.catalina.startup.SetContextPropertiesRule"/>
+<fullyQualifiedTypeName name="constant.PaymentMethod"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="jpa.TbWsResponses"/>
+<fullyQualifiedTypeName name="constant.TypeProgramming"/>
+<fullyQualifiedTypeName name="jpa.TbBankTransact"/>
+<fullyQualifiedTypeName name="com.facilpass.util.classes.SimpleTagMessageParser"/>
+<fullyQualifiedTypeName name="constant.EEmailParam"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.text.DecimalFormat"/>
+</qualifiedTypeNameHistroy>

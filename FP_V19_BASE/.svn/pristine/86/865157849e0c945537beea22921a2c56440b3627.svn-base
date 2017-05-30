@@ -1,0 +1,21 @@
+package ejb;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import jpa.TbAlarmBalance;
+
+public class AlarmBalanceEJB implements AlarmBalance {
+	
+	@PersistenceContext(unitName = "bo") 
+	EntityManager em;
+	
+	public TbAlarmBalance getInfoByType (long type){
+		TbAlarmBalance tab=null;
+		
+		Query qry = em.createQuery("Select tba from TbAlarmBalance tba Where tba.idTipAlarm=?1");
+		qry.setParameter(1, type);
+		tab=(TbAlarmBalance) qry.getSingleResult();
+		return tab;
+	}
+}

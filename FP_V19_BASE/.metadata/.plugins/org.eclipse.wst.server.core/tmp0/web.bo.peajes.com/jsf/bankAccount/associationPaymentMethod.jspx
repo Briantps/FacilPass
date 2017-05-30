@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Asociar Producto Bancario</title>
+	</head>
+
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+		
+	<div class="bkContents span-18 prepend-1">		
+	<rich:spacer height="5"/>	
+	<h:form>
+		<rich:panel style="width:600 px;margin:auto;">
+			<f:facet name="header">
+				<h:outputText value="Asociar Producto Bancario" styleClass="bold"/>
+			</f:facet>
+			<rich:panel>
+				<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+					<h:commandButton value="Asociar Producto Bancario" action="#{associationPaymentMethodBean.initAssociateProductsAccountClient}"/>
+					<h:outputText value="Para este proceso debe tener un producto bancario creado en alguna de las entidades de Grupo AVAL o en cualquier otra entidad financiera con servicio PSE habilitado." 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px" styleClass="bold">
+		            </h:outputText>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:spacer height="20"/>
+			<rich:panel style="overflow: auto;">
+				<f:facet name="header">
+					<h:outputText styleClass="bold" value="Lista Productos Asociados"/>
+				</f:facet>
+				<rich:dataTable id="dtable" width="100%" value="#{associationPaymentMethodBean.accountBankList}" var="list" rows="10" 
+				onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'" rowClasses="white,grey">
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Fecha Asociación"/>
+						</f:facet>
+						<h:outputText value="#{list.dateU}" style="font-size: 12px" converter="StringToStringDateConverter"/>
+					</rich:column>
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Entidad"/>
+						</f:facet>
+						<h:outputText value="#{list.bankNameU}"/>
+ 					</rich:column>
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Producto Bancario"/>
+						</f:facet>
+						<h:outputText value="#{list.bankAccountNumberU}" rendered="#{list.bankAvalU==1}"/>
+						<h:outputText value="" rendered="#{list.bankAvalU==0}"/>
+					</rich:column>
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Tipo Producto"/>
+						</f:facet>
+						<h:outputText value="#{list.productTypeDescriptionU}" />
+					</rich:column>
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Cuenta FacilPass"/>
+						</f:facet>
+						<h:outputText value="#{list.accountIdU}"/>
+					</rich:column>
+					<rich:column style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Estado"/>
+						</f:facet>
+						<h:outputText value="Activa Por Banco" style="font-size: 12px;color:green;" rendered="#{list.stateU==0 and list.bankAvalU==1}" />
+						<h:outputText value="Activa" style="font-size: 12px;color:green;" rendered="#{list.stateU==0 and list.bankAvalU==0}" />
+						<h:outputText value="Pendiente Activación" style="font-size: 12px; color:red;" rendered="#{list.stateU==1}" />
+						<h:outputText value="Pendiente de Cierre" style="font-size: 12px;" rendered="#{list.stateU==2}" />
+						<h:outputText value="Para Cerrar" style="font-size: 12px;" rendered="#{list.stateU==3}" />
+						<h:outputText value="Cerrada" style="font-size: 12px;" rendered="#{list.stateU==4}" />
+						<h:outputText value="Suspendida" style="font-size: 12px;" rendered="#{list.stateU==5}" />
+						<h:outputText value="Pendiente Asignación de Recursos" style="font-size: 12px;" rendered="#{list.stateU==7}" />
+					</rich:column>
+				</rich:dataTable>
+				<rich:datascroller align="center" for="dtable" />
+			</rich:panel>
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>
+	
+	<rich:modalPanel id="panel2" width="400" showWhenRendered="#{associationPaymentMethodBean.showInsert}" 
+	 				autosized = "true" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Asociar Cuenta FacilPass/Producto Bancario" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{associationPaymentMethodBean.hideModal2}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+  			<f:loadBundle basename="staticText.messages" var="msg" />
+  			<h:form id="Formulario">
+				<rich:panel>
+					<table width="100%">
+						<tr>
+							<td width="50%">
+								<h:outputLabel value="#{msg.NumDoc}: " styleClass="bold"/>
+							</td>
+							<td width="50%">
+								<h:inputText value="#{associationPaymentMethodBean.userCode}" disabled="true" style="width: 179px;"/>
+							</td>
+						</tr>
+						<tr>
+							<td width="50%">
+								<h:outputLabel value="#{msg.CtaFP}: " styleClass="bold"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</td>
+							<td width="40%">
+   								<h:selectOneMenu id="types1" value="#{associationPaymentMethodBean.accountId}" style="width: 184px;">
+									<f:selectItems value="#{associationPaymentMethodBean.clientAccounts}"></f:selectItems>
+									<a4j:support event="onchange" reRender="banks,types,products" ajaxSingle="true"></a4j:support>
+	   							</h:selectOneMenu>
+							</td>
+						</tr>
+						<tr>
+							<td width="50%">
+								<h:outputText value="Entidad: " styleClass="bold"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</td>
+							<td width="60%">
+	 							<h:selectOneMenu id="banks" value="#{associationPaymentMethodBean.idBank}" 
+	 								valueChangeListener="#{associationPaymentMethodBean.changeMenu}" onchange="submit()" style="width: 184px;">
+									<f:selectItems value="#{associationPaymentMethodBean.banks}"/>
+		 						</h:selectOneMenu>
+    						</td>
+						</tr>
+						<tr>
+							<td width="50%">
+								<h:outputText id="typesText" value="#{msg.TipProd}:" rendered="#{associationPaymentMethodBean.showOcult}" styleClass="bold"/>
+								<h:outputLabel id="typesLabel" value="#{msg.Asterisk}" rendered="#{associationPaymentMethodBean.showOcult}" styleClass="asteriskMandatoryField"/>
+							</td>
+							<td width="40%">						
+    							<h:selectOneMenu id="types" value="#{associationPaymentMethodBean.idType}" rendered="#{associationPaymentMethodBean.showOcult}" style="width: 185px;">
+									<f:selectItems value="#{associationPaymentMethodBean.bankAccountTypes}"/>
+									<a4j:support event="onchange" reRender="products" ajaxSingle="true"></a4j:support>
+		 						</h:selectOneMenu>
+							</td>
+						</tr>
+						<tr>
+							<td width="50%">
+								<h:outputText id="productsText" value="#{msg.ProdBanc}: " rendered="#{associationPaymentMethodBean.showOcult}" styleClass="bold"/>
+								<h:outputLabel id="productsLabel" value="#{msg.Asterisk}" rendered="#{associationPaymentMethodBean.showOcult}" styleClass="asteriskMandatoryField"/>
+							</td>
+							<td width="40%">						
+    							<h:selectOneMenu id="products" value="#{associationPaymentMethodBean.idProduct}" rendered="#{associationPaymentMethodBean.showOcult}" style="width: 185px;">
+									<f:selectItems value="#{associationPaymentMethodBean.products}" ></f:selectItems>
+		 						</h:selectOneMenu>
+							</td>
+						</tr>
+						<tr>
+							<td width="20%">
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							</td>
+							<td width="30%">
+								<h:commandButton value="Asociar" action="#{associationPaymentMethodBean.addAssociateProductsAccountClient}"
+								 	rendered="#{associationPaymentMethodBean.showOcult}" styleClass="normal" style="width: 89px"/>
+								 	<h:commandButton value="Asociar" action="#{associationPaymentMethodBean.addAssociateProductsAccountClientPSE}"
+								 	rendered="#{associationPaymentMethodBean.showOcultPSE}" styleClass="normal" style="width: 89px"/>
+							</td>	
+						</tr>
+					</table>
+				</rich:panel>
+			</h:form>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{associationPaymentMethodBean.showModal}" 
+					 onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Mensaje - Asociación Producto/Cuenta" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{associationPaymentMethodBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{associationPaymentMethodBean.modalMessage}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{associationPaymentMethodBean.hideModal}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+	    </h:form>
+	<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{associationPaymentMethodBean.showConfirmation}" 
+				     onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Confirmación" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:form>
+					<h:commandButton action="#{associationPaymentMethodBean.hideModal2}" image="/img/close.png" />
+				</h:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{associationPaymentMethodBean.modalMessage}" styleClass="normal"/>
+		<a4j:form id="form">
+		<h:message for="send1"/>
+		
+		<div align="center">
+			<a4j:region id="editando">
+	     		<a4j:commandButton id="send1" value="Aceptar" action="#{associationPaymentMethodBean.saveAssociateProductsAccountClient}" style="width: 80px">
+	                <a4j:support event="oncomplete" reRender="panelm"/>
+		           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+	            </a4j:commandButton>
+	        </a4j:region> 
+			<rich:spacer width="20"/>
+			<h:commandButton id="cancel" value="Cancelar" action="#{associationPaymentMethodBean.hideModal2}" style="width: 80px"/>
+		</div>	
+	
+	    </a4j:form>
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{associationPaymentMethodBean.showModalValidate}" 
+					 onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Mensaje - Asociación Producto/Cuenta" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup> 
+				<a4j:form>
+					<h:commandButton action="#{associationPaymentMethodBean.hideModal2}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{associationPaymentMethodBean.modalMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{associationPaymentMethodBean.hideModal2}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+		</h:form>
+		<br/>
+	</rich:modalPanel>	
+	
+	
+	<rich:modalPanel id="confirmacionPSE" width="350" height="120" showWhenRendered="#{associationPaymentMethodBean.showConfirmationPSE}" 
+					 autosized="true" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Confirmación" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:form>
+					<h:commandButton action="#{associationPaymentMethodBean.hideModal2}" image="/img/close.png" />
+				</h:form>
+			</h:panelGroup>
+		</f:facet>
+		<div style="width: 350px; word-wrap: break-word;">
+			<h:outputText value="#{associationPaymentMethodBean.modalMessage}" styleClass="normal" />
+		</div>
+		<rich:spacer height="10"/>
+		<a4j:form id="form1">
+			<div align="center">
+				<a4j:region id="editando">
+		     		<a4j:commandButton id="send" value="Aceptar" action="#{associationPaymentMethodBean.saveAssociateProductsAccountClientPSE}" style="width: 80px">
+		                 <a4j:support event="oncomplete" reRender="panelPSE"/>
+			           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+			   			</a4j:status>
+		               </a4j:commandButton>
+		        </a4j:region> 
+				<rich:spacer width="20"/>
+				<h:commandButton id="cancel" value="Cancelar" action="#{associationPaymentMethodBean.hideModal2}" style="width: 80px"/>
+			</div>	
+	    </a4j:form>
+	</rich:modalPanel>
+		
+	
+	<rich:modalPanel id="panelPSE" width="450" height="128" showWhenRendered="#{associationPaymentMethodBean.showModalValidatePSE}" 
+					 onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Mensaje - Asociación Producto/Cuenta" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup> 
+				<a4j:form>
+					<h:commandButton action="#{associationPaymentMethodBean.hideModal2}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{associationPaymentMethodBean.modalMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{associationPaymentMethodBean.hideModal2}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+		</h:form>
+		<br/>
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+	</rich:modalPanel>  
+	
+	</div>
+	<f:subview id="footer">
+		<ui:include src="/jsf/content/footer.jsp"/>
+	</f:subview>
+   </f:view>
+  </div>
+</body>
+</html>

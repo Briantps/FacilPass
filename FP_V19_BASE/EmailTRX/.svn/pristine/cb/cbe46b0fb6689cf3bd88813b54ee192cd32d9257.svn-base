@@ -1,0 +1,6 @@
+mail.smtp.host                         smtp.peajes.com
+mail.smtp.starttls.enable              false
+mail.smtp.port                         25
+mail.smtp.user                         nathaly.ramirez@peajes.com
+mail.smtp.password                     Nata$
+mail.smtp.auth	 		         true

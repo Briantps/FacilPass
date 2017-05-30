@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Mensajes De Estado del Equipo</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+
+	<rich:spacer height="5"/>	
+    <a4j:form>
+    <rich:panel styleClass="richPanel" >
+     <f:facet name="header" >
+      <h:outputText value="Mensajes De Estado del Equipo" styleClass="bold"></h:outputText>
+     </f:facet>
+     <h:panelGrid columns="4"  styleClass="tableBO"  style="size 330px; margin: auto; padding:10px; ">
+       <h:panelGroup>
+       	<h:outputText value="Fecha Inicio: " styleClass="bold"/>
+       	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+       </h:panelGroup>
+       <rich:calendar id="fec1" value="#{messageStatus.initDate}"
+        	datePattern="dd/MM/yyyy hh:mm a"
+            showApplyButton="false"
+            cellWidth="24px"
+            cellHeight="22px"
+            style="width:190px"/>
+
+      <h:panelGroup>
+      	<h:outputText value="Fecha Fin: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <rich:calendar id="fec2" value="#{messageStatus.endDate}"
+            datePattern="dd/MM/yyyy hh:mm a"
+            showApplyButton="false"
+            cellWidth="24px"
+            cellHeight="22px"
+            style="width:190px" />
+
+    <h:panelGroup>
+   	  <h:outputText value="Concesión: " styleClass="bold"/>
+      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+    </h:panelGroup>
+
+    <h:selectOneMenu id="conces" value="#{messageStatus.conce}" style="width: 230px;">
+        <f:selectItems value="#{messageStatus.conceList}"/>
+        <a4j:support event="onchange" reRender="stations,lanes" ajaxSingle="true"/>
+      </h:selectOneMenu>
+
+      <h:outputText value="Estación: " styleClass="bold"/>
+      <h:selectOneMenu id="stations" value="#{messageStatus.stationId}" style="width: 150px;">
+        <f:selectItems value="#{messageStatus.stationList}"/>
+        <a4j:support event="onchange" reRender="lanes" ajaxSingle="true"/>
+      </h:selectOneMenu>
+
+      <h:outputText value="Carriles: " styleClass="bold"/>
+      <h:selectOneMenu id="lanes" value="#{messageStatus.laneId}">
+        <f:selectItems value="#{messageStatus.laneList}"/>
+      </h:selectOneMenu>
+
+      <h:panelGroup>
+      	<h:outputText value="Tipo Doc.: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:selectOneMenu id="typesDoc" value="#{messageStatus.codeType}">
+        <f:selectItems value="#{messageStatus.codeTypesList}"/>
+        <a4j:support event="onchange" action="#{messageStatus.changeTypeDoc}" reRender="client,m"/>
+      </h:selectOneMenu>
+
+      <h:panelGroup>
+      	<h:outputText value="#{msg.NumDoc}: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:inputText id="client" value="#{messageStatus.codClient}" onkeypress="return numOnly(event)">
+        <a4j:support event="onkeypress"  action="#{messageStatus.ocult}" reRender="accounts,devices,boton,panelData,dtable" ajaxSingle="true"/>
+        <a4j:support event="onmousedown"  action="#{messageStatus.ocult}" reRender="accounts,devices,boton,panelData,dtable" ajaxSingle="true"/>
+      </h:inputText>
+
+      <h:commandButton value="Buscar"  action="#{messageStatus.search}" >
+       <a4j:support event="onchange"  reRender="accounts,panel1" ajaxSingle="true"/>
+      </h:commandButton>
+    
+      <h:panelGroup></h:panelGroup>
+      <h:outputText value="Cuentas: " styleClass="bold"/>
+      <h:selectOneMenu id="accounts" value="#{messageStatus.accountId}" disabled="#{messageStatus.disabled}">
+        <f:selectItems value="#{messageStatus.accountList}"/>
+         <a4j:support event="onclick"  reRender="devices" ajaxSingle="true"/>
+      </h:selectOneMenu>
+
+      <h:outputText value="Dispositivos: " styleClass="bold"/>
+      <h:selectOneMenu id="devices" value="#{messageStatus.deviceId}" disabled="#{messageStatus.disabled}" style="overflow: scroll; width: 160px;">
+        <f:selectItems  value="#{messageStatus.deviceList}"/>
+      </h:selectOneMenu>
+
+      <h:commandButton id="boton" value="Ver Transacciones"  action="#{messageStatus.getTransactions}" disabled="#{messageStatus.disabled}"></h:commandButton> <h:panelGroup/><h:panelGroup/><h:panelGroup/>
+     </h:panelGrid>
+     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+	 <h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+    </rich:panel> 
+   
+    <a4j:outputPanel id="panelData" layout="inline">
+      <rich:panel id="r2" rendered="#{messageStatus.showData}" styleClass="richPanel">
+       <f:facet name="header"><h:outputText value="Transacciones"/></f:facet>
+        <div id="scroll_horizontal">
+         <rich:dataTable  id="dtable" width="960px" rows="10" value="#{messageStatus.details}" var="list" 
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+					rowClasses="white,grey" style="width: 670px; position: relative; margin:auto;">
+                
+           <rich:column width="155px" style="text-align:center;">
+            <f:facet name="header">
+              <h:outputText value="Fecha Transacción" />
+            </f:facet>
+            <h:outputText value="#{list.dateTransaction}"/>
+           </rich:column>   
+           <rich:column style="text-align:center;">
+            <f:facet name="header">
+              <h:outputText value="Concesión"/>
+            </f:facet>
+            <h:outputText value="#{list.company}"/>
+           </rich:column>  
+           <rich:column style="text-align:center;">
+            <f:facet name="header">
+              <h:outputText value="Estación"/>
+            </f:facet>
+            <h:outputText value="#{list.station}"/>
+           </rich:column> 
+           <rich:column style="text-align:center;">
+            <f:facet name="header">
+              <h:outputText value="Carril"/>
+            </f:facet>
+            <h:outputText value="#{list.lane}"/>
+           </rich:column>
+           <rich:column style="text-align:center;">
+            <f:facet name="header">
+              <h:outputText value="Valor"/>
+            </f:facet>
+            <h:outputText value="#{list.value}"/>
+           </rich:column> 
+           <rich:column style="text-align:center;">
+            <f:facet name="header">
+              <h:outputText value="Acción"/>
+            </f:facet>
+            <h:commandLink value="Ver Estados" action="#{messageStatus.getStatus}">
+             <f:setPropertyActionListener target="#{messageStatus.transactionId}" value="#{list.transactionId}"/>
+             <f:setPropertyActionListener target="#{messageStatus.dateTransaction}" value="#{list.dateTransaction}"/>
+             <f:setPropertyActionListener target="#{messageStatus.companyTransaction}" value="#{list.company}"/>
+             <f:setPropertyActionListener target="#{messageStatus.stationTransaction}" value="#{list.station}"/>
+             <f:setPropertyActionListener target="#{messageStatus.laneTransaction}" value="#{list.lane}"/>
+             <f:setPropertyActionListener target="#{messageStatus.cateTransaction}" value="#{list.cate}"/>
+            </h:commandLink>
+           </rich:column> 
+           <f:facet name="footer">
+            	<rich:datascroller for="dtable"/>
+           	</f:facet>
+         </rich:dataTable>
+        </div>
+      </rich:panel>
+    </a4j:outputPanel>    
+
+    </a4j:form>
+
+    <rich:modalPanel id="showd" width="750" height="490" showWhenRendered="#{messageStatus.showDac}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Estado de la Transacción" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{messageStatus.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+       <h:form>
+        <h:panelGrid id="p1" columns ="4" styleClass="tableBO">
+          <h:outputText value="Concesión:" styleClass="bold"/>
+          <h:outputText value="#{messageStatus.companyTransaction}" />
+
+          <h:outputText value="Estación:" styleClass="bold"/>
+          <h:outputText value="#{messageStatus.stationTransaction}" />
+
+          <h:outputText value="Carril:" styleClass="bold"/>
+          <h:outputText value="#{messageStatus.laneTransaction}" />
+         </h:panelGrid>
+        <rich:spacer height="5"></rich:spacer>
+        <rich:panel>
+         <h:panelGrid columns ="4" styleClass="tableBO">
+          <h:outputText value="Fecha Transacción:" styleClass="bold"/>
+          <h:outputText value="#{messageStatus.dateTransaction}">
+          </h:outputText>
+
+          <h:outputText value="Fecha Detección:" styleClass="bold"/>
+          <h:outputText value="#{messageStatus.transactionDac.transactionDacDate}" converter="TimeStampToStringDateConverter">
+          </h:outputText>
+
+          <h:outputText value="Categoria Consola:" styleClass="bold"/>
+          <h:outputText value="#{messageStatus.cateTransaction}" />
+
+          <h:outputText value="Categoria Dac:" styleClass="bold"/>
+          <h:outputText value="#{messageStatus.transactionDac.categoryId}" />
+         </h:panelGrid>
+        </rich:panel>
+        <rich:spacer height="5"></rich:spacer>
+         <rich:panel >
+         <f:facet name="header">
+			<h:panelGroup><h:outputText value="Estado del Equipo" styleClass="bold"/></h:panelGroup>
+		 </f:facet>
+         <h:panelGrid columns ="4" styleClass="tableBO"> 
+          <h:outputText value="Sentido:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="#{messageStatus.transactionDac.sent!=null?messageStatus.transactionDac.sent:'-'}"/>
+          </h:panelGroup>
+
+          <h:outputText value="Contraflujo:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="SI" rendered="#{messageStatus.transactionDac.backFlow==1}"/>
+          <h:outputText value="NO" rendered="#{messageStatus.transactionDac.backFlow==0}"/>
+          <h:outputText value="-" rendered="#{messageStatus.transactionDac.backFlow==null}"/>
+          </h:panelGroup>   
+
+          <h:outputText value="Sensor 1:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="Detectó #{messageStatus.transactionDac.sensor1} eje(s)"/>
+          </h:panelGroup>
+          
+          <h:outputText value="Sensor 2:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="Detectó #{messageStatus.transactionDac.sensor2} eje(s)"/>
+          </h:panelGroup>
+      
+          <h:outputText value="Sensor 3:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="Detectó #{messageStatus.transactionDac.sensor3} eje(s)"/>
+          </h:panelGroup>
+
+          <h:outputText value="Sensor 4:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="Detectó #{messageStatus.transactionDac.sensor4} eje(s)"/>
+          </h:panelGroup>
+
+          <h:outputText value="Sensor 5:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="Detectó #{messageStatus.transactionDac.sensor5} eje(s)"/>
+          </h:panelGroup>
+
+          <h:outputText value="Sensor 6:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="Detectó #{messageStatus.transactionDac.sensor6} eje(s)"/>
+          </h:panelGroup>
+
+          <h:outputText value="Sensor 7:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="Detectó #{messageStatus.transactionDac.sensor7} eje(s)"/>
+          </h:panelGroup>
+
+          <h:outputText value="Sensor 8:" styleClass="bold"/>
+          <h:panelGroup>
+          <h:outputText value="Detectó #{messageStatus.transactionDac.sensor8} eje(s)"/>
+          </h:panelGroup>
+
+          <h:outputText value="Inductivo:" styleClass="bold"/>
+          <h:panelGroup>
+           <h:outputText value="Ok" rendered="#{messageStatus.transactionDac.inductive==1}"/>
+           <h:outputText value="Falló" rendered="#{messageStatus.transactionDac.inductive==0}"/>
+           <h:outputText value="-" rendered="#{messageStatus.transactionDac.inductive==null}"/>
+          </h:panelGroup>
+
+          <h:outputText value="Óptico:" styleClass="bold"/>
+          <h:panelGroup>
+           <h:outputText value="Ok" rendered="#{messageStatus.transactionDac.optical==1}"/>
+           <h:outputText value="Falló" rendered="#{messageStatus.transactionDac.optical==0}"/>
+           <h:outputText value="-" rendered="#{messageStatus.transactionDac.optical==null}"/>
+          </h:panelGroup>
+        </h:panelGrid>
+        </rich:panel>
+		<rich:spacer height="10"/>
+		
+		<h:panelGrid columns="4" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>  	
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{messageStatus.hideModal}" /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+	</rich:modalPanel>
+
+    <rich:modalPanel id="panel1" width="350" height="115"  showWhenRendered="#{messageStatus.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Mensajes De Estado del Equipo" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{messageStatus.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{messageStatus.messageModal}" styleClass="normal"/>
+        <rich:spacer height="10"/>
+        <h:form>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+			<h:commandButton value="Aceptar" action="#{messageStatus.hideModal}"/>
+        </h:panelGrid>
+        </h:form> 
+        <br />
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

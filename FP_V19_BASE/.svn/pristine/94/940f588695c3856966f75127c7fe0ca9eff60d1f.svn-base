@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Saldo Bajo PSE</title>
+</head>
+<script>
+	function getFocus() {		
+		setTimeout(function(){document.getElementById("formfocus:alertAcepts").focus()},1000);		
+	}
+	
+	function getFocust() {		
+		setTimeout(function(){document.getElementById("formfocust:alertAceptst").focus()},1000);		
+	}
+</script>
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="menuheader">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="../menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+				<rich:spacer height="5" />
+				<rich:panel id="panelfull">
+					<f:facet name="header">
+						<h:outputText value="Saldo Bajo Cliente" styleClass="bold" />
+					</f:facet>
+
+					<a4j:outputPanel id="output2">
+						<rich:panel style="width:660 px;margin:auto;" id="panelReport2">
+							<div align="center">
+								<h:outputText
+									value="A continuación puede configurar el valor que utilizará el sistema para enviar una notificación de Saldo Bajo de la cuenta FacilPass"
+									styleClass="bold" />
+							</div>
+						</rich:panel>
+					</a4j:outputPanel>
+					<rich:spacer height="20" />
+					<a4j:outputPanel id="output">
+						<rich:panel style="width:660 px;margin:auto;" id="panelReport"
+							rendered="#{lowBalanceBean.modalList}">
+							<div align="center">
+								<f:facet name="header">
+									<h:outputText value="Configuración de Saldo Bajo"
+										styleClass="bold" />
+								</f:facet>
+							</div>
+							<h:form>
+								<f:facet name="header">
+									<h:outputText value="Saldo Bajo" styleClass="bold" />
+								</f:facet>
+
+								<div id="scroll_horizontal">
+
+									<rich:spacer height="10" />
+									<rich:dataTable id="listCuentaUser" var="item"
+										value="#{lowBalanceBean.accountclient}"
+										style="width:225px;margin:auto;" rows="10">
+
+
+										<rich:column width="115">
+											<f:facet name="header">
+												<h:outputText value="Cuenta FacilPass" styleClass="bold"
+													style="width:110px" />
+											</f:facet>
+											<h:outputText value="#{item.account}" styleClass="normal"
+												style="width:110px" />
+										</rich:column>
+
+										<rich:column width="115">
+											<f:facet name="header">
+												<h:outputText value="Saldo Bajo" styleClass="bold" />
+											</f:facet>
+
+											<h:inputText id="initValue" value="#{item.valbajo}"
+												style="width:110px" onkeypress="return solonumeros(event)"
+												maxlength="15"
+												onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+												<rich:toolTip event="onclick"
+													style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+													horizontalOffset="40" followMouse="false"
+													direction="top-right" showDelay="500" styleClass="normal"
+													value="#{item.msn}" for="initValue"
+													rendered="#{item.aval==0}" />
+												<a4j:support event="onblur"
+													action="#{lowBalanceBean.preload}"
+													status="commonstatus">
+													<f:setPropertyActionListener
+														target="#{lowBalanceBean.preaccount}"
+														value="#{item.account}" />
+													<f:setPropertyActionListener
+														target="#{lowBalanceBean.prevalbajo}"
+														value="#{item.valbajo}" />
+												</a4j:support>
+											</h:inputText>
+										</rich:column>
+
+										<f:facet name="footer">
+											<rich:datascroller align="center" for="listCuentaUser"
+												id="ds">
+											</rich:datascroller>
+										</f:facet>
+
+
+									</rich:dataTable>
+								</div>
+								<rich:spacer height="10" />
+								<div align="center">
+
+
+									<a4j:region id="Aceptar">
+										<a4j:commandButton id="send" value="Aceptar"
+											action="#{lowBalanceBean.savechanges}" style="width: 80px">
+											<a4j:support event="oncomplete"
+												reRender="output,panelReport,listCuentaUser,paneltrue" />
+											<a4j:status onstart="#{rich:component('wait')}.show()"
+												for="Aceptar" />
+										</a4j:commandButton>
+									</a4j:region>
+
+									<rich:spacer width="20" />
+
+									<h:commandButton value="Cancelar"
+										action="#{lowBalanceBean.cancelchanges}" style="width: 80px">
+										<a4j:support event="onclick" reRender="panelReport" />
+									</h:commandButton>
+
+
+								</div>
+							</h:form>
+						</rich:panel>
+					</a4j:outputPanel>
+				</rich:panel>
+
+				<rich:spacer height="20" />
+
+				<rich:modalPanel id="panelfalse" width="350" height="115"
+					showWhenRendered="#{lowBalanceBean.modalError}"
+					onresize="return false;" moveable="false" onbeforeshow="getFocust()" >
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Saldo Bajo" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{lowBalanceBean.ocult}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{lowBalanceBean.msnmodalError}"
+						styleClass="normal" />
+					<rich:spacer height="20" />
+					<h:form id="formfocust">
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:commandButton id = "alertAceptst" value="Aceptar"
+									action="#{lowBalanceBean.ocult}" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:form>
+					<br />
+				</rich:modalPanel>
+
+				<rich:modalPanel id="paneltrue" width="350" height="115"
+					showWhenRendered="#{lowBalanceBean.modal1}"
+					onresize="return false;" moveable="false" onbeforeshow="getFocus()">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Saldo Bajo" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{lowBalanceBean.ocult}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{lowBalanceBean.msnModal1}"
+						styleClass="normal" />
+					<rich:spacer height="20" />
+					<h:form id="formfocus">
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:commandButton id = "alertAcepts" value="Aceptar"
+									action="#{lowBalanceBean.ocult}" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:form>
+					<br />
+				</rich:modalPanel>
+
+				<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Por favor espere..." style="font-size:12px;" />
+				</rich:modalPanel>
+			</div>
+			<f:subview id="footer">
+				<ui:include src="../content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+
+</html>

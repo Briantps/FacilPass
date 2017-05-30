@@ -1,0 +1,493 @@
+package ejb;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Remote;
+
+import constant.AccountStateType;
+
+import util.AllInfoClient;
+import util.Cities;
+import util.ClientsDB;
+import util.HistoricalRecharges;
+import util.ValidationPassword;
+import jpa.TbAccount;
+import jpa.TbAccountCloseLog;
+import jpa.TbAccountType;
+import jpa.TbBankAccount;
+import jpa.TbCodeType;
+import jpa.TbMunicipality;
+import jpa.TbSystemUser;
+import jpa.TbUserData;
+import jpa.TbUserStateType;
+/**
+ * 
+ * @author Frances Zucchet
+ *  
+ */
+@Remote
+public interface User {
+
+	/**
+	 * 
+	 * @param fromOutside
+	 * @param creationUser
+	 * @param ip
+	 * @param userCodeType
+	 * @param userCode
+	 * @param names
+	 * @param lastNames
+	 * @param phone1
+	 * @param phone2
+	 * @param address
+	 * @param userCity
+	 * @param userEmail
+	 * @param userPassword
+	 * @return
+	 */
+	public String createClient(boolean fromOutside, Long creationUser, String ip,
+			String userCodeType, String userCode, String names,
+			String lastNames, String phone1, String phone2, String address,
+			String userCity, String userEmail, String userPassword, String dv,
+			String legalTypeId,String legalId,String foreignCity,String foreignCountry);
+	
+	/**
+	 * 
+	 * @param userCode
+	 * @param names
+	 * @param lastNames
+	 * @param userMail
+	 * @param userCodeType
+	 * @param creationUser
+	 * @param ip
+	 * @return
+	 */
+	public Long createSystemUser(String userCode, String names,
+			String lastNames, String userMail, String userCodeType,
+			Long creationUser, String ip);
+		
+	/**
+	 * 
+	 * @param systemUser
+	 * @return
+	 */
+	public boolean updateUser(TbSystemUser systemUser);
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<TbSystemUser> getAllUsers();
+
+	/**
+	 * @param ip
+	 * @param creationUser
+	 * @param userId
+	 * @return
+	 */
+	public boolean inactivateUser(long userId, String ip, Long creationUser);
+	
+	/**
+	 * @param ip
+	 * @param creationUser
+	 * @return true if the user password is correctly updated, otherwise false.
+	 */
+	public boolean resetPassword(long userId, String ip, Long creationUser);
+	
+	/**
+	 * 
+	 * @return List of cities 
+	 */
+	public List<Cities> getCities();
+	
+	/**
+	 * Validates if a code corresponding to an user is taken. 
+	 * @param userCodeType Type of User Code.
+	 * @param userCode User Code.
+	 * @return true if successful, false otherwise. 
+	 */
+	public boolean validateUserCodeUK(String userCodeType, String userCode);
+	
+	/**
+	 * Validates if an email is registered. 
+	 * @param userEmail
+	 * @return true if successful, false otherwise. 
+	 */
+	public boolean validateUserEmailUK(String userEmail);
+	
+	/**
+	 * Activates an User
+	 * @param userId
+	 * @return true if successful, false otherwise. 
+	 */
+	public boolean activateUser(long userId);
+	
+	/**
+	 * 
+	 * @param userPassword
+	 * @param password current typed password
+	 * @return true is passwords match, false otherwise.
+	 */
+	public boolean validatePassword(String userPassword, String password);
+	
+	/**
+	 * Changes user password
+	 * @param userId
+	 * @param newPassword
+	 * @param creationUser
+	 * @param ip
+	 * @return true if successful, false otherwise. 
+	 */
+	public String changePassword(long userId, String newPassword,
+			Long creationUser, String ip);
+
+	/**
+	 * Retrieves an user, given an id.
+	 * @param userId User identification
+	 * @return User if found, null otherwise
+	 */
+	public TbSystemUser getSystemUser(long userId);
+	
+	/**
+	 * Retrieves all user except inactive users.
+	 * @return List of Users
+	 */
+	public List<TbSystemUser> getAllNoneInactiveUsers();
+	
+	/**
+	 * Gets System user where role is = pre-enroll or client, and they are not inactive.
+	 * @return List of clients
+	 */
+	public List<String> getClients(String code);
+	
+	public List<String> getClients();
+
+	
+	/**
+	 * 
+	 * @return List of all active clients, (which have a process associated)
+	 */
+	public List<TbSystemUser> getAllActiveClient();
+	
+	/**
+	 * 
+	 * @return List of client Data.
+	 */
+	public List<TbUserData> getClientData(Long idClient);
+	
+	/**
+	 * 
+	 * @param idClient
+	 * @param officeName
+	 * @param address
+	 * @param phone
+	 * @param optionalPhone
+	 * @param contactName
+	 * @param ip
+	 * @param creationUser
+	 * @param idCity
+	 * @return true is successful, false otherwise.
+	 */
+	public boolean saveClientData(long idClient, String officeName,
+			String address, String phone, String optionalPhone, String contactName,
+			String ip, Long creationUser, Long idCity);
+	
+	/**
+	 * 
+	 * @return List of all code types.
+	 */
+	public List<TbCodeType> getCodeTypes();
+	
+	/**
+	 * 
+	 * @param code
+	 * @param codeType
+	 * @return List of client data.
+	 */
+	public List<TbUserData> getClientData(String code, Long codeType);
+	
+	/**
+	 * 
+	 * @param idClient
+	 * @param officeName
+	 * @param address
+	 * @param phone
+	 * @param optionalPhone
+	 * @param contactName
+	 * @param ip
+	 * @param creationUser
+	 * @param idCity
+	 * @return true is successful, false otherwise.
+	 */
+	public boolean modClientData(long idClient, String officeName,
+			String address, String phone, String optionalPhone, String contactName,
+			String ip, Long creationUser, Long idCity, Long idUserData);
+	
+	/**
+	 * 
+	 * @param code
+	 * @param codeType
+	 * @return User
+	 */
+	public TbSystemUser getUserByCode(String code, Long codeType);
+	
+	/**
+	 * 
+	 * @param idClient
+	 * @param creationUser
+	 * @param ip
+	 * @return
+	 */
+	public Long createAccount(Long idClient, Long type,Long creationUser,  String ip, Long idBank, Long idProduct);
+
+   /**
+	 * 
+	 * @return List of all clients / user with an account.
+	 */
+	public List<TbSystemUser> getClientsWithAccount();
+	
+	/**
+	 * 
+	 * @return List of users with install roll. 
+	 */
+	public List<TbSystemUser> getInstallationUsers();
+	
+	public List<TbSystemUser> getUsersByName(String name);
+	
+	/**
+	 * @param ip
+	 * @param creationUser
+	 * @param userId
+	 * @return true if the user password is correctly updated, otherwise false.
+	 */
+	public boolean resetPasswordClient(Long userId, String ip, Long creationUser);
+	
+	/**
+	 * 
+	 * @param clientId
+	 * @return {@link TbAccount} {@link List}
+	 */
+	public List<TbAccount> getClientAccount(Long clientId);
+	
+	public List<TbAccountType> getTypes();
+	
+	public boolean createNoteAccount(Long idClient,Long idAccount, String nota, Long typeId,  String ip, Long user);
+
+	public TbUserData getUserDataById(Long idClient);
+	
+	public List<TbBankAccount> getProductsByClient(Long idBank, Long idType, Long userId);
+	
+	public boolean accountCloseRequest (Long idAccount, String reason,Long userId, String ip);
+	
+	public List<TbAccountCloseLog> getAccountPendingClose(AccountStateType typeAccountState);
+	
+	public boolean closeAccount(Long idAccount, String reason,Long userId, String ip);
+	
+	public boolean accountReactivation(Long idAccount, String reason,Long userId, String ip);
+
+	boolean haveAccountAssociation(Long idProduct);
+
+	public String changePasswordFirst(long userId, String newPassword,Long creationUser, String ip);
+
+	public Object[] getInfAssociationProdcut(Long accountId, Long idProduct);
+
+	public boolean deleteAssociation(Long idProduct, Long acountId);
+
+	public boolean deleteUser(long userId, String ip, Long creationUser);
+
+	public List<TbSystemUser> getOnlineUsersList();
+
+	public List<TbSystemUser> getAllUsersClients();
+
+	public List<TbSystemUser> getDeleteUsersClients();
+
+	public List<TbSystemUser> getEnableUsersList();
+	
+	public String getDocumentClient(String code, long userId, String ip, long creationUser);
+	
+	public List<TbSystemUser>  getAllUsersSystem(int page, int rows);
+	
+	public TbUserStateType getState(Integer stateId);
+	
+	public List<AllInfoClient> getAllInfoClients(int page, int rows);
+	
+	public boolean createProcess(Long idClient, Long creationUser, String ip, String productNumber ,Long account, Long idBank);
+	
+	public List<TbAccount> getClientAccount2(String userCode);
+	
+	public List<Object> initRecharge(Long account, Long itemId);
+	
+	public Object[] recharge(BigDecimal umbral);
+	
+	public boolean createProcessRecharge(Long idClient, Long creationUser, String ip ,Long account,Long idProduct, Long idBank, Long res);
+	
+	public boolean createProcessRechargeClient(Long idClient, Long creationUser, String ip ,Long account, Long idProduct, Long idBank);
+	
+	public boolean getIsAccountdissociationProcess(Long accountId);
+	
+	public boolean editClientInformation(Long clientId, Long userDataId, String email, Long city, String address,
+			String phone, String optionalPhone, String ip, Long userId);
+	
+	public boolean editInformationLegalPerson(Long clientId, Long userDataId, String name, 
+			String secondName, String email, Long city,String address, 
+			String phone, String optionalPhone, String ip, Long userId);
+	
+	public boolean editClientData(Long dataId, Long city, String userPhone1,
+			String userPhone2, String userAdress, String ip, Long userId);
+	
+	public List<AllInfoClient> getInfoClientsByFilters(Long codeType, String numberDoc, String name, String secondName, 
+			String email, String accountId, String placa, int page, int rows, int type, int filtroId, String filtroDescription);
+	
+	public List<TbUserStateType> getListUserStates();
+	
+	public List<TbMunicipality> getListCity();
+
+	public List<ClientsDB> getLisClientsDB(long type);
+	
+	public void setStateSystemUser(long userId,Integer state);
+	
+	public Long[] getNumClientsDB();
+	
+	public String getContractNP(String userCodeType, String userCode, String names,
+			String lastNames, String address,String userCity,String userCountry, String userEmail);
+	
+	public String getContractLP(String userCodeType, String userCode, String names,
+			String lastNames, String address,String userCity,String userCountry, String userEmail,
+			String legalTypeCode, String legalCode,String countryConstitution);
+	
+	public Long createUserClient(String userCode, 
+			String upperCase, String upperCase2, String userPhone1,
+			String userPhone2, String upperCase3, String userCity,
+			String userEmail, String userCodeType, Long userId, String ip);
+
+	public boolean editDataClient(Long userId, Long dataId, Long city,String userAdress, 
+			String userPhone1, String userPhone2, String ip, Long creationUser);
+
+	public boolean editUserEmailUK(long userId, String userEmail);
+
+	public boolean cancelSteps(Long userId, String ip, Long creationUser);
+	
+	public boolean activateClient(Long userId, String ip, Long creationUser);
+
+	public Long getSystemMasterById(long userId);
+
+	public String getSystemUserCode(long userId);
+
+	public TbAccount getAccountById(Long accountId);
+	
+	public ValidationPassword validationPassword(String userPassword, String userCode);
+	
+	public boolean createUserRoleMaster(String userCode, String userCodeType, 
+			String userNames, String userSecondNames, String userPhone1, 
+			String userPhone2, String userAdress, String userCity, 
+			String userEmail, long roleId, String ip, long creationUser,String foreignCity,String foreignCount);
+	
+	public List<TbSystemUser> getAllActiveClientMaster();
+
+	public BigDecimal getCodeTypeId(Long userId);
+	
+	public List<TbSystemUser> getOnlyClients();
+	
+	public Long getSizePassword();
+	
+	public boolean disableDevices(long idAccount,Long userId, String ip);
+	
+	public boolean activeDevices(long idAccount,Long userId, String ip);
+	
+	public boolean intregateBalance(long idAccount,Long userId, String ip);
+	
+	public Long getUserFromFiltersCreateNote(String userCodeType, Long codeTypeUser, String userNames, String userSecondNames);
+	
+	public boolean isClient(Long idClient);
+	
+	public Long getUserFromFiltersVehicle(Long codeType,String code,String firstName,String lastName,
+			String email,String accountId);
+	
+	public Long getProductByAccount(Long accountId);
+	
+	/**
+	 * Metodo encargado de cancelar las recargas programadas
+	 * @author ablasquez
+	 * @param accountId	 * 
+	 */	
+	public void cancelAutomaticRechage(Long accountId);
+	
+	public Long getacceptanceofcontract (Long usrs);
+
+	public List<TbAccount> getClientAccountWithoutPSE(Long clientId);
+	
+	public boolean validatePseAccount(Long accountId) throws Exception;
+	
+	public String getCityNameByID(Long cityId);
+	
+	public Long createAccountCarril(Long idClient, Long creationUser, String ip);
+	
+	/**
+	 * 
+	 * @param creationUser
+	 * @param ip
+	 * @param userCodeType
+	 * @param userCode
+	 * @param names
+	 * @param lastNames
+	 * @param phone1
+	 * @param phone2
+	 * @param address
+	 * @param userCity
+	 * @param userEmail
+	 * @param userPassword
+	 * @return
+	 */
+	public String createClientCarril(Long creationUser, String ip,
+			String userCodeType, String userCode, String names,
+			String lastNames, String phone1, String phone2, String address,
+			String userCity, String userEmail, String userPassword, String dv,
+			String legalTypeId,String legalId,String foreignCity,String foreignCountry);
+	
+	public void sendMessageOutboxLane(Long userId,Long accountId,Long deviceId,Long vehicleId,Long transactionId,Long creationUser);
+	
+	public Long makeRechargeCarril(Long umbralId,Long userId,String ip,Long creatorUser);
+	
+	public boolean getPermission(Long userId, String namePerm);
+	
+	public Long getReTypeRole(Long userId);
+	
+	public Long getReTypeRoleNat(Long userId);
+	
+	public String getContractNPExisting(Long idUser,Long typePerson);
+	
+	public Long getLastAccountByUserId(Long accountId);
+	
+	public ArrayList<HistoricalRecharges> getHistoricalRechargesByAccount(Long accountId);
+	
+	public Long numRad(Long userId);
+
+	public boolean containIdentification(String rp1, Long userId);
+
+	public String logicalSequences(String rp1, int i);
+
+	public String changePasswordReset(Long userId, String newPassword, Long creationUser, String ip);
+	
+	public boolean changeRoleUser(Long userId,Long roleId);
+	
+	public boolean verificationCta(Long userId);
+	
+	public int getUserFirstLogin(Long userId);
+	
+	public boolean resetSecurityQuestions(Long userId, String ip, Long creationUser);
+	
+	public boolean roleAdmin(Long userid);
+
+	public List<AllInfoClient> getInfoClientsByFilters(int page, int rows, int filtroId, String filtroDescription);
+
+	/**
+	 * Carga todas las cuentas facilpass que no tienen recarga automática programada en estado activo del usuario con identificador indicado
+	 * @param clientId identificador del usuario
+	 * @return List<TbAccount> con las cuentas del usuario
+	 * @author TPS r.bautista
+	 */
+	public List<TbAccount> getClientAccountProgrammingAutomatic(Long clientId);
+
+}

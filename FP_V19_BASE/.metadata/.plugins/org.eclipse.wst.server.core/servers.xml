@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<servers>
+  <server auto-publish-setting="1" hostname="localhost" id="GlassFish 2.1 Java EE 5 at localhost" name="GlassFish 2.1 Java EE 5 at localhost" runtime-id="GlassFish 2.1 Java EE 5" server-type="com.sun.enterprise.jst.server.sunappsrv91" server-type-id="com.sun.enterprise.jst.server.sunappsrv91" start-timeout="240" stop-timeout="240" timestamp="31">
+    <list key="Generic_Server_Modules_List" value0="org.eclipse.jst.jee.server:bo-ear"/>
+    <map key="generic_server_instance_properties" sunappserver.adminname="admin" sunappserver.adminpassword="adminadmin" sunappserver.adminserverportnumber="4848" sunappserver.contextroot="bo-ear" sunappserver.domainpath="C:/Sun/SDK/domains/domain1" sunappserver.serveraddress="localhost" sunappserver.serverportnumber="8080"/>
+    <list key="modules" value0="bo-ear::org.eclipse.jst.jee.server:bo-ear::jst.ear::5.0"/>
+  </server>
+</servers>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>   
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />  
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />  
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" /> 
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Carga de Vehículos</title>
+<style>
+	.top {
+	    vertical-align: top;    
+	}
+	.info {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #C3C3C3; border-collapse: collapse;    
+	}
+	.info2 {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #C3C3C3; border-collapse: collapse;    
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="/jsf/content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="10"/>
+	<rich:panel styleClass="richPanel">	
+		<f:facet name="header">
+			<h:outputText value="Carga de Vehículos" styleClass="bold"/>
+		</f:facet>
+		<h:form>
+		<rich:spacer height="10"/>
+		    <h:panelGrid columns="1">  	 
+			<h:panelGroup>
+			<h:outputText value="Está opción le permite crear sus vehículos por medio de un archivo, los formatos de archivos permitidos son Excel, " 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	        <h:outputText value="CSV y TXT." 
+            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	        </h:panelGroup>
+            <rich:spacer/>
+            <h:panelGroup>
+			<h:outputText value="Si desea subir los vehículos por medio de un Excel descargue la plantilla, para subir archivos en CSV y TXT " 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	        <h:outputText value="descargue el PDF en el cual encontrará un paso a paso para elaborar estos documentos." 
+            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	        </h:panelGroup>
+			<rich:spacer/>
+		</h:panelGrid>
+		<a4j:outputPanel>
+				<h:panelGrid style="vertical-align: middle; margin: auto;" columns="2">
+					<h:panelGroup>
+						<div align="right">
+							<h:commandLink value="" 
+								action="#{massiveVehicleLoadClientBean.loadTemplateLink}">
+								<img title="Imprimir" src="/web.bo.peajes.com/img/generar_xls_btn.gif" alt="Imprimir"
+								style="cursor: pointer; border: 0px solid blue;" />
+			           		</h:commandLink>
+						</div>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:commandLink value="" 
+							action="#{massiveVehicleLoadClientBean.loadInstructiveLink}">
+							<img title="Imprimir" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+							style="cursor: pointer; border: 0px solid blue;" />
+		           		</h:commandLink>
+					</h:panelGroup>
+					
+				</h:panelGrid>					
+			</a4j:outputPanel>
+
+		<a4j:outputPanel id="panelData" layout="inline">  
+		<rich:panel id="pd" rendered="#{massiveVehicleLoadClientBean.showData}"> 		
+		<h:panelGrid columns="1" columnClasses="top,top">	
+			<rich:fileUpload id="upload" addControlLabel="Subir Archivo" fileUploadListener="#{massiveVehicleLoadClientBean.loadDocument}"  
+	              maxFilesQuantity="1" ontyperejected="javascript:Richfaces.showModalPanel('panelextension');"
+				  doneLabel="Documento Cargado Correctamente"         
+	              immediateUpload="#{massiveVehicleLoadClientBean.autoUpload}" listWidth="100%" listHeight="70px"
+	              acceptedTypes="XLS,xls,XLSX,xlsx,CSV,csv,TXT,txt" allowFlash="#{massiveVehicleLoadClientBean.useFlash}">
+				<a4j:support event="onuploadcomplete" reRender="info,upload,panelm,panel3">	
+				</a4j:support>
+	        </rich:fileUpload>
+			</h:panelGrid>
+			<rich:spacer height="20"/>    
+			</rich:panel>		
+		</a4j:outputPanel>		
+		<rich:spacer height="5"/>
+        <a4j:outputPanel id="panelError">
+				<rich:panel id="rich1" rendered="#{massiveVehicleLoadClientBean.showErrorFile}">
+					<h:panelGrid style="vertical-align: middle; margin: auto;" columns="2">
+						<h:outputText value="Log de Errores Carga de Vehículos" styleClass="normal" style="color: #008040; font-size: 18px"/>
+						<h:commandLink id="clinkpdf" target="_blank" value="" 
+							action="#{massiveVehicleLoadClientBean.printPdf}">
+							<img title="Imprimir" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+							style="cursor: pointer; border: 0px solid blue;" />
+                            <f:setPropertyActionListener target="#{massiveVehicleLoadClientBean.exportOption}" value="PDF"/>
+		           		</h:commandLink>
+					</h:panelGrid>					
+				</rich:panel>
+			</a4j:outputPanel>
+		
+	</h:form>	
+	</rich:panel>
+	<rich:spacer height="20"/>
+	<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{massiveVehicleLoadClientBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Carga de Vehículos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">   
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{massiveVehicleLoadClientBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{massiveVehicleLoadClientBean.message}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{massiveVehicleLoadClientBean.hideModal}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>       
+	    </h:form>
+		<br />  
+	</rich:modalPanel>   
+	
+	
+	<rich:modalPanel id="panelextension" width="350" height="115" showWhenRendered="#{massiveVehicleLoadClientBean.showMessage4}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Carga de Vehículos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">        
+			<h:panelGroup>    
+				<a4j:form>
+					<h:commandButton action="#{massiveVehicleLoadClientBean.hideModal4}" image="/img/close.png" /> 
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="Sólo archivos con extensión xls, xlsx, txt o csv son aceptados!!!" styleClass="normal"/> 
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{massiveVehicleLoadClientBean.hideModal4}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+     <rich:modalPanel id="panel2" width="350" height="115"  showWhenRendered="#{massiveVehicleLoadClientBean.showMessage2}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Carga de Vehículos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{massiveVehicleLoadClientBean.hideModal2}" image="/img/close.png" >
+                    </h:commandButton>
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="#{massiveVehicleLoadClientBean.message2}" styleClass="normal"/>
+        <rich:spacer height="10"/>
+        <h:form>
+        <h:panelGrid columns="2" style="width: 100px; margin: auto; padding:5px; ">
+		    <h:commandButton value="Aceptar" action="#{massiveVehicleLoadClientBean.hideModal2}"/>
+        </h:panelGrid>
+        </h:form>
+        <br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panel3" width="350" height="115" showWhenRendered="#{massiveVehicleLoadClientBean.showMessage3}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Carga de Vehículos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">   
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{massiveVehicleLoadClientBean.hideModal4}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{massiveVehicleLoadClientBean.message}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<a4j:form id="form1">
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:panelGroup>
+			     	 <a4j:region id="editando">	     	  
+			     		<a4j:commandButton id="acept" value="Aceptar" action="#{massiveVehicleLoadClientBean.saveVehicles}"
+			     		 oncomplete="#{rich:component('wait')}.hide()">
+			     		   <a4j:support event="onclick"  
+			                  onsubmit="document.getElementById('form1:acept').disabled=true;document.getElementById('form1:cancel').disabled=true" />
+			                  <a4j:support event="oncomplete" reRender="panelm" 
+			                  oncomplete="document.getElementById('form1:acept').disabled=false;document.getElementById('form1:cancel').disabled=false"/>
+			     		</a4j:commandButton>
+			     		<a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+						</a4j:status>
+			     	 </a4j:region>	
+	     		</h:panelGroup>
+	     		<rich:spacer width="10" />
+	     		<h:commandButton id="cancel" value="Cancelar" action="#{massiveVehicleLoadClientBean.cancelLoad}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>       
+	    </a4j:form>
+		<br />  
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Transacción en proceso..."  style="font-size:12px;"/>
+	</rich:modalPanel>    
+	
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

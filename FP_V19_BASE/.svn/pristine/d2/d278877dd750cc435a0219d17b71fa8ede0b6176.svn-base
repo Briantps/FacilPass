@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head/>
+<body>
+<f:view>
+<div>		
+	<rich:panel style="width: 500px;">
+		<f:facet name="header">
+			<h:outputText value="Registrar Traslado" styleClass="bold"/>
+		</f:facet>
+		<a4j:form>
+			<rich:spacer height="5"/>
+			<rich:messages style="color: red;" styleClass="bold"/>
+			<a4j:outputPanel id="tf">
+				<rich:panel>
+					<h:panelGrid style="width: 400px; margin: auto; padding:10px; " 
+						styleClass="tableBO" columns="2" >
+						<h:outputText value="Valor:" styleClass="bold"/>
+						<h:inputText value="#{purchaseBean.consigValueT}" maxlength="10" style="width: 150px;"
+								required="true" requiredMessage="El Valor es Requerido."
+								onkeypress="return numOnly(event)" validatorMessage="El Valor debe ser mayor que $100.">
+							<f:validateLongRange minimum="100"/>
+						</h:inputText>
+						<h:outputText />
+						<h:commandButton styleClass="normal" value="Guardar" action="#{purchaseBean.initConfirmT}"/>
+					</h:panelGrid>
+					<rich:spacer height="10"/>
+				</rich:panel>
+			</a4j:outputPanel>
+		</a4j:form>
+	</rich:panel>
+</div>
+</f:view>
+</body>
+</html>

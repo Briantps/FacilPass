@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta http-equiv ="Cache-Control" content ="no-cache"/>
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administracion de Mensajes de Correo Electrónico</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />				
+					<rich:spacer height="5"/>	
+					
+				  	<rich:panel id="pnlepp" style="width:600 px;margin:auto;">
+					    <f:facet name="header">
+					    	<h:outputText value="Administración de Mensajes de Correo Electrónico" styleClass="bold"/>
+					    </f:facet>
+				    	<a4j:form>
+				     		<h:panelGrid columns="1" style="width: 600px">
+				      			<h:panelGrid columns="3" style="width: 600px">
+				      				<h:panelGroup>
+				           				<h:outputText value="Seleccione Proceso: "  styleClass="bold"/>
+					       				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				         			</h:panelGroup>
+				       	 			<h:selectOneMenu value="#{emailAdmin.processId}" 
+										style="width: 350px;" styleClass="normal">
+										<f:selectItems value="#{emailAdmin.lstProcess}"/>
+										<a4j:support event="onchange" action="#{emailAdmin.searchMessages}" reRender="lista,modifyMsg"/>		
+									</h:selectOneMenu>
+				   				</h:panelGrid>
+				   				<rich:dataTable value="#{emailAdmin.lstEmailType}" var="item" id="lista" rows="11" width="800px" >
+				    				<rich:column>
+				     					<f:facet name="header">
+				     						<h:outputText value="Asunto" styleClass="bold"/>
+				     					</f:facet>
+										<h:outputText value="#{item.emailTypeSubject}" styleClass="normal"/>
+				     				</rich:column>
+				     				<rich:column>
+				     					<f:facet name="header">
+				     						<h:outputText value="Mensaje para" styleClass="bold"/>
+				     					</f:facet>
+										<h:outputText value="#{item.tbReference.optActDescription}" styleClass="normal"/>
+				     				</rich:column>
+				     				<rich:column>
+				      					<f:facet name="header">
+				      						<h:outputText value="Ver Mensaje" styleClass="bold"/>
+				      					</f:facet>
+										<h:commandLink value="Ver / Modificar" action="#{emailAdmin.showMessagepanel}" styleClass="normal2" rendered="#{item.emailStatus == 0}">
+											<f:setPropertyActionListener target="#{emailAdmin.emailTypeId}" value="#{item.emailTypeId}"/>
+										</h:commandLink>
+				     				</rich:column>
+				     				<rich:column>
+				      					<f:facet name="header">
+				      						<h:outputText value="Activar/Inactivar Mensaje" styleClass="bold"/>
+				      					</f:facet>
+										<h:commandLink value="Inactivar" action="#{emailAdmin.showMsgdelete}" styleClass="normal2" rendered="#{item.emailStatus == 0}">
+											<f:setPropertyActionListener target="#{emailAdmin.emailTypeId}" value="#{item.emailTypeId}"/>
+										</h:commandLink>
+										
+										<h:commandLink value="Activar" action="#{emailAdmin.showMsgactive}" styleClass="normal2" rendered="#{item.emailStatus == 1}">
+											<f:setPropertyActionListener target="#{emailAdmin.emailTypeId}" value="#{item.emailTypeId}"/>
+										</h:commandLink>
+				     				</rich:column>
+				    			</rich:dataTable>
+				   			</h:panelGrid> 
+				  		</a4j:form>   
+					</rich:panel>
+
+					<rich:panel id="modifyMsg" rendered="#{emailAdmin.showPanelEdit}">
+				  			<f:facet name="header">
+				  				<h:outputText value="Ver o Modificar Mensaje de Correo Electrónico" styleClass="bold"/>
+				  			</f:facet>
+				  			
+				  			<h:form>
+				   				<rich:spacer height="5"/>
+				    			<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+				    				<h:outputText value="Proceso: #{emailAdmin.processName}"  styleClass="bold"/>
+				  					<rich:spacer height="5"/>
+				  					<h:panelGrid columns="1" style="width: 600px">
+				  						<h:panelGrid columns="2" style="width: 600px">
+				   							<h:panelGroup>
+				 								<h:outputText value="Asunto: "  styleClass="bold"/>
+				 								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											</h:panelGroup> 
+											<h:inputText value="#{emailAdmin.subject}" styleClass="normal" maxlength="190" style="width:250px;" onkeypress="return noEspecialobjection(event)"/>	
+											<h:panelGroup rendered="#{emailAdmin.showEmailAddressList}">
+				 								<h:outputText value="Tipo de Destinatario: "  styleClass="bold"/>
+				 								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											</h:panelGroup> 
+											<h:outputText rendered="#{emailAdmin.showEmailAddressList}" value="#{emailAdmin.destinationType}"  styleClass="normal"/>												
+											
+											<h:panelGroup rendered="#{emailAdmin.showEmailAddressList}">
+				 								<h:outputText value="Lista de Destinatarios: "  styleClass="bold"/>
+				 								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											</h:panelGroup> 
+											<h:inputText rendered="#{emailAdmin.showEmailAddressList}" value="#{emailAdmin.emailAddressList}" 
+											styleClass="normal" maxlength="190" style="width:250px;" onkeypress="return onlyEmail(event)" />      
+				  						</h:panelGrid>
+				  						<h:panelGroup>
+				 							<h:outputText value="Plantilla de Mensaje"  styleClass="bold"/>	 
+				 							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup> 
+										<h:panelGrid columns="3" style="width: 600px">
+				 							<h:outputText value="Insertar Parámetro: "  styleClass="bold" style="width:150px;" />
+				 							<h:selectOneMenu value="#{emailAdmin.idParameter}" 
+												style="width: 250px;" styleClass="normal">
+												<f:selectItems value="#{emailAdmin.lstParameters}"/>		
+											</h:selectOneMenu>
+											<h:commandButton value="Adicionar" action="#{emailAdmin.addParameter}" >
+												<a4j:support event="oncomplete" reRender="mensaje" oncomplete="#{rich:component('mensaje')}.focus()"/>
+											</h:commandButton>
+				 						</h:panelGrid>
+				 						<h:inputTextarea id="mensaje" value="#{emailAdmin.message}" cols="60" rows="10" style="width: 600px; resize: none;"
+				 						onkeypress="return noEspecialobjection(event)" onkeyup="return checkMaxLength(event, this, 2000);" >
+											
+				  						</h:inputTextarea>
+				  						<h:panelGrid columns="5" style="width: 600px">
+				     						<h:commandLink value="Ver Ejemplo de Mensaje" action="#{emailAdmin.preview}" style="font-size: 14px">
+											</h:commandLink>
+											<rich:spacer height="5" />
+				 							<rich:spacer height="5" />
+											<h:commandButton value="Guardar" action="#{emailAdmin.msgsave}" >
+											</h:commandButton>
+											<h:commandButton value="Cancelar" action="#{emailAdmin.cancel}" >
+				     						</h:commandButton>
+				    					</h:panelGrid> 
+				   					</h:panelGrid>
+				    			</h:panelGrid>
+				  			</h:form>				
+						<rich:spacer height="5"/>	
+				  		<rich:panel id="pnlprev" rendered="#{emailAdmin.showPreview}">
+							<f:facet name="header">
+				 				<h:panelGroup>
+				 					<h:outputText value="Vista Previa de Mensaje" styleClass="bold"/>
+				 				</h:panelGroup>
+							</f:facet>	
+							<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto;">		    				
+		  					<h:panelGrid columns="1" style="width: 600px">
+								<h:inputTextarea id="mensaje" value="#{emailAdmin.msgExample}" cols="60" rows="10" style="width: 600px; resize: none;" readonly="true">
+							  		<f:validateLength maximum="4000" />
+							 	</h:inputTextarea>
+							</h:panelGrid>
+							</h:panelGrid>
+							<br />
+					  	</rich:panel> 
+					</rich:panel>	
+							
+					<rich:modalPanel id="confirm" width="385" height="115" showWhenRendered="#{emailAdmin.showModalConfirm}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Modificación de Mensajes de Correo Electrónico" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{emailAdmin.cancel}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{emailAdmin.modalmsgConfirm}" styleClass="normal"/>
+						<br />
+						<br />
+						<h:form>
+							<div align="center">
+				  				<h:commandButton value="Aceptar" action="#{emailAdmin.save}" />
+								<rich:spacer width="15"/>
+								<h:commandButton value="Cancelar" action="#{emailAdmin.cancel}" />
+							</div>  
+						</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="confirmDel" width="385" height="115" showWhenRendered="#{emailAdmin.showModalConfirmDel}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Inactivación de Mensajes de Correo Electrónico" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{emailAdmin.cancel}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{emailAdmin.modalmsgConfirm}" styleClass="normal"/>
+						<br />
+						<br />
+						<h:form>
+							<div align="center">
+				  				<h:commandButton value="Aceptar" action="#{emailAdmin.delete}" />
+								<rich:spacer width="15"/>
+								<h:commandButton value="Cancelar" action="#{emailAdmin.cancel}" />
+							</div>  
+						</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="confirmAct" width="385" height="115" showWhenRendered="#{emailAdmin.showModalConfirmAct}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Activación de Mensajes de Correo Electrónico" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{emailAdmin.cancel}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{emailAdmin.modalmsgConfirm}" styleClass="normal"/>
+						<br />
+						<br />
+						<h:form>
+							<div align="center">
+				  				<h:commandButton value="Aceptar" action="#{emailAdmin.active}" />
+								<rich:spacer width="15"/>
+								<h:commandButton value="Cancelar" action="#{emailAdmin.cancel}" />
+							</div>  
+						</h:form>
+					</rich:modalPanel>
+							
+					<rich:modalPanel id="msgemer" width="385" height="115" showWhenRendered="#{emailAdmin.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{emailAdmin.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{emailAdmin.modalmsg}" styleClass="normal"/>
+						<br />
+						<br />						
+						<h:form>
+							<div align="center">
+				  				<h:commandButton value="Aceptar" action="#{emailAdmin.hideModal}" />
+							</div>  
+						</h:form>
+					</rich:modalPanel>
+					
+				</div>
+                <f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			 </f:view>
+		</div>   
+	</body>
+</html>

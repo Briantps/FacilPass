@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Consulta Datos Erróneos</title>
+<style type="text/css">
+	#scroll_horizontal {
+		width: 100%;
+		overflow: auto;
+		clear:both;
+		text-align: center;
+		margin :auto;
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:loadBundle basename="staticText.messages" var="msg" />
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5"><ui:include src="../menu/sideMenu.jsp"/></div>
+<div class="bkContents span-18 prepend-1">
+	
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;"/>
+	<h:form>
+		<rich:panel styleClass="richPanel" >
+			<f:facet name="header">
+				<h:outputText value="Consulta Datos Erróneos" styleClass="bold"/>
+			</f:facet>
+			<a4j:outputPanel id="opanel">
+				<rich:spacer height="5"/>
+				<h:outputText value="No Hay Datos Para Corregir." styleClass="bold" style="color: red;"
+					rendered="#{fixMaster.showMessage}"/>
+				<rich:panel style="background-color: #FBFBFB" rendered="#{fixMaster.showData}">
+				<div id="scroll_horizontal">
+					<rich:extendedDataTable id="datalist" value="#{fixMaster.cusList}" 
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+						onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+						var="list" rows="10" rowClasses="white,white"
+						height="150px" width="1800px" enableContextMenu="false">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Editar"/>
+							</f:facet>
+							<h:commandLink value="Editar" action="#{fixMaster.initEdit}" styleClass="bold">
+								<f:setPropertyActionListener value="#{list.deviceCustomizationId}" 
+									target="#{fixMaster.cusId}"/>
+								<a4j:support event="oncomplete" reRender="editArea,pdep"/>
+							</h:commandLink>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Tipo"/>
+							</f:facet>
+							<h:outputText value="#{list.tbOperationType.operationTypeName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Placa"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.vehiclePlate}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Chasis"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.vehicleChassis}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Cód Interno"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.vehicleInternalCode}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Tip. Vehículo"/>
+							</f:facet>
+							<h:outputText value="#{list.tbSpecialExemptType.tbDeviceType.deviceTypeName} - #{list.tbSpecialExemptType.specialExemptTypeName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="No. Rad"/>
+							</f:facet>
+							<h:outputText value="#{list.filingNumber}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Cliente"/>
+							</f:facet>
+							<h:outputText value="#{list.tbAccount.tbSystemUser.userNames}" styleClass="normal"
+								rendered="#{list.tbAccount.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+							<h:outputText value="#{list.tbAccount.tbSystemUser.userNames} #{list.tbAccount.tbSystemUser.userSecondNames}" styleClass="normal"
+								rendered="#{list.tbAccount.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Cat Concesión"/>
+							</f:facet>
+							<h:outputText value="#{list.categoryConcession}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Cat Invias"/>
+							</f:facet>
+							<h:outputText value="#{list.categoryInvias}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Regional"/>
+							</f:facet>
+							<h:outputText value="#{list.tbDepartment.departmentName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Color"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.tbColor.colorName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Marca"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.tbBrand.brandName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Oficio"/>
+							</f:facet>
+							<h:outputText value="#{list.officialDocumentNumber}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Fecha de Oficio"/>
+							</f:facet>
+							<h:outputText value="#{list.officialDocuemntDate}" converter="TimeStampToStringDateConverter"
+								styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Estado"/>
+							</f:facet>
+							<h:outputText value="#{list.tbDeviceCustomizationState.customizationStateName}" styleClass="normal"/>
+						</rich:column>
+						<f:facet name="footer">
+							<rich:datascroller/>
+						</f:facet>
+					</rich:extendedDataTable>
+				</div>
+				</rich:panel>
+			</a4j:outputPanel>
+			
+			<rich:spacer height="10"/>
+			<a4j:outputPanel id="editArea">
+				<rich:panel rendered="#{fixMaster.showEditArea}" style="background-color: #FBFBFB">
+				
+					<fieldset style="background-color: white;">
+						<legend>Vehículo</legend>
+						<h:panelGrid columns="2">
+							<a4j:outputPanel id="lcnv">
+								<h:commandLink value="Crear Vehículo" action="#{fixMaster.initCreateVehicle}" 
+									styleClass="bold">
+									<a4j:support event="oncomplete" reRender="svehi,panelradc,clientallpanel"/>
+								</h:commandLink>
+							</a4j:outputPanel>
+							<h:commandLink value="Buscar Vehículo" action="#{fixMaster.initSearchVehicle}" styleClass="bold">
+								<a4j:support event="oncomplete" reRender="svehi,clientallpanel"/>
+							</h:commandLink>
+						</h:panelGrid>
+					</fieldset>	
+					
+					<!-- Data Vehicle -->
+					
+					<a4j:outputPanel id="svehi" >
+						<rich:panel rendered="#{fixMaster.showVehicle}">
+							<fieldset style="background-color: white;">
+								<legend>Datos Vehículo</legend>
+								<h:panelGrid columns="6">
+									<h:outputText value="Placa: " styleClass="bold"/>
+									<h:outputText value="#{fixMaster.vehicleObject.vehiclePlate}" styleClass="normal"/>
+									<h:outputText value="Núm Chasis: " styleClass="bold"/>
+									<h:outputText value="#{fixMaster.vehicleObject.vehicleChassis}" styleClass="normal"/>
+									<h:outputText value="Cód Interno: " styleClass="bold"/>
+									<h:outputText value="#{fixMaster.vehicleObject.vehicleInternalCode}" styleClass="normal"/>
+									<h:outputText value="Color: " styleClass="bold"/>
+									<h:outputText value="#{fixMaster.vehicleObject.tbColor.colorName}" styleClass="normal"/>
+									<h:outputText value="Marca: " styleClass="bold"/>
+									<h:outputText value="#{fixMaster.vehicleObject.tbBrand.brandName}" styleClass="normal"/>
+									<h:outputText value="Categoría: " styleClass="bold"/>
+									<h:outputText value="#{fixMaster.vehicleObject.tbCategory.categoryName}" styleClass="normal"/>
+								</h:panelGrid>
+							</fieldset>	
+						</rich:panel>
+						
+						<rich:spacer height="10"/>
+						
+						<rich:panel style="background-color: #FBFBFB" rendered="#{fixMaster.showVehicle}">
+							
+							<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+								styleClass="tableBO"  columns="4" >
+								<h:outputText value="Núm. Radicación:" styleClass="bold"/>
+								<h:inputText value="#{fixMaster.filingNumber}" maxlength="20"/>
+								<h:outputText value="Fecha Radicado:" styleClass="bold"/>	
+								<rich:calendar id="beg_date" value="#{fixMaster.filingDate}"                 		
+							    	cellWidth="26px" cellHeight="22px" style="width:150px" 
+							        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+							    </rich:calendar>
+							    <h:outputText value=""/>
+							    <h:outputText value=""/>		
+							    <h:outputText value="Fecha Recibido COR:" styleClass="bold"/>	
+							    <rich:calendar id="cor_date" value="#{fixMaster.corReceivedDate}"                 		
+							    	cellWidth="26px" cellHeight="22px" style="width:150px" 
+							        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+							    </rich:calendar>				
+							</h:panelGrid>
+							
+							<fieldset style="background-color: white;">
+								<legend>Tipo Personalización</legend>
+								<h:panelGrid columns="2">
+									<h:selectOneRadio value="#{fixMaster.idType}" styleClass="bold">
+										<f:selectItems value="#{fixMaster.typeList}"/>
+										<a4j:support ajaxSingle="true" event="onchange" 
+											reRender="eetype,pdep,stationp,pdtable,regionp,clientallpanel"/>
+									</h:selectOneRadio>
+									<a4j:outputPanel id="eetype">
+										<h:selectOneMenu value="#{fixMaster.especialExemptId}" style="width: 180px">
+											<f:selectItems value="#{fixMaster.especialExemptList}"/>
+											<a4j:support ajaxSingle="true" event="onchange" reRender="pdep"/>
+										</h:selectOneMenu>
+									</a4j:outputPanel>
+									<a4j:outputPanel id="pdep">
+										<h:panelGrid columns="2">
+											<h:outputText value="Dependecia :" styleClass="bold" rendered="#{fixMaster.exempt}"/>
+											<h:selectOneMenu value="#{fixMaster.exemptOfficeId}" style="width: 220px" rendered="#{fixMaster.exempt}">
+												<f:selectItems value="#{fixMaster.exemptOfficeList}"/>
+											</h:selectOneMenu>
+										</h:panelGrid>
+									</a4j:outputPanel>
+								</h:panelGrid>
+							</fieldset>	
+						</rich:panel>
+					</a4j:outputPanel>
+					
+					<rich:spacer height="10"/>
+					
+					<a4j:outputPanel id="clientallpanel" >
+						<rich:panel rendered="#{fixMaster.idType!=null}">
+							<fieldset style="background-color: white;">
+								<legend>Cliente</legend>
+								<h:panelGrid columns="2">
+									<h:outputText value="Seleccione el Cliente" styleClass="bold"/>
+									<h:selectOneMenu id="sidcli" value="#{fixMaster.idClientAccount}" style="width: 300px;" styleClass="normal">
+										<f:selectItems value="#{fixMaster.clientNames}"/>
+										<a4j:support ajaxSingle="true" event="onchange" action="#{fixMaster.changeClient}" reRender="dataClient"/>
+									</h:selectOneMenu>
+								</h:panelGrid>
+								<a4j:outputPanel id="dataClient">
+									<h:panelGrid columns="4" rendered="#{fixMaster.showClient}">
+										<h:outputText value="Cliente:" styleClass="bold"></h:outputText>
+					                    <h:panelGroup>
+					                    	<h:outputText value="#{fixMaster.client.userNames} #{fixMaster.client.userSecondNames}" styleClass="normal" 
+					                    			rendered="#{fixMaster.client.tbCodeType.codeTypeId!=3}"/>
+					                    	<h:outputText value="#{fixMaster.client.userNames}" styleClass="normal" 
+					                    			rendered="#{fixMaster.client.tbCodeType.codeTypeId==3}"/>
+					                    </h:panelGroup>
+					                    <h:outputText value="#{msg.NumDoc}:" styleClass="bold"></h:outputText>
+					                    <h:outputText value="#{fixMaster.client.userCode} - #{fixMaster.client.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+									</h:panelGrid>
+								</a4j:outputPanel>
+							</fieldset>	
+							
+							<fieldset style="background-color: white;">
+								<legend>Categoría</legend>
+								<h:panelGrid columns="2">
+									<h:outputText value="Seleccione la Categoría" styleClass="bold"/>
+									<h:selectOneMenu id="cse" value="#{fixMaster.idCategory}" style="width: 300px;" styleClass="normal">
+										<f:selectItems value="#{fixMaster.categories}"/>
+									</h:selectOneMenu>
+								</h:panelGrid>
+							</fieldset>	
+							
+							<fieldset style="background-color: white;">
+								<legend>Regional</legend>
+								<h:panelGrid columns="4">
+									<a4j:outputPanel id="regionp">
+										<h:panelGrid columns="2" rendered="#{fixMaster.exempt}">
+											<h:outputText value="Regional" styleClass="bold"/>
+											<h:selectOneMenu id="dpsel" value="#{fixMaster.departmentId}" style="width: 150px;" styleClass="normal">
+												<f:selectItems value="#{fixMaster.departments}"/>
+											</h:selectOneMenu>
+										</h:panelGrid>
+									</a4j:outputPanel>
+									<a4j:outputPanel id="stationp">
+										<h:panelGrid columns="2" rendered="#{fixMaster.special}">
+											<h:outputText/>
+											<h:commandLink value="Agregar Peaje" styleClass="bold" action="#{fixMaster.initAddStation}">
+											</h:commandLink>
+										</h:panelGrid>
+									</a4j:outputPanel>
+									<a4j:outputPanel id="pdtable">
+										<h:panelGrid rendered="#{fixMaster.special}"> 
+											<rich:dataTable id="datalists" value="#{fixMaster.stationList}" 
+												onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+												onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+												var="list" rows="10" width="650px" rowClasses="white,white"
+												rendered="#{fixMaster.showStations}">
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText styleClass="bold" value="Regional"/>
+													</f:facet>
+													<h:outputText value="#{list.tbDepartment.departmentName}" styleClass="normal"/>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText styleClass="bold" value="Peaje"/>
+													</f:facet>
+													<h:outputText value="#{list.stationBOName}" styleClass="normal"/>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText styleClass="bold" value=""/>
+													</f:facet>
+													<h:commandLink value="Quitar" action="#{fixMaster.removeStation}" styleClass="bold">
+														<f:setPropertyActionListener value="#{list.stationBOId}" target="#{fixMaster.idStationToDelete}"/>
+														<a4j:support event="oncomplete" reRender="pdtable"/>
+													</h:commandLink>
+												</rich:column>
+												<f:facet name="footer">
+													<rich:datascroller/>
+												</f:facet>
+										</rich:dataTable>
+										</h:panelGrid>
+									</a4j:outputPanel>
+								</h:panelGrid>
+							</fieldset>	
+							<rich:spacer height="5"/>
+							
+							<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+								styleClass="tableBO"  columns="6" >
+								<h:outputText value="Núm Oficio:" styleClass="bold"/>
+								<h:inputText value="#{fixMaster.officialDocumentNumber}" maxlength="20" style="width: 115px"/>
+								<h:outputText value="Fecha Oficio:" styleClass="bold"/>	
+								<rich:calendar id="offddate" value="#{fixMaster.officialDocuementDate}"                 		
+							    	cellWidth="26px" cellHeight="22px" style="width: 113px" 
+							        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+							    </rich:calendar>
+							    <h:outputText value="Pago:" styleClass="bold"/>
+							    <h:selectOneMenu value="#{fixMaster.payOption}" styleClass="normal" style="width: 53px">
+							    	<f:selectItems value="#{fixMaster.payOptions}"/>
+							    	<a4j:support event="onchange" reRender="psurplus"/>
+							    </h:selectOneMenu>
+							</h:panelGrid>
+							<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+								styleClass="tableBO"  columns="3" >
+								<a4j:outputPanel id="typedp">
+									<h:panelGroup style="width: 150px">
+										<h:outputText value="Digitado   :" styleClass="bold"/>
+										<h:outputText value=" " styleClass="bold"/>
+										 <h:selectOneMenu value="#{fixMaster.typedOption}" styleClass="normal">
+									    	<f:selectItems value="#{fixMaster.typedOptions}"/>
+									    </h:selectOneMenu>	
+									</h:panelGroup>
+								</a4j:outputPanel>
+							    <a4j:outputPanel id="psurplus" style="width: 350px">
+							    	<h:panelGrid columns="2" rendered="#{fixMaster.surplus}">
+								    	<h:outputText value="Valor Excedente:" styleClass="bold"/>	
+									    <h:inputText value="#{fixMaster.surplusValue}" maxlength="15"
+									    	onkeypress="return numOnly(event)" converterMessage="Debe digitar un número válido.">
+											<f:convertNumber integerOnly="true"/>
+										</h:inputText>	
+									</h:panelGrid>
+							    </a4j:outputPanel>
+							</h:panelGrid>
+							<h:panelGrid columns="2">
+								<h:outputText value="Observaciones: " styleClass="bold"/>
+								<h:inputTextarea styleClass="normal" value="#{fixMaster.observation}"
+									onkeyup="this.value = this.value.substring(0, 3500);" style="height: 73px; width: 460px"/>
+								<h:outputText value=""/>
+								<h:commandButton value="Guardar" action="#{fixMaster.initSave}">
+								</h:commandButton>
+							</h:panelGrid>
+							
+						</rich:panel>
+					</a4j:outputPanel>
+				
+				</rich:panel>
+			</a4j:outputPanel>
+			
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>
+	
+	
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{fixMaster.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Corrección Malas Digitaciones" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fixMaster.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fixMaster.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="addStation" autosized="true" width="450" 
+		showWhenRendered="#{fixMaster.showAddStation}">
+		<f:facet name="header">
+			<h:outputText value="Peaje Adicional" styleClass="bold"/>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fixMaster.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<rich:messages style="color:red;" styleClass="bold"/>
+			<h:panelGrid columns="4">
+					<h:outputText value="Regional" styleClass="bold"/>
+					<h:selectOneMenu id="dpselta" value="#{fixMaster.departmentIdA}" style="width: 150px;" styleClass="normal">
+						<f:selectItems value="#{fixMaster.departmentsA}"/>
+						<a4j:support event="onchange" reRender="stasela"/>
+					</h:selectOneMenu>
+					<h:outputText value="Peaje" styleClass="bold"/>
+					<h:selectOneMenu id="stasela" value="#{fixMaster.stationIdA}" style="width: 150px;" styleClass="normal">
+						<f:selectItems value="#{fixMaster.stationsA}"/>
+					</h:selectOneMenu>
+					<h:outputText/>
+					<h:commandButton value="Adicionar" action="#{fixMaster.addStation}" >
+						<a4j:support ajaxSingle="true" event="oncomplete" reRender="pdtable"/>
+					</h:commandButton>
+			</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacionSave" width="350" height="150" showWhenRendered="#{fixMaster.confirmationSaveShow}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fixMaster.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fixMaster.confirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{fixMaster.save}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{fixMaster.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="searchPanel" autosized="true" width="450" 
+		showWhenRendered="#{fixMaster.showSearchVehicle}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:outputText value="Buscar Vehículo" styleClass="bold"/>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fixMaster.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<rich:messages style="color:red;" styleClass="bold"/>
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" columnClasses="paddingCol">
+					<h:outputText value="Digite la Placa: " styleClass="bold" />
+					<h:inputText value="#{fixMaster.vehiclePlate}" maxlength="6" required="true"
+						requiredMessage="Digite la Placa.">
+						<f:validator validatorId="plate"/>
+					</h:inputText>
+					<h:outputText/>
+					<h:commandButton value="Buscar" action="#{fixMaster.searchVehicle}" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacionC" width="350" height="150" showWhenRendered="#{fixMaster.confirmationChangeShow}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fixMaster.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fixMaster.confirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{fixMaster.changeVehicle}">
+	     			<a4j:support event="oncomplete" reRender="svehi"/>
+	     		</h:commandButton>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{fixMaster.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="confirmacionA" width="350" height="150" showWhenRendered="#{fixMaster.confirmationShow}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fixMaster.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fixMaster.confirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{fixMaster.createVehicle}">
+	     			<a4j:support event="oncomplete" reRender="svehi"/>
+	     		</h:commandButton>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{fixMaster.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="addPanel" autosized="true" width="450" 
+		showWhenRendered="#{fixMaster.showAddVehicle}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:outputText value="Agregar vehiculo" styleClass="bold"/>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fixMaster.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<rich:messages style="color:red;" styleClass="bold"/>
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" columnClasses="paddingCol">
+					<h:outputText value="Placa: " styleClass="bold" />
+					<h:inputText value="#{fixMaster.vehiclePlate}" maxlength="6" required="true"
+						requiredMessage="La Placa Es Requerida.">
+						<f:validator validatorId="plate"/>
+					</h:inputText>
+                       	
+					<h:outputText value="Chasis: " styleClass="bold" />
+					<h:inputText value="#{fixMaster.vehicleChassis}" maxlength="20">
+						<f:validator validatorId="blank"/>
+					</h:inputText>
+					
+					<h:outputText value="Cód. Interno: " styleClass="bold" />
+					<h:inputText value="#{fixMaster.vehicleInternalCode}" maxlength="10">
+						<f:validator validatorId="blank"/>
+					</h:inputText>
+					
+					<h:outputText value="Color: " styleClass="bold" />
+					<h:selectOneMenu styleClass="normal" value="#{fixMaster.colorId}" style="width: 157px">
+						<f:selectItems value="#{fixMaster.colorsList}" />
+					</h:selectOneMenu>
+					
+					<h:outputText value="Marca: " styleClass="bold" />
+					<h:selectOneMenu styleClass="normal" value="#{fixMaster.brandId}" style="width: 157px">
+						<f:selectItems value="#{fixMaster.brandList}"/>
+					</h:selectOneMenu>
+					<h:outputText value="Categoría: " styleClass="bold" />
+					<h:selectOneMenu value="#{fixMaster.categoryId}" style="width: 157px">
+						<f:selectItems value="#{fixMaster.categoryList}"/>
+					</h:selectOneMenu>
+					<h:outputText/>
+					<h:commandButton value="Guardar" action="#{fixMaster.initConfirm}" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

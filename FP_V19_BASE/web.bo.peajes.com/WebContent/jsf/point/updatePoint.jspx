@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<div>
+	<rich:messages style="color:red;" styleClass="bold"/>		
+	<h:form id="Formulario">
+		<f:loadBundle basename="staticText.messages" var="msg" />
+		<rich:panel style="width:350px;">
+			<h:panelGrid styleClass="tableBO" columns="2" style="size 330px; margin: auto; padding:10px; ">
+				<h:panelGroup>
+					<h:outputText value="Digite Nombre del Punto: " styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<h:inputText value="#{pointBean.pointName}" required="true" maxlength="5"
+					id="n" requiredMessage="Campo Requerido." 
+					converterMessage="Debe digitar un nombre." style="width: 44px">
+					<f:convertNumber integerOnly="true"/>
+					<f:validator validatorId="blank"/>
+				</h:inputText>
+				<h:panelGroup>
+					<h:outputText value="Digite la IP: " styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:inputText value="#{pointBean.ip1}" required="true" maxlength="3"
+						 id="i1" requiredMessage="Campo Requerido." onkeypress="return numOnly(event)"
+						 converterMessage="Debe digitar un número válido." style="width: 44px"
+						 validatorMessage="El rango permitido es 0-255">
+						<f:convertNumber integerOnly="true"/>
+						<f:validateLongRange minimum="0" maximum="255"/>
+						<f:validator validatorId="blank"/>
+					</h:inputText>
+					<h:outputText value="." styleClass="bold"/>
+					<h:inputText value="#{pointBean.ip2}" required="true" maxlength="3"
+						 id="i2" requiredMessage="Campo Requerido." onkeypress="return numOnly(event)"
+						 converterMessage="Debe digitar un número válido." style="width: 44px"
+						 validatorMessage="El rango permitido es 0-255">
+						<f:convertNumber integerOnly="true"/>
+						<f:validateLongRange minimum="0" maximum="255"/>
+						<f:validator validatorId="blank"/>
+					</h:inputText>
+					<h:outputText value="." styleClass="bold"/>
+					<h:inputText value="#{pointBean.ip3}" required="true" maxlength="3"
+						 id="i3" requiredMessage="Campo Requerido." onkeypress="return numOnly(event)"
+						 converterMessage="Debe digitar un número válido." style="width: 44px"
+						 validatorMessage="El rango permitido es 0-255">
+						<f:convertNumber integerOnly="true"/>
+						<f:validateLongRange minimum="0" maximum="255"/>
+						<f:validator validatorId="blank"/>
+					</h:inputText>
+					<h:outputText value="." styleClass="bold"/>
+					<h:inputText value="#{pointBean.ip4}" required="true" maxlength="3"
+						 id="i4" requiredMessage="Campo Requerido." onkeypress="return numOnly(event)"
+						 converterMessage="Debe digitar un número válido." style="width: 44px"
+						 validatorMessage="El rango permitido es 0-255">
+						<f:convertNumber integerOnly="true"/>
+						<f:validateLongRange minimum="0" maximum="255"/>
+						<f:validator validatorId="blank"/>
+					</h:inputText>
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:outputText value="Digite El Puerto: " styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<h:inputText value="#{pointBean.pointPort}" required="true" maxlength="5"
+					id="p" requiredMessage="Campo Requerido." onkeypress="return numOnly(event)"
+					converterMessage="Debe digitar un número válido." style="width: 44px">
+					<f:convertNumber integerOnly="true"/>
+					<f:validator validatorId="blank"/>
+				</h:inputText>
+				<h:outputText/>
+				<h:commandButton value="Editar"  styleClass="bold" 
+						action="#{pointBean.editPoint}"/>
+			</h:panelGrid>
+			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>	
+
+</div>
+</f:view>
+</div>
+</body>
+</html>

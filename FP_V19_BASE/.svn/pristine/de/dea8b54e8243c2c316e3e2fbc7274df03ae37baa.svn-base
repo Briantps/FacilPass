@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<div>
+	<rich:messages style="color:red;" styleClass="bold"/>		
+	<h:form id="Formulario">
+		<rich:panel style="width:350px;">
+			<table width="100%">
+				<tr>
+					<td width="10%"></td>
+					<td width="50%"><h:outputText value="Digite el Nombre del Titular: " styleClass="bold"/></td>
+					<td width="40%">
+						<h:inputText value="#{bankAccountBean.bankAccountHolder}" required="true" maxlength="50"
+							 requiredMessage="El Campo titular es requerido"
+							 id="Nombre" validatorMessage="El campo debe ser máximo de 50 caracteres.">
+							<f:validateLength maximum="50"/>
+							<f:validator validatorId="blank"/>
+						</h:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%"></td>
+					<td width="50%"><h:outputText value="Digite el Nit del Titular: " styleClass="bold"/></td>
+					<td width="40%">
+						<h:inputText value="#{bankAccountBean.bankAccountHolderNit}" required="true" maxlength="20"
+							 requiredMessage="El Campo Nit de titular es requerido"
+							 validatorMessage="El campo debe ser máximo de 20 caracteres.">
+							<f:validateLength maximum="20"/>
+							<f:validator validatorId="blank"/>
+						</h:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%"></td>
+					<td width="50%"><h:outputText value="Digite el Nombre del Producto: " styleClass="bold"/></td>
+					<td width="40%">
+						<h:inputText value="#{bankAccountBean.product}" required="true" maxlength="50"
+							 requiredMessage="El Campo Producto es requerido"
+							 validatorMessage="El campo debe ser máximo de 50 caracteres.">
+							<f:validateLength maximum="50"/>
+							<f:validator validatorId="blank"/>
+						</h:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%"></td>
+					<td width="50%"><h:outputText value="Digite el número de cuenta: " styleClass="bold"/></td>
+					<td width="40%">
+						<h:inputText value="#{bankAccountBean.bankAccountNumber}" required="true" maxlength="20"
+							 requiredMessage="El Campo titular es requerido"
+							 validatorMessage="El campo debe ser máximo de 20 caracteres.">
+							<f:validateLength maximum="20"/>
+							<f:validator validatorId="blank"/>
+						</h:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td width="10%"></td>
+					<td width="50%"><h:outputText value="Seleccione el Tipo de Cuenta: " styleClass="bold"/></td>
+					<td width="40%">
+						<h:selectOneMenu value="#{bankAccountBean.bankAccountType}">
+							<f:selectItems value="#{bankAccountBean.bankAccountTypes}"/>
+						</h:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td width="20%"></td>
+					<td width="20%"></td>
+					<td width="60%"><h:commandButton value="Crear"  styleClass="bold" 
+						action="#{bankAccountBean.addBank}"/></td>
+				</tr>
+			</table>
+
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>	
+
+</div>
+</f:view>
+</div>
+</body>
+</html>

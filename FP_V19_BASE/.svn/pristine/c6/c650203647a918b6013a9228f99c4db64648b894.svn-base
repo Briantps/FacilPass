@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Auditoría Reconciliación RFID" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="328"/>
+	<property name="ireport.y" value="143"/>
+	<parameter name="initDate" class="java.sql.Timestamp"/>
+	<parameter name="endDate" class="java.sql.Timestamp"/>
+	<queryString>
+		<![CDATA[SELECT
+      DECODE(tt.transaction_type_id,2,'DESCUENTO') AS "FORMA PAGO",
+      SUM(DECODE(tt.category_id,1, 1,0)) "CAT1",
+      SUM(DECODE(tt.category_id,2, 1,0)) "CAT2",
+      SUM(DECODE(tt.category_id,3, 1,0)) "CAT3",
+      SUM(DECODE(tt.category_id,4, 1,0)) "CAT4",
+      SUM(DECODE(tt.category_id,5, 1,0)) "CAT5",
+      SUM(DECODE(tt.category_id,6, 1,0)) "CAT6",
+      SUM(DECODE(tt.category_id,7, 1,0)) "CAT7",
+      SUM(tt.transaction_value) AS "TOTAL"
+      FROM tb_transaction tt
+           WHERE tt.lane_id is NOT NULL
+           AND tt.account_id is not NULL
+           AND TRANSACTION_TYPE_ID=2
+           AND tt.category_id is not null
+           AND tt.transaction_time BETWEEN $P{initDate} and $P{endDate}
+           GROUP BY tt.transaction_type_id]]>
+	</queryString>
+	<field name="FORMA PAGO" class="java.lang.String"/>
+	<field name="CAT1" class="java.math.BigDecimal"/>
+	<field name="CAT2" class="java.math.BigDecimal"/>
+	<field name="CAT3" class="java.math.BigDecimal"/>
+	<field name="CAT4" class="java.math.BigDecimal"/>
+	<field name="CAT5" class="java.math.BigDecimal"/>
+	<field name="CAT6" class="java.math.BigDecimal"/>
+	<field name="CAT7" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="sumTotal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<variable name="sumCat1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAT1}]]></variableExpression>
+	</variable>
+	<variable name="sumCat2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAT2}]]></variableExpression>
+	</variable>
+	<variable name="sumCat3" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAT3}]]></variableExpression>
+	</variable>
+	<variable name="sumCat4" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAT4}]]></variableExpression>
+	</variable>
+	<variable name="sumCat5" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAT5}]]></variableExpression>
+	</variable>
+	<variable name="sumCat6" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAT6}]]></variableExpression>
+	</variable>
+	<variable name="sumCat7" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAT7}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="215" height="79"/>
+				<imageExpression class="java.lang.String"><![CDATA["facilpass.PNG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement positionType="Float" x="215" y="17" width="282" height="36" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Auditoría Reconciliación RFID]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="752" height="35" forecolor="#000000" backcolor="#81BC00"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement x="215" y="18" width="140" height="17"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[FECHA INICIAL:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="497" y="18" width="142" height="17"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[FECHA FINAL:]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy hh:mm:ss a">
+					<reportElement x="355" y="18" width="142" height="17"/>
+					<textElement verticalAlignment="Middle" lineSpacing="Single">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[$P{initDate}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy hh:mm:ss a">
+					<reportElement x="639" y="18" width="113" height="17"/>
+					<textElement verticalAlignment="Middle" lineSpacing="Single">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[$P{endDate}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="110" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[FORMA DE PAGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="661" y="0" width="91" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[TOTAL VALOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="586" y="0" width="75" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[TOTAL VEHÍCULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="518" y="0" width="68" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[CAT VII]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="450" y="0" width="68" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[CAT VI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="382" y="0" width="68" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[CAT V]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="314" y="0" width="68" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[CAT IV]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="246" y="0" width="68" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[CAT III]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="178" y="0" width="68" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[CAT II]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="110" y="0" width="68" height="20" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[CAT I]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="110" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FORMA PAGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="0" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAT1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="178" y="0" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAT2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="246" y="0" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAT3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="314" y="0" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAT4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="382" y="0" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAT5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="0" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAT6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="518" y="0" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAT7}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="586" y="0" width="75" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAT2}.add($F{CAT1}.add($F{CAT3}.add($F{CAT4}.add($F{CAT5}.add($F{CAT6}.add($F{CAT7}))))))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="661" y="0" width="91" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="15" width="110" height="15" forecolor="#000000"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="15" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCat1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="178" y="15" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCat2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="246" y="15" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCat3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="314" y="15" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCat4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="382" y="15" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCat5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="15" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCat6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="518" y="15" width="68" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCat7}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="586" y="15" width="75" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumCat2}.add($V{sumCat1}.add($V{sumCat3}.add($V{sumCat4}.add($V{sumCat5}.add($V{sumCat6}.add($V{sumCat7}))))))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="661" y="15" width="91" height="15"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="151" height="18" forecolor="#000000"/>
+				<box leftPadding="3" rightPadding="3">
+					<pen lineWidth="0.0" lineColor="#F4F9FE"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineColor="#F4F9FE"/>
+					<bottomPen lineWidth="0.0" lineColor="#F4F9FE"/>
+					<rightPen lineWidth="0.0" lineColor="#F4F9FE"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[ELABORÓ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="0" width="152" height="18" forecolor="#000000"/>
+				<box leftPadding="3" rightPadding="3">
+					<pen lineWidth="0.0" lineColor="#F4F9FE"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineColor="#F4F9FE"/>
+					<bottomPen lineWidth="0.0" lineColor="#F4F9FE"/>
+					<rightPen lineWidth="0.0" lineColor="#F4F9FE"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vo. Bo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="0" width="151" height="18" forecolor="#000000"/>
+				<box leftPadding="3" rightPadding="3">
+					<pen lineWidth="0.5" lineColor="#F4F9FE"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#F4F9FE"/>
+					<bottomPen lineWidth="0.5" lineColor="#F4F9FE"/>
+					<rightPen lineWidth="0.5" lineColor="#F4F9FE"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REVISÓ]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="18" width="751" height="26" forecolor="#333333" backcolor="#CCCCCC"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="18" width="110" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[FECHA DE GENERACIÓN:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy hh:mm:ss aa">
+				<reportElement x="110" y="18" width="105" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="18" width="148" height="26"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página 1 de 1  "]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="572">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="546" width="751" height="26" forecolor="#333333" backcolor="#CCCCCC"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="272" width="752" height="50" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Double" lineColor="#969696"/>
+					<leftPen lineWidth="0.0" lineStyle="Double"/>
+					<bottomPen lineWidth="0.25" lineStyle="Double" lineColor="#969696"/>
+					<rightPen lineWidth="0.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="24"/>
+				</textElement>
+				<text><![CDATA[EL REPORTE NO CONTIENE INFORMACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="546" width="110" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[FECHA DE GENERACIÓN:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="235" y="27" width="282" height="36" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Auditoría Reconciliación RFID]]></text>
+			</staticText>
+			<image>
+				<reportElement x="20" y="10" width="215" height="79"/>
+				<imageExpression class="java.lang.String"><![CDATA["facilpass.PNG"]]></imageExpression>
+			</image>
+			<textField pattern="dd/MM/yyyy hh:mm:ss aa">
+				<reportElement x="118" y="546" width="105" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="599" y="546" width="152" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de 1"]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

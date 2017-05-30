@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Registrar Pago de Dispositivo</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<a4j:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Registrar Pago de Dispositivo" styleClass="bold"/>
+							</f:facet>
+							<h:panelGrid styleClass="tableBO" columns="2" 
+								style="size:300px; margin: auto; padding:10px; ">
+								<h:panelGroup>
+									<h:outputText value="Seleccione la Cuenta Cliente: " styleClass="bold"/>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:selectOneMenu value="#{savePayment.idClientAccount}" 
+										style="width: 400px;" styleClass="normal">
+										<f:selectItems value="#{savePayment.clientAccounts}"/>
+										<a4j:support event="onchange" reRender="panelData" action="#{savePayment.changeAccount}"/>
+									</h:selectOneMenu>
+								</h:panelGroup>
+							</h:panelGrid>
+							<rich:spacer height="5"/>							
+							<a4j:outputPanel id="panelData">
+								<rich:panel rendered="#{savePayment.showData}">
+									<h:panelGrid styleClass="tableBO" columns="2" 
+										style="size:300px; margin: auto; padding:10px; width: 400px; background-color: #ffffff; border-top-style: dashed; border-bottom-width: thin; border-bottom-style: dashed; border-left-color: #B1B1B1; border-top-color: #B1B1B1; border-right-color: #B1B1B1; border-left-style: dashed; border-right-width: thin; border-right-style: dashed; border-left-width: thin; border-bottom-color: #B1B1B1; border-top-width: thin">
+										<h:outputText styleClass="bold" value="Saldo Disponible:"/>
+										<h:outputText styleClass="bold" value="#{savePayment.account.accountBalance}" style="color: #000000; font-size: 18px">
+											<f:convertNumber pattern="$#,##0" />
+										</h:outputText>
+									</h:panelGrid>
+									<rich:spacer height="10"/>
+									<div id="scroll_horizontal">
+									<rich:dataTable id="dTable"  width="550px" value="#{savePayment.devicesList}" var="list"  rows="10"
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+										rowClasses="white,grey" style="vertical-align: middle; margin: auto;">		
+										<rich:column width="220px" sortBy="#{list.deviceCode}">
+											<f:facet name="header">
+												<h:outputText value="ID Interno" styleClass="bold"/>
+											</f:facet>
+											<h:outputText value=" #{list.deviceCode}" 
+												styleClass="normal" style="font-size: 12px;"/>
+										</rich:column>
+										<rich:column width="180px">
+											<f:facet name="header">
+												<h:outputText value="Facial" styleClass="bold"/>
+											</f:facet>
+											<h:outputText value=" #{list.deviceFacialId}" 
+												styleClass="normal" style="font-size: 12px;">
+											</h:outputText>
+										</rich:column>
+										<rich:column width="200px">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value=""/>
+											</f:facet>
+											<h:outputText value="PAGADO" styleClass="bold"
+												 rendered="#{list.devicePaid}"/>
+											<h:commandLink value="REALIZAR PAGO" styleClass="bold"
+												action="#{savePayment.initSavePay}" rendered="#{!list.devicePaid}">
+												<f:setPropertyActionListener value="#{list.deviceId}" target="#{savePayment.deviceId}"/>
+											</h:commandLink>
+										</rich:column>
+										<f:facet name="footer">
+                                          <rich:datascroller  for="dTable"/>
+           	                            </f:facet>
+									</rich:dataTable>
+									</div>
+								</rich:panel>
+							</a4j:outputPanel>
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>			
+						
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{savePayment.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Registro de pago de dispositivo" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{savePayment.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{savePayment.modalMessage}" styleClass="normal"/>
+						<h:form>
+						  <h:panelGrid columns="1" styleClass="tableBO" style="width:100px; margin: auto;padding-left:8px;">
+						    <h:commandButton value="Aceptar" action="#{savePayment.hideModal}"  />	     	
+						  </h:panelGrid>
+						</h:form>		
+						<br />
+					</rich:modalPanel>		
+								
+					<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{savePayment.showConfirmation}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Registrar Pago de Dispositivo" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{savePayment.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{savePayment.confirmMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<a4j:form id="formulario" style="margin-top: 10px">
+							<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     		  <a4j:region id="editando">
+					     			<a4j:commandButton id="aceptar" value="Aceptar" action="#{savePayment.savePay}" oncomplete="#{rich:component('wait')}.hide()" reRender="panel">				     	 
+					     			</a4j:commandButton>
+					     		    <a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+				                    </a4j:status>
+                                  </a4j:region>
+					     		</h:panelGroup>   	
+					     		<h:panelGroup>
+						     		<h:commandButton id="cancelar" value="Cancelar" action="#{savePayment.hideModal}"/>
+						     		<rich:componentControl for="confirmacion" attachTo="cancel" operation="hide" event="onclick" />
+						     	</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </a4j:form>
+						<br />
+					</rich:modalPanel>	
+									
+					<rich:modalPanel id="payWindow" width="419" height="218" showWhenRendered="#{savePayment.showPayWindow}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Pago de Dispositivo Electrónico TAG" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{savePayment.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:form>
+						  <rich:panel style="width:390px;height:170px;margin:auto;">
+							<h:panelGrid columns="2" styleClass="tableBO" style="width:380px;height:160px; margin: auto; padding:2px; ">
+								<h:outputText styleClass="bold" value="Saldo Disponible:"/>
+								<h:outputText styleClass="bold" value="#{savePayment.account.accountBalance}" style="color: #005E2F; font-size: 16px">
+									<f:convertNumber pattern="$#,##0" />
+								</h:outputText>
+								<h:panelGroup>
+									<h:outputText styleClass="bold" value="Valor a Pagar:"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:inputText value="#{savePayment.valueTxt}" onkeypress="return numOnly(event)" maxlength="15"
+									onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+								</h:inputText>
+								<h:panelGroup>					
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+								</h:panelGroup>			
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{savePayment.initConfirm}"/>
+						     	</h:panelGroup>   	
+					    	</h:panelGrid>
+					      </rich:panel>
+					    </h:form>
+						<br />
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="wait" autosized="true" width="350" height="110" moveable="false" resizeable="false">
+		              <f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	                <h:outputText value="Transacción en proceso..."  style="font-size:12px;"/>
+	                </rich:modalPanel> 
+					
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

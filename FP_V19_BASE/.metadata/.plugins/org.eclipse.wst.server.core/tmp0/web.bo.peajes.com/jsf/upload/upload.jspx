@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Subir Documentos</title>
+<style>
+	.top {
+	    vertical-align: top;  
+	}
+	.info {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #c3c3c3; border-collapse: collapse;    
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="/jsf/content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="10"/>
+	<rich:panel style="width: 700px;">	
+		<f:facet name="header">
+			<h:outputText value="Subir Documentos" styleClass="bold"/>
+		</f:facet>
+		<h:form id="uploadForm">
+			<rich:panel>
+					<h:panelGrid columns="2">
+						<h:panelGroup>
+							<h:outputText value="Tipo de Documento: " styleClass="bold"/>
+							<h:selectOneMenu value="#{fileUploadBean.typePath}" onchange="submit()"
+								 valueChangeListener="#{fileUploadBean.loadList}" id="tyfile">
+								<f:selectItems value="#{fileUploadBean.typePathList}"/>
+								<a4j:support event="onchange" reRender="suggestionBoxId"></a4j:support>
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<f:subview id="codview" rendered="#{fileUploadBean.show}" >
+						<h:panelGroup>
+							<h:outputText id="codeLabel" rendered="#{fileUploadBean.showC}" value="No. de Identificación #{fileUploadBean.typePath} +DV: " styleClass="bold"/>
+                            <h:outputText id="codeLabel1" rendered="#{fileUploadBean.showD}" value="No. de Id #{fileUploadBean.typePath}: " styleClass="bold"/>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							<h:inputText id="code" value="#{fileUploadBean.code}" styleClass="normal" style="width:140px" 
+											 onkeypress="return alphaNumOnly(event)">
+								<a4j:support event="onkeyup" action="#{fileUploadBean.reload}" reRender="panelUpload"/>
+							</h:inputText> 			
+							<rich:suggestionbox id="suggestionBoxId" for="code" shadowOpacity="4"
+								suggestionAction="#{fileUploadBean.autocomplete}" immediate="true"
+	                            var="result" tokens="," height="150" width="160" cellpadding="2" cellspacing="2"   
+	                            shadowDepth="4" minChars="1" rules="none" nothingLabel="No se encontró nada.">
+	                        	<h:column><h:outputText value="#{result}" styleClass="bold" /></h:column>
+	                        </rich:suggestionbox>
+						</h:panelGroup>
+						</f:subview>
+					</h:panelGrid>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+			</rich:panel>
+			<rich:spacer height="10"/>
+			<h:panelGrid id="panelUpload" columns="2" columnClasses="top,top">					
+				<rich:fileUpload  id="upload"  fileUploadListener="#{fileUploadBean.listener}"
+		              maxFilesQuantity="100" ontyperejected="javascript:Richfaces.showModalPanel('panelextension');"  
+					  doneLabel="Documento Cargado Correctamente"         
+		              immediateUpload="#{fileUploadBean.autoUpload}" listWidth="300px"
+		              acceptedTypes="JPG,jpg,PNG,png,BMP,bmp,TIF,tif,PDF,pdf,DOC,doc,DOCX,docx" allowFlash="#{fileUploadBean.useFlash}">
+					<a4j:support event="onclick" action="#{fileUploadBean.test}"></a4j:support>
+					<a4j:support event="onuploadcomplete" reRender="info,upload,panelm,suggestionBoxId" />
+		        </rich:fileUpload>
+	
+				<h:panelGroup id="info">
+					<rich:panel bodyClass="info" style="width: 360px;">
+	                    <f:facet name="header">
+	                        <h:outputText value="Información de Documentos Cargados" styleClass="bold"/>
+	                    </f:facet>
+						<h:outputText value="No se han subido Documentos"
+	                        rendered="#{fileUploadBean.size==0}" styleClass="normal"/>
+	                    
+						<rich:dataGrid columns="1" value="#{fileUploadBean.files}"
+	                       var="file" rowKeyVar="row">
+							
+							<rich:panel bodyClass="rich-laguna-panel-no-header">
+								<h:panelGrid columns="2">
+									<h:panelGrid columns="2">
+	                                    <h:outputText value="Nombre Documento:" />
+	                                    <h:outputText value="#{file.name}" />
+	                                    <h:outputText value="Tamaño del Documento(bytes):" />
+	                                    <h:outputText value="#{file.length}" />
+	                                </h:panelGrid>
+								</h:panelGrid>
+							</rich:panel>	
+						</rich:dataGrid>
+					</rich:panel>
+					<rich:spacer height="3"/>
+	                <br />
+					<a4j:commandButton action="#{fileUploadBean.clearUploadData}"
+                   	 	reRender="info, upload" value="Limpiar Paneles"
+                    	rendered="#{fileUploadBean.size>0}" />
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>	
+	</rich:panel>
+	<rich:spacer height="20"/>
+	
+	<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{fileUploadBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Subir Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fileUploadBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fileUploadBean.modalMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{fileUploadBean.hideModal}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panelextension" width="350" height="115" showWhenRendered="#{fileUploadBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Subir Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fileUploadBean.hideModal}" image="/img/close.png" /> 
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="Sólo documentos con extensión jpg, png, bmp, tif, pdf, doc o docx son aceptados!!!" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{fileUploadBean.hideModal}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

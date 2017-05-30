@@ -1,0 +1,11 @@
+package ejb;
+
+/***
+ * @author ablasquez
+ */
+import jpa.TbAlarmBalance;
+
+public interface AlarmBalance {
+  
+	public TbAlarmBalance getInfoByType(long type);
+}

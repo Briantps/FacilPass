@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/gen_validation.js"></script>
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/report.js"></script>
+		<title>Recarga por Concesion</title>
+	</head>
+	<body>
+		<a4j:loadScript src="resource://org.ajax4jsf.javascript.PrototypeScript" />
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">				
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>
+					<rich:messages style="color:red;"/>		
+					<rich:panel style="width:700px;margin:auto;">
+						<f:facet name="header">
+							<h:outputText value="Recargas por Concesion" styleClass="bold"/>
+						</f:facet>							
+						<h:form id="form" target="_blank">				
+							<h:panelGroup>
+								<h:selectOneRadio value="#{clearingConcRecg.exportOption}">
+									<f:selectItem itemValue="PDF" itemLabel="PDF"/>
+									<f:selectItem itemValue="HTML" itemLabel="HTML"/>
+									<f:selectItem itemValue="EXCEL" itemLabel="EXCEL"/>
+								</h:selectOneRadio>
+							</h:panelGroup>				
+							<rich:spacer height="20"/>
+							<h:panelGroup>
+								<table width="100%">
+									<tr>
+										<td width="20%"></td>
+										<td width="30%">
+											<h:outputText value="Fecha Inicial: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</td>
+										<td width="30%">
+											<rich:calendar id="beg_date" value="#{clearingConcRecg.begDate}"                 		
+					                        	cellWidth="26px" cellHeight="22px" style="width:150px" 
+						                        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+						                    </rich:calendar>
+										</td>
+										<td width="20%"></td>
+									</tr>
+								</table>
+							</h:panelGroup>				
+							<rich:spacer height="20"/>
+							<h:panelGroup>
+								<table width="100%">
+									<tr>
+										<td width="20%"></td>
+										<td width="30%">
+											<h:outputText value="Fecha Final: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</td>
+										<td width="30%">
+											<rich:calendar id="end_date" value="#{clearingConcRecg.endDate}"                 		
+				                    			cellWidth="26px" cellHeight="22px" style="width:150px" 
+						                        datePattern="MM/dd/yyyy" popup="true"> 	
+						                    </rich:calendar>
+										</td>
+										<td width="20%"></td>
+									</tr>
+								</table>
+							</h:panelGroup>								
+							<rich:spacer height="20"/>
+							<h:panelGroup>
+								<h:panelGrid style="width:400px;margin:auto;" columns="2">
+									<h:commandButton  action="#{clearingConcRecg.execute}" styleClass="normal" 
+										value="Ejecutar" />
+								</h:panelGrid>
+							</h:panelGroup>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+						</h:form>
+					</rich:panel>
+					<rich:spacer height="20"/>
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{clearingConcRecg.modal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Recargas por Concesion" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{clearingConcRecg.hide}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{clearingConcRecg.modalMessage}" styleClass="normal"/>
+						<h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+		         			<a4j:form>
+								<h:commandButton value="Aceptar" action="#{clearingConcRecg.hide}"/>
+						  	</a4j:form>
+				        </h:panelGrid>
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

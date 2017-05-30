@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Crear Reclamación</title>
+<script type="text/javascript">
+	function validarSize (campo, limite) {
+		if (campo.value.length > limite){
+			campo.value = campo.value.substring(0, limite);
+		} 
+	} 
+	</script> 
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;" styleClass="bold"/>
+     
+    <h:form>
+    <rich:panel>
+      <f:facet name="header">
+        <h:outputText value="Crear Reclamación"  style="font-size: 12px;"/>
+      </f:facet>
+      <h:panelGrid columns="1">
+        <h:panelGrid columns="1">
+         <h:commandButton value="Crear Reclamación" action="#{createReclamation.create}"/>
+         <div id="scroll_horizontal">
+           <rich:dataTable id="dTable" width="800" value="#{createReclamation.reclamationsList}" var="list" rows="10"
+            onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgoundcolor='#FFFFFF'" rowClasses="white,grey">
+
+            <rich:column style="text-align:center;">
+              <f:facet name="header">
+                <h:outputText value="Cuenta FacilPass" style="font-size: 12px;"/>
+			  </f:facet>
+              <h:outputText value="#{list.accountId}" style="text-align:center; font-size: 11px;"/>
+            </rich:column>
+
+            <rich:column style="text-align:center;">
+              <f:facet name="header">
+                <h:outputText value="Fecha de Transacción"  style="font-size: 12px;"/>
+			  </f:facet>
+              <h:outputText value="#{list.date}" style="text-align:center; font-size: 11px;" converter="TimeStampToStringDateConverter">
+                
+              </h:outputText>
+            </rich:column>
+
+            <rich:column style="text-align:center;">
+              <f:facet name="header">
+                <h:outputText value="Estado" style="font-size: 12px;"/>
+			  </f:facet>
+              <h:outputText value="Pendiente Por Aplicar" rendered="#{list.state==0}" style="text-align:center; font-size: 11px;"/>
+			  <h:outputText value="Aplicada" rendered="#{list.state==1}" style="text-align:center; font-size: 11px;"/>
+              <h:outputText value="Rechazada" rendered="#{list.state==2}" style="text-align:center; font-size: 11px;"/>
+              <h:outputText value="Pendiente Por Aplicar" rendered="#{list.state==null}" style="text-align:center; font-size: 11px;"/>
+              <h:outputText value="Eliminada Por Cliente" rendered="#{list.state==3}" style="text-align:center; font-size: 11px;"/>
+            </rich:column>
+
+            <rich:column style="text-align:center;">
+              <f:facet name="header">
+                <h:outputText value="Acción" style="font-size: 12px;"/>
+			  </f:facet>
+              <h:commandLink value="Ver" action="#{createReclamation.showInf}" style="text-align:center; font-size: 11px;">
+                <f:setPropertyActionListener target="#{createReclamation.objectionId}" value="#{list.objectionId}"/>
+			  </h:commandLink>
+              <rich:spacer width="15"/>
+              <h:commandLink value="Modificar" action="#{createReclamation.update}" style="text-align:center; font-size: 11px;" disabled="#{list.state==3}">
+                <f:setPropertyActionListener target="#{createReclamation.objectionId}" value="#{list.objectionId}"/>
+			  </h:commandLink>
+              <rich:spacer width="15"/>
+			  <h:commandLink value="Eliminar" action="#{createReclamation.delete}" style="text-align:center; font-size: 11px;" disabled="#{list.state==3}">
+                <f:setPropertyActionListener target="#{createReclamation.objectionId}" value="#{list.objectionId}"/>
+               </h:commandLink>
+            </rich:column>
+           <f:facet name="footer">
+             <rich:datascroller for="dTable"/>
+           </f:facet>
+           </rich:dataTable>
+         </div>
+        </h:panelGrid>
+       
+      </h:panelGrid>
+    </rich:panel>
+    </h:form>
+
+    <rich:modalPanel id="panel2" width="700" height="550" showWhenRendered="#{createReclamation.showCreate}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Crear Reclamación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createReclamation.hideModal}" image="/img/close.png" />
+                     <rich:componentControl for="panel2" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+          
+      <h:form>
+      <h:panelGrid columns="2" styleClass="tableBO" style="size 300px; margin: auto; padding:10px; ">
+      <h:panelGroup>
+	      <h:outputText value="Cuenta FacilPass: " styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:selectOneMenu id="account" value="#{createReclamation.accountId}" style="width: 150px;" styleClass="normal">
+		<f:selectItems value="#{createReclamation.accounts}"/>
+	  </h:selectOneMenu>
+      <h:panelGroup>
+	      <h:outputText value="Fecha Transacción: " styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <rich:calendar id="fecha" value="#{createReclamation.dateTransaction}" 
+                        datePattern="dd/MM/yyyy hh:mm a"
+                        popup="true"
+                       	cellWidth="24px"
+                       	cellHeight="22px"
+                       	style="width:200px"
+                        enableManualInput="false"/>
+
+
+
+      <h:panelGroup>
+      	<h:outputText value="Tipo Cargo: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:selectOneMenu id="tc" value="#{createReclamation.chargeId}" style="width: 170px;" styleClass="normal">
+		<f:selectItems value="#{createReclamation.charges}"/>
+         <a4j:support event="onchange" reRender="conce,station,lane" action="#{createReclamation.validate}" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Concesión: " styleClass="bold"/>
+      <h:selectOneMenu id="conce" value="#{createReclamation.companyId}" style="width: 170px;" styleClass="normal" disabled="#{createReclamation.render1}">
+		<f:selectItems value="#{createReclamation.companys}"/>
+        <a4j:support event="onchange" reRender="station,lane" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Estación: " styleClass="bold"/>
+      <h:selectOneMenu id="station" value="#{createReclamation.stationId}" style="width: 170px;" styleClass="normal" disabled="#{createReclamation.render1}">
+		<f:selectItems value="#{createReclamation.stations2}"/>
+        <a4j:support event="onchange" reRender="lane" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Carril: " styleClass="bold"/>
+      <h:selectOneMenu id="lane" value="#{createReclamation.laneId}" style="width: 170px;" styleClass="normal" disabled="#{createReclamation.render1}">
+		<f:selectItems value="#{createReclamation.lanes}"/>
+	  </h:selectOneMenu>
+
+      <h:panelGroup>
+      	<h:outputText value="Reclamación: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:inputTextarea id="obj" value="#{createReclamation.objection}"  style="height:100px;resize:none;" onkeyup="validarSize(this,800);"  onkeydown="validarSize(this,800);"  onkeypress="return noEspecialobjection(event);">
+      </h:inputTextarea>
+    
+      <h:commandButton value="Crear Reclamación" action="#{createReclamation.saveObjection}" >
+        <a4j:support event="oncomplete" reRender="dTable,panel1"/>
+      </h:commandButton>
+    </h:panelGrid>
+    </h:form>
+    <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+	<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+	</rich:modalPanel>
+
+
+	<rich:modalPanel id="panel3" width="700" height="550" showWhenRendered="#{createReclamation.showUpdate}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Modificar Reclamación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createReclamation.hideModal}" image="/img/close.png" />
+                     <rich:componentControl for="panel3" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+          
+      <h:form>
+      <h:panelGrid columns="2" styleClass="tableBO" style="size 300px; margin: auto; padding:10px; ">
+      <h:panelGroup>
+	      <h:outputText value="Cuenta FacilPass: " styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:selectOneMenu id="account" value="#{createReclamation.newAccountId}" style="width: 150px;" styleClass="normal">
+		<f:selectItems value="#{createReclamation.accounts}"/>
+	  </h:selectOneMenu>
+
+      
+      <h:panelGroup>
+	      <h:outputText value="Fecha Transacción: " styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <rich:calendar id="fecha" value="#{createReclamation.newDate}" 
+                        datePattern="dd/MM/yyyy hh:mm a"
+                        popup="true"
+                       	cellWidth="24px"
+                       	cellHeight="22px"
+                       	style="width:200px"
+                        enableManualInput="false"/>
+
+
+
+      <h:panelGroup>
+      	<h:outputText value="Tipo Cargo: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:selectOneMenu id="ntc" value="#{createReclamation.newChargeId}" style="width: 170px;" styleClass="normal">
+		<f:selectItems value="#{createReclamation.charges}"/>
+         <a4j:support event="onchange" reRender="nconce,nstation,nlane" action="#{createReclamation.validate2}" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Concesión: " styleClass="bold"/>
+      <h:selectOneMenu id="nconce" value="#{createReclamation.newCompanyId}" style="width: 170px;" styleClass="normal" disabled="#{createReclamation.render1}">
+		<f:selectItems value="#{createReclamation.companys}"/>
+        <a4j:support event="onchange" reRender="nstation,nlane" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Estación: " styleClass="bold"/>
+      <h:selectOneMenu id="nstation" value="#{createReclamation.newStationId}" style="width: 170px;" styleClass="normal" disabled="#{createReclamation.render1}">
+		<f:selectItems value="#{createReclamation.stations3}"/>
+        <a4j:support event="onchange" reRender="nlane" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Carril: " styleClass="bold"/>
+      <h:selectOneMenu id="nlane" value="#{createReclamation.newLaneId}" style="width: 170px;" styleClass="normal" disabled="#{createReclamation.render1}">
+		<f:selectItems value="#{createReclamation.lanes3}"/>
+	  </h:selectOneMenu>
+
+      <h:panelGroup>
+      	<h:outputText value="Reclamación: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:inputTextarea id="obj" value="#{createReclamation.newObjection}"  style="height:100px;;resize:none;" onkeyup="validarSize(this,800);" onkeydown="validarSize(this,800);" onkeypress="return noEspecialobjection(event);">
+      </h:inputTextarea>
+    
+      <h:commandButton value="Modificar Reclamación" action="#{createReclamation.updateObjection}" >
+        <a4j:support event="oncomplete" reRender="dTable"/>
+      </h:commandButton>
+    </h:panelGrid>
+    </h:form>
+    <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+	<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+	</rich:modalPanel>
+
+
+
+	<rich:modalPanel id="panelV" width="630" height="480" showWhenRendered="#{createReclamation.showInfo}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Ver Reclamación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createReclamation.hideModal}" image="/img/close.png" />
+                     <rich:componentControl for="panel3" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+          
+      <h:form>
+      <h:panelGrid columns="2" styleClass="tableBO" style="size 300px; margin: auto; padding:10px; ">
+
+      <h:panelGroup>
+	      <h:outputText value="Cuenta FacilPass: " styleClass="bold"/>
+      </h:panelGroup>
+      <h:outputText value="#{createReclamation.ob1.accountId.accountId}" style="font-size:12px;"/>
+      
+ 	  <h:panelGroup>
+	      <h:outputText value="Fecha Creación Reclamación: " styleClass="bold"/>
+      </h:panelGroup>
+      <h:outputText value="#{createReclamation.ob1.date}" style="font-size:12px;" converter="TimeStampToStringDateConverter"/>
+
+
+      <h:panelGroup>
+	      <h:outputText value="Fecha Transacción: " styleClass="bold"/>
+      </h:panelGroup>
+      <h:outputText value="#{createReclamation.ob1.dateTransaction}" style="font-size:12px;" converter="TimeStampToStringDateConverter"/>
+     
+      <h:panelGroup>
+      	<h:outputText value="Tipo Cargo: " styleClass="bold"/>
+      </h:panelGroup>
+      <h:outputText value="#{createReclamation.ob1.charge.chargeDescription}" style="font-size:12px;"/>
+
+      <h:outputText value="Concesión: " styleClass="bold"/>
+      <h:outputText value="#{createReclamation.conc}" style="font-size:12px;"/>
+
+      <h:outputText value="Estación: " styleClass="bold"/>
+      <h:outputText value="#{createReclamation.esta}" style="font-size:12px;"/>
+
+      <h:outputText value="Carril: " styleClass="bold"/>
+      <h:outputText value="#{createReclamation.carr}" style="font-size:12px;"/>
+
+      <h:panelGroup>
+	      <h:outputText value="Estado Reclamación: " styleClass="bold"/>
+      </h:panelGroup>
+      <h:outputText value="Pendiente Por Aplicar" rendered="#{createReclamation.ob1.state==0}" style="text-align:center; font-size: 11px; color:green;"/>
+      <h:outputText value="Pendiente Por Aplicar" rendered="#{createReclamation.ob1.state==null}" style="text-align:center; font-size: 11px; color:green;"/>
+	  <h:outputText value="Aplicada por Administrador" rendered="#{createReclamation.ob1.state==1}" style="text-align:center; font-size: 11px; color:green;"/>
+      <h:outputText value="Rechazada por Administrador" rendered="#{createReclamation.ob1.state==2}" style="text-align:center; font-size: 11px; color:green;"/>
+      <h:outputText value="Eliminada Por Cliente" rendered="#{createReclamation.ob1.state==3}" style="text-align:center; font-size: 11px; color:green;"/>
+      
+      <h:panelGroup>
+      	<h:outputText value="Reclamación: " styleClass="bold"/>
+      </h:panelGroup>
+      <h:inputTextarea id="obj" value="#{createReclamation.ob1.objection}"  style="height:100px;font-size:12px;" disabled="true">
+      </h:inputTextarea>
+    
+      <h:commandButton value="Aceptar" action="#{createReclamation.hideModal}" >
+      </h:commandButton>
+    </h:panelGrid>
+    </h:form>
+	</rich:modalPanel>
+
+    <rich:modalPanel id="panel1" width="350" height="115" showWhenRendered="#{createReclamation.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Crear Reclamación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createReclamation.hideModal}" image="/img/close.png" />
+                     <rich:componentControl for="panel1" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{createReclamation.message}" styleClass="normal"/>
+		<a4j:form>
+          <h:panelGrid columns="1" styleClass="tableBO" style="width:100px; margin: auto; padding-left:8px; ">
+            <h:panelGroup>
+		      <h:commandButton value="Aceptar" action="#{createReclamation.hideModal}"/>
+              <rich:componentControl for="panel1" attachTo="hidelink" operation="hide" event="onclick" />
+            </h:panelGroup>        
+          </h:panelGrid>
+        </a4j:form> 
+	</rich:modalPanel>
+
+	<rich:modalPanel id="panelI" width="350" height="115" showWhenRendered="#{createReclamation.showModalInsertError}" >
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Crear Reclamación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createReclamation.hideModalInsert}" image="/img/close.png" />
+                     <rich:componentControl for="panelI" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{createReclamation.message}" styleClass="normal"/>
+		<a4j:form>
+        <h:panelGrid columns="1" styleClass="tableBO" style="width:100px; margin: auto; padding-left:8px; ">
+          <h:panelGroup>
+		    <h:commandButton value="Aceptar" action="#{createReclamation.hideModalInsert}"/>
+            <rich:componentControl for="panelI" attachTo="hidelink" operation="hide" event="onclick" />
+            </h:panelGroup>
+        </h:panelGrid>
+        </a4j:form>
+	</rich:modalPanel>
+
+    <rich:modalPanel id="panelM" width="350" height="115" showWhenRendered="#{createReclamation.showModalUpdateError}" >
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Crear Reclamación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createReclamation.hideModalUpdate}" image="/img/close.png" />
+                     <rich:componentControl for="panelM" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{createReclamation.message}" styleClass="normal"/>
+		<a4j:form>
+          <h:panelGrid columns="1" styleClass="tableBO" style="width:100px; margin: auto; padding-left:8px; ">
+		    <h:commandButton value="Aceptar" action="#{createReclamation.hideModalUpdate}"/>
+            <rich:componentControl for="panelM" attachTo="hidelink" operation="hide" event="onclick" />
+          </h:panelGrid>
+        </a4j:form>    
+	</rich:modalPanel>
+
+	<rich:modalPanel id="confirmacion" width="350" height="100" showWhenRendered="#{createReclamation.showConfirmation}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createReclamation.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{createReclamation.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+              <h:commandButton id="aceptar" value="Aceptar" action="#{createReclamation.deleteObjection}" >
+               <a4j:support event="onclick" 
+                 onsubmit="document.getElementById('formulario:aceptar').disabled=true;document.getElementById('formulario:cancelar').disabled=true"
+                 reRender="panel1"/>
+               <a4j:support event="oncomplete"
+                 oncomplete="document.getElementById('formulario:aceptar').disabled=false;document.getElementById('formulario:cancelar').disabled=false"
+                 reRender="panel1"/> 
+              </h:commandButton>
+            </h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton id="cancelar" value="Cancelar" action="#{createReclamation.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

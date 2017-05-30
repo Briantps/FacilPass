@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+   <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Configuración de Parametros del Sistema</title>
+</head>
+<style>
+  .rich-spinner-input{ width: 30px!important; }
+</style>
+<script>
+function hiddenScroll(){
+	document.getElementById('body').className="noscrollbody nocopypage";
+}
+</script>
+<body id="body" ondragstart='return false' ondrop='return false'>
+<div class="container">
+<f:view>
+ <f:subview id="header"><ui:include src="../content/header.jsp"></ui:include></f:subview>
+ <div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+ </div>
+ <div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+ </div>
+<div class="bkContents span-18 prepend-1">
+<f:loadBundle basename="staticText.messages" var="msg" />
+  <h:form>
+    <rich:panel id="rp" style="margin:auto;" >
+      <f:facet name="header">
+       <h:outputText value="Configuración Parámetros del Sistema"/>
+      </f:facet>
+        <div id="scroll_horizontal">
+         <rich:dataTable id="dTable"  value="#{systemParameters.lista}" var="lis" rows="10"
+           onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+	                  rowClasses="white,grey">
+           <rich:column style="text-align:center;"  width="20px">
+             <f:facet name="header">
+               <h:outputText value="Código"/>
+             </f:facet>
+             <h:outputText value="#{lis.systemParameterId}"/>
+           </rich:column>
+           <rich:column  width="120px">
+             <f:facet name="header">
+               <h:outputText value="Nombre Parámetro"/>
+             </f:facet>
+             <h:outputText value="#{lis.systemParameterName}"/>
+           </rich:column>
+           <rich:column style="text-align:center; word-wrap: break-word;"  width="200">
+             <f:facet name="header">
+               <h:outputText value="Valor Parámetro"/>
+             </f:facet>
+             <h:outputText value="#{lis.systemParameterValue}" escape="false" style= "resize: none; max-width: 200px; overflow: auto; display: block; text-align: center; max-height: 250px"/>
+              															      
+           </rich:column>
+           <rich:column   width="200px">
+             <f:facet name="header">
+               <h:outputText value="Descripción Parámetro"/>
+             </f:facet>
+             <h:outputText value="#{lis.systemParameterDescription}" />
+           </rich:column>
+           <rich:column style="text-align:center;"  width="50px">
+             <f:facet name="header">
+               <h:outputText value="Acción"/>
+             </f:facet>
+             <h:commandLink value="Modificar" action="#{systemParameters.update}">
+               <f:setPropertyActionListener target="#{systemParameters.parameterId}" value="#{lis.systemParameterId}"/>
+	           <f:setPropertyActionListener target="#{systemParameters.valueParameter}" value="#{lis.systemParameterValue}"/>
+               <f:setPropertyActionListener target="#{systemParameters.nameParameter}" value="#{lis.systemParameterName}"/>
+               <f:setPropertyActionListener target="#{systemParameters.clasification}" value="#{lis.clasification}"/>               
+             </h:commandLink>
+           </rich:column>
+           <f:facet name="footer">
+             <rich:datascroller for="dTable"/>
+           </f:facet>
+         </rich:dataTable>
+        </div>
+    </rich:panel>
+  </h:form>
+  
+  <rich:spacer height="5"/>
+	<rich:panel>
+		<f:facet name="header">
+			<h:outputText value="Reporte Parámetros de Seguridad" styleClass="bold"/>
+		</f:facet>
+   <h:form id="form" target="_blank">
+		  <h:panelGrid style="width: 200px; margin: auto; padding:10px;" columns="2">
+				<h:commandLink id="clinkpdf" target="_blank" value="" action="#{securityParametersReportBean.execute}">
+					<img title="Generar" src="/web.bo.peajes.com/img/generar_btn.gif" 
+					style="cursor: pointer; border: 0px solid blue;" />
+					<f:setPropertyActionListener target="#{securityParametersReportBean.exportOption}" value="PDF"/>
+           		</h:commandLink>
+           		<h:commandLink id="clinkExcel" target="_blank" value="" action="#{securityParametersReportBean.execute}">
+					<img title="Generar" src="/web.bo.peajes.com/img/generar_xls_btn.gif" style="cursor: pointer; border: 0px solid blue;" />
+					<f:setPropertyActionListener target="#{securityParametersReportBean.exportOption}" value="EXCEL"/>
+						 </h:commandLink>
+			</h:panelGrid>	
+	</h:form>
+	</rich:panel>		
+	<rich:spacer height="20"/>
+
+       <rich:modalPanel id="panelm" width="370" height="115" showWhenRendered="#{systemParameters.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Configuración Parámetros del Sistema" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{systemParameters.hideModal}" image="/img/close.png">
+                        <a4j:support event="onclick" action="#{systemParameters.hideModal}" reRender="dTable"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panelm" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{systemParameters.message}" styleClass="normal"/>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding-left:12px; ">
+          <a4j:form>
+			<h:commandButton value="Aceptar" action="#{systemParameters.hideModal}">
+               <a4j:support event="onclick" action="#{systemParameters.hideModal}" reRender="dTable"></a4j:support>
+			</h:commandButton>
+			<rich:componentControl for="panelm" attachTo="hidelink" operation="hide" event="onclick" />
+		  </a4j:form>
+        </h:panelGrid>
+	</rich:modalPanel>
+
+ <rich:modalPanel id="panelm2" width="370" height="115" showWhenRendered="#{systemParameters.showModalError}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Configuración Parámetros del Sistema" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{systemParameters.hideModal3}" image="/img/close.png">
+                        <a4j:support event="onclick" action="#{systemParameters.hideModal3}" reRender="confirmacion,panel1,panelm"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panelm2" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{systemParameters.message}" styleClass="normal"/>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding-left:12px; ">
+          <a4j:form>
+			<h:commandButton value="Aceptar" action="#{systemParameters.hideModal3}">
+               <a4j:support event="onclick" action="#{systemParameters.hideModal3}" reRender="confirmacion,panel1,panelm"></a4j:support>
+			</h:commandButton>
+			<rich:componentControl for="panelm" attachTo="hidelink" operation="hide" event="onclick" />
+		  </a4j:form>
+        </h:panelGrid>
+	</rich:modalPanel>
+	
+	 <rich:modalPanel id="panel1" width="450" height="220"  showWhenRendered="#{systemParameters.showUpdate}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Modificar Parámetro" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{systemParameters.hideModal}" image="/img/close.png">
+						<a4j:support event="onclick" action="#{systemParameters.hideModal}" reRender="np2,dTable"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panel1" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+          <rich:panel style="height:200">
+          <f:facet name="header">
+            <h:outputText value="Actualizar Información Parámetros del Sistema"/>
+          </f:facet>
+		  <h:panelGrid columns="2" width="240">
+           <h:panelGroup>
+               <h:panelGrid columns="1" >
+		         <h:outputText value="Digite Parámetro No.: "  styleClass="bold"/>
+			     <h:panelGroup>
+                   <h:outputText value="#{systemParameters.parameterId} -  #{systemParameters.nameParameter}"/>
+                   <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+                 </h:panelGroup>
+               </h:panelGrid>
+           </h:panelGroup>
+		   <h:inputText id="np2" value="#{systemParameters.valueParameter}" maxlength="12" onkeypress="return numOnly(event)" rendered="#{systemParameters.showNumOnly}"/>
+           <h:selectOneMenu id="np3" value="#{systemParameters.valueParameter}" style="width: 100px;" styleClass="normal" rendered="#{systemParameters.showAlphaOnly}">
+			     <f:selectItem itemValue="SI" itemLabel="SI" />
+				 <f:selectItem itemValue="NO" itemLabel="NO" />
+            </h:selectOneMenu>
+           <h:inputText id="np4" value="#{systemParameters.valueParameter}" maxlength="500"  rendered="#{systemParameters.showAlphaNumOnly}"/>
+           <h:inputText id="np5" value="#{systemParameters.valueParameter}" maxlength="10" onkeypress="return dateOnly(event)" rendered="#{systemParameters.showDate}"/>
+           
+           <h:panelGroup id="np6" rendered="#{systemParameters.showHour}" >
+           <h:panelGrid columns="5">            
+           	  <rich:inputNumberSpinner value="#{systemParameters.hour}" minValue="00" maxValue="23" style="width: 30px;"/>
+           	  <h:outputText value=":" />
+           	  <rich:inputNumberSpinner value="#{systemParameters.minute}" minValue="00" maxValue="59" style="width: 30px;"/>
+           	  <h:outputText value=":" />
+           	  <rich:inputNumberSpinner value="#{systemParameters.second}" minValue="00" maxValue="59" style="width: 30px;"/>
+           	 </h:panelGrid> 
+           </h:panelGroup>
+           
+		  </h:panelGrid> 
+          <h:panelGrid columns="2" > 
+             <h:panelGroup>					
+			     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				 <h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+			 </h:panelGroup>
+             <h:commandButton value="Guardar Cambios" action="#{systemParameters.confirm}">
+		   </h:commandButton>
+		  </h:panelGrid>
+          </rich:panel>
+		</h:form>
+	</rich:modalPanel>
+	
+	<!--Modal Wysiwyg, para los parámetros 49 y 50 -->
+	<rich:modalPanel id="panelWysiwyg"  width="680" height="580"  showWhenRendered="#{systemParameters.showWysiwyg}" onresize="return false;" moveable="false" domElementAttachment="parent" onbeforeshow="hiddenScroll();">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Modificar Parámetro" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{systemParameters.hideModal}" image="/img/close.png">
+						<a4j:support event="onclick" action="#{systemParameters.hideModal}" reRender="np2,dTable"></a4j:support>
+					</h:commandButton>
+					<rich:componentControl for="panel1" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+          <rich:panel style="height:200">
+          <f:facet name="header">
+            <h:outputText value="Actualizar Información Parámetros del Sistema"/>
+          </f:facet>
+		  <h:panelGrid columns="2" width="240">
+           <h:panelGroup>
+               <h:panelGrid columns="1" >
+		         <h:outputText value="Digite Parámetro No.: "  styleClass="bold"/>
+			     <h:panelGroup>
+                   <h:outputText value="#{systemParameters.parameterId} -  #{systemParameters.nameParameter}"/>
+                   <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+                 </h:panelGroup>
+               </h:panelGrid>
+           </h:panelGroup> 
+                     
+           <div align="center" ondragover="return false">
+		   		<rich:editor value="#{systemParameters.valueParameter}" theme="advanced" id="editor"
+		   		width="600"
+				plugins="spellchecker,pagebreak,style,layer,table,save,advhr,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking" 
+				language="es"
+				height="350" >
+				<a4j:support event="onchange"
+										action="#{systemParameters.contCatac}" reRender="panelm2"
+										ajaxSingle="true" requestDelay="50"/>								 
+					<f:param name="theme_advanced_buttons1"	value="#{systemParameters.themeOne}" />
+					<f:param name="theme_advanced_buttons2" value="#{systemParameters.themeFour}" />
+					<f:param name="theme_advanced_buttons3" value="#{systemParameters.themeTwo}" />
+					<f:param name="theme_advanced_buttons4" value="#{systemParameters.themeTree}" />									
+					<f:param name="theme_advanced_toolbar_location" value="top" />
+					<f:param name="theme_advanced_toolbar_align" value="left" />
+					<f:param name="content_css" value="/web.bo.peajes.com/css/stylesEditor.css" />
+					<f:param name="theme_advanced_fonts" value="#{systemParameters.themeFont}"/>
+					<f:param name="extended_valid_elements" value= "iframe[src|title|width|height|allowfullscreen|frameborder|class|id],object[classid|width|height|codebase|*],param[name|value|_value|*],embed[type|width|height|src|*]" />
+				</rich:editor>																
+			</div>
+			
+		  </h:panelGrid> 
+          <h:panelGrid columns="2" > 
+             <h:panelGroup>					
+			     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				 <h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+			 </h:panelGroup>
+             <h:commandButton value="Guardar Cambios" action="#{systemParameters.confirm}">
+		   </h:commandButton>
+		  </h:panelGrid>
+          </rich:panel>
+		</h:form>
+	</rich:modalPanel>
+
+    <rich:modalPanel id="confirmacion" width="350" height="115"  showWhenRendered="#{systemParameters.showConfirm}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{systemParameters.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{systemParameters.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+			<rich:spacer height="15"/>
+			<div align="center">
+				<h:panelGroup>
+				<h:commandButton value="Aceptar" action="#{systemParameters.updateParameter}" style="width: 80px"/>					 
+                <rich:spacer width="10"/>
+              	<h:commandButton value="Cancelar" action="#{systemParameters.hideModal}" style="width: 80px"/>
+				</h:panelGroup>
+			</div>
+    	</h:form>
+	</rich:modalPanel>
+ 
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

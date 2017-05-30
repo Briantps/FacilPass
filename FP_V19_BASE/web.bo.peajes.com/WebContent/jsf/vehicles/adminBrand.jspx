@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css"
+			type="text/css"	media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+			type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+			type="text/css" media="screen, projection" />
+        <script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administración de marcas</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp" />
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headermenu">
+						<ui:include src="../menu/menu.jsp" />
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp" />
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<rich:spacer height="5" />
+					<h:form>
+						<script type="text/javascript">
+				            var row;
+				        </script>
+						<rich:contextMenu attached="false" id="menu" submitMode="ajax"
+							oncollapse="row.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+							<rich:menuItem value="Editar Marca" ajaxSingle="true"
+								oncomplete="#{rich:component('editPanel')}.show()"
+								actionListener="#{adminBrand.fetchCurrentRow}">
+								<a4j:actionparam name="brandId" value="{brandId}" />
+								<a4j:actionparam name="row" value="{currentRow}" />
+							</rich:menuItem>
+						</rich:contextMenu>				
+						<rich:panel style="width:700px;margin:auto;">
+							<f:facet name="header">
+								<h:outputText value="Lista de marcas" styleClass="bold" />
+							</f:facet>
+							<div id="btnAddBrandAlign">
+								<a4j:commandButton value="Agregar Marca" oncomplete="#{rich:component('addPanel')}.show();" />
+							</div>
+							<rich:spacer height="15" />
+							<rich:dataTable id="brandTable" var="item" value="#{adminBrand.listBrand}"
+								rows="15" rowKeyVar="row" ajaxKeys="#{adminBrand.keys}"
+								onRowContextMenu="if (row) row.style.backgroundColor='#{a4jSkin.tableBackgroundColor}';
+				                this.style.backgroundColor='#F1F1F1';
+				                row = this; #{rich:component('menu')}.show(event,{brandId:'#{item.brandId}', currentRow:'#{row}'});
+				                return false;" style="width:500px;margin:auto;">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="ID" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.brandId}" styleClass="normal" id="brId" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Marca" styleClass="bold" />
+									</f:facet>
+									<h:outputText value="#{item.brandName}" styleClass="normal"
+										id="brName" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Acción" styleClass="bold" />
+									</f:facet>
+									<a4j:commandLink ajaxSingle="true" id="editLink"
+										oncomplete="#{rich:component('editPanel')}.show()" styleClass="bold">
+										<h:outputText value="Editar" />
+										<f:setPropertyActionListener value="#{item}"
+											target="#{adminBrand.currentItem}" />
+										<f:setPropertyActionListener value="#{row}"
+											target="#{adminBrand.currentRow}" />
+									</a4j:commandLink>
+								</rich:column>
+							</rich:dataTable>				
+							<rich:spacer height="15" />
+							<rich:datascroller for="brandTable" maxPages="30" />
+						</rich:panel>
+					</h:form>				
+					<rich:modalPanel id="addPanel" width="350" height="120" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:outputText value="Agregar marca" />
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<h:graphicImage value="/img/close.png" id="addpanel_hidelink" />
+								<rich:componentControl for="addPanel" attachTo="addpanel_hidelink"
+									operation="hide" event="onclick" />
+							</h:panelGroup>
+						</f:facet>
+						<h:form>
+							<f:loadBundle basename="staticText.messages" var="msg" />
+							<h:panelGrid columns="1">
+								<h:panelGrid columns="2">
+									<h:panelGroup>
+										<h:outputText value="Marca: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText value="#{adminBrand.newItem.brandName}" maxlength="50" onkeypress="return alphaSpaceOnly(event)"></h:inputText>
+									<h:panelGroup>
+				               			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+									</h:panelGroup>
+									<h:commandButton value="Guardar" action="#{adminBrand.storeNew}" />
+								</h:panelGrid>
+							</h:panelGrid>
+						</h:form>
+					</rich:modalPanel>				
+					<rich:modalPanel id="editPanel" width="350" height="120" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:outputText value="Editar marca" />
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<h:graphicImage value="/img/close.png" id="editpanel_hidelink" />
+								<rich:componentControl for="editPanel" attachTo="editpanel_hidelink"
+									operation="hide" event="onclick" />
+							</h:panelGroup>
+						</f:facet>
+						<h:form>
+							<f:loadBundle basename="staticText.messages" var="msg" />
+							<rich:messages style="color:red;"></rich:messages>
+							<h:panelGrid columns="1">
+								<a4j:outputPanel ajaxRendered="true">
+									<h:panelGrid columns="2">
+										<h:panelGroup>
+											<h:outputText value="Nombre: " styleClass="bold" />
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+										<h:inputText value="#{adminBrand.currentItem.brandName}" maxlength="50" onkeypress="return alphaSpaceOnly(event)"></h:inputText>
+										<h:panelGroup>
+				      						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+										</h:panelGroup>
+										<h:commandButton value="Modificar" action="#{adminBrand.store}" />
+									</h:panelGrid>
+								</a4j:outputPanel>				
+							</h:panelGrid>
+						</h:form>
+					</rich:modalPanel>				
+				    <rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{adminBrand.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Marcas" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminBrand.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{adminBrand.msg}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{adminBrand.hideModal}"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>		
+						<br />
+					</rich:modalPanel>	 
+					
+					<rich:spacer height="20" />			
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp" />
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

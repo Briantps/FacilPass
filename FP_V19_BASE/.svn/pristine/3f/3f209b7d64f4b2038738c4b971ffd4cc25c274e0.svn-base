@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<div>	
+					<rich:spacer height="5"/>	
+					<a4j:form id="myForm">
+						<rich:panel style="width:375px;">
+							<rich:extendedDataTable value="#{listUser.listRol}" height="330px" width="350px"
+								var="item" style="margin:auto;" id="lista" enableContextMenu="false">
+								<rich:column sortable="false" width="165px">
+									<f:facet name="header">
+										<h:outputText value="Nombre Rol" styleClass="bold" style="color:#000000;text-align:center;"/>
+									</f:facet>
+									<h:outputText value="#{item.role.roleName}" styleClass="normal"/>
+								</rich:column>
+								<rich:column sortable="false" width="165px">
+									<f:facet name="header">
+										<h:outputText value="Asignar" styleClass="bold" style="color:#000000;text-align:center"/>
+									</f:facet>
+									<h:selectBooleanCheckbox value="#{item.active}" styleClass="normal"/>
+								</rich:column>
+							</rich:extendedDataTable>
+							<rich:spacer height="10"/>	
+							<table width="100px">
+								<tr>
+									<td width="25%"></td>
+									<td width="25%"></td>
+									<td width="25%"></td>
+									<td width="25%">
+										<h:commandButton value="Guardar" action="#{listUser.showConfirmation}" styleClass="normal" style="width: 80px">
+                                          <a4j:support event="onclick" reRender="panelC1"/>
+                                        </h:commandButton>
+									</td>
+								</tr>
+							</table>
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>	
+				</div>
+			</f:view>
+		</div>
+	</body>
+</html>

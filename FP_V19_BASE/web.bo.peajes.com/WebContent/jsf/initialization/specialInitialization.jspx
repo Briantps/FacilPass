@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Inicialización</title>
+<style type="text/css">
+	#scroll_horizontal {
+		width: 100%;
+		overflow: auto;
+		clear:both;
+		text-align: center;
+		margin :auto;
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="../menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="../menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>
+	<h:form>
+		<a4j:outputPanel id="startPanel">
+			<rich:panel styleClass="richPanel" style="background-color: #FBFBFB;"
+				rendered="#{!initializationBean.showPanel}">
+				<h:outputText value="No hay Datos Para Procesar." styleClass="bold" style="color: red;"/>
+			</rich:panel>
+			<rich:panel styleClass="richPanel" style="background-color: #FBFBFB;"
+				rendered="#{initializationBean.showPanel}">
+				<f:facet name="header">
+					<h:outputText value="Inicialización Tarjetas Especiales: Inclusiones Recibidas" styleClass="bold"/>
+				</f:facet>
+				<rich:dataTable id="datalistI" value="#{initializationBean.inclusionList}" 
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+					var="list" width="500px" rowClasses="white,white" rows="5"
+					style="margin: auto;">
+					<rich:column style="text-align: center;" width="200px">
+						<f:facet name="header">
+							<h:outputText styleClass="bold" value="Número de Inclusión"/>
+						</f:facet>
+						<h:commandLink value="#{list.inclusionNumber}" action="#{initializationBean.initIni}"
+							styleClass="bold">
+							<f:setPropertyActionListener value="#{list.inclusionId}" target="#{initializationBean.inclusionId}"/>	
+						</h:commandLink>
+					</rich:column>
+					<rich:column style="text-align: center;"  width="300px">
+						<f:facet name="header">
+							<h:outputText styleClass="bold" value="Fecha Inclusión"/>
+						</f:facet>
+						<h:outputText value="#{list.inclusionDate}" styleClass="normal"
+							converter="TimeStampToStringDateConverter"/>
+					</rich:column>
+					<f:facet name="footer">
+						<rich:datascroller/>
+					</f:facet>
+				</rich:dataTable>
+				<rich:spacer height="10"/>
+				<rich:panel rendered="#{initializationBean.showDetail}">
+					<h:panelGrid style="margin: auto; size: 500px;" columns="2" 
+						styleClass="tableBO">
+						<h:outputText value="No. Inclusión" styleClass="bold"/>
+						<h:inputText styleClass="bold" value="#{initializationBean.inclusion.inclusionNumber}" 
+							disabled="true"/>
+						<h:outputText value="Fecha:" styleClass="bold"/>
+						<h:inputText styleClass="bold" value="#{initializationBean.inclusion.inclusionDate}" 
+							disabled="true" converter="TimeStampToStringDateConverter"/>
+					</h:panelGrid>
+					<rich:spacer height="10"/>
+					<div id="scroll_horizontal">	
+						<rich:extendedDataTable id="datalist" value="#{initializationBean.details}" 
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+							var="list" height="300px" width="1100px" rowClasses="white,white"
+							enableContextMenu="false">
+							<rich:column sortable="true" sortBy="#{list.customization.tbAccount.tbSystemUser.userNames} #{list.customization.tbAccount.tbSystemUser.userSecondNames}">
+								<f:facet name="header">
+									<h:outputText styleClass="bold" value="Nombre Cliente"/>
+								</f:facet>
+								<h:outputText value="#{list.customization.tbAccount.tbSystemUser.userNames} #{list.customization.tbAccount.tbSystemUser.userSecondNames}"
+									styleClass="normal" rendered="#{list.customization.tbAccount.tbSystemUser.tbCodeType.codeTypeId != 3}"/>
+								<h:outputText value="#{list.customization.tbAccount.tbSystemUser.userNames}"
+									styleClass="normal" rendered="#{list.customization.tbAccount.tbSystemUser.tbCodeType.codeTypeId == 3}"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText styleClass="bold" value="Regional"/>
+								</f:facet>
+								<h:outputText value="#{list.reg}"
+									styleClass="normal"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText styleClass="bold" value="Peaje"/>
+								</f:facet>
+								<h:outputText value="#{list.station}"
+									styleClass="normal"/>
+							</rich:column>
+							<rich:column sortable="true" sortBy="#{list.customization.tbVehicle.vehiclePlate}"
+								filterEvent="onkeyup" filterBy="#{list.customization.tbVehicle.vehiclePlate}">
+								<f:facet name="header">
+									<h:outputText styleClass="bold" value="Placa"/>
+								</f:facet>
+								<h:outputText value="#{list.customization.tbVehicle.vehiclePlate}"
+									styleClass="normal"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText styleClass="bold" value="Facial"/>
+								</f:facet>
+								<h:outputText value="#{list.detail.deviceFacialId}"
+									styleClass="normal"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText styleClass="bold" value="ID. Tarjeta"/>
+								</f:facet>
+								<h:outputText value="#{list.customization.tbDevice.deviceCode}"
+									styleClass="normal"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText styleClass="bold" value="Acción"/>
+								</f:facet>
+								<h:outputText styleClass="bold" value="ASOCIADO" 
+								rendered="#{list.customization.tbDevice != null}"/>
+								<h:commandLink value="ASOCIAR ID" styleClass="bold" rendered="#{list.customization.tbDevice == null}"
+									action="#{initializationBean.initAssociateId}">
+									<f:setPropertyActionListener value="#{list.detail.inclusionDetailId}" 
+										target="#{initializationBean.inclusionDetailId}"/>
+								</h:commandLink>
+							</rich:column>
+						</rich:extendedDataTable>
+					</div>
+				</rich:panel>
+			</rich:panel>
+		</a4j:outputPanel>
+	</h:form>
+	<rich:spacer height="20"/>
+
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{initializationBean.modal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Inicialización" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{initializationBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{initializationBean.modalMessage}" styleClass="normal"/>
+		<br/>
+	</rich:modalPanel>	
+	
+	<rich:modalPanel id="confirmacion" width="350" height="150" 
+		showWhenRendered="#{initializationBean.confirmModal}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación - Inicialización" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{initializationBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{initializationBean.modalMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{initializationBean.associateId}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{initializationBean.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

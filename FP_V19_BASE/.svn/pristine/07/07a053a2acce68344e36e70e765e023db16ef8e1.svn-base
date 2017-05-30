@@ -1,0 +1,40 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<rich:modalPanel id="#{dlgId}" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Usuarios asociados a la tarea" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/img/close.png" id="#{dlgId}_hidelink" />
+				<rich:componentControl for="#{dlgId}"
+					attachTo="#{dlgId}_hidelink" operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+
+		<a4j:form>
+			<h:panelGrid columns="1">
+				<h:panelGrid columns="2" columnClasses="paddingCol">
+					<rich:pickList id="userTaskSelector"
+						value="#{selectedUsers}"
+						copyAllControlLabel = "Mover todos"
+						copyControlLabel = "Mover" 
+                    	removeControlLabel = "Quitar"
+                    	removeAllControlLabel ="Quitar todos">
+						<f:selectItems value="#{availableUsers}"/>
+					</rich:pickList>
+				</h:panelGrid>
+				
+				<a4j:commandButton value="Guardar"
+					reRender="#{reRender}"
+					action="#{userBean[actionForButton]}"
+					oncomplete="#{rich:component(dlgId)}.hide()" />
+			</h:panelGrid>
+		</a4j:form>
+	</rich:modalPanel>
+</ui:component>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"	type="text/css" media="screen, projection" />
+<title>Contrato Usuario FacilPass</title>
+</head>
+<body>
+
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="../menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+
+				<rich:spacer height="5" />
+				<rich:panel>
+					<f:facet name="header">
+						<h:outputText value="Contrato Usuario FacilPass" styleClass="bold" />
+					</f:facet>
+					<a4j:form id="formPDF">
+						<a4j:outputPanel id="panelPDF"
+							rendered="#{contractClients.showPDF}">
+							<div align="center">
+								<h:commandLink id="clinkpdf" target="_blank" value=""
+									action="#{contractClients.showPdfVerify}">
+									<img title="Descargar"
+										src="/web.bo.peajes.com/img/generar_btn.gif" alt="Descargar"
+										style="cursor: pointer; border: 0px solid blue;" />
+								</h:commandLink>
+							</div>
+						</a4j:outputPanel>
+					</a4j:form>
+				</rich:panel>
+
+				<rich:spacer height="20" />
+			</div>
+			<f:subview id="footer">
+				<ui:include src="../content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+
+
+	<rich:modalPanel id="contract" width="700" height="510"
+		showWhenRendered="#{contractClients.contractModal}"
+		onresize="return false;" moveable="false" style="word-wrap: break-word;">
+
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="#{contractClients.titleContract}"
+					styleClass="bold" />
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:form>
+					<h:commandButton action="#{contractClients.cancelAceptation}"
+						image="/img/close.png" />
+				</h:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form>
+			<h:outputText value="#{contractClients.msnContract}" escape="false"
+				style="width: 668px; height: 396px;resize: none;overflow: auto;display: block;" styleclass="someClass" />
+
+			<h:panelGrid columns="1"
+				style="width: 668px; margin: auto; padding:5px; ">
+				<h:panelGroup>
+					<h:selectBooleanCheckbox id="cb"
+						value="#{contractClients.aceptcient}">
+						<a4j:support event="onclick"
+							action="#{contractClients.activatebutton}"
+							reRender="panelButtons" status="commonstatus">
+						</a4j:support>
+					</h:selectBooleanCheckbox>
+					<h:outputLabel value="He leído y acepto los términos y condiciones"
+						styleClass="bold" />
+				</h:panelGroup>
+			</h:panelGrid>
+
+			<h:panelGrid id="Buttons" columns="1"
+				style="width: 668px; margin: auto; padding:7px; ">
+				<h:panelGroup id="panelButtons">
+					<h:commandButton value="Aceptar" id="botonAceptar"
+						action="#{contractClients.openAceptation}"
+						disabled="#{not contractClients.enableacept}">
+						<a4j:support event="oncomplete" ajaxSingle="true"
+							reRender="acept2,contract" />
+					</h:commandButton>
+					<rich:spacer width="10px"></rich:spacer>
+					<h:commandButton value="Volver"
+						action="#{contractClients.cancelAceptation}" />
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+
+
+
+	<rich:modalPanel id="acept2" width="400" height="115"
+		showWhenRendered="#{contractClients.aceptation2}"
+		onresize="return false;" moveable="false" autosized="true">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="ACEPTACIÓN DE TÉRMINOS Y CONDICIONES"
+					styleClass="bold" />
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:form>
+					<h:commandButton action="#{contractClients.cancelAceptation}"
+						image="/img/close.png">
+						<a4j:support event="oncomplete"
+							action="#{contractClients.clearVar}" reRender="" />
+					</h:commandButton>
+				</h:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form id="form2">
+			<h:outputText value="#{contractClients.msgAcept}" styleClass="normal"
+				style="height: auto;" />
+			<div align="center" style="margin-top: 10px">
+				<h:panelGroup>
+					<h:panelGroup>
+						<a4j:commandButton id="send2" value="Si Acepto"
+							action="#{contractClients.makeAceptation2}">
+							<a4j:support event="onclick"
+								onsubmit="document.getElementById('form2:send2').disabled=true;document.getElementById('form2:cancel2').disabled=true" />
+							<a4j:support event="oncomplete" ajaxSingle="true"
+								reRender="acept,acept2,form1,panelPDF,panelm,formPDF" />
+						</a4j:commandButton>
+					</h:panelGroup>
+					<rich:spacer width="10" />
+					<h:commandButton id="cancel2" value="No Acepto"
+						action="#{contractClients.cancelAceptation}" />
+				</h:panelGroup>
+			</div>
+		</h:form>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="acept" width="400" height="115"
+		showWhenRendered="#{contractClients.aceptation}"
+		onresize="return false;" moveable="false" autosized="true">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="ACEPTACIÓN DE TÉRMINOS Y CONDICIONES"
+					styleClass="bold" />
+			</h:panelGroup>
+		</f:facet>
+		<h:form id="form3">
+			<h:outputText value="#{contractClients.msgAcept}" styleClass="normal"
+				style="height: auto;" />
+			<div align="center" style="margin-top: 10px">
+				<h:panelGroup>
+					<h:panelGroup>
+						<a4j:commandButton id="send" value="Si Acepto"
+							action="#{contractClients.makeAceptation}">
+							<a4j:support event="onclick"
+								onsubmit="document.getElementById('form3:send').disabled=true;document.getElementById('form3:cancel').disabled=true" />
+							<a4j:support event="oncomplete" ajaxSingle="true"
+								reRender="acept,form1,panelPDF,panelm,formPDF" />
+						</a4j:commandButton>
+					</h:panelGroup>
+					<rich:spacer width="10" />
+					<h:commandButton id="cancel" value="No Acepto"
+						action="#{contractClients.cancelAceptation}" />
+				</h:panelGroup>
+			</div>
+		</h:form>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="panelm" width="350" height="115"
+		showWhenRendered="#{contractClients.showModal}"
+		onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Mensaje - Contrato Usuarios FacilPass"
+					styleClass="bold" />
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{contractClients.hideModal}"
+						image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{contractClients.msgModal}" styleClass="normal" />
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:commandButton value="Aceptar"
+						action="#{contractClients.hideModal}" />
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
+		<br />
+	</rich:modalPanel>
+
+
+	<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+		moveable="false" resizeable="false">
+		<f:facet name="header">
+			<h:outputText value="Procesando" />
+		</f:facet>
+		<h:outputText value="Procesando..." style="font-size:12px;" />
+	</rich:modalPanel>
+
+</body>
+</html>

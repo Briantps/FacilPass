@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<title>Administración de opciones del Menú</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">				
+					<rich:spacer height="5"/>	
+					<rich:panel style="width:600 px;margin:auto;">
+						<f:facet name="header">
+							<h:outputText value="Administración de Opciones del Menú" styleClass="bold"/>
+						</f:facet>
+						<h:form>
+							<div id="scroll_horizontal">
+								<h:panelGrid styleClass="tableBO" columns="6" style="size 800px; margin: auto; padding:10px; ">
+					  				<rich:spacer width="30"/>
+								  	<rich:spacer width="30"/>
+								  	<rich:spacer width="30"/>
+								  	<rich:spacer width="30"/>
+								  	<rich:spacer width="20"/>
+								  	<h:panelGroup>
+								 		<h:commandButton value="Vista Previa Menú Cliente" action="#{previewMenuBean.client}">
+								    		<a4j:support event="oncomplete" reRender="panelData"/>
+								 		</h:commandButton>	
+								 		<rich:spacer width="10"/>
+								 		<h:commandButton value="Vista Previa Menú Usuario-Administrador" action="#{previewMenuBean.admin}">
+								   			<a4j:support event="oncomplete" reRender="panelData"/>
+								 		</h:commandButton>
+								 	</h:panelGroup>
+								</h:panelGrid>
+								<rich:dataTable value="#{adminMenu.listMenu}" var="item" id="lista" rows="#{adminMenu.maxValueOrder}" width="800px">
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Menú" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink action="#{adminMenu.viewActions}" styleClass="normal">
+											<h:outputText value="#{item.optionName}" styleClass="normal"/>
+											<f:setPropertyActionListener target="#{adminMenu.idOpt}" value="#{item.optionId}"/>
+										</h:commandLink>									
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Subir" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink action="#{adminMenu.upOrder}" styleClass="normal" rendered="#{item.optionOrder != adminMenu.minValueOrder}">					
+									    	<h:graphicImage url="/img/flecha_arriba_transp.gif" />
+											<f:setPropertyActionListener target="#{adminMenu.idOpt}" value="#{item.optionId}"/>
+										</h:commandLink>
+									</rich:column>	
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Bajar" styleClass="bold"/>
+										</f:facet>				
+										<h:commandLink action="#{adminMenu.downOrder}" styleClass="normal" rendered="#{item.optionOrder != adminMenu.maxValueOrder}">
+											<h:graphicImage url="/img/flecha_abajo_transp.gif" />
+											<f:setPropertyActionListener target="#{adminMenu.idOpt}" value="#{item.optionId}"/>
+										</h:commandLink>
+									</rich:column>		
+								</rich:dataTable>		
+							</div>
+						</h:form>
+					</rich:panel>					
+					<rich:spacer height="20"/>					
+					<rich:modalPanel id="panelOption" width="450" autosized="true" showWhenRendered="#{adminMenu.showActions}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Administración de Opciones del menú #{adminMenu.nameOpt}" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminMenu.hideModalOptions}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:form>
+							<rich:dataTable
+						  		value="#{adminMenu.listActions}" 
+						  		var="itemAct" 
+						  		id="listaAct" 
+						  		
+						  		rows="#{adminMenu.maxValueOrderAction}" 		  
+						  		width="425px" 
+				          		>
+						  		<rich:column width="220px" > 
+									<f:facet name="header">
+										<h:outputText value="Opción" styleClass="normal"/>
+									</f:facet>
+									<h:outputText value="#{itemAct.actionId.actionName}" styleClass="normal"/>
+						  		</rich:column>	
+						  		<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Referencia" styleClass="normal"/>
+									</f:facet>
+									<h:commandLink action="#{adminMenu.changeReference}" styleClass="normal">					
+								    	<h:outputText value="#{itemAct.optionActionReference.optActDescription}" styleClass="normal"/>
+										<f:setPropertyActionListener target="#{adminMenu.idOptAct}" value="#{itemAct.optionActiontId}"/>
+									</h:commandLink>				
+						  		</rich:column>	
+						  		<rich:column width="40px">
+									<f:facet name="header">
+										<h:outputText value="Subir" styleClass="normal"/>
+									</f:facet>
+									<h:commandLink action="#{adminMenu.upOrderAction}" styleClass="normal" rendered="#{itemAct.optionActionOrder != adminMenu.minValueOrderAction}">					
+								    	<h:graphicImage url="/img/flecha_arriba_transp.gif" />
+										<f:setPropertyActionListener target="#{adminMenu.idOptAct}" value="#{itemAct.optionActiontId}"/>
+									</h:commandLink>
+								</rich:column>	
+								<rich:column width="40px">
+									<f:facet name="header">
+										<h:outputText value="Bajar" styleClass="normal"/>
+									</f:facet>				
+									<h:commandLink action="#{adminMenu.downOrderAction}" styleClass="normal" rendered="#{itemAct.optionActionOrder != adminMenu.maxValueOrderAction}">
+										<h:graphicImage url="/img/flecha_abajo_transp.gif" />
+										<f:setPropertyActionListener target="#{adminMenu.idOptAct}" value="#{itemAct.optionActiontId}"/>
+									</h:commandLink>
+								</rich:column>
+                                
+						 	</rich:dataTable>
+						</h:form>
+						<br />
+					</rich:modalPanel>					
+					<rich:modalPanel id="pnlReferencias" width="350" height="200" showWhenRendered="#{adminMenu.showReferences}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Cambiar Referencia de la Opción #{adminMenu.nameOptAct} " styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminMenu.hideModalReferences}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:form>						
+							<h:outputText value="Seleccione Uno" styleClass="bold"/>
+							<h:selectOneRadio layout="pageDirection" value="#{adminMenu.referenceId}">
+						  		<f:selectItems value="#{adminMenu.selListRef}" />				
+							</h:selectOneRadio>
+							<h:panelGrid styleClass="tableBO" columns="3" style="size 300px; margin: auto; padding:10px; ">	
+								<rich:spacer height="5"/>
+								<h:commandButton value="Aceptar" action="#{adminMenu.changingReference}">
+									<a4j:support event="oncomplete"/>
+								</h:commandButton>				
+								<h:commandButton value="Cancelar" action="#{adminMenu.hideModalReferences}">
+									<a4j:support event="oncomplete"/>
+								</h:commandButton>
+							</h:panelGrid>	
+					    </h:form>		
+					</rich:modalPanel>					
+					<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{adminMenu.showMsg}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Menú" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminMenu.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+                        <a4j:form>
+						  <h:outputText value="#{adminMenu.msg}" styleClass="normal"/><br />
+                          <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+                            <h:commandButton value="Aceptar" action="#{adminMenu.hideModal}"/>
+                          </h:panelGrid>
+                        </a4j:form>
+						<br />
+					</rich:modalPanel>				
+					<rich:modalPanel id="panelPrev" width="350" height="500" showWhenRendered="#{previewMenuBean.showPrevMenu}" style="overflow:auto;" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Vista Previa - Administración de Menú" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{previewMenuBean.hideModalPrev}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:form>
+							<h:outputText value="#{previewMenuBean.descript}" style="color: red; font-size: 12px;"></h:outputText>
+						   	<div class="left-menu">
+								<rich:panelMenu id="menuPpalPrev" binding="#{previewMenuBean.panelMenuPrev}" 
+									topGroupStyle="font-family: 'Arial Black'; font-size: 11px;" selectedChild="#{previewMenuBean.itemSelectedPrev}"/>
+						   </div>
+						</h:form>
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

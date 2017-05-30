@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<title>Información Saldos</title>
+</head>
+
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="menuheader">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="../menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+
+				<rich:spacer height="5" />
+				<rich:panel style="width:600 px;margin:auto;">
+					<f:facet name="header">
+							<h:outputText value="Número Único de Recargas Electrónicas "
+								styleClass="bold" />
+						</f:facet>
+					<rich:panel styleClass="ajust" style="overflow: hidden;height: auto" >						
+						<h:outputText value="#{informationBalanceAccount.txtHtml}"
+							escape="false"
+							style="width: 680; height: auto;resize: none;display: compact;word-wrap: break-word;overflow-x: hidden;" />						
+					</rich:panel>
+					<rich:spacer height="5" />
+
+					<div>
+						<rich:spacer height="5" width="800px" />
+					</div>
+					<h:form>
+					<rich:panel style="overflow-x: auto;">
+						
+							<f:facet name="header">
+								<h:outputText value="Lista de Cuentas FacilPass"
+									styleClass="bold"></h:outputText>
+							</f:facet>
+							<div id="scroll_horizontal">
+								<rich:dataTable
+									value="#{informationBalanceAccount.listBalanceAccount}"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+											onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+											rowClasses="white,grey" var="list" id="lista" rows="10">
+
+									<rich:column width="150px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Fecha de Creación" />
+										</f:facet>
+										<h:outputText value="#{list.dateCreationAccount}"
+											styleClass="normal" converter="StringToStringDateConverter" />
+									</rich:column>
+									<rich:column width="150px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Cuenta FacilPass" />
+										</f:facet>
+										<h:outputText value="#{list.account}" styleClass="normal" />
+
+									</rich:column>
+									<rich:column width="150px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="#{informationBalanceAccount.nameNure}" />
+										</f:facet>
+										<h:outputText value="#{list.nure}" styleClass="normal" />
+									</rich:column>
+									<rich:column width="150px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Saldo" />
+										</f:facet>
+										<h:outputText value="#{list.balanceAccount}"
+											styleClass="normal">
+											<f:convertNumber pattern="$###,###,###" />
+										</h:outputText>
+									</rich:column>
+									
+									<rich:column style="text-align:center;">
+									<f:facet name="header">
+											<h:outputText value="Recarga Programada" />
+										</f:facet>
+										<h:outputText value="#{list.detailFrecuence}"
+											styleClass="normal">
+										</h:outputText>
+									</rich:column>
+
+								</rich:dataTable>
+								<rich:datascroller align="center" for="lista" />
+							</div>
+						
+
+
+					</rich:panel>
+					</h:form>
+				</rich:panel>
+
+				<rich:spacer height="20" />
+
+
+			</div>
+			<f:subview id="footer">
+				<ui:include src="../content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

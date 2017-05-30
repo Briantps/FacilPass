@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administración Convenio</title>
+	</head>
+	<script type="text/javascript">
+	function getFocus(numero) {
+	   if (numero==1){
+	   		setTimeout(function(){document.getElementById("formulario:createRecharge").focus()},1000);
+	   		setTimeout(function(){document.getElementById("formulario:editRecharge").focus()},1000);
+	   }	   
+	}
+	</script>
+<body onload="getFocus(#{agreementsManagementBean.numero})">
+<div class="container">
+	<f:view>
+		<f:subview id="header">
+			<ui:include src="../content/header.jsp"/>
+		</f:subview>
+		<div class="span-24">
+			<f:subview id="menuheader">
+				<ui:include src="../menu/menu.jsp"/>
+			</f:subview>
+		</div>
+		<div class="span-5">
+			<ui:include src="../menu/sideMenu.jsp"/>
+		</div>
+		<div class="bkContents span-18 prepend-1">
+			<f:loadBundle basename="staticText.messages" var="msg" />
+		<h:form id="formulario">
+			<rich:panel style="width:750px;margin:auto; background-color: #ffffff;" >
+				<f:facet name="header">
+					<h:outputText value="Administrar Convenio" styleClass="bold"/>
+				</f:facet>
+				
+				<rich:panel style="width:700px;margin:auto; background-color: #ffffff;" rendered="#{agreementsManagementBean.showCreateAgreement}">
+					<f:facet name="header" >
+						<h:commandLink value="Crear Convenio" action="#{agreementsManagementBean.panelCreateAgreement}" 
+									   rendered="#{agreementsManagementBean.permCreate}" styleClass="no-decor"/>
+					</f:facet>
+					<h:panelGrid id="viewPanelCreateAgreement" rendered="#{agreementsManagementBean.viewPanelCreateAgreement}" columns="6">
+						<h:panelGroup> 
+							<h:outputText styleClass="bold" value="Código:" />
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              	</h:panelGroup>
+		              	<h:inputText value="#{agreementsManagementBean.codeAgreement}" maxlength="6" 
+		              	onkeypress="return numOnly(event)" id="codigoConvenio" style="width: 175px"/>
+		              	<rich:spacer width="40px"/>		              	
+		              	<h:panelGroup> 
+							<h:outputText styleClass="bold" value="Nombre:" />
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              	</h:panelGroup>
+		              	<rich:spacer width="58px"/>		              	
+		              	<h:inputText value="#{agreementsManagementBean.nameAgreement}" maxlength="100" 
+		              	onkeypress="return nameAgreement(event)" id="NombreConvenio" style="width: 175px"/>
+		              	<h:panelGroup> 
+							<h:outputText styleClass="bold" value="Modalidad:" />
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              	</h:panelGroup>
+		              	<h:selectOneMenu id="paymentMethodId" value="#{agreementsManagementBean.paymentMethodId}" style="width:179px">
+		                	<f:selectItems value="#{agreementsManagementBean.paymentMethodList}"/>
+		                  	<a4j:support event="onchange" ajaxSingle="true" reRender="bankId"/>
+		              	</h:selectOneMenu>
+		              	<rich:spacer width="40px"/>
+		              	<h:panelGroup> 
+							<h:outputText styleClass="bold" value="Entidad:" />
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              	</h:panelGroup>
+		              	<rich:spacer width="58px"/>		              	
+		              	<h:selectOneMenu id="bankId" value="#{agreementsManagementBean.bankId}" style="width:178px">
+		                	<f:selectItems value="#{agreementsManagementBean.bankList}"/>
+		                  	<a4j:support event="onchange" ajaxSingle="true"/>
+		              	</h:selectOneMenu>
+		              </h:panelGrid>	
+		              <h:panelGrid columns="4" rendered="#{agreementsManagementBean.viewPanelCreateAgreement}">
+			            <h:panelGroup> 	              	
+		              		<h:selectBooleanCheckbox id="selectedCheckBoxCreate" value="#{agreementsManagementBean.active}" style="text-align: center"
+			              		valueChangeListener="#{agreementsManagementBean.validateMinimumAssignment}" immediate="true" onclick="submit()">
+		              			<a4j:support event="onchange" reRender="createRecharge"/>         		    
+		              		</h:selectBooleanCheckbox>
+		              		<h:outputText value="Valida Recarga/asignación mínima" styleClass="bold"/>
+	              		</h:panelGroup>
+	              		<rich:spacer width="73px"/>
+	              		<h:panelGroup>
+		              		<td width="135px">
+								<h:outputText value="Recarga/asignación mínima:" styleClass="bold" />
+		              			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              		</td>		              		
+		              	</h:panelGroup>
+		              	<h:inputText id="createRecharge" value="#{agreementsManagementBean.textRechargeValue}" style="width:178px"
+		              	    disabled="#{agreementsManagementBean.disableField}"
+					   	    onkeypress="return solonumerosNoPrimerCero(event,this)" maxlength="16"
+					   	    onkeyup="separadorMiles(this,this.value.charAt(this.value.length-1),event)">	   
+                        </h:inputText>
+                    </h:panelGrid>	   
+		            <h:panelGrid style="width: 672px;" rendered="#{agreementsManagementBean.viewPanelCreateAgreement}">
+			            <h:panelGroup>    	              	
+		              		<h:outputText styleClass="bold" value="Descripción:"/>
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		                </h:panelGroup>
+	              		<h:inputTextarea id="descriptionAgreement" value="#{agreementsManagementBean.descriptionAgreement}" 
+	              		style="resize:none;height: 100px;width: 663px" onkeyup="return checkMaxLength(event, this, 201);" onkeypress="return descriptionAgreement(event)"/>
+	                </h:panelGrid>
+	                <h:panelGrid rendered="#{agreementsManagementBean.viewPanelCreateAgreement}" styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px;">
+		               	<rich:spacer  style="width: 230px"/>
+			            <a4j:commandButton value="Guardar" styleClass="center" style="width: 80px" action="#{agreementsManagementBean.validateCreateAgreement}"
+			                               onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate,confirmationCreate"/>
+		               	<h:commandButton value="Cancelar" action="#{agreementsManagementBean.hideModalPanel}" styleClass="center"  style="width: 80px"/>
+					  	<rich:spacer  style="width: 230px"/>    
+					 </h:panelGrid>	
+					 <h:panelGroup rendered="#{agreementsManagementBean.viewPanelCreateAgreement}">  
+				      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				     </h:panelGroup> 
+				</rich:panel>
+
+				<rich:panel style="width:700px;margin:auto; background-color: #ffffff;" rendered="#{agreementsManagementBean.showUpdateAgreement}">
+					<f:facet name="header" >
+						<h:outputText value="Editar Convenio" styleClass="bold"/>
+					</f:facet>
+					<h:panelGrid  columns="6">
+					    <h:panelGroup> 
+							<h:outputText value="Código:" styleClass="bold"/>
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              	</h:panelGroup>
+		              	<h:inputText id="CodConvenio" value="#{agreementsManagementBean.codeAgreement}" maxlength="4" 
+		              	onkeypress="return numOnly(event)" disabled="#{!agreementsManagementBean.permUpdate}" style="width: 175px"/>
+		              	<rich:spacer width="40px"/>
+		              	<h:panelGroup> 
+							<h:outputText styleClass="bold" value="Nombre:"/>
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              	</h:panelGroup>
+		              	<rich:spacer width="58px"/>
+		              	<h:inputText id="NomConvenio" value="#{agreementsManagementBean.nameAgreement}" maxlength="100" 
+		              	onkeypress="return nameAgreement(event)" disabled="#{!agreementsManagementBean.permUpdate}" style="width: 178px"/>
+		              	<h:panelGroup> 
+							<h:outputText value="Modalidad:" styleClass="bold"/>
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              	</h:panelGroup>
+		              	<h:selectOneMenu value="#{agreementsManagementBean.paymentMethodId}" disabled="#{!agreementsManagementBean.permUpdate}" style="width:180px">
+		                	<f:selectItems value="#{agreementsManagementBean.paymentMethodList}"/>
+		                  	<a4j:support event="onchange" ajaxSingle="true" reRender="bank"/>
+		              	</h:selectOneMenu>
+		              	<rich:spacer width="40px"/>
+		              	<h:panelGroup> 
+							<h:outputText styleClass="bold" value="Entidad:"/>
+		              		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              	</h:panelGroup>
+		              	<rich:spacer width="58px"/>
+		              	<h:selectOneMenu id="bank" value="#{agreementsManagementBean.bankId}" disabled="#{!agreementsManagementBean.permUpdate}" style="width:179px">
+		                	<f:selectItems value="#{agreementsManagementBean.bankList}"/>
+		                  	<a4j:support event="onchange" ajaxSingle="true"/>
+		              	</h:selectOneMenu>
+		             </h:panelGrid>	
+	              	 <h:panelGrid columns="4">
+		              	<h:panelGroup> 
+			              	<h:selectBooleanCheckbox id="selectedCheckBoxEdit" value="#{agreementsManagementBean.active}"
+			              		valueChangeListener="#{agreementsManagementBean.validateMinimumAssignment}" 
+			              		disabled="#{!agreementsManagementBean.permActiveRecharge}" immediate="true" onclick="submit()">
+		              			<a4j:support event="onchange" reRender="editRecharge"/>              		    
+		              		</h:selectBooleanCheckbox>
+		              		<h:outputText value="Valida Recarga/asignación mínima" styleClass="bold"/>
+	              		</h:panelGroup>
+	              		<rich:spacer width="73px"/>
+		              	<h:panelGroup>
+		              		<td width="135px">
+								<h:outputText styleClass="bold" value="Recarga/asignación mínima:"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</td>
+		              	</h:panelGroup>
+	              		<h:inputText id="editRecharge" value="#{agreementsManagementBean.textRechargeValue}" style="width:178px"
+	              	    	disabled="#{!agreementsManagementBean.permActiveRecharge || agreementsManagementBean.disableField}"
+				   	   	 	onkeypress="return solonumerosNoPrimerCero(event,this)" maxlength="16"
+				   	    	onkeyup="separadorMiles(this,this.value.charAt(this.value.length-1),event)">
+                       	</h:inputText> 
+                    </h:panelGrid>	   
+		            <h:panelGrid style="width: 672px;">
+		                <h:panelGroup>    	              	
+		              		<h:outputText styleClass="bold" value="Descripción:" />
+		              		<h:outputLabel value="#{msg.Asterisk}" rendered="#{agreementsManagementBean.showUpdateAgreement}" styleClass="asteriskMandatoryField"/>
+		                </h:panelGroup> 
+	              		<h:inputTextarea id="descAgreement" value="#{agreementsManagementBean.descriptionAgreement}" disabled="#{!agreementsManagementBean.permUpdate}"
+	              		onkeyup="return checkMaxLength(event, this, 201);" onkeypress="return descriptionAgreement(event)" style="resize:none;height: 100px;width: 663px" />
+	                </h:panelGrid>
+	                <h:panelGrid styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px; " >
+		               	<rich:spacer  style="width: 230px"/>
+		               	<a4j:commandButton value="Editar" action="#{agreementsManagementBean.validateUpdateAgreement}"
+			                               onclick="this.disabled=true" 
+			                               oncomplete="this.disabled=false" 
+			                               reRender="msjValidate,confirmationUpdate"
+			                               styleClass="center" style="width: 80px" />
+		               	<h:commandButton value="Cancelar" action="#{agreementsManagementBean.hideModalPanel}" styleClass="center"  style="width: 80px"/>
+					   	<rich:spacer  style="width: 230px"/>    
+					 </h:panelGrid>	
+					 <h:panelGroup>  
+				      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				     </h:panelGroup>  
+				</rich:panel>
+				<rich:spacer height="10"/>
+				
+				<rich:panel style="width:700px;margin:auto; background-color: #ffffff;" >
+					<f:facet name="header">
+						<h:outputText value="Lista Convenios" styleClass="bold"/>
+					</f:facet>	
+					<div id="scroll_horizontal">					
+						<rich:dataTable width="800px" id="dtable" value="#{agreementsManagementBean.agreementList}" var="list" rows="10">
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText value="Código"/>
+								</f:facet>
+									<h:outputText value="#{list.codeAgreement}"/>					
+							</rich:column>
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText value="Nombre"/>
+								</f:facet>
+								<div style="word-wrap: break-word;width:100px">
+									<h:outputText value="#{list.nameAgreement}" styleClass="normal"/>					
+							    </div>
+							</rich:column>
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText value="Modalidad"/>
+								</f:facet>
+								<div style="word-wrap: break-word;width:60px">
+									<h:outputText value="#{list.namePaymentMethod}" styleClass="normal"/>					
+							    </div>
+							</rich:column>
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText value="Entidad"/>
+								</f:facet>
+								<div style="word-wrap: break-word;width:75px">
+									<h:outputText value="#{list.bankName}" styleClass="normal"/>					
+							    </div>
+							</rich:column>
+							<rich:column width="100px" style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText value="Descripción"/>
+								</f:facet>
+								<div style="word-wrap: break-word;width:90px">
+									<h:outputText value="#{list.descriptionAgreement}" styleClass="normal"/>					
+							    </div>
+							</rich:column>
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText style="white-space:pre-wrap" value="Recarga/ Asignación Mínima"/>
+								</f:facet>
+								<div>
+									<h:outputText value="#{list.rechargeValue}" styleClass="normal"/>
+							    </div>
+							</rich:column>
+							<rich:column rendered="#{agreementsManagementBean.permActivateInactivate}" style="text-align:center;min-width: 55px;">
+								<f:facet name="header">
+									<h:outputText value="Estado"/>
+								</f:facet>
+								<h:commandLink value="Inactivar" action="#{agreementsManagementBean.updateStateAgreement}" rendered="#{list.idState==1}">
+								    <f:setPropertyActionListener value="#{list.idAgreementBank}" target="#{agreementsManagementBean.idAgreementBank}"/>
+									<f:setPropertyActionListener value="#{list.idAgreement}" target="#{agreementsManagementBean.idAgreement}"/>				
+									<f:setPropertyActionListener value="#{list.idState}" target="#{agreementsManagementBean.idState}"/>
+									<f:setPropertyActionListener value="#{list.codeAgreement}" target="#{agreementsManagementBean.codeAgreement}"/>
+									<f:setPropertyActionListener value="#{list.nameAgreement}" target="#{agreementsManagementBean.nameAgreement}"/>		
+								</h:commandLink>
+								<h:commandLink value="Activar" action="#{agreementsManagementBean.updateStateAgreement}" rendered="#{list.idState==0}">
+								    <f:setPropertyActionListener value="#{list.idAgreementBank}" target="#{agreementsManagementBean.idAgreementBank}"/>
+									<f:setPropertyActionListener value="#{list.idAgreement}" target="#{agreementsManagementBean.idAgreement}"/>			
+									<f:setPropertyActionListener value="#{list.idState}" target="#{agreementsManagementBean.idState}"/>
+									<f:setPropertyActionListener value="#{list.codeAgreement}" target="#{agreementsManagementBean.codeAgreement}"/>
+									<f:setPropertyActionListener value="#{list.nameAgreement}" target="#{agreementsManagementBean.nameAgreement}"/>		
+								</h:commandLink>
+							</rich:column>
+							<rich:column rendered="#{agreementsManagementBean.permUpdate || agreementsManagementBean.permActiveRecharge}" style="text-align:center;min-width: 55px;">
+								<f:facet name="header">
+									<h:outputText value="Editar"/>
+								</f:facet>
+								<h:commandLink value="Editar" action="#{agreementsManagementBean.panelUpdateAgreement}">
+									<f:setPropertyActionListener value="#{list.idAgreementBank}" target="#{agreementsManagementBean.idAgreementBank}"/>
+									<f:setPropertyActionListener value="#{list.idAgreement}" target="#{agreementsManagementBean.idAgreement}"/>
+									<f:setPropertyActionListener value="#{list.codeAgreement}" target="#{agreementsManagementBean.codeAgreement}"/>
+									<f:setPropertyActionListener value="#{list.nameAgreement}" target="#{agreementsManagementBean.nameAgreement}"/>	
+									<f:setPropertyActionListener value="#{list.paymentMethodId}" target="#{agreementsManagementBean.paymentMethodId}"/>	
+									<f:setPropertyActionListener value="#{list.descriptionAgreement}" target="#{agreementsManagementBean.descriptionAgreement}"/>		
+									<f:setPropertyActionListener value="#{list.bankId}" target="#{agreementsManagementBean.bankId}"/>
+									<f:setPropertyActionListener value="#{list.rechargeValue}" target="#{agreementsManagementBean.textRechargeValue}"/>
+									<a4j:support event="oncomplete" immediate="true" reRender="editRecharge"/>
+								</h:commandLink>  			
+							</rich:column>
+							<rich:column rendered="#{agreementsManagementBean.permRemove}" style="text-align:center;min-width: 55px;">
+								<f:facet name="header">
+									<h:outputText value="Eliminar"/>
+								</f:facet>
+								<h:commandLink value="Eliminar" action="#{agreementsManagementBean.showConfirmDelete}" rendered="#{list.deleteAgreement==0}">	
+									<f:setPropertyActionListener value="#{list.idAgreementBank}" target="#{agreementsManagementBean.idAgreementBank}"/>	
+									<f:setPropertyActionListener value="#{list.idAgreement}" target="#{agreementsManagementBean.idAgreement}"/>
+									<f:setPropertyActionListener value="#{list.codeAgreement}" target="#{agreementsManagementBean.codeAgreement}"/>
+									<f:setPropertyActionListener value="#{list.nameAgreement}" target="#{agreementsManagementBean.nameAgreement}"/>	
+									<f:setPropertyActionListener value="#{list.paymentMethodId}" target="#{agreementsManagementBean.paymentMethodId}"/>	
+									<f:setPropertyActionListener value="#{list.descriptionAgreement}" target="#{agreementsManagementBean.descriptionAgreement}"/>				
+									<f:setPropertyActionListener value="#{list.bankId}" target="#{agreementsManagementBean.bankId}"/>			
+								</h:commandLink>  					
+							</rich:column>
+							 <f:facet name="footer">
+	            	             <rich:datascroller for="dtable"/>
+	           	            </f:facet>
+						</rich:dataTable>
+					</div>	
+				</rich:panel>
+			</rich:panel>
+		</h:form>
+		<rich:spacer height="20"/>
+		
+		<rich:modalPanel id="msjValidate" showWhenRendered="#{agreementsManagementBean.showModalValidate}" 
+		autosized="true" onresize="return false" moveable="false" width="350" height="115">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText styleClass="bold" value="Mensaje - Administrar Convenio"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup> 
+					<a4j:form>
+						<h:commandButton action="#{agreementsManagementBean.hideModal1}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+				<div style="width: 350px; word-wrap: break-word;">
+	      			<h:outputText value="#{agreementsManagementBean.message}" styleClass="normal"/>
+				</div>					
+			<h:form>
+				<rich:spacer height="5"/>
+				<h:panelGrid columns="3" styleClass="tableBO">
+					<h:panelGroup>
+						<div class="span-1"/>
+					</h:panelGroup>
+	     			<h:panelGroup>
+	     				<h:commandButton value="Aceptar" action="#{agreementsManagementBean.hideModal1}" style="width: 80px"/>
+	     			</h:panelGroup>	     	
+	    		</h:panelGrid>
+			</h:form>
+		</rich:modalPanel>
+		
+		<rich:modalPanel id="confirmationDelete" showWhenRendered="#{agreementsManagementBean.showModalConfirmationDelete}" 
+		autosized="true" onresize="return false;" moveable="false" width="350" height="115">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Confirmación" styleClass="bold"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{agreementsManagementBean.hideModal1}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			<div style="width: 350px; word-wrap: break-word;">
+				<h:outputText value="#{agreementsManagementBean.message}" styleClass="normal" />
+			</div>
+			<h:form>
+				<rich:spacer height="10"/>
+				<div align="center">
+					<h:panelGroup>
+					<a4j:region id="editando">
+						<a4j:commandButton id="send" value="Aceptar" style="width: 80px" action="#{agreementsManagementBean.deleteAgreement}" 
+			     			 onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate">
+					        <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+		            	</a4j:commandButton>
+	                </a4j:region>						 
+	                <rich:spacer width="10"/>
+	              	<h:commandButton value="Cancelar" action="#{agreementsManagementBean.hideModal1}" style="width: 80px"/>
+					</h:panelGroup>
+				</div>
+	    	</h:form>
+		</rich:modalPanel>
+		
+		
+		<rich:modalPanel id="confirmationCreate" showWhenRendered="#{agreementsManagementBean.showModalConfirmationCreate}" 
+		autosized="true" onresize="return false;" moveable="false" width="350" height="115">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Confirmación" styleClass="bold"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{agreementsManagementBean.hideModal1}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			<div style="width: 350px; word-wrap: break-word;">
+				<h:outputText value="#{agreementsManagementBean.message}" styleClass="normal" />
+			</div>
+			<h:form>
+			    <rich:spacer height="10"/>
+				<div align="center">
+					<h:panelGroup>
+					<a4j:region id="editando">
+						<a4j:commandButton id="send" value="Aceptar" style="width: 80px" action="#{agreementsManagementBean.insertAgreement}" 
+		     			 	onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate">
+				        	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+		                </a4j:commandButton>
+	                </a4j:region>						 
+	                <rich:spacer width="10"/>
+	                <h:commandButton value="Cancelar" action="#{agreementsManagementBean.hideModal1}" style="width: 80px"/>
+					</h:panelGroup>
+				</div>
+	    	</h:form>
+		</rich:modalPanel>
+		
+		<rich:modalPanel id="confirmationRecharge" showWhenRendered="#{agreementsManagementBean.showModalConfirmationRecharge}" 
+		autosized="true" onresize="return false;" moveable="false" width="350" height="115">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Confirmación" styleClass="bold"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{agreementsManagementBean.hideModal}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			
+			<div style="width: 350px; word-wrap: break-word;">
+				<h:outputText value="#{agreementsManagementBean.message}" styleClass="normal" />
+			</div>
+			    <rich:spacer height="10"/>
+			    <a4j:form id="formE">
+			    
+				<div align="center">
+					<h:panelGroup>
+	     				<a4j:commandButton id="btn_accept" value="Aceptar" action="#{agreementsManagementBean.hideModal2}" style="width: 80px">
+							<a4j:support event="onclick" onsubmit="document.getElementById('formE:btn_accept').disabled=true;document.getElementById('formE:btn_cancel').disabled=true"
+							reRender="confirmationRecharge,selectedCheckBoxCreate,createRecharge,selectedCheckBoxEdit,editRecharge"/>										
+						</a4j:commandButton>							
+	                <rich:spacer width="10"/>
+	                	<a4j:commandButton id="btn_cancel" value="Cancelar" action="#{agreementsManagementBean.hideModal}" style="width: 80px"> 
+							<a4j:support event="onclick" onsubmit="document.getElementById('formE:btn_accept').disabled=true;document.getElementById('formE:btn_cancel').disabled=true"
+							reRender="confirmationRecharge,selectedCheckBoxCreate,createRecharge,selectedCheckBoxEdit,editRecharge"/>										
+						</a4j:commandButton>	
+					</h:panelGroup>
+				</div>
+				</a4j:form>			
+		</rich:modalPanel>
+		
+		<rich:modalPanel id="confirmationUpdate" showWhenRendered="#{agreementsManagementBean.showModalConfirmationUpdate}" 
+		autosized="true" onresize="return false;" moveable="false" width="350" height="115" >
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Confirmación" styleClass="bold"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{agreementsManagementBean.hideModal1}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			<div style="width: 350px; word-wrap: break-word;">
+				<h:outputText value="#{agreementsManagementBean.message}" styleClass="normal" />
+			</div>
+			<h:form>
+				<div align="center">
+					<h:panelGroup>
+					<a4j:region id="editando">
+						<a4j:commandButton id="send" value="Aceptar" style="width: 80px" action="#{agreementsManagementBean.updateAgreement}" 
+			     			 onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate">
+					        <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+			            </a4j:commandButton>
+	                </a4j:region>						 
+	                <rich:spacer width="10"/>
+                	<h:commandButton value="Cancelar" action="#{agreementsManagementBean.hideModal1}" style="width: 80px"/>
+					</h:panelGroup>
+				</div>
+	    	</h:form>
+		</rich:modalPanel>
+		
+		
+		<rich:modalPanel id="confirmationUpdateEC" showWhenRendered="#{agreementsManagementBean.showModalConfirmationUpdateEC}" 
+		autosized="true" onresize="return false;" moveable="false" width="350" height="115" >
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Confirmación" styleClass="bold"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{agreementsManagementBean.hideModal1}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			<div style="width: 350px; word-wrap: break-word;">
+				<h:outputText value="#{agreementsManagementBean.message}" styleClass="normal" />
+			</div>
+			<h:form>
+				<rich:spacer height="10"/>
+				<div align="center">
+					<h:panelGroup>
+					<a4j:region id="editando">					
+						<a4j:commandButton id="send" value="Aceptar" style="width: 80px" action="#{agreementsManagementBean.updateEstateAgreement}" 
+			     			 onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate">
+					        <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+		            	</a4j:commandButton>
+	                </a4j:region>						 
+	                <rich:spacer width="10"/>
+                	<h:commandButton value="Cancelar" action="#{agreementsManagementBean.hideModal1}" style="width: 80px"/>
+					</h:panelGroup>
+				</div>
+	    	</h:form>
+		</rich:modalPanel>		
+		
+		<rich:modalPanel id="wait" autosized="true" width="350" height="115" moveable="false" resizeable="false">
+			<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+			<panelGrid columns="1">
+			<h:graphicImage  url="/img/procesando.gif" style="width: 50px;height: 50px"/>
+			<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+			</panelGrid >
+		</rich:modalPanel>
+		
+		
+		</div>
+		<f:subview id="footer">
+			<ui:include src="/jsf/content/footer.jsp"/>
+		</f:subview>
+	</f:view>
+</div>
+</body>
+</html>

@@ -1,0 +1,875 @@
+package ejb.email;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import com.facilpass.util.MessageParser;
+
+import jpa.ReUserEmailProcess;
+import jpa.TbEmailParameters;
+import jpa.TbEmailType;
+import jpa.TbOutbox;
+import jpa.TbOutboxState;
+import jpa.TbSystemUser;
+import util.Email;
+import constant.EEmailParam;
+import constant.EmailProcess;
+import crud.ObjectEM;
+import ejb.SendMail;
+
+@Stateless(mappedName = "ejb/email/Outbox")
+public class OutboxEJB implements Outbox{
+	
+	@PersistenceContext(unitName = "bo")
+	EntityManager em;
+	
+	private ObjectEM objectEM;
+	
+	@EJB(mappedName ="ejb/sendMail")
+	private SendMail sendMail;
+	
+	
+	
+	
+
+	@Override
+	/**
+	 * Metodo encargado del envio de notificaciones - gestor de correos
+	 * @author ablasquez
+	 * @param userid	Id del usuario 
+	 * @param EmailProcess	Proceso del gestor de correo al que esta asociada la notificacion
+	 * @param accountId	Numero de cuenta del cliente 
+	 * @param bankAccountId	Id de la relacion entre cuenta y producto bancario
+	 * @param transactionId	Id de tb_transaction
+	 * @param deviceId	Id del dispositivo
+	 * @param vehicleId Id de la tabla ttb_vehicle
+	 * @param numberVehicles	Numero de vehiculos si es requerido en la notificacion
+	 * @param documentId	id de la tabla tb_document
+	 * @param userCreator	id del usuario que esta realizando la operacion
+	 * @param codeTypeId	id de la tabla tb_code_type
+	 * @param facialId		id facila del tag anterior
+	 * @param actionType	tipo de acción
+	 * @param sendImmediate siempre de envia true
+	 */
+	public boolean insertMessageOutbox(Long userid,
+			EmailProcess processEmail, Long accountId, Long bankAccountId,
+			Long transactionId, Long deviceId, Long vehicleId, Long numberVehicles, 
+			Long bankId, Long documentId,Long userCreator, Long codeTypeId, String facialId, String actionType, boolean sendImmediate,
+			ArrayList<String> parameters) {
+		try{			
+			boolean resultado = false;
+			String message = "";
+			String messageTo = "";
+			String messageToList = "";
+			/**
+			 * Se valida si el cliente tiene la platilla habilitada para el mensaje
+			 */
+			Query es = em.createQuery("Select ruep From ReUserEmailProcess ruep where ruep.tbEmailProcess.emailProcessId = ?1 and ruep.tbSystemUser.userId =?2");
+			es.setParameter(1, processEmail.getId());
+			es.setParameter(2, userid);
+			int stateNotification = 1;
+			try{
+				ReUserEmailProcess ruep = (ReUserEmailProcess) es.getSingleResult();				
+				stateNotification = ruep.getUserEmailProcessState();
+				messageToList =ruep.getUserEmailProcessTo();
+			}catch(NoResultException n){
+				stateNotification = 1;
+			}
+			
+			
+			if(stateNotification ==1){
+				
+				//sebusca la plantilla del mensaje de acuerdo al proceso
+				Query q = em.createQuery("Select e from TbEmailType e where tbEmailProcess.emailProcessId = ?1 and e.emailStatus=0 ");
+				q.setParameter(1, processEmail.getId());
+				
+				for (Object obj : q.getResultList()) {
+					System.out.println("messageTo: "+messageTo);
+					messageTo="";
+					System.out.println("messageToList: "+messageToList);
+					TbEmailType te = (TbEmailType) obj;
+					//se crea un mensaje en la bandeja de salida TB_OUTBOX
+					message = "";
+					message=this.replaceParameters(te.getEmailTypeMessage(), userid, accountId, bankAccountId, transactionId, deviceId,vehicleId,
+							numberVehicles,bankId,documentId, userCreator, codeTypeId, facialId, actionType,parameters);
+					
+					TbOutbox to = new TbOutbox();
+					String referencia  = te.getTbReference().getOptActReferenceId();
+					System.out.println("referencia: "+referencia);
+					System.out.println("userid "+userid);
+					if((referencia.equals("A")) ||
+					(referencia.equals("C"))){
+						System.out.println("Ingreso a Referencia");
+						if(userid!=null){
+							System.out.println("Con user id 1");
+							if(messageToList.equals("") && processEmail.getId().equals(38L)){
+								to.setTbSystemUser(em.find(TbSystemUser.class, userCreator));
+								messageTo = to.getTbSystemUser().getUserEmail();	
+							}else if(messageToList.equals("")){
+								to.setTbSystemUser(em.find(TbSystemUser.class, userid));
+								messageTo = to.getTbSystemUser().getUserEmail();
+							}
+						}
+					}else{
+						to.setTbSystemUser(null);
+						messageTo = te.getEmailAddressList();
+					}
+					to.setTbEmailType(te);
+					to.setOutboxMessage(message);
+					to.setTbOutboxState(em.find(TbOutboxState.class,0L));
+					to.setOutboxCreate(new Timestamp(System.currentTimeMillis()));
+					
+					if(messageTo.equals("")){
+						if(userid!=null){
+							System.out.println("Con user id 2");
+							messageTo = to.getTbSystemUser().getUserEmail();
+						}
+					}
+					to.setOutboxSendList(messageTo);
+					objectEM = new ObjectEM(em);
+					if(objectEM.create(to)){
+						if(sendImmediate){
+							
+							String[] messageToUnique = messageTo.split(";");
+							
+							for(String addressTo : messageToUnique){
+							
+							Email popEmail = new Email();
+							String from = popEmail.getString("mail.smtp.user");		
+							System.out.println("from: "+from);
+							System.out.println("to: "+addressTo);
+							resultado = (sendMail.sendMailtoOutBox(
+									addressTo,
+									from,
+									"FacilPass", 
+									to.getTbEmailType().getEmailTypeSubject(),
+									"1",
+									to.getOutboxMessage()));
+							if(resultado){
+								System.out.println("TbOutBoxId: "+to.getOutboxId());
+								TbOutbox send = em.find(TbOutbox.class, to.getOutboxId());
+								send.setOutboxSend(new Timestamp(System.currentTimeMillis()));
+								send.setTbOutboxState(em.find(TbOutboxState.class,1L));
+								objectEM.update(send);
+							}else{
+								System.out.println("TbOutBoxId: "+to.getOutboxId());
+								TbOutbox send = em.find(TbOutbox.class, to.getOutboxId());
+								send.setOutboxSend(new Timestamp(System.currentTimeMillis()));
+								send.setTbOutboxState(em.find(TbOutboxState.class,2L));
+								objectEM.update(send);
+							}
+						  }
+						}else{
+							TbOutbox send = em.find(TbOutbox.class, to.getOutboxId());							
+							send.setTbOutboxState(em.find(TbOutboxState.class,0L));
+							objectEM.update(send);
+						}
+					}else{
+						resultado = false;
+					}
+				}			
+			}else{
+				System.out.println("el usuario "+userid+" no tiene habilitada la notificación para el proceso "+processEmail.getId());
+			}
+			return resultado;
+		}catch(Exception e){
+			System.out.println("[ Error en OutboxEJB.insertMessageOutbox ]");
+			e.printStackTrace();
+			return false;
+		}
+	}	
+	private String replaceParameters(String templateMessage, Long userId, Long accountId, Long bankAccountId,
+			Long transactionId, Long deviceId, Long vehicleId, Long numberVehicles,Long bankId, Long documentId,
+			Long userCreator, Long codeTypeId, String facialId, String actionType,ArrayList<String> parameters){
+		try{
+			Long accountNew=null;
+			Long codeTypeNew=null;
+			Long accountDeviceId=null;
+			Long minimunId=null;
+
+			Long newOtp=null;
+
+			String errorsSignatureDigital=null;
+			Long categoryId= null;
+			Long valMini=null;
+			String obsm = null;
+			String obsmE = null;
+			
+			String urlAcc=null;
+			String ipAcc=null;
+
+			Long valRec=null;
+			String messageError=null;
+			Long codErr=null;
+			String codBank=null;
+			String nomBank=null;
+			if(parameters!=null){
+				for(int x=0;x<parameters.size();x++){
+					String[] par=parameters.get(x).split("=");
+					if(par[0].equals("#NEWCFP")){
+						accountNew=Long.parseLong(par[1]);
+					}
+					if(par[0].equals("#NEWTPCC")){
+						codeTypeNew=Long.parseLong(par[1]);
+					}
+					if(par[0].equals("#DATEINAC")){
+						accountDeviceId=Long.parseLong(par[1]);
+					}					
+					if(par[0].equals("#MINIID")){
+						minimunId=Long.parseLong(par[1]);
+					}
+					if(par[0].equals("#OTP")){
+						newOtp=Long.parseLong(par[1]);
+					}
+					if(par[0].equals("#ERR")){
+						errorsSignatureDigital=par[1].toString();
+					}
+					if(par[0].equals("#CATM")){
+						categoryId=Long.parseLong(par[1]);
+					}
+					if(par[0].equals("#VALM")){
+						valMini=Long.parseLong(par[1]);
+					}
+					if(par[0].equals("#OBMIN")){
+						obsm=par[1].toString();
+					}
+					if(par[0].equals("#OBERROR")){
+						obsmE=par[1].toString();
+					}
+					if(par[0].equals("#ACCURL")){
+						urlAcc=par[1].toString();
+					}
+					if(par[0].equals("#ACCIP")){
+						ipAcc=par[1].toString();
+					}
+					if(par[0].equals("#PSEERR")){
+						messageError=par[1].toString();
+					}
+					if(par[0].equals("#PSECODERR")){
+						codErr=Long.parseLong(par[1]);
+					}
+					if(par[0].equals("#PSECB")){
+						codBank=par[1].toString();
+					}
+					if(par[0].equals("#PSENB")){
+						nomBank=par[1].toString();
+					}
+					if(par[0].equals("#VALREC")){
+						valRec=Long.parseLong(par[1]);
+					}
+				}
+			}
+			System.out.println("userId: "+userId);
+			System.out.println("accountId: "+accountId);
+			System.out.println("bankAccountId: "+bankAccountId);
+			System.out.println("transactionId: "+transactionId);
+			System.out.println("deviceId: "+deviceId);
+			System.out.println("vehicleId: "+vehicleId);
+			System.out.println("numberVehicles: "+numberVehicles);
+			System.out.println("documentId: "+documentId);
+			System.out.println("bankId: "+bankId);
+			System.out.println("userCreator: "+userCreator);
+			System.out.println("codeTypeId: "+codeTypeId);
+			System.out.println("facialId: "+facialId);
+			System.out.println("actionType: "+actionType);
+			System.out.println("accountNew: "+accountNew);
+			System.out.println("codeTypeNew: "+codeTypeNew);
+			System.out.println("accountDeviceId: "+accountDeviceId);
+			System.out.println("minimunId: "+minimunId);
+
+			System.out.println("categoryId: "+categoryId);
+			System.out.println("valMini: "+valMini);
+			System.out.println("OBMIN: "+obsm);
+			System.out.println("OBERROR: "+obsmE);
+			
+			System.out.println("urlAcc: "+urlAcc);
+			System.out.println("ipAcc: "+ipAcc);
+
+			System.out.println("valRec: "+valRec);
+			System.out.println("messageError: "+messageError);
+			System.out.println("codErr: "+codErr);
+			System.out.println("codBank: "+codBank);
+			System.out.println("nomBank: "+nomBank);
+			
+			String qry = "";
+			String r = null;
+			Query p = null;
+			String mensaje = "";
+			mensaje = templateMessage;
+			Query q = em.createQuery("Select p from TbEmailParameters p order by p.emailParametersId");
+			for (Object obj : q.getResultList()) {
+				TbEmailParameters tp = (TbEmailParameters) obj;
+				qry = "";
+				if(mensaje.contains(tp.getEmailParametersAbbreviation())){
+					try{
+					 if(tp.getEmailParametersInput()!=null){
+						qry = "Select to_char("+tp.getEmailParametersFieldRef()+
+							  ") From "+tp.getEmailParametersTableRef()+
+							  " "+tp.getEmailParametersWhere()+"=?1";
+						p = em.createNativeQuery(qry);
+						if(tp.getEmailParametersInput().trim().equals("userId")){
+							if(tp.getEmailParametersAbbreviation().equals("#USER")||tp.getEmailParametersAbbreviation().equals("#NEWCLI")||
+									tp.getEmailParametersAbbreviation().equals("#NEWCC")){
+								if(userCreator != null){
+									p.setParameter(1, userCreator);
+								}else{
+									p.setParameter(1, -1L);
+								}
+							}else{
+								if(userId != null){
+									p.setParameter(1, userId);
+								}else{
+									p.setParameter(1, -1L);
+								}
+							}							
+						}else if(tp.getEmailParametersInput().trim().equals("accountId")){
+							if(tp.getEmailParametersAbbreviation().equals("#NEWCFP")){
+								if(accountNew != null){
+									p.setParameter(1, accountNew);
+								}else{
+									p.setParameter(1, -1L);
+								}
+							}else{
+								if(accountId != null){
+									p.setParameter(1, accountId);
+								}else{
+									p.setParameter(1, -1L);
+								}
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("bankAccountId")){
+							if(bankAccountId != null){
+								p.setParameter(1, bankAccountId);
+							}else{
+								p.setParameter(1, -1L);
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("transactionId")){
+							if(transactionId != null){
+								p.setParameter(1, transactionId);
+							}else{
+								p.setParameter(1, -1L);
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("deviceId")){
+							if(deviceId != null){
+								p.setParameter(1, deviceId);
+							}else{
+								p.setParameter(1, -1L);
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("vehicleId")){
+							if(vehicleId != null){
+								p.setParameter(1, vehicleId);
+							}else{
+								p.setParameter(1, -1L);
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("bankId")){
+							if(bankId != null){
+								p.setParameter(1, bankId);
+							}else{
+								p.setParameter(1, -1L);
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("documentId")){
+							if(documentId != null){
+								p.setParameter(1, documentId);
+							}else{
+								p.setParameter(1, -1L);
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("codeTypeId")){
+							if(tp.getEmailParametersAbbreviation().equals("#TPCC")){
+								if(codeTypeId != null){
+									p.setParameter(1, codeTypeId);
+								}else{
+									p.setParameter(1, -1L);
+								}
+							}else if(tp.getEmailParametersAbbreviation().equals("#NEWTPCC")){
+								if(codeTypeNew != null){
+									p.setParameter(1, codeTypeNew);
+								}else{
+									p.setParameter(1, -1L);
+								}
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("accountDeviceId")){
+							if(accountDeviceId != null){
+								p.setParameter(1, accountDeviceId);
+							}else{
+								p.setParameter(1, -1L);
+							}
+						}else if(tp.getEmailParametersInput().trim().equals("minimumId")){
+							if(minimunId != null){
+								p.setParameter(1, minimunId);
+							}else{
+								p.setParameter(1, -1L);
+							}
+
+						}else if(tp.getEmailParametersInput().trim().equals("newOtp")){
+							if(newOtp != null){
+								p.setParameter(1, newOtp);
+							}else{
+								p.setParameter(1, -1L);
+							}
+
+						}else if(tp.getEmailParametersInput().trim().equals("errorCodeId")){
+							if(obsmE != null){
+								p.setParameter(1, obsmE);
+							}else{
+								p.setParameter(1, "");
+							}
+
+						}
+						
+					    r = (String) p.getSingleResult();
+					 }
+						String replace=null;
+						
+						if (errorsSignatureDigital!=null) 
+						if(tp.getEmailParametersAbbreviation().equals("#ERR")){
+							mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), errorsSignatureDigital);
+						}
+						if(numberVehicles!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#NV")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), numberVehicles.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), numberVehicles.toString());
+					    	}
+					    }
+						if(facialId!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#FCANT")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), facialId.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), facialId.toString());					    		
+					    	}
+					    }
+						if(actionType!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#ACTTYPE")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), actionType.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), actionType.toString());
+					    	}
+					    }
+						
+						if(ipAcc!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#ACCIP")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), ipAcc.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), actionType.toString());
+					    	}
+					    }
+						if(urlAcc!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#ACCURL")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), urlAcc.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), actionType.toString());
+					    	}
+					    }
+						if(messageError!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#PSEERR")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), messageError.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), actionType.toString());
+					    	}
+					    }
+						if(codErr!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#PSECODERR")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), codErr.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), actionType.toString());
+					    	}
+					    }
+						if(codBank!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#PSECB")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), codBank.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), actionType.toString());
+					    	}
+					    }
+						if(nomBank!= null){
+					    	if(tp.getEmailParametersAbbreviation().equals("#PSENB")){
+					    		mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), nomBank.toString());
+					    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), actionType.toString());
+					    	}
+					    }
+						if(tp.getEmailParametersAbbreviation().equals("#FECPROC")){
+							String date = new SimpleDateFormat("dd/MM/yyyy").format(new Timestamp(System.currentTimeMillis()));
+							mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), date);
+				    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), date);
+				    	}
+						if(tp.getEmailParametersAbbreviation().equals("#HORPROC")){
+							String hour = new SimpleDateFormat("HH:mm:ss").format(new Timestamp(System.currentTimeMillis()));
+							mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), hour);
+				    		//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), hour);
+				    	}
+						if(tp.getEmailParametersAbbreviation().equals("#CATM")){
+							mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), categoryId.toString());
+						}
+						if(valMini !=null){
+							if(tp.getEmailParametersAbbreviation().equals("#VALM")){
+								DecimalFormat formateador = new DecimalFormat("###,###.##");								
+								r = "$"+formateador.format(new BigDecimal(valMini));
+								mensaje= myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), r);
+							}							
+						}
+						if(valRec !=null){
+							if(tp.getEmailParametersAbbreviation().equals("#VALREC")){
+								DecimalFormat formateador = new DecimalFormat("###,###.##");								
+								r = "$"+formateador.format(new BigDecimal(valRec));
+								mensaje= myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), r);
+							}							
+						}
+						if(tp.getEmailParametersAbbreviation().equals("#OBMIN")){
+							mensaje=myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), obsm);
+						}
+						if(r!=null){
+							if((tp.getEmailParametersAbbreviation().equals("#VLT") || tp.getEmailParametersAbbreviation().equals("#VNSB")) && !r.contains("xxxxx")){
+								DecimalFormat formateador = new DecimalFormat("###,###.##");								
+								r = "$"+formateador.format(new BigDecimal(r));
+							}
+							replace = (tp.getEmailParametersReplace()!=null?tp.getEmailParametersReplace():"");
+							mensaje= myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), replace+r);
+							//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), replace+r);
+							System.out.println("mensaje: "+mensaje);
+						}else{
+							mensaje= myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), replace+tp.getEmailParametersDemo());
+							//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), replace+tp.getEmailParametersDemo());
+							System.out.println("mensaje: "+mensaje);
+						}
+					}catch(NoResultException nr){						
+						System.out.println("[ Error NoResultException en OutboxEJB.insertMessageOutbox ]");
+						String replace = (tp.getEmailParametersReplace()!=null?tp.getEmailParametersReplace():"");
+						mensaje= myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), replace+tp.getEmailParametersDemo());
+						//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), replace+tp.getEmailParametersDemo());
+						
+						System.out.println("mensaje: "+mensaje);
+					}catch (Exception e) {
+						e.printStackTrace();
+						System.out.println("[ Error Exception en OutboxEJB.insertMessageOutbox ]");
+						System.out.println("[ Error  ]: "+e.getLocalizedMessage());
+						String replace = (tp.getEmailParametersReplace()!=null?tp.getEmailParametersReplace():"");
+						mensaje= myReplaceAll(mensaje,tp.getEmailParametersAbbreviation(), replace+tp.getEmailParametersDemo());
+						//mensaje = mensaje.replaceAll(tp.getEmailParametersAbbreviation(), replace+tp.getEmailParametersDemo());
+						
+						System.out.println("mensaje: "+mensaje);
+					}
+				}
+				r = null;
+			}
+			mensaje = mensaje.replaceAll("#SL#SL", "\n\r");
+			System.out.println("mensaje: "+mensaje);
+			return mensaje;
+		}catch(Exception e){
+			System.out.println("[ Error en OutboxEJB.insertMessageOutbox ]");
+			e.printStackTrace();
+			return templateMessage;
+		}
+	}
+	
+	
+	public String myReplaceAll(String mensaje, String inRegex, String replacement){
+			String reemplazo = "";
+			int tamanio = replacement.length();
+			char dato;
+			for (int i=0; i<tamanio; i++){
+				dato = replacement.charAt(i);				
+				if (((int)dato) <48){
+					reemplazo=reemplazo+"\\"+dato;
+				}else if ((((int)dato) >57) && (((int)dato) <65)){
+					reemplazo=reemplazo+"\\"+dato;
+				}else if ((((int)dato) >90) && (((int)dato) <97)){
+					reemplazo=reemplazo+"\\"+dato;
+				}else if (((int)dato) >122){
+					reemplazo=reemplazo+"\\"+dato;
+				}else{
+					reemplazo=reemplazo+""+dato;
+				}
+			}
+		
+		
+
+		String rpl = mensaje.replaceAll(inRegex, reemplazo);
+		
+		return rpl;
+	}
+	
+	@Override
+	/**
+	 * Metodo encargado del envio de notificaciones - gestor de correos, mejorado, optimizado y extensible
+	 * @author Cristhian Buchely
+	 */
+	public boolean insertMessageOutbox2(Long userid,EmailProcess processEmail,boolean sendInmediate,MessageParser parser)
+	{
+		try{			
+			boolean resultado = false;
+			String message = "";
+			String messageTo = "";
+			String messageToList = "";
+			/**
+			 * Se valida si el cliente tiene la platilla habilitada para el mensaje
+			 */
+			Query es = em.createQuery("Select ruep From ReUserEmailProcess ruep where ruep.tbEmailProcess.emailProcessId = ?1 and ruep.tbSystemUser.userId =?2");
+			es.setParameter(1, processEmail.getId());
+			es.setParameter(2, userid);
+			int stateNotification = 1;
+			try{
+				ReUserEmailProcess ruep = (ReUserEmailProcess) es.getSingleResult();				
+				stateNotification = ruep.getUserEmailProcessState();
+				messageToList =ruep.getUserEmailProcessTo();
+			}catch(NoResultException n){
+				stateNotification = 1;
+			}
+			
+			if(stateNotification ==1){
+				//se busca la plantilla del mensaje de acuerdo al proceso
+				Query q = em.createQuery("Select e from TbEmailType e where tbEmailProcess.emailProcessId = ?1 and e.emailStatus=0 ");
+				q.setParameter(1, processEmail.getId());
+				
+				for (Object obj : q.getResultList()) {
+					System.out.println("messageTo: "+messageTo);
+					messageTo="";
+					System.out.println("messageToList: "+messageToList);
+					TbEmailType te = (TbEmailType) obj;
+					//se crea un mensaje en la bandeja de salida TB_OUTBOX
+					// message=parser.parseMessage(te.getEmailTypeMessage());
+					message = this.replace(te.getEmailTypeMessage(), parser.getParams());
+					
+					TbOutbox to = new TbOutbox();
+					String referencia  = te.getTbReference().getOptActReferenceId();
+					System.out.println("referencia: "+referencia);
+					System.out.println("userid "+userid);
+					if((referencia.equals("A")) ||
+					(referencia.equals("C"))){
+						System.out.println("Ingreso a Referencia");
+						if(userid!=null){
+							System.out.println("Con user id 1");
+							if(messageToList.equals("") && processEmail.getId().equals(38L)){
+								to.setTbSystemUser(em.find(TbSystemUser.class,  /*userCreator*/ userid)); // TODO: remplazo un id por otro, verificar esta operación 
+								messageTo = to.getTbSystemUser().getUserEmail();	
+							}else if(messageToList.equals("")){
+								to.setTbSystemUser(em.find(TbSystemUser.class, userid));
+								messageTo = to.getTbSystemUser().getUserEmail();
+							}
+						}
+					}else{
+						to.setTbSystemUser(null);
+						messageTo = te.getEmailAddressList();
+					}
+					to.setTbEmailType(te);
+					to.setOutboxMessage(message);
+					to.setTbOutboxState(em.find(TbOutboxState.class,0L));
+					to.setOutboxCreate(new Timestamp(System.currentTimeMillis()));
+					
+					if(messageTo.equals("")){
+						if(userid!=null){
+							System.out.println("Con user id 2");
+							messageTo = to.getTbSystemUser().getUserEmail();
+						}
+					}
+					to.setOutboxSendList(messageTo);
+					objectEM = new ObjectEM(em);
+					if(objectEM.create(to)){
+						if(sendInmediate){
+							
+							String[] messageToUnique = messageTo.split(";");
+							
+							for(String addressTo : messageToUnique){
+							
+							Email popEmail = new Email();
+							String from = popEmail.getString("mail.smtp.user");		
+							System.out.println("from: "+from);
+							System.out.println("to: "+addressTo);
+							resultado = (sendMail.sendMailtoOutBox(
+									addressTo,
+									from,
+									"FacilPass", 
+									to.getTbEmailType().getEmailTypeSubject(),
+									"1",
+									to.getOutboxMessage()));
+							if(resultado){
+								System.out.println("TbOutBoxId: "+to.getOutboxId());
+								TbOutbox send = em.find(TbOutbox.class, to.getOutboxId());
+								send.setOutboxSend(new Timestamp(System.currentTimeMillis()));
+								send.setTbOutboxState(em.find(TbOutboxState.class,1L));
+								objectEM.update(send);
+							}else{
+								System.out.println("TbOutBoxId: "+to.getOutboxId());
+								TbOutbox send = em.find(TbOutbox.class, to.getOutboxId());
+								send.setOutboxSend(new Timestamp(System.currentTimeMillis()));
+								send.setTbOutboxState(em.find(TbOutboxState.class,2L));
+								objectEM.update(send);
+							}
+						  }
+						}else{
+							TbOutbox send = em.find(TbOutbox.class, to.getOutboxId());							
+							send.setTbOutboxState(em.find(TbOutboxState.class,0L));
+							objectEM.update(send);
+						}
+					}else{
+						resultado = false;
+					}
+				}			
+			}else{
+				System.out.println("el usuario "+userid+" no tiene habilitada la notificación para el proceso "+processEmail.getId());
+			}
+			return resultado;
+		}catch(Exception e){
+			System.out.println("[ Error en OutboxEJB.insertMessageOutbox ]");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Remplaza los valores de los tags contenidos en el template indicado con los valores de los params indicados
+	 * @param template Plantilla del mensaje
+	 * @param params parametros del mensaje. Puede contener ids o valores finales del tag
+	 * @return la plantilla con los valores remplazados
+	 */
+	@SuppressWarnings("unchecked")
+	private String replace(String template, Map<String, Object> params){
+		String resp = template;
+		// String sSql = "Select p from TbEmailParameters p Where p.emailParametersAbbreviation =?1";
+		String clave = "abrevs";
+		String sSql = "Select p from TbEmailParameters p Where p.emailParametersAbbreviation In (:" + clave + ")";
+		String subSql;
+		DecimalFormat mFormat = new DecimalFormat("###,###.##");
+		SimpleDateFormat dFormat = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat hFormat = new SimpleDateFormat("HH:mm:ss");
+		List<String> abrevs = new ArrayList<String>();
+		
+		for (Map.Entry<String, Object> entry : params.entrySet()){
+			abrevs.add(entry.getKey());
+		}
+		
+		Query q = em.createQuery(sSql);
+		q.setParameter(clave, abrevs);
+		List<TbEmailParameters> lEParams = q.getResultList();
+		for (TbEmailParameters tep : lEParams){
+			String rSql = null;
+			Date aDate = null;
+			String valorFormateado = "";
+			boolean vacio = false;
+
+
+			EEmailParam ep = EEmailParam.getEmailParam(tep.getEmailParametersAbbreviation());
+
+
+			if (ep != null) {
+
+				Object macheteObject=params.get(ep.getTag());
+
+				if (macheteObject instanceof MessageParser) {
+
+					resp=((MessageParser)macheteObject).parseMessage(resp);
+					continue;
+				}
+
+				
+				switch(ep){
+				// Se verifican los TAGS que tienen comportamiento especial
+					case FECHA_ACCION :
+						// Este campo no se puede traer de BD sin embargo puede tener comportamientos especiales...
+	//					if (tep.getEmailParametersReplace() != null){
+	//					
+	//					}
+						valorFormateado = dFormat.format(params.get(ep.getTag()));
+						resp = this.myReplaceAll(resp, ep.getTag(), valorFormateado);
+						break;
+					case HORA_ACCION :
+						// Este campo no se puede traer de BD sin embargo puede tener comportamientos especiales...
+	//					if (tep.getEmailParametersReplace() != null){
+	//						
+	//					}
+						valorFormateado = hFormat.format(params.get(ep.getTag()));
+						resp = this.myReplaceAll(resp, ep.getTag(), valorFormateado);
+						break;
+					case VAL_RECARG :
+						// Este campo no se puede traer de BD sin embargo puede tener comportamientos especiales...
+	//					if (tep.getEmailParametersReplace() != null){
+	//						
+	//					}
+						
+						valorFormateado = "$" + mFormat.format(params.get(ep.getTag()));
+						
+						resp = this.myReplaceAll(resp, ep.getTag(), valorFormateado);
+						break;
+					case ERROR_DESC :		// se comporta igual
+					case ERROR_DINAMICO :   // se comporta igual
+					case IP_ACCION :   		// se comporta igual
+					case URL_ACCION :  		// se comporta igual
+						// Este campo no se puede traer de BD sin embargo puede tener comportamientos especiales...
+						//					if (tep.getEmailParametersReplace() != null){
+						//						
+						//					}
+						valorFormateado = params.get(ep.getTag()).toString();
+						resp = this.myReplaceAll(resp, ep.getTag(), valorFormateado);
+						break;
+					default:
+						// Los tags que si se pueden extraer de BD
+					   
+					   {
+
+						if (ep.isTime() || ep.isDate()){
+							subSql = "Select " + tep.getEmailParametersFieldRef() +
+									" From " + tep.getEmailParametersTableRef() +
+									" " + tep.getEmailParametersWhere() + "=?1";
+						} else {
+							subSql = "Select to_char(" + tep.getEmailParametersFieldRef() +
+									") From " + tep.getEmailParametersTableRef() +
+									" " + tep.getEmailParametersWhere() + "=?1";
+						}
+	
+						Query sQuery = em.createNativeQuery(subSql);
+						sQuery.setParameter(1, params.get(ep.getTag()));
+						try {
+							if (ep.isTime() || ep.isDate()){
+								aDate = (Date) sQuery.getSingleResult();
+							} else {
+								rSql = (String) sQuery.getSingleResult();
+							}
+							
+						} catch (NoResultException e){
+							// Nada que hacer
+							vacio = true;
+						}
+
+						if (vacio)
+						{
+						 String demo=tep.getEmailParametersDemo()!=null?tep.getEmailParametersDemo():"";
+						 resp = this.myReplaceAll( resp,ep.getTag(), demo);
+
+						} else {
+							// Se debe verificar el tipo de dato y acorde al tipo realizar formateo
+							if (ep.isMoney())
+							{
+							 String nrSql=rSql.replaceAll("[^\\d]", "");
+							 valorFormateado = "$" + mFormat.format(new BigDecimal(nrSql));
+							} else if (ep.isNumeric()){
+								valorFormateado = rSql;
+							} else if (ep.isAlphabetic()){
+								valorFormateado = rSql;
+							} else if (ep.isTime()) {
+								valorFormateado = hFormat.format(aDate);
+							} else if (ep.isDate()) {
+								valorFormateado = dFormat.format(aDate);
+							}
+		
+							String replace = tep.getEmailParametersReplace() != null ? tep.getEmailParametersReplace() : "";
+							resp = this.myReplaceAll(resp, ep.getTag(), replace + valorFormateado);
+						}
+					   }
+
+
+					break;
+
+				}
+				
+			}
+			
+		}
+		
+		resp = resp.replaceAll("#SL#SL", "\n\r");
+		return resp;
+	}
+
+}

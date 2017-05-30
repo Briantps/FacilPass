@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Verificación de Documentos</title>   
+	
+	<style type="text/css">
+        .ecol1 { vertical-align: top; padding-right : 25px }
+        .ecol2 { vertical-align: top; border-left: #ACBECE 1px solid; padding-left : 10px }
+        .rich-calendar-tool-btn{
+            font-family: Arial, Verdana;
+        } 
+    </style>
+</head>
+	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>  
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<rich:spacer height="5"/>
+					<h:form>
+						<f:loadBundle basename="staticText.messages" var="msg" />
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Verificación Documentos de Afiliación" styleClass="bold"/>
+							</f:facet>
+							<rich:messages styleClass="bold" style="color: red;"/>
+							<rich:panel style="width:660 px;margin:auto;">   
+								<f:facet name="header">    
+									<h:outputText value="Filtrar por" styleClass="bold"/>
+								</f:facet>
+								<h:panelGrid styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px; ">
+									<h:outputText value="Tipo Identificación:"  styleClass="bold"/>
+									<h:selectOneMenu value="#{validateDocumentBean.codeType}" style="width: 158px;" styleClass="normal">
+										<f:selectItems value="#{validateDocumentBean.codeTypesList}"/>	
+										<a4j:support event="onclick" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>	
+			 						</h:selectOneMenu> 
+			 						       
+			 						<h:outputText value="No. Identificación:" styleClass="bold"/>
+			 						<h:inputText value="#{validateDocumentBean.numberDoc}" styleClass="normal" style="width:155px" 
+			 							onkeypress="return numOnly(event)" maxlength="15">
+			 							<a4j:support event="onkeyup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+										<a4j:support event="onmouseup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+									</h:inputText>
+									
+			 						<h:outputText value="Nombre:" styleClass="bold"/>
+			 						<h:inputText value="#{validateDocumentBean.userName}" styleClass="normal" style="width:155px; 
+			 							text-transform: uppercase" onkeypress="return noEspecialRazSol(event)" maxlength="150">
+			 							<a4j:support event="onkeyup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+										<a4j:support event="onmouseup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+									</h:inputText>
+									
+			 						<h:outputText value="Apellidos:" styleClass="bold"/>
+			 						<h:inputText value="#{validateDocumentBean.secondName}" styleClass="normal" style="width:155px; 
+			 							text-transform: uppercase" onkeypress="return alphaSpaceWithoutPoint(event)" maxlength="150">
+			 							<a4j:support event="onkeyup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+										<a4j:support event="onmouseup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+									</h:inputText>
+									
+			 						<h:outputText value="Usuario:" styleClass="bold"/>   
+			 						<h:inputText value="#{validateDocumentBean.userEmail}" styleClass="normal" style="width:155px" 
+			 							onkeypress="return emailValidation(event)" maxlength="100">
+			 							<a4j:support event="onkeyup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+										<a4j:support event="onmouseup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+									</h:inputText>
+									
+			 						<h:outputText value="Cuenta FacilPass:" styleClass="bold"/>
+			 						<h:inputText value="#{validateDocumentBean.accountId}" styleClass="normal" style="width:155px" 
+			 							onkeypress="return numOnly(event)" maxlength="15">
+			 							<a4j:support event="onkeyup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+										<a4j:support event="onmouseup" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+									</h:inputText>
+									
+			 						<h:outputText value="Documentos: " styleClass="bold"/>  
+									<h:selectOneMenu id="typeId" value="#{validateDocumentBean.state}" styleClass="normal"  style="width:158px">  
+									    <f:selectItem itemValue="4" itemLabel="Pendientes por Validar"/>
+										<f:selectItem itemValue="3" itemLabel="Validados"/>
+										<f:selectItem itemValue="-1" itemLabel="Rechazados"/>
+										<f:selectItem itemValue="99" itemLabel="Todos"/> 
+									<a4j:support event="onclick" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+									</h:selectOneMenu> 
+									
+									<h:outputText value="Fecha Documentos: " styleClass="bold"/>  
+									<h:selectOneMenu id="fec" value="#{validateDocumentBean.fechaCargue}" style="width:158px" styleClass="normal">  
+									    <f:selectItem itemValue="-1" itemLabel="--Seleccione Uno--"/>
+									    <f:selectItem itemValue="1" itemLabel="Documentos Cargados"/>
+										<f:selectItem itemValue="2" itemLabel="Documentos Gestionados"/>
+									<a4j:support event="onclick" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+									</h:selectOneMenu> 
+						        
+								   	<h:outputText value="Fecha Inicial:" styleClass="bold"/>
+						          	 <rich:calendar id="beg_date" value="#{validateDocumentBean.fechaInicial}"                 		
+			                     		   cellWidth="26px" cellHeight="22px" style="width:150px" inputStyle="width:155px"
+			                     		   datePattern="dd/MM/yyyy" popup="true" styleClass="normal">
+			                       	<a4j:support event="onclick" action="#{validateDocumentBean.ocult}" reRender="panelReport"/> 
+								  	 </rich:calendar>
+								   
+								   	<h:outputText value="Fecha Final:" styleClass="bold"/>
+						          	 <rich:calendar id="end_date" value="#{validateDocumentBean.fechaFinal}" 
+						          	 	   cellWidth="26px" cellHeight="22px" style="width:150px" inputStyle="width:155px"
+			                     		   datePattern="dd/MM/yyyy" popup="true" styleClass="normal">
+			                       	<a4j:support event="onclick" action="#{validateDocumentBean.ocult}" reRender="panelReport"/>
+								   	</rich:calendar>
+								</h:panelGrid>
+ 								
+								<table width="100px">
+									<div align="center">
+										<h:panelGroup>
+										 <h:commandButton value="Buscar" action="#{validateDocumentBean.searchFilter}" style="width: 80px">
+											<a4j:support event="oncomplete" reRender="panelData, dtable"/>
+										</h:commandButton>
+										 <rich:spacer width="20"/>
+										 <h:commandButton value="Limpiar" action="#{validateDocumentBean.clearFilter}" style="width: 80px">
+											<a4j:support event="oncomplete" reRender="panelData, dtable"/>
+										</h:commandButton>
+										</h:panelGroup>
+									</div>
+								</table> 
+				 			</rich:panel>
+							<rich:spacer height="10"/>      	  				
+								<rich:panel id="panelData" style="width:200 px;margin:auto;">
+									<f:facet name="header">     
+										<h:outputText styleClass="bold" value="Lista Documentos"/>   
+									</f:facet>
+										<h:commandButton value="Validar"  action="#{validateDocumentBean.showConfirmAllValidate}" style="width: 80px"/>  
+									<!--<h:commandButton value="Rechazar" action="#{validateDocumentBean.showConfirmAllInvalidate}" style="width: 80px"/>-->	 
+									<rich:spacer width="20" />
+									<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:5px; ">
+					
+								    </h:panelGrid>
+									<div id="scroll_horizontal">	     								
+										<rich:dataTable id="dtable" value="#{validateDocumentBean.listAllInfoVerification}" var="list"  rows="10">
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+											<h:outputText styleClass="bold" value="Tipo Identificación"/>
+											</f:facet>
+											<h:outputText value="#{list.codeTypeAbbrU}" styleClass="normal">
+											</h:outputText>  
+										</rich:column>  
+										 
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+											<h:outputText styleClass="bold" value="No. Identificación"/>
+											</f:facet>
+											<h:outputText value="#{list.codeUserU}" styleClass="normal">
+											</h:outputText>  
+										</rich:column>  
+										
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Nombre"/>
+											</f:facet>
+											<div style="word-wrap: break-word;width:280px">
+												<h:outputText value="#{list.nameU}" styleClass="normal"/>					
+										    </div>
+										</rich:column>
+										
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Apellidos"/> 
+											</f:facet>
+											<div style="word-wrap: break-word;width:280px">
+												<h:outputText value="#{list.secondNameU}" styleClass="normal"/>					
+										    </div>
+										</rich:column>
+										
+										<rich:column style="text-align:center;"> 
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Tipo Documento"/> 
+											</f:facet>
+											<h:commandLink value="#{list.typeDocumentDescriptionU}" action="#{validateDocumentBean.downLoadFileAdmin}" id="desca" styleClass="normal">
+											<f:setPropertyActionListener value="#{list.codeUserU}" target="#{validateDocumentBean.numberDoc}"/>  
+											<f:setPropertyActionListener value="#{list.url}" target="#{validateDocumentBean.url}"/> 
+											<f:setPropertyActionListener value="#{list.userIdU}" target="#{validateDocumentBean.userId}"/> 
+											</h:commandLink>
+											<rich:toolTip style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;" followMouse="false" direction="top-right" showDelay="500" styleClass="normal" value="Descargar" for="desca"/>
+										</rich:column>
+										
+										<rich:column style="text-align:center;min-width: 130px;"> 
+											<f:facet name="header">													
+												<h:outputText styleClass="bold" value="Estado"/> 
+											</f:facet>
+											<h:outputText value="Validado" styleClass="normal" style="font-size: 10x;color:green;" rendered="#{list.stateU==3}" />
+											<h:outputText value="Pendiente por Validar" styleClass="normal" style="font-size: 8x; color:red;" rendered="#{list.stateU==4}" />
+											<h:outputText value="Rechazado" styleClass="normal" style="font-size: 10x;color:black;" rendered="#{list.stateU==-1}"/>
+										</rich:column>
+
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Acción"/>
+											</f:facet>  
+											<h:commandLink value="Validar"  action="#{validateDocumentBean.showConfirmValidate}" styleClass="bold" rendered="#{list.stateU==4}">      
+												<f:setPropertyActionListener value="#{list.documentIdU}" target="#{validateDocumentBean.documentId}"/>
+												<f:setPropertyActionListener value="#{list.typeDocumentIdU}" target="#{validateDocumentBean.typeDocumentId}"/>
+												<f:setPropertyActionListener value="#{list.codeTypeAbbrU}" target="#{validateDocumentBean.codeTypeAbbr}"/>
+												<f:setPropertyActionListener value="#{list.userIdU}" target="#{validateDocumentBean.userId}"/>
+											</h:commandLink>  									<h:outputText value=" "/>		
+											<h:commandLink value="Rechazar"  action="#{validateDocumentBean.initObservation}" styleClass="bold" rendered="#{list.stateU==4}"> 
+												<f:setPropertyActionListener value="#{list.codeUserU}" target="#{validateDocumentBean.numberDoc}"/>
+												<f:setPropertyActionListener value="#{list.nameU}" target="#{validateDocumentBean.userName}"/>
+												<f:setPropertyActionListener value="#{list.secondNameU}" target="#{validateDocumentBean.secondName}"/>
+												<f:setPropertyActionListener value="#{list.documentIdU}" target="#{validateDocumentBean.documentId}"/>
+												<f:setPropertyActionListener value="#{list.typeDocumentIdU}" target="#{validateDocumentBean.typeDocumentId}"/>
+												<f:setPropertyActionListener value="#{list.uploadDateDocumentU}" target="#{validateDocumentBean.fechaCargue}"/>   
+												<f:setPropertyActionListener value="#{list.stateU}" target="#{validateDocumentBean.state}"/>
+												<f:setPropertyActionListener value="#{list.descriptionU}" target="#{validateDocumentBean.description}"/>
+												<f:setPropertyActionListener value="#{list.userUploadU}" target="#{validateDocumentBean.userUpload}"/>
+												<f:setPropertyActionListener value="#{list.codeTypeAbbrU}" target="#{validateDocumentBean.codeTypeAbbr}"/>
+												<f:setPropertyActionListener value="#{list.userIdU}" target="#{validateDocumentBean.userId}"/>
+												<f:setPropertyActionListener value="#{list.typeDocumentDescriptionU}" target="#{validateDocumentBean.typeDocument}"/>   	
+											</h:commandLink>  
+										</rich:column>
+										
+										<rich:column style="text-align:center;min-width: 150px;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Usuario"/>
+											</f:facet>  
+											<h:outputText value="#{list.userUploadU}" styleClass="normal"/>
+										</rich:column>
+										
+										<rich:column style="text-align:center;min-width: 200px;">
+											<f:facet name="header">												
+												<h:outputText styleClass="bold" value="Observación"/> 	
+											</f:facet>  
+											<h:outputText value="#{list.descriptionU}" styleClass="normal"/>
+										</rich:column>
+										
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value=" Fecha Cargue "/> 
+											</f:facet>  
+											<h:outputText value="#{list.uploadDateDocumentU}" styleClass="normal"/>
+										</rich:column>
+										
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Fecha Aprobación/Rechazo"/> 
+											</f:facet>  
+											<h:outputText value="#{list.processDateDocumentU}" styleClass="normal"/>
+										</rich:column>
+									    </rich:dataTable>
+								        <rich:dataTable id="ws"
+												value="#{validateDocumentBean.listaScroll}"							
+												var="list" rows="10">	
+										</rich:dataTable>															
+										<rich:datascroller for="ws" id="PTScroll" 
+											page="#{validateDocumentBean.page}"
+											reRender="dtable, PTScroll"
+											actionListener="#{validateDocumentBean.dataScroller}">
+										</rich:datascroller>
+									</div>
+								</rich:panel>
+						<rich:spacer height="10"/>	
+						
+						<a4j:outputPanel id="panelReport">
+							<rich:panel id="rich1" rendered="#{validateDocumentBean.showReport}">
+								<h:panelGrid style="vertical-align: middle; margin: auto;" columns="2">
+									<h:commandLink id="clinkpdf1" target="_blank" value="" action="#{validateDocumentBean.generarReporte}">
+							   			<img title="Generar Reporte Documentos" src="/web.bo.peajes.com/img/generar_xls_btn.gif" alt="Imprimir"
+							     			style="cursor: pointer; border: 0px solid blue;" />
+					        		</h:commandLink>
+								</h:panelGrid>					
+							</rich:panel>
+						</a4j:outputPanel>  
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>	
+									
+					<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{validateDocumentBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Verificación Documentos de Afiliación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{validateDocumentBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{validateDocumentBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{validateDocumentBean.hideModal}" style="width: 80px"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>		
+						<br />
+					</rich:modalPanel>
+
+
+					<rich:modalPanel id="confirmacionV" width="340" height="115" showWhenRendered="#{validateDocumentBean.showConfirmV}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{validateDocumentBean.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{validateDocumentBean.modalMessage}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{validateDocumentBean.validateDocument}" style="width: 80px">
+				                	<a4j:support event="oncomplete" reRender="panelm"/>
+						           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <rich:spacer width="20"/>
+			                <h:commandButton value="Cancelar" action="#{validateDocumentBean.hideModal}" style="width: 80px"/>
+				     	</h:panelGroup>   	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>	 
+					
+					
+					<rich:modalPanel id="confirmacionI" width="340" height="115" showWhenRendered="#{validateDocumentBean.showConfirmI}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>    
+							<a4j:form>
+								<h:commandButton action="#{validateDocumentBean.hideModal}" image="/img/close.png" />
+							</a4j:form>      
+						</h:panelGroup>    
+					</f:facet>
+					<h:outputText value="#{validateDocumentBean.modalMessage}" styleClass="normal"/>
+					<h:form> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{validateDocumentBean.rejectDocument}" style="width: 80px">
+				                	<a4j:support event="oncomplete" reRender="description"/>
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <rich:spacer width="20"/>
+			                <h:commandButton value="Cancelar" action="#{validateDocumentBean.hideModal}" style="width: 80px"/>
+				     	</h:panelGroup> 	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>	 					
+					 
+
+					<rich:modalPanel id="confirmacionAllV" width="340" height="115" showWhenRendered="#{validateDocumentBean.showConfirmAllV}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>    
+							<a4j:form>
+								<h:commandButton action="#{validateDocumentBean.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>    
+					</f:facet>
+					<h:outputText value="#{validateDocumentBean.modalMessage}" styleClass="normal"/>
+					<h:form> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{validateDocumentBean.validateAllDocument}" style="width: 80px">
+				                  <a4j:support event="oncomplete" reRender="panelm"/>
+						           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <rich:spacer width="20"/>
+			                <h:commandButton value="Cancelar" action="#{validateDocumentBean.hideModal}" style="width: 80px"/>
+						</h:panelGroup> 	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>						 
+					
+					<rich:modalPanel id="confirmacionAllI" width="340" height="115" showWhenRendered="#{validateDocumentBean.showConfirmAllI}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>    
+							<a4j:form>
+								<h:commandButton action="#{validateDocumentBean.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>    
+					</f:facet>
+					<h:outputText value="#{validateDocumentBean.modalMessage}" styleClass="normal"/>
+					<h:form> 
+					<h:panelGrid columns="3" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup> 
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{validateDocumentBean.validateAllDocument}" style="width: 80px">
+				                  <a4j:support event="oncomplete" reRender="panelm"/>
+						           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <rich:spacer width="20"/>
+			                <h:commandButton value="Cancelar" action="#{validateDocumentBean.hideModal}" style="width: 80px"/>
+				     	</h:panelGroup>
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="description" width="480" showWhenRendered="#{validateDocumentBean.showDescription}" 
+					autosized ="true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Rechazar Documento" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>    
+								<a4j:form>
+									<h:commandButton action="#{validateDocumentBean.hideModal}" image="/img/close.png" />
+								</a4j:form>      
+							</h:panelGroup>    
+						</f:facet>
+						<h:form id="Formulario">
+						<rich:panel style="width:460px;">	
+							<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+								<h:outputLabel value="Tipo Identificación:"  styleClass="bold"/>
+								<h:outputText value="#{validateDocumentBean.codeTypeAbbr}" style="width:170px;"/>  
+								<h:outputLabel value="No. Identificación:" styleClass="bold"/>
+								<h:outputText value="#{validateDocumentBean.numberDoc}" style="width:170px;"/>
+								<h:outputLabel value="Nombre:" styleClass="bold"/>
+								<h:panelGroup layout="block" style="width: 335px; word-wrap: break-word;">
+									<h:outputText value="#{validateDocumentBean.userName}" rendered="#{listClient.codeType!=3}" style="width:170px;"/>								
+								</h:panelGroup>
+								<h:outputLabel value="Apellidos:" styleClass="bold"/>
+								<h:panelGroup layout="block" style="width: 335px; word-wrap: break-word;">								 
+									<h:outputText value="#{validateDocumentBean.secondName}" rendered="#{listClient.codeType!=3}" style="width:170px;"/>
+								</h:panelGroup>
+								<h:outputLabel value="Tipo Documento:" styleClass="bold"/>
+								<h:outputText value="#{validateDocumentBean.typeDocument}" style="width:70px;"/>
+								<h:outputLabel value="Estado:" styleClass="bold"/>
+								<h:outputText value="Pendientes por Validar" rendered="#{validateDocumentBean.state==4}" style="width:170px;"/>
+								<h:outputLabel value="Fecha Cargue:" styleClass="bold"/>
+								<h:outputText value="#{validateDocumentBean.fechaCargue}" style="width:170px;"/>
+								<h:panelGroup>
+									<h:outputText value="Digite Observación: "  styleClass="bold"/>
+									<h:outputText value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+							</h:panelGrid>
+							    <h:inputTextarea id="descr" value="#{validateDocumentBean.description}" 
+							        onkeypress="return Observation(event)" style="width:97%; height:100px; resize: none;"/>	
+					      		<h:panelGrid styleClass="tableBO" columns="2">
+				     		 	<h:panelGroup>  
+						      		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							 	</h:panelGroup>
+						     	<h:panelGroup>  
+									<h:commandButton value="Aceptar" action="#{validateDocumentBean.validateDescription}" style="width: 80px"/>
+									<rich:spacer width="20"/>
+									<h:commandButton value="Cancelar" action="#{validateDocumentBean.hideModal}" style="width: 80px"/>
+						     	</h:panelGroup>
+					    	</h:panelGrid>
+					    </rich:panel>
+						</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panele" width="350" height="115" showWhenRendered="#{validateDocumentBean.showModalError}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Rechazar Documento" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{validateDocumentBean.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{validateDocumentBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{validateDocumentBean.hideModal2}" style="width: 80px"/>
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+				    	</h:form>		
+						<br />
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="panelc" width="340" height="115" showWhenRendered="#{validateDocumentBean.showConfirmation}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>    
+							<a4j:form>
+								<h:commandButton action="#{validateDocumentBean.hideModal}" image="/img/close.png" />
+							</a4j:form>      
+						</h:panelGroup>    
+					</f:facet>
+					<h:outputText value="#{validateDocumentBean.modalMessage}" styleClass="normal"/>
+					<h:form> 
+					<h:panelGrid styleClass="tableBO" columns="3">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{validateDocumentBean.saveDescription}" style="width: 80px">
+				                	<a4j:support event="oncomplete" reRender="panelm"/>
+						            <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/> 
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <rich:spacer width="20"/>
+			                <h:commandButton value="Cancelar" action="#{validateDocumentBean.hideModal2}" style="width: 80px"/>
+				     	</h:panelGroup> 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>	 
+						 					
+				    </div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+				
+				<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+				  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+				</rich:modalPanel> 
+				
+			</f:view>
+		</div>
+	</body>
+</html>

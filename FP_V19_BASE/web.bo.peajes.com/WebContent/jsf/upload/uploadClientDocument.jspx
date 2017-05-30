@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>   
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />  
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />  
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" /> 
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Subir Documentos</title>
+<style>
+	.top {
+	    vertical-align: top;    
+	}
+	.info {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #C3C3C3; border-collapse: collapse;    
+	}
+	.info2 {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #C3C3C3; border-collapse: collapse;    
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="/jsf/content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="10"/>
+	<rich:panel styleClass="richPanel">	
+		<f:facet name="header">
+			<h:outputText value="Subir Documentos" styleClass="bold"/>
+		</f:facet>
+		<h:form>
+		<rich:spacer height="10"/>
+			<table width="100%">
+				<tr>
+					<td width="30%">
+						<h:outputLabel value="Tipo Documento: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="60%">
+						<h:selectOneMenu id="documento" value="#{fileUploadClientBean.documentTypeId}" style="width: 215px;">
+							<f:selectItems value="#{fileUploadClientBean.documentList}"/> 
+				            <a4j:support event="onchange" action="#{fileUploadClientBean.chargeDocument}" reRender="panelData, panelData2"/>	
+						</h:selectOneMenu>  
+					</td>
+				</tr>
+			</table> 
+		    <h:panelGrid columns="2">  	 
+			<h:panelGroup>
+			<h:outputText value="Contrato FacilPass:" 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	        </h:panelGroup>
+            <h:outputText value="Utilice está opción sólo para subir el contrato FacilPass, el sistema sólo acepta documentos" 
+            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+            <rich:spacer/>
+            <h:outputText value="con extensión PDF." 
+            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>  
+            <rich:spacer/>
+			<rich:spacer/>
+            <h:outputText value="Tarjeta de Propiedad:" 
+            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	        <h:outputText value="Utilice está opción sólo para subir las tarjetas de propiedad de sus vehículos, el sistema" 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+			<rich:spacer/>
+	        <h:outputText value="sólo acepta documentos con extensión jpg, png, xls, xlsx, tif, pdf, doc o docx."
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>   
+            <rich:spacer/>
+			<rich:spacer/>	    
+			<h:outputText value="Otros:" 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	        <h:outputText value="Utilice esta opción  para subir documentos relacionados con el sistema FacilPass, como" 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+			<rich:spacer/>
+            <h:outputText value="la relación de vehículos entre otros. El sistema sólo acepta documentos con extensión"
+            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/> 
+            	<rich:spacer/>
+            <h:outputText value="jpg, png, xls, xlsx, tif, pdf, doc o docx."
+            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>           	
+			<h:panelGroup> 
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>  
+			</h:panelGroup>
+			<rich:spacer/>
+		</h:panelGrid>
+
+		<a4j:outputPanel id="panelData" layout="inline">  
+		<rich:panel id="pd" rendered="#{fileUploadClientBean.showDataDocumentTPyOtro}"> 		
+		<h:panelGrid columns="2" columnClasses="top,top">	
+				<rich:fileUpload id="upload" fileUploadListener="#{fileUploadClientBean.saveDocumentTPyOtro}"  
+		              maxFilesQuantity="1" ontyperejected="javascript:Richfaces.showModalPanel('panelextension');"
+					  doneLabel="Documento Cargado Correctamente"         
+		              immediateUpload="#{fileUploadClientBean.autoUpload}" listWidth="280px"
+		              acceptedTypes="JPG,jpg,PNG,png,XLS,xls,XLSX,xlsx,TIF,tif,PDF,pdf,DOC,doc,DOCX,docx" allowFlash="#{fileUploadClientBean.useFlash}">
+					<a4j:support event="onclick">	           
+						<f:setPropertyActionListener value="#{fileUploadClientBean.documentTypeId}" target="#{fileUploadClientBean.documentTypeId}"/>  
+					</a4j:support>
+					<a4j:support event="onuploadcomplete" reRender="info,upload,panelm">	
+					</a4j:support>
+		        </rich:fileUpload>
+	  
+				<h:panelGroup id="info">
+					<rich:panel bodyClass="info" style="width: 360px;">
+	                    <f:facet name="header">
+	                        <h:outputText value="Información de Documentos Cargados" styleClass="bold"/>
+	                    </f:facet>
+						<h:outputText value="No se han subido Documentos."
+	                        rendered="#{fileUploadClientBean.size==0}" styleClass="normal"/>
+	                    
+						<rich:dataGrid columns="1" value="#{fileUploadClientBean.files}"     
+	                       var="file" rowKeyVar="row">
+							
+							<rich:panel>
+								<h:panelGrid columns="2">
+									<h:panelGrid columns="2">
+	                                    <h:outputText value="Nombre Documento:" />
+	                                    <h:outputText value="#{file.name}" />
+	                                    <h:outputText value="Tamaño del Documento(bytes):" />
+	                                    <h:outputText value="#{file.length}" />
+	                                </h:panelGrid>
+								</h:panelGrid>
+							</rich:panel>	
+						</rich:dataGrid>
+					</rich:panel>
+					<rich:spacer height="3"/>  
+	                <br />
+					<a4j:commandButton action="#{fileUploadClientBean.clearUploadData}" 
+                   	 	reRender="info, upload" value="Limpiar Paneles"
+                    	rendered="#{fileUploadClientBean.size>0}" />
+				</h:panelGroup>
+			</h:panelGrid>
+			<rich:spacer height="20"/>    
+			</rich:panel>		
+		</a4j:outputPanel>		
+		
+		<a4j:outputPanel id="panelData2" layout="inline">
+		<rich:panel id="pd2" rendered="#{fileUploadClientBean.showDataDocumentContract}"> 		
+		<h:panelGrid columns="2" columnClasses="top,top">	
+				<rich:fileUpload id="upload2" fileUploadListener="#{fileUploadClientBean.saveDocumentContract}"  
+		              maxFilesQuantity="1" ontyperejected="javascript:Richfaces.showModalPanel('panelextension2');"
+					  doneLabel="Documento Cargado Correctamente"         
+		              immediateUpload="#{fileUploadClientBean.autoUpload}" listWidth="280px"
+		              acceptedTypes="PDF,pdf" allowFlash="#{fileUploadClientBean.useFlash}">
+					<a4j:support event="onclick">	           
+						<f:setPropertyActionListener value="#{fileUploadClientBean.documentTypeId}" target="#{fileUploadClientBean.documentTypeId}"/>
+					</a4j:support>
+					<a4j:support event="onuploadcomplete" reRender="info2,upload2,panelm">	
+					</a4j:support>
+		        </rich:fileUpload>
+	  
+				<h:panelGroup id="info2">
+					<rich:panel bodyClass="info2" style="width: 360px;">
+	                    <f:facet name="header">
+	                        <h:outputText value="Información de Documentos Cargados" styleClass="bold"/>
+	                    </f:facet>
+						<h:outputText value="No se han subido Documentos."
+	                        rendered="#{fileUploadClientBean.size==0}" styleClass="normal"/>
+	                    
+						<rich:dataGrid columns="1" value="#{fileUploadClientBean.files}"     
+	                       var="file" rowKeyVar="row">
+							
+							<rich:panel>
+								<h:panelGrid columns="2">
+									<h:panelGrid columns="2">
+	                                    <h:outputText value="Nombre Documento:" />
+	                                    <h:outputText value="#{file.name}" />
+	                                    <h:outputText value="Tamaño del Documento(bytes):" />
+	                                    <h:outputText value="#{file.length}" />
+	                                </h:panelGrid>
+								</h:panelGrid>
+							</rich:panel>	
+						</rich:dataGrid>
+					</rich:panel>
+					<rich:spacer height="3"/>  
+	                <br />
+					<a4j:commandButton action="#{fileUploadClientBean.clearUploadData}" 
+                   	 	reRender="info2, upload2" value="Limpiar Paneles"
+                    	rendered="#{fileUploadClientBean.size>0}" />
+				</h:panelGroup>
+			</h:panelGrid>			
+			<rich:spacer height="20"/>    
+		</rich:panel>
+	</a4j:outputPanel>										
+	</h:form>	
+	</rich:panel>
+	
+	<rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{fileUploadClientBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Subir Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">   
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fileUploadClientBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fileUploadClientBean.message}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{fileUploadClientBean.hideModal}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+    	</h:form>		
+		<br /> 
+	</rich:modalPanel>   
+	
+	
+	<rich:modalPanel id="panelextension" width="350" height="115" showWhenRendered="#{fileUploadClientBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Subir Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">        
+			<h:panelGroup>    
+				<a4j:form>
+					<h:commandButton action="#{fileUploadClientBean.hideModal}" image="/img/close.png" /> 
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="Revise que su documento tenga las extensiones jpg, png, xls, xlsx, tif, pdf, para poder subirlo." styleClass="normal"/> 
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{fileUploadClientBean.hideModal}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+    	</h:form>		
+		<br />
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="panelextension2" width="350" height="115" showWhenRendered="#{fileUploadClientBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Subir Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">        
+			<h:panelGroup>    
+				<a4j:form>
+					<h:commandButton action="#{fileUploadClientBean.hideModal}" image="/img/close.png" /> 
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="Revise que su documento tenga la extensión PDF para poder subirlo." styleClass="normal"/> 
+			<h:form>
+				<h:panelGrid columns="3" styleClass="tableBO">
+					<h:panelGroup>
+						<div class="span-1"></div>
+					</h:panelGroup>
+		     		<h:panelGroup>
+		     			<h:commandButton value="Aceptar" action="#{fileUploadClientBean.hideModal}" style="width: 80px"/>
+		     		</h:panelGroup>	     	
+		    	</h:panelGrid>
+	    	</h:form>		
+			<br />
+	 </rich:modalPanel>
+	  
+<rich:spacer height="20"/>			
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

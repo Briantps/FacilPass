@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.ant.AntLaunchConfigurationType">
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_OUTPUT_ON" value="true"/>
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND" value="false"/>
+<booleanAttribute key="org.eclipse.debug.ui.private" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.ant.internal.ui.antsupport.InternalAntRunner"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
+<mapAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_PROPERTIES">
+<mapEntry key="contextRoot" value="bo-ear"/>
+<mapEntry key="key" value="generic_server_instance_properties"/>
+<mapEntry key="module.archive.name" value="bo-ear.ear"/>
+<mapEntry key="module.dir" value="C:/Users/ln/Desktop/Integra/FP_V19_BASE/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/bo-ear"/>
+<mapEntry key="module.name" value="bo-ear"/>
+<mapEntry key="project.location" value="C:/Users/ln/Desktop/Integra/FP_V19_BASE/bo-ear"/>
+<mapEntry key="project.name" value="bo-ear"/>
+<mapEntry key="project.working.dir" value="C:/Users/ln/Desktop/Integra/FP_V19_BASE/.metadata/.plugins/org.eclipse.wst.server.core/tmp0"/>
+<mapEntry key="server.publish.dir" value="C:/Sun/SDK/domains/${sunappserver.domainname}/autodeploy"/>
+<mapEntry key="sunappserver.adminname" value="admin"/>
+<mapEntry key="sunappserver.adminpassword" value="adminadmin"/>
+<mapEntry key="sunappserver.adminserverportnumber" value="4848"/>
+<mapEntry key="sunappserver.contextroot" value="bo-ear"/>
+<mapEntry key="sunappserver.domainpath" value="C:/Sun/SDK/domains/domain1"/>
+<mapEntry key="sunappserver.rootdirectory" value="C:/Sun/SDK"/>
+<mapEntry key="sunappserver.serveraddress" value="localhost"/>
+<mapEntry key="sunappserver.serverportnumber" value="8080"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_TARGETS" value="deploy.j2ee.ear"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="C:\Users\ln\Desktop\Integra\FP_V19_BASE\.metadata\.plugins\org.eclipse.jst.server.generic.core\serverdef\sunappsrv-ant.xml"/>
+<stringAttribute key="process_factory_id" value="org.eclipse.ant.ui.remoteAntProcessFactory"/>
+</launchConfiguration>

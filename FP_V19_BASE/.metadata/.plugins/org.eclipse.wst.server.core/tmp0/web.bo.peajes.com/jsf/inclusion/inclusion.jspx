@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Crear Inclusión</title>
+<style type="text/css">
+	#scroll_horizontal {
+		width: 100%;
+		overflow: auto;
+		clear:both;
+		text-align: center;
+		margin :auto;
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="../menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="../menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+	<h:form>
+		<a4j:outputPanel id="startPanel">
+			<rich:panel styleClass="richPanel" style="background-color: #FBFBFB;"
+				rendered="#{!inclusionBean.showPanel}">
+				<h:outputText value="No hay Datos Para ser Incluidos." styleClass="bold" style="color: red;"/>
+			</rich:panel>
+			<rich:panel styleClass="richPanel" style="background-color: #FBFBFB;"
+				rendered="#{inclusionBean.showPanel}">
+				<f:facet name="header">
+					<h:outputText value="Inclusión" styleClass="bold"/>
+				</f:facet>
+				<rich:panel>
+					<h:panelGrid style="margin: auto; size: 500px;" columns="2" 
+						styleClass="tableBO">
+						<h:outputText value="Fecha: " styleClass="bold"/>
+						<h:inputText styleClass="bold" value="#{inclusionBean.date}" disabled="true">
+							<f:convertDateTime pattern="dd-MM-yyyy"/>
+						</h:inputText>
+						<h:outputText value="Estado: " styleClass="bold"/>
+						<h:inputText styleClass="bold" value="NUEVA" disabled="true"/>
+					</h:panelGrid>
+				</rich:panel>
+				<rich:spacer height="5"/>
+				<div id="scroll_horizontal">	
+					<rich:extendedDataTable id="datalist" value="#{inclusionBean.details}" 
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+						onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+						var="list" height="300px" width="1200px" rowClasses="white,white"
+						enableContextMenu="false">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Incluir"/>
+							</f:facet>
+							<h:selectBooleanCheckbox value="#{list.selected}"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Fecha Registro"/>
+							</f:facet>
+							<h:outputText value="#{list.customization.creationRepositionDate}"
+								converter="TimeStampToStringDateConverter" styleClass="normal"/>
+						</rich:column>
+						<rich:column sortable="true" sortBy="#{list.customization.tbVehicle.vehiclePlate}"
+							filterEvent="onkeyup" filterBy="#{list.customization.tbVehicle.vehiclePlate}">
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Placa"/>
+							</f:facet>
+							<h:outputText value="#{list.customization.tbVehicle.vehiclePlate}"
+								styleClass="normal"/>
+						</rich:column>
+						<rich:column sortable="true" sortBy="#{list.customization.tbAccount.tbSystemUser.userNames} #{list.customization.tbAccount.tbSystemUser.userSecondNames}">
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Nombre Cliente"/>
+							</f:facet>
+							<h:outputText value="#{list.customization.tbAccount.tbSystemUser.userNames} #{list.customization.tbAccount.tbSystemUser.userSecondNames}"
+								styleClass="normal" rendered="#{list.customization.tbAccount.tbSystemUser.tbCodeType.codeTypeId != 3}"/>
+							<h:outputText value="#{list.customization.tbAccount.tbSystemUser.userNames}"
+								styleClass="normal" rendered="#{list.customization.tbAccount.tbSystemUser.tbCodeType.codeTypeId == 3}"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Regional"/>
+							</f:facet>
+							<h:outputText value="#{list.reg}"
+								styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Peaje"/>
+							</f:facet>
+							<h:outputText value="#{list.station}"
+								styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Categoría Conseción"/>
+							</f:facet>
+							<h:outputText value="#{list.customization.categoryConcession}"
+								styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Categoría Invias"/>
+							</f:facet>
+							<h:outputText value="#{list.customization.categoryInvias}"
+								styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Nro Oficio"/>
+							</f:facet>
+							<h:outputText value="#{list.customization.officialDocumentNumber}"
+								styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Fecha Oficio"/>
+							</f:facet>
+							<h:outputText value="#{list.customization.officialDocuemntDate}"
+							 converter="TimeStampToStringDateConverter"	styleClass="normal"/>
+						</rich:column>
+					</rich:extendedDataTable>
+				</div>
+				<rich:spacer height="5"/>
+				<h:commandButton value="CREAR" styleClass="bold" action="#{inclusionBean.saveInclusion}">
+				</h:commandButton>
+			</rich:panel>
+		</a4j:outputPanel>
+	</h:form>
+	<rich:spacer height="20"/>
+
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{inclusionBean.modal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Inclusiones" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{inclusionBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{inclusionBean.modalMessage}" styleClass="normal"/>
+		<br/>
+	</rich:modalPanel>	
+	
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

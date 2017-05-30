@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Seguimiento de Procesos de Cliente</title>
+</head>
+
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="/jsf/content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="/jsf/menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:spacer height="5" />
+				<h:form>
+					<rich:panel styleClass="richPanel">
+						<f:facet name="header">
+							<h:outputText value="Seguimiento de Procesos de Cliente"
+								styleClass="bold" />
+						</f:facet>
+						<rich:messages styleClass="bold" style="color: red;" />
+						<rich:panel>
+							<h:panelGrid styleClass="tableBO" columns="2"
+								style="margin: auto; size: 300px; padding:10px;">
+								<h:outputText value="#{msg.TipDoc}:" styleClass="bold" />
+								<h:selectOneMenu value="#{clientProcessBean.codeTypeId}">
+									<f:selectItems value="#{clientProcessBean.codeTypeList}" />
+								</h:selectOneMenu>
+								<h:panelGroup>
+									<h:outputText value="#{msg.NumDoc}: " styleClass="bold" />
+									<h:outputLabel value="#{msg.Asterisk}"
+										styleClass="asteriskMandatoryField" />
+								</h:panelGroup>
+								<h:inputText value="#{clientProcessBean.userCode}"
+									onkeypress="return solonumeros(event)" />
+								<h:outputLabel value="Fecha inicial:"></h:outputLabel>			
+								<rich:calendar id="dateStart" value="#{clientProcessBean.dateStart}"
+									cellWidth="26px" cellHeight="22px" style="width:150px"
+									datePattern="dd/MM/yyyy" popup="true" styleClass="normal"></rich:calendar>								
+								<h:outputLabel value="Fecha Final:"></h:outputLabel>
+								<rich:calendar id="dateEnd" value="#{clientProcessBean.dateEnd}"
+									cellWidth="26px" cellHeight="22px" style="width:150px"
+									datePattern="dd/MM/yyyy" popup="true" styleClass="normal"></rich:calendar>
+							</h:panelGrid>
+							<div align="center">
+								<h:panelGroup>
+									<h:commandButton value="Buscar" style="width: 80px"
+										action="#{clientProcessBean.search}">
+										<a4j:support event="onchange" reRender="panel,panelData" ajaxSingle="true"  />
+									</h:commandButton>
+								</h:panelGroup>
+							</div>
+							<h:panelGroup>
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput" />
+							</h:panelGroup>
+						</rich:panel>
+						<rich:spacer height="10" />
+
+						<a4j:outputPanel id="panelData" layout="inline">
+							<rich:panel id="pd" rendered="#{clientProcessBean.showData}">
+								<f:facet name="header">
+									<h:outputText styleClass="bold"
+										value="Detalle de Seguimientos de Proceso" />
+								</f:facet>
+								<rich:spacer height="10" />
+								<h:panelGrid styleClass="tableBO" columns="2"
+									style="margin: auto; size: 300px; padding:10px;">
+									<h:outputText value="Cliente: " styleClass="bold"></h:outputText>
+									<h:outputText
+										value="#{clientProcessBean.client.userNames} #{clientProcessBean.client.userSecondNames}"
+										styleClass="normal" style="word-break: break-word"
+										rendered="#{clientProcessBean.client.tbCodeType.codeTypeId!=3}" />
+									<h:outputText
+										value="#{clientProcessBean.client.userNames} Rept. #{clientProcessBean.client.userSecondNames}"
+										styleClass="normal" style="word-break: break-word"
+										rendered="#{clientProcessBean.client.tbCodeType.codeTypeId==3}" />
+									<h:outputText value="#{msg.NumDoc}: " styleClass="bold"></h:outputText>
+									<h:outputText
+										value="#{clientProcessBean.client.userCode} - #{clientProcessBean.client.tbCodeType.codeTypeDescription}"
+										styleClass="normal" />
+								</h:panelGrid>
+								<rich:spacer height="10" />
+								<div id="scroll_horizontal">
+
+									<rich:dataTable id="datalist"
+										value="#{clientProcessBean.details}"
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+										var="list" rows="20" width="650px" rowClasses="grey,">
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Detalle" />
+											</f:facet>
+											<h:outputText value="#{list.detailProcess}"
+												styleClass="normal" />
+											<h:commandLink value="( XML )"
+												rendered="#{list.processError}"
+												action="#{clientProcessBean.dowloadFileZipWhitXML}">
+												<f:setPropertyActionListener
+													value="#{list.fileNameXMLResponce} "
+													target="#{clientProcessBean.fileNameXMLRp}" />
+												<f:setPropertyActionListener
+													value="#{list.fileNameXMLRequest} "
+													target="#{clientProcessBean.fileNameXMLRq }" />
+												<f:setPropertyActionListener
+													value="#{clientProcessBean.client.userCode}"
+													target="#{clientProcessBean.codeClient }" />
+												<a4j:support event="oncomplete" reRender="panel" />
+
+											</h:commandLink>
+											<h:commandLink value="aquí" rendered="#{list.processPSE}"
+												action="#{clientProcessBean.downloadVoucher}"
+												target="_blank">
+												<f:setPropertyActionListener value="#{list.filePse} "
+													target="#{clientProcessBean.filePse}" />
+												<f:setPropertyActionListener
+													value="#{clientProcessBean.client.userCode}"
+													target="#{clientProcessBean.codeClient }" />
+												<a4j:support event="oncomplete" reRender="panel" />
+
+											</h:commandLink>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Fecha Detalle" />
+											</f:facet>
+											<h:outputText value="#{list.dateProcess}" styleClass="normal"
+												converter="TimeStampToStringDateConverter" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Estado" />
+											</f:facet>
+											<h:outputText value="#{list.stateProcess}"
+												styleClass="normal" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Usuario de Creación" />
+											</f:facet>
+											<h:outputText value="#{list.userCreateProcess}"
+												styleClass="normal" />
+										</rich:column>
+									</rich:dataTable>
+									<rich:dataTable id="ws"
+										value="#{clientProcessBean.listaScroll}"							
+										var="list" rows="20">	
+									</rich:dataTable>									
+									<rich:datascroller for="ws" id="PTScroll" 
+										page="#{clientProcessBean.page}"
+										reRender="datalist, PTScroll"
+										actionListener="#{clientProcessBean.dataScroller}">
+									</rich:datascroller>
+								</div>
+							</rich:panel>
+						</a4j:outputPanel>
+					</rich:panel>
+				</h:form>
+				<rich:spacer height="20" />
+				<rich:modalPanel id="panel" width="350" height="110"
+					showWhenRendered="#{clientProcessBean.showMessage}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - #{clientProcessBean.title}"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{clientProcessBean.hideModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{clientProcessBean.message}"
+						styleClass="normal" />
+					<h:panelGrid columns="1"
+						style="width: 100px; margin: auto; padding:5px; ">
+						<a4j:form>
+							<h:commandButton value="Aceptar" style="width: 80px"
+								action="#{clientProcessBean.hideModal}" />
+						</a4j:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

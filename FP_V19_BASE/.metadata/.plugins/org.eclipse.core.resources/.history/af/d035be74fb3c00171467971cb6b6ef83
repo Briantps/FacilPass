@@ -1,0 +1,258 @@
+/**
+ * 
+ */
+package util.ws;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+
+import javax.xml.ws.WebServiceException;
+
+import util.ws.dtos.WsRtaConsultTransAval;
+
+import com.corficolombiana.facilpass.ws.connector.commons.dto.StatusDTO;
+import com.corficolombiana.facilpass.ws.connector.commons.exception.WSConnectorException;
+import com.corficolombiana.facilpass.ws.connector.transactioninq.delegate.WSDelegate;
+import com.corficolombiana.facilpass.ws.connector.transactioninq.dto.RequestDTO;
+import com.corficolombiana.facilpass.ws.connector.transactioninq.dto.ResponseDTO;
+import com.facilpass.ws.TransactionInqWS;
+
+import constant.EWebServices;
+
+/**
+ * Clase que consume el Web Service de consulta de transaccion en AVAL 
+ * @author r.bautista
+ *
+ */
+public class WSConsultTransactionAval extends AbstractWSClient{
+
+	/**
+	 * Campos de invocacion del web-service
+	 */
+	private WSDelegate del;
+	private RequestDTO req;
+	private ResponseDTO responseDTO;
+	
+	/**
+	 * Campos para invocar el servicio
+	 */
+	// campos por doc
+	private Long rqUID;
+	private String channel;
+	private Date date;
+	private String ip;
+	private String idType;
+	private String idNum;
+	private String bankId;
+	private String acctId;
+
+	/**
+	 * Constructor vacío
+	 * deja el estado de la transacción como pendiente
+	 */
+	public WSConsultTransactionAval() {
+		this.del = null;
+		this.req = null;
+		this.setRta(new WsRtaConsultTransAval());
+	}
+
+//	@Override
+//	public WsRtaConsultTransAval execute() {
+//		WsRtaConsultTransAval rta = new WsRtaConsultTransAval();
+//		WSDelegate del = null;
+//		RequestDTO req = null;
+//		ResponseDTO ar;
+//		StatusDTO st;
+//		Long statCode;
+//		TbWsResponses wsResp;
+//
+//		if (this.getWSUrl() == null) {
+//			this.setWSUrl("");
+//		}
+//
+//		try {
+//			del = new WSDelegate(new URL(this.getWSUrl()));
+//			req = new RequestDTO(this.rqUID, this.channel, this.date, this.ip, this.idType, this.idNum, this.bankId, this.acctId);
+//		} catch (MalformedURLException e1) {
+//			e1.printStackTrace();
+//			rta.setConnectionProbs(true);
+//		} catch(WebServiceException e2){
+//			e2.printStackTrace();
+//			rta.setConnectionProbs(true);
+//		} catch(Exception e3){
+//			e3.printStackTrace();
+//			rta.setConnectionProbs(true);
+//		}
+//
+//		if (rta.isConnectionProblems()){
+//			this.createTimeError();
+//			return rta;
+//		}
+//
+//		try {
+//			ar = del.invokeWS(req);
+//		} catch (WSConnectorException e1) {
+//			e1.printStackTrace();
+//			rta.setConnectionProbs(true);
+//			this.createTimeError();
+//			return this.rta;
+//		}
+//
+//		st = ar.getStatus();
+//		statCode = st.getStatusCode();
+//		wsResp = this.getCods().get(statCode);
+//
+//		if (wsResp == null) {
+//			System.out.println("Código recibido desconocido - " + statCode);
+//			wsResp = this.getCods().get(EWebServices.WS_CONSULT_TRX_AVAL.getGeneralErrorCode());
+//		}
+//
+//		if (!wsResp.isValid()) {
+//			rta.setStatusCode(wsResp.getCode());
+//			rta.setDescription(wsResp.getDescription());
+//			return rta;
+//		}
+//
+//		// Resultado satisfactorio
+//		rta.setStatusCode(wsResp.getCode());
+//		rta.setSuccess(true);
+//		return rta;
+//	}
+
+	@Override
+	protected Long getTimeOutErrorCode() {
+		return EWebServices.WS_CONSULT_TRX_AVAL.getTimeOutCode();
+	}
+
+	@Override
+	protected void createRtaFromRequest() {
+
+		try {
+			this.del = new WSDelegate(new URL(this.getWSUrl()));
+			this.req = new RequestDTO(this.rqUID, this.channel, this.date, this.ip, this.idType, this.idNum, this.bankId, this.acctId);
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+			this.getRta().setConnectionProbs(true);
+		} catch(WebServiceException e2){
+			e2.printStackTrace();
+			this.getRta().setConnectionProbs(true);
+		} catch(Exception e3){
+			e3.printStackTrace();
+			this.getRta().setConnectionProbs(true);
+		}
+		
+	}
+
+	@Override
+	protected void invokeService() {
+		try {
+			this.responseDTO = del.invokeWS(req);
+		} catch (WSConnectorException e1) {
+			e1.printStackTrace();
+			this.getRta().setConnectionProbs(true);
+			this.createTimeError();
+		}
+		
+	}
+
+	@Override
+	protected StatusDTO getResultStatus() {
+		return this.responseDTO.getStatus();
+	}
+
+	@Override
+	protected void setFinalResp() {
+		WsRtaConsultTransAval tRta = (WsRtaConsultTransAval) this.getRta();
+		String resp = this.responseDTO.getApprovalId();
+		
+		if ( (resp != null ) && (!resp.isEmpty())) {
+			// TODO Suponemos que 0 es aceptado y cualquier otro valor es rechazado... no sabemos aún
+			
+	 		if (resp.trim().startsWith("16")) {
+	 			tRta.setStatus(WsRtaConsultTransAval.APROVED);
+	 		}
+	 		else if(approvalData.trim().startsWith("17"))
+	 		{
+	 		 approvalState=TransactionInqWS.STATE_PENDING;
+	 		}
+			
+			if(resp.equals("0")) {
+				tRta.setStatus(WsRtaConsultTransAval.APROVED);
+			} else {
+				tRta.setStatus(WsRtaConsultTransAval.REJECTED);
+			}
+		}
+		
+	}
+
+	@Override
+	protected Long getGeneralErrorCode() {
+		return EWebServices.WS_CONSULT_TRX_AVAL.getGeneralErrorCode();
+	}
+
+	public Long getRqUID() {
+		return rqUID;
+	}
+
+	public void setRqUID(Long rqUID) {
+		this.rqUID = rqUID;
+	}
+
+	public String getChannel() {
+		return channel;
+	}
+
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getIdType() {
+		return idType;
+	}
+
+	public void setIdType(String idType) {
+		this.idType = idType;
+	}
+
+	public String getIdNum() {
+		return idNum;
+	}
+
+	public void setIdNum(String idNum) {
+		this.idNum = idNum;
+	}
+
+	public String getBankId() {
+		return bankId;
+	}
+
+	public void setBankId(String bankId) {
+		this.bankId = bankId;
+	}
+
+	public String getAcctId() {
+		return acctId;
+	}
+
+	public void setAcctId(String acctId) {
+		this.acctId = acctId;
+	}
+
+}

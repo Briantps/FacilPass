@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contractNP" language="groovy" pageWidth="612" pageHeight="792" columnWidth="416" leftMargin="97" rightMargin="99" topMargin="39" bottomMargin="80">
+	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.x" value="4"/>
+	<property name="ireport.y" value="264"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="ID" class="java.lang.String"/>
+	<parameter name="MAIL" class="java.lang.String"/>
+	<parameter name="DIA" class="java.lang.String"/>
+	<parameter name="MES" class="java.lang.String"/>
+	<parameter name="AÑO" class="java.lang.String"/>
+	<parameter name="DIANOMBRE" class="java.lang.String"/>
+	<parameter name="ADDRESSFP" class="java.lang.String"/>
+	<parameter name="NUMDOCLEGAL" class="java.lang.String"/>
+	<parameter name="TYPEDOCLEGAL" class="java.lang.String"/>
+	<parameter name="NOMLEGALFP" class="java.lang.String"/>
+	<parameter name="NOM" class="java.lang.String"/>
+	<parameter name="TID" class="java.lang.String"/>
+	<parameter name="ADDRESS" class="java.lang.String"/>
+	<parameter name="CITY" class="java.lang.String"/>
+	<parameter name="COUNTRY" class="java.lang.String"/>
+	<parameter name="RAZONFP" class="java.lang.String"/>
+	<parameter name="NITFP" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select contract_title TITULO,contract_text TEXTO,contact_version VERSION,contract_desc DESCRIP from tb_contracts where contract_id=1]]>
+	</queryString>
+	<field name="TITULO" class="java.lang.String"/>
+	<field name="TEXTO" class="oracle.sql.CLOB"/>
+	<field name="VERSION" class="java.lang.String"/>
+	<field name="DESCRIP" class="java.lang.String"/>
+	<pageHeader>
+		<band height="48">
+			<image>
+				<reportElement mode="Opaque" x="-40" y="0" width="167" height="48"/>
+				<imageExpression class="java.lang.String"><![CDATA["FacilPassContract.PNG"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="139" y="16" width="274" height="11"/>
+				<textElement textAlignment="Right">
+					<font fontName="Calibri" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Contrato Usuarios FacilPass V"+$F{VERSION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="338" y="26" width="58" height="11"/>
+				<textElement textAlignment="Right" markup="html">
+					<font fontName="Calibri" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página <b>"+$V{PAGE_NUMBER}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="395" y="26" width="18" height="11"/>
+				<textElement textAlignment="Right" markup="html">
+					<font fontName="Calibri" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" de <b>"+$V{PAGE_NUMBER}+"</b>"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="241" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="93" y="1" width="230" height="30"/>
+				<textElement textAlignment="Center" markup="html">
+					<font fontName="Corbel" size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TITULO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="219" width="416" height="20"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TEXTO}.getSubString(1l,(new Long($F{TEXTO}.length())).intValue()).replace("¿","-").replace("{NOMBRE}", $P{NOM}).replace("{TIPOID}", $P{TID}).replace("{ID}", $P{ID}).replace("{DIRECCION}", $P{ADDRESS}).replace("{CIUDAD}", $P{CITY}).replace("{PAIS}", $P{COUNTRY}).replace("{MAIL}", $P{MAIL}).replace("{DIA}", $P{DIA}).replace("{AÑO}", $P{AÑO}).replace("{MES}", $P{MES}).replace("{DIANOMBRE}", $P{DIANOMBRE}).replace("{DIRFACILPASS}", $P{ADDRESSFP})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="46" width="191" height="13"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["<pre>         A.     FacilPass</pre>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="69" width="167" height="13"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Razón Social"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="69" width="250" height="24"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isBold="false" isItalic="true" isUnderline="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RAZONFP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="92" width="167" height="12"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["NIT"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="92" width="250" height="12"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NITFP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="103" width="167" height="13"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Representante legal"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="103" width="250" height="13"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NOMLEGALFP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="115" width="167" height="12"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Documento de identidad"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="183" y="115" width="233" height="12"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NUMDOCLEGAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="126" width="167" height="12"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Domicilio"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="126" width="250" height="12"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ADDRESSFP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="184" width="167" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Documento de Identidad"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="172" width="167" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Nombre"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1" y="149" width="191" height="13"/>
+				<textElement markup="html">
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["<pre>         B.     Usuario</pre>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="172" width="250" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NOM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="196" width="167" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Domicilio"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="196" width="250" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ADDRESS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="183" y="184" width="233" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="184" width="18" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="166" y="115" width="18" height="12"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPEDOCLEGAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="185">
+			<staticText>
+				<reportElement x="0" y="85" width="215" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Representante Legal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="214" y="0" width="202" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[FIRMA USUARIO]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="73" width="215" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NOMLEGALFP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="97" width="18" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPEDOCLEGAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="17" y="97" width="198" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NUMDOCLEGAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="215" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[FIRMA FACILPASS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="61" width="215" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Peajes Electrónicos S.A.S]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="214" y="61" width="202" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NOM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="214" y="73" width="18" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="231" y="73" width="185" height="13"/>
+				<textElement>
+					<font fontName="Corbel" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ID}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

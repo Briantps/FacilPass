@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Descargar Documentos</title>
+<style>
+	.top {
+	    vertical-align: top;  
+	}
+	.info {
+	    height: 600px;
+	    overflow: auto;
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="/jsf/content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="10"/>
+	<rich:panel style="width: 700px;">	
+		<f:facet name="header">
+			<h:outputText value="Descargar Documentos" styleClass="bold"/>
+		</f:facet>
+		<!-- 
+		<h:form>
+			<rich:panel>
+				<rich:messages styleClass="normal" style="color:red;"/>
+				<h:panelGrid columns="2">
+					<h:panelGroup>
+						<h:outputText value="#{msg.TipDoc}: " styleClass="bold"/>
+						<h:selectOneMenu value="#{fileDownloadBean.typePath}" onchange="submit()"
+							 valueChangeListener="#{fileDownloadBean.loadList}" id="tyfile">
+							<f:selectItems value="#{fileDownloadBean.typePathList}"/>
+							<a4j:support event="onclick, onchange" reRender="suggestionBoxId,codeLabel,showbot,code"></a4j:support>
+
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:outputText rendered="#{fileDownloadBean.showC}" id="codeLabel" value="No. de Identificación #{fileDownloadBean.typePath} +DV: " styleClass="bold"/>
+                        <h:outputText rendered="#{fileDownloadBean.showD}" id="codeLabel1" value="No. de Id #{fileDownloadBean.typePath} : " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField" rendered="#{fileDownloadBean.show }"/>
+						<h:inputText id="code" value="#{fileDownloadBean.code}" styleClass="normal" style="width:140px" 
+									 rendered="#{fileDownloadBean.show}" onkeypress="return alphaNumOnly(event)">
+						</h:inputText>		
+						<rich:suggestionbox rendered="#{fileDownloadBean.show}" id="suggestionBoxId" for="code" shadowOpacity="4"
+							suggestionAction="#{fileDownloadBean.autocomplete}" immediate="true"
+                            var="result" tokens="," height="150" width="160" cellpadding="2" cellspacing="2"   
+                            shadowDepth="4" minChars="1" rules="none" nothingLabel="No se encontró datos.">
+                        	<h:column><h:outputText value="#{result}" styleClass="bold" /></h:column>
+                        </rich:suggestionbox>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{fileDownloadBean.show}">
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<a4j:commandButton rendered="#{fileDownloadBean.show}" id="showbot" style="width: 80px"
+							value="Listar" action="#{fileDownloadBean.viewFiles}" reRender="info,messInfo"/>
+					</h:panelGroup>
+				</h:panelGrid>
+			</rich:panel>
+			<rich:spacer height="10"/>
+			<rich:panel id="messInfo" rendered="#{fileDownloadBean.showMessage}">
+				<h:outputText value="#{fileDownloadBean.messageInfo}" styleClass="bold"/>	
+			</rich:panel>
+			<rich:dataTable value="#{fileDownloadBean.files}" var="file" id="lista" rows="15" width="800px"> 
+					
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Nombre Documento"/></f:facet>
+				<h:outputText value="#{file.name}" styleClass="normal"/>
+			</rich:column>
+			<rich:column width="150px" style="text-align:center;">
+				<f:facet name="header"><h:outputText value="Tamaño del Documento(bytes)"/></f:facet>
+				<h:outputText value="#{file.length}" styleClass="normal"/>  
+			</rich:column>
+			<rich:column width="100px" style="text-align:center;">
+				<f:facet name="header"><h:outputText styleClass="bold" value=""/></f:facet>
+				<h:commandLink value="Descargar" action="#{fileDownloadBean.downLoadFileAdmin}" styleClass="bold">
+					<f:setPropertyActionListener value="#{file.name}" target="#{fileDownloadBean.name}"/>  
+				</h:commandLink>
+		    </rich:column>
+		</rich:dataTable> 
+		</h:form>	 -->
+		
+		<h:form>
+			<rich:panel>
+				<h:panelGrid columns="3">
+					<h:panelGroup>
+						<h:outputText value="Tipo Documento: " styleClass="bold"/>
+						<h:selectOneMenu value="#{fileDownloadBean.typePath}" onchange="submit()"
+							 valueChangeListener="#{fileDownloadBean.inputCode}">
+							<f:selectItems value="#{fileDownloadBean.typePathList}"/>
+							<a4j:support event="onchange" reRender="code,label,label1" ajaxSingle="true"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:outputText rendered="#{fileDownloadBean.showC}" id="label" value="Tipo Identificación:" styleClass="bold"/>
+                        <h:outputText rendered="#{fileDownloadBean.showD}" id="label1" value="Tipo Dispositivo: " styleClass="bold"/>
+						<h:selectOneMenu value="#{fileDownloadBean.codeTypeId}" rendered="#{fileDownloadBean.show}" onchange="submit()">
+							<f:selectItems value="#{fileDownloadBean.codeTypeList}"/>
+							<a4j:support event="onchange" reRender="codeLabel,codeLabel1,showbot,code" ajaxSingle="true"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:outputText rendered="#{fileDownloadBean.showC}" id="codeLabel" value="No. de Identificación #{fileDownloadBean.typePath} +DV: " styleClass="bold"/>
+                        <h:outputText rendered="#{fileDownloadBean.showD}" id="codeLabel1" value="No. de Id #{fileDownloadBean.typePath} : " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" rendered="#{fileDownloadBean.show}" styleClass="asteriskMandatoryField"/>
+						<h:inputText id="code" value="#{fileDownloadBean.code}" styleClass="normal" style="width:140px" 
+									 rendered="#{fileDownloadBean.show}" onkeypress="return alphaNumOnly(event)">
+							<a4j:support event="onkeyup" action="#{fileDownloadBean.clearFilter}" reRender="panelData" ajaxSingle="true"/>
+						</h:inputText>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{fileDownloadBean.show}">
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<a4j:commandButton rendered="#{fileDownloadBean.show}" id="showbot" style="width: 80px"
+							value="Listar" action="#{fileDownloadBean.fileTypeList}" reRender="panelm,panelData"/>
+					</h:panelGroup>
+					<h:panelGroup/>
+				</h:panelGrid>
+			</rich:panel>
+		
+			<rich:spacer height="10"/>
+			<a4j:outputPanel id="panelData" layout="inline">
+		    <rich:panel id="panel" rendered="#{fileDownloadBean.showFile}" style="width:600 px;margin:auto;">
+			<f:facet name="header">  
+				<h:outputText value="Lista Documentos" styleClass="bold"/>
+			</f:facet>			
+               <div id="scroll_horizontal">
+			   <rich:dataTable value="#{fileDownloadBean.files}" var="file" id="lista" rows="15" width="800px"> 				
+					<rich:column width="150px" style="text-align:center;">
+						<f:facet name="header"><h:outputText value="Nombre Documento"/></f:facet>
+						<h:outputText value="#{file.name}" styleClass="normal"/>
+					</rich:column>
+					<rich:column width="150px" style="text-align:center;">
+						<f:facet name="header"><h:outputText value="Tamaño del Documento(bytes)"/></f:facet>
+						<h:outputText value="#{file.length}" styleClass="normal"/>  
+					</rich:column>
+					<rich:column width="100px" style="text-align:center;">
+						<f:facet name="header"><h:outputText styleClass="bold" value=""/></f:facet>
+						<h:commandLink value="Descargar" action="#{fileDownloadBean.downLoadFile}" styleClass="bold">
+							<f:setPropertyActionListener value="#{file.name}" target="#{fileDownloadBean.name}"/>  
+						</h:commandLink>
+				    </rich:column>
+                    <f:facet name="footer">
+       	             <rich:datascroller for="lista"/>
+      	            </f:facet>
+			  </rich:dataTable>
+				</div>
+					</rich:panel>
+				</a4j:outputPanel>
+		</h:form>
+		
+	</rich:panel>
+	<rich:spacer height="20"/>
+
+    <rich:modalPanel id="panelm" width="350" height="115" showWhenRendered="#{fileDownloadBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Descargar Documentos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{fileDownloadBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{fileDownloadBean.messageInfo}" styleClass="normal"/>
+		<h:form>
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup>
+					<div class="span-1"></div>
+				</h:panelGroup>
+	     		<h:panelGroup>
+	     			<h:commandButton value="Aceptar" action="#{fileDownloadBean.hideModal}" style="width: 80px"/>
+	     		</h:panelGroup>	     	
+	    	</h:panelGrid>
+    	</h:form>		
+		<br />
+	</rich:modalPanel>
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

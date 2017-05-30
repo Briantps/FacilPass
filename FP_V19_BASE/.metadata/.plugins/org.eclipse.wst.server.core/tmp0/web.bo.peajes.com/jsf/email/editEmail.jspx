@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head/>
+<body>
+<div class="container">
+<f:view>
+<div>
+		<rich:messages style="color:red;" styleClass="normal"/>
+		<h:form>
+			<rich:panel>
+				<f:facet name="header"><h:outputText value="Editar Tipo E-Mail" styleClass="bold"/> </f:facet>
+				
+				<h:panelGrid border="1" columns="2" cellpadding="5">
+					
+				 	<h:outputText value="Tipo E-Mail" styleClass="bold"/>
+				 	<h:inputText value="#{emailMBean.def.typeMail}" size="50" disabled="true" styleClass="normal"/>
+				  	<h:outputText value="Nombre" styleClass="bold"/>
+				  	<h:inputText value="#{emailMBean.def.nameTypeMail}" size="50" disabled="true" styleClass="normal"/>
+				  	<h:outputText value="From Address" styleClass="bold"/>
+				  	<h:inputText value="#{emailMBean.def.addressFrom}" size="50" disabled="true" styleClass="normal"/>
+				  	<h:outputText value="Nombre From Address" styleClass="bold"/>
+				  	<h:inputText value="#{emailMBean.def.nameFrom}" size="50" disabled="true" styleClass="normal"/>
+				  	<h:outputText value="To Address" styleClass="bold"/>
+				  	<h:inputText value="#{emailMBean.def.addressTo}" size="50" styleClass="normal" required="true" requiredMessage="El campo To Address es requerido." />
+				  	<h:outputText value="Prioridad" styleClass="bold"/>
+				  	<h:inputText value="#{emailMBean.def.priority}" size="50" styleClass="normal"
+							required="true" requiredMessage="La prioridad es requerida."
+							converterMessage="La prioridad es un valor numérico de 1 a 5"
+							validatorMessage="La prioridad sólo puede ser un número de 1 a 5.">
+						<f:validateLongRange minimum="1" maximum="5"/>
+						<f:convertNumber integerOnly="true" />
+					</h:inputText>
+				  	<h:outputText value="Asunto" styleClass="bold"/>
+					<h:inputText value="#{emailMBean.def.subject}" size="50" disabled="true" styleClass="normal"/>
+				</h:panelGrid>
+				
+				<rich:spacer height="20" />
+				<div class="notice"><p class="normal">Las direcciones de correo <b>(Campo To Address)</b> deben estar separadas por comas (,) y sin dejar espacios en blanco.</p></div>
+	
+
+				<rich:spacer height="20"/>
+				<table width="100%">
+					<tr>
+						<td width="25%"></td>
+						<td width="25%"></td>
+						<td width="20%"></td>
+						<td width="30%"><h:commandButton value="Editar" action="#{emailMBean.edit }" styleClass="normal" style="width: 120px"/></td>
+					</tr>
+				</table>
+
+				<rich:spacer height="20"/>
+				<rich:simpleTogglePanel label="Mensajes" opened="true" width="90%" style="color:red;">
+					
+					<rich:dataTable id="listd" rows="1" var="item" value="#{emailMBean.mssgs}" style="width:600px;margin:auto;" >
+						<f:facet name="header">
+			                <rich:columnGroup>
+			                    <rich:column><h:outputText value="Id Mensaje" styleClass="bold"/></rich:column>
+			                    <rich:column><h:outputText value="Nombre Mensaje" styleClass="bold"/></rich:column>
+			                    <rich:column><h:outputText value="Contenido Mensaje" styleClass="bold"/></rich:column>
+							</rich:columnGroup>
+			            </f:facet>
+						<rich:column><h:outputText value="#{item.id}" styleClass="normal"/></rich:column>
+			            <rich:column><h:outputText value="#{item.name}" styleClass="normal"/></rich:column>
+			            <rich:column>
+							<h:inputTextarea value="#{item.content}" styleClass="normal" style="width:400px; height:100px;"
+								required="true" requiredMessage="El contenido del mensaje es requerido."> 
+								<f:validator validatorId="blank" />
+							</h:inputTextarea>
+						</rich:column>	
+						<f:facet name="footer">
+							<rich:datascroller for="listd"/>
+						</f:facet>				
+					</rich:dataTable>					
+				</rich:simpleTogglePanel>
+
+				<rich:spacer height="20"/>
+				<table width="100%">
+					<tr>
+						<td width="25%"></td>
+						<td width="25%"></td>
+						<td width="20%"></td>
+						<td width="30%"><h:commandButton value="Nuevo Mensaje" action="#{emailMBean.newMsg}" styleClass="normal" style="width: 120px"/></td>
+					</tr>
+				</table>
+
+			</rich:panel>
+		</h:form>
+		<rich:spacer height="20" />
+
+		<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{emailMBean.showModalEdit}" onresize="return false;" moveable="false">
+			<f:facet name="header">
+				<h:panelGroup><h:outputText value="E-Mail" styleClass="bold"/></h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{emailMBean.reset}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			<h:outputText value="#{emailMBean.modalMessage}" styleClass="normal"/>
+			<br />
+		</rich:modalPanel>
+
+		<rich:modalPanel id="panelnm" width="600" autosized="true"  showWhenRendered="#{emailMBean.showNewMsg}">
+			<f:facet name="header">
+				<h:panelGroup><h:outputText value="E-Mail" styleClass="bold"/></h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{emailMBean.reset}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			<f:subview id="newmenssage"><ui:include src="newMsg.jspx"/></f:subview>
+			<br />
+		</rich:modalPanel>		
+</div>
+</f:view>
+</div>
+</body>
+</html>

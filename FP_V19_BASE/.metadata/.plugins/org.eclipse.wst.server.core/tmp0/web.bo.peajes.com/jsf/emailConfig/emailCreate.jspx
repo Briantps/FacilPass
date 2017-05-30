@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta http-equiv ="Cache-Control" content ="no-cache"/>
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Creacion de Mensajes de Correo Electrónico</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />				
+					<rich:spacer height="5"/>	
+					<rich:panel id="pnlemsg" style="width:600 px;margin:auto;">
+						<f:facet name="header">
+							<h:outputText value="Creación de Mensajes de Correo Electrónico" styleClass="bold"/>
+						</f:facet>
+				    	<h:form>
+				    		<h:panelGrid columns="1" style="width: 600px">
+				      			<h:panelGrid columns="2" style="width: 600px">							       
+					   				<h:panelGroup>
+				           				<h:outputText value="Seleccione Proceso: "  styleClass="bold"/>
+					       				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				         			</h:panelGroup>
+				       				<h:selectOneMenu value="#{emailSettings.processId}" 
+										style="width: 250px;" styleClass="normal">
+										<f:selectItems value="#{emailSettings.lstProcess}"/>	
+										<a4j:support event="onchange" action="#{emailSettings.changeProcess}" reRender="pnlemsg"/>	
+						 			</h:selectOneMenu>
+						 			<h:panelGroup>
+							         <h:outputText value="Seleccione Tipo de Destinatario "  styleClass="bold"/>
+								     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								    </h:panelGroup>
+								    <h:selectOneMenu value="#{emailSettings.typeMsgId}" 
+										style="width: 250px;" styleClass="normal" >
+										<f:selectItems value="#{emailSettings.lstTypeMsg}"/>
+										<a4j:support event="onchange" action="#{emailSettings.changeTypeMsg}" reRender="pnlemsg,tadrlst,adrlst"/>		
+										<a4j:support event="oncomplete" reRender="tadrlst,adrlst"/>
+								    </h:selectOneMenu> 								   								    								    
+					   				<h:panelGroup>
+					    				<h:outputText value="Escriba el Asunto para el Nuevo Mensaje: "  styleClass="bold"/>
+					    				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					   				</h:panelGroup>
+					   				<h:inputText value="#{emailSettings.subject}" styleClass="normal" maxlength="190" style="width:250px;" onkeypress="return noEspecialobjection(event)"/>
+					   				<h:panelGroup id="tadrlst" rendered="#{emailSettings.showEmailAddressList}">
+							         <h:outputText value="Lista de Destinatarios: "  styleClass="bold"/>
+								     <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								    </h:panelGroup>
+								    <h:inputText rendered="#{emailSettings.showEmailAddressList}" id="adrlst" value="#{emailSettings.emailAddressList}" maxlength="1999" style="width: 250px;"
+								    onkeypress="return onlyEmail(event)"></h:inputText>
+				      			</h:panelGrid>
+				      			<h:panelGroup>
+					    			<h:outputText value="Escriba el Texto para el Nuevo Mensaje"  styleClass="bold"/>	 
+					    			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					   			</h:panelGroup> 
+					   			<h:panelGrid columns="3" style="width: 600px">
+					    			<h:outputText value="Insertar Parámetro: "  styleClass="bold" style="width:150px;" />
+				    				<h:selectOneMenu value="#{emailSettings.idParameter}" 
+										style="width: 250px;" styleClass="normal">
+										<f:selectItems value="#{emailSettings.lstParameters}"/>		
+					 				</h:selectOneMenu>
+					 				<h:commandButton value="Adicionar" action="#{emailSettings.addParameter}" >
+										<a4j:support event="oncomplete" reRender="mensaje" oncomplete="#{rich:component('mensaje')}.focus()"/>
+						 			</h:commandButton>
+					   			</h:panelGrid>
+					   			<h:inputTextarea id="mensaje" value="#{emailSettings.message}" cols="60" rows="10" style="width: 600px; resize: none;"
+					   			  onkeypress="return noEspecialobjection(event)" onkeyup="return checkMaxLength(event, this, 2000);">
+									<f:validateLength maximum="2000" />									
+					   			</h:inputTextarea>
+					   			<h:panelGrid columns="5" style="width: 600px">
+						     		<h:commandLink value="Ver Ejemplo de Mensaje" action="#{emailSettings.preview}" style="font-size: 14px">
+						     		</h:commandLink>
+						     		<rich:spacer height="5" />
+						      		<rich:spacer height="5" />
+						     		<h:commandButton value="Guardar" action="#{emailSettings.save}" >
+						     		</h:commandButton>
+						     		<h:commandButton value="Limpiar" action="#{emailSettings.clear}" >
+						     		</h:commandButton>
+						    	</h:panelGrid> 
+				     		</h:panelGrid>
+				    	</h:form>
+				  	</rich:panel>
+				  				
+				  	<rich:spacer height="5"/>	
+				  	<rich:panel id="pnlprev" rendered="#{emailSettings.showPreview}">
+						<f:facet name="header">
+					 		<h:panelGroup>
+					 			<h:outputText value="Vista Previa de Mensaje" styleClass="bold"/>
+					 		</h:panelGroup>
+						</f:facet>	
+						<h:inputTextarea id="mensaje" value="#{emailSettings.msgExample}" cols="60" rows="10" style="width: 600px; resize: none;" readonly="true">
+					  		<f:validateLength maximum="4000" />
+					 	</h:inputTextarea>
+						<br />
+				  	</rich:panel>
+				  	
+				  	<rich:modalPanel id="msgemer" width="350" height="115" showWhenRendered="#{emailSettings.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Creación de Mensajes de Correo Electrónico" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{emailSettings.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{emailSettings.modalmsg}" styleClass="normal"/>
+						<br />
+						<br />
+						<h:form>
+							<div align="center">
+						  		<h:commandButton value="Aceptar" action="#{emailSettings.hideModal}" />
+							</div>  
+						</h:form>
+					</rich:modalPanel> 
+					<rich:modalPanel id="confirmacion" width="340" height="115" showWhenRendered="#{emailSettings.modalConfirm}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Mensaje - Creación de Mensajes de Correo Electrónico" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{emailSettings.hideModalConfirm}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{emailSettings.modalmsg}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form> 
+					<rich:spacer height="10"/>
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="aprob">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{emailSettings.save1}" style="width: 80px">
+				                	<a4j:support event="oncomplete" reRender="msgemer"/>
+						           	<a4j:status onstart="#{rich:component('wait')}.show()" for="aprob"/>
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <rich:spacer width="15"/>
+			                <h:commandButton value="Cancelar" action="#{emailSettings.hideModalConfirm}" style="width: 80px"/>
+				     	</h:panelGroup>   	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>	
+					<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Por favor espere..." style="font-size:12px;" />
+				</rich:modalPanel>
+				</div>
+               <f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administración de Opciones</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>		
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>		
+				<div class="bkContents span-18 prepend-1">		
+					<rich:spacer height="5"/>	
+					<h:form>
+						<rich:panel style="width:580px;margin:auto;">
+							<f:facet name="header">
+								<h:outputText value="Modificar Opción" styleClass="bold"/>
+							</f:facet>
+							<rich:dataTable id="listOpt" rows="15" var="item" value="#{adminOptMBean.listOpt}" style="width:500px;margin:auto;">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Opción" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.optionName}" styleClass="normal"/>
+								</rich:column>
+								<rich:column style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Modificar" styleClass="bold"/>
+									</f:facet>
+									<h:commandLink value="Modificar" action="#{adminOptMBean.changeOpt}" styleClass="normal">
+										<f:setPropertyActionListener target="#{adminOptMBean.optId}" value="#{item.optionId}"/>
+									</h:commandLink>
+								</rich:column>
+								<rich:column style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Acciones por Opción" styleClass="bold"/>
+									</f:facet>
+									<h:commandLink value="Asignar" action="#{adminOptMBean.assigAct}" styleClass="normal">
+										<f:setPropertyActionListener target="#{adminOptMBean.optId}" value="#{item.optionId}"/>
+									</h:commandLink>
+								</rich:column>
+								<f:facet name="footer">
+			                		<rich:datascroller id="datascroller" for="listOpt" />
+			            		</f:facet>
+							</rich:dataTable>
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>		
+					<rich:modalPanel id="panel" width="410" height="139" showWhenRendered="#{adminOptMBean.update}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Modificar Opción" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminOptMBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="ModOpt">
+							<ui:include src="UpdateOpt.jspx"/>
+						</f:subview>
+						<br />
+					</rich:modalPanel>
+					<rich:modalPanel id="panelP" width="605" height="600" showWhenRendered="#{adminOptMBean.editPermission}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Opciones por Acciones" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminOptMBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="ModOptAct">
+							<ui:include src="modOptAct.jspx"/>
+						</f:subview>
+						<br />
+					</rich:modalPanel>		
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

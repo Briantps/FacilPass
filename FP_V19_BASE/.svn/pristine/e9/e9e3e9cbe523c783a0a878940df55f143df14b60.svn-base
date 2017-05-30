@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Administración Canal</title>
+<script type="text/javascript">
+	function getFocus(numero) {
+	   if (numero==1){
+	   		setTimeout(function(){document.getElementById("formulario:createRecharge").focus()},1000);
+	   		setTimeout(function(){document.getElementById("formulario:editRecharge").focus()},1000);
+	   }	   
+	}
+</script>
+</head>
+<body onload="getFocus(#{adminChannel.numero})">	
+<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<h:form id="formulario">
+					<rich:panel style="width:750px;margin:auto; background-color: #ffffff;" >
+						<f:facet name="header">
+							<h:outputText value="Administrar Canal" />
+						</f:facet>
+						<rich:panel id="createc" rendered="#{adminChannel.showCreateChannel}" style="width:700px;margin:auto; background-color: #ffffff;">
+							<f:facet name="header">
+								<h:commandLink value="Crear Canal" action="#{adminChannel.showViewCreate}" 
+								rendered="#{adminChannel.permissionCreate}" styleClass="no-decor"/>
+							</f:facet>
+								<h:panelGrid id="createChannel" rendered="#{adminChannel.viewFormCreate}" columns="6">
+									<h:panelGroup>
+										<h:outputLabel value="Código:"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText value="#{adminChannel.codeChannel}" maxlength="4"
+										onkeypress="return numOnly(event)" id="codigoChannel" style="width: 175px"/>
+									<rich:spacer width="55px"/>	
+									<h:panelGroup>
+										<h:outputLabel value="Nombre:"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<rich:spacer width="58px"/>	
+									<h:inputText value="#{adminChannel.nameChannel}" maxlength="100" style="width: 175px"/>								
+								</h:panelGrid>	
+		              		    <h:panelGrid columns="4" rendered="#{adminChannel.viewFormCreate}">
+		              		    	<h:panelGroup> 	              	
+										<h:selectBooleanCheckbox id="selectedCheckBoxCreate" value="#{adminChannel.active}" style="text-align: center"
+						              		valueChangeListener="#{adminChannel.validateMinimumAssignment}" 
+						              		immediate="true" onclick="submit()">
+					              			<a4j:support event="onclick" reRender="createRecharge"/>              		    
+					              		</h:selectBooleanCheckbox>
+					              		<h:outputText value="Valida Recarga/asignación mínima" styleClass="bold"/>
+					              	</h:panelGroup>
+				              		<rich:spacer width="70px"/>
+				              		<h:panelGroup>
+					              		<td width="135px">
+											<h:outputText value="Recarga/asignación mínima:" styleClass="bold"/>
+					              			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					              		</td>
+					              	</h:panelGroup>
+					              	<h:inputText id="createRecharge" value="#{adminChannel.textRechargeValue}" style="width:175px"
+					              	    disabled="#{adminChannel.disableField}"
+								   	    onkeypress="return solonumerosNoPrimerCero(event,this)" maxlength="16"
+								   	    onkeyup="separadorMiles(this,this.value.charAt(this.value.length-1),event)">
+			                        </h:inputText>
+			                    </h:panelGrid>	   
+						        <h:panelGrid style="width: 672px;" rendered="#{adminChannel.viewFormCreate}">
+						            <h:panelGroup>    	              	
+		                        		<h:outputLabel value="Descripción:"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField" /> 
+									</h:panelGroup>
+									<h:inputTextarea value="#{adminChannel.descriptionChannel}"
+										onkeyup="return checkMaxLength(event, this, 201);" style="resize:none;height: 100px;width: 663px"/>
+								</h:panelGrid>
+								<h:panelGrid rendered="#{adminChannel.viewFormCreate}" styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px;">
+									<rich:spacer style="width: 230px" />
+									<a4j:commandButton value="Guardar" styleClass="center"
+										style="width: 80px" onclick="this.disabled=true" oncomplete="this.disabled=false"
+										action="#{adminChannel.confirmationSave}" reRender="msjValidate,confirmationCreate"/>
+									<h:commandButton value="Cancelar" styleClass="center"
+										style="width: 80px" action="#{adminChannel.hideModalPanel}"/>
+									<rich:spacer style="width: 230px" />
+								</h:panelGrid>	
+								<h:panelGroup rendered="#{adminChannel.viewFormCreate}">
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField" />
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput" />
+								</h:panelGroup>
+						</rich:panel>
+
+						<rich:panel id="editc" rendered="#{adminChannel.showUpdateChannel}" style="width:700px;margin:auto; background-color: #ffffff;">
+							<f:facet name="header">
+							<h:commandLink value="Editar Canal" styleClass="no-decor"/>
+							</f:facet>
+								<h:panelGrid columns="6">
+									<h:panelGroup>
+										<h:outputLabel value="Código:"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText id="codChannel" value="#{adminChannel.codeChannel}" maxlength="4"
+										onkeypress="return numOnly(event)" disabled="#{!adminChannel.permissionUpdate}" style="width: 175px"/>
+									<rich:spacer width="55px"/>	
+									<h:panelGroup>
+										<h:outputLabel value="Nombre:"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<rich:spacer width="58px"/>
+									<h:inputText value="#{adminChannel.nameChannel}" disabled="#{!adminChannel.permissionUpdate}" maxlength="100" style="width: 175px"/>
+								</h:panelGrid>	
+								<h:panelGrid columns="4">
+		              				<h:panelGroup> 
+										<h:selectBooleanCheckbox id="selectedCheckBoxEdit" value="#{adminChannel.active}" 
+						              		valueChangeListener="#{adminChannel.validateMinimumAssignment}" 
+						              		disabled="#{!adminChannel.permActiveRecharge}" immediate="true" onclick="submit()">
+					              			<a4j:support event="onclick" reRender="editRecharge"/>              		    
+					              		</h:selectBooleanCheckbox>
+				              		<h:outputText value="Valida Recarga/asignación mínima" styleClass="bold"/>
+					              	</h:panelGroup>
+				              		<rich:spacer width="70px"/>
+					              	<h:panelGroup>
+					              		<td width="135px">
+											<h:outputText value="Recarga/asignación mínima:" styleClass="bold"/>
+					              			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					              		</td>
+					              	</h:panelGroup>
+					              	<h:inputText id="editRecharge" value="#{adminChannel.textRechargeValue}" style="width:175px"
+					              	    disabled="#{!adminChannel.permActiveRecharge || adminChannel.disableField}"
+								   	    onkeypress="return solonumerosNoPrimerCero(event,this)" maxlength="16"
+								   	    onkeyup="separadorMiles(this,this.value.charAt(this.value.length-1),event)" 
+								   	    onclick="return borrarCero(this)">
+			                        </h:inputText> 
+								</h:panelGrid>
+								<h:panelGrid style="width: 672px; ">
+		                			<h:panelGroup>  
+										<h:outputLabel value="Descripción:"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									 </h:panelGroup> 		
+									<h:panelGrid style="width: 672px; ">
+										<h:inputTextarea value="#{adminChannel.descriptionChannel}" disabled="#{!adminChannel.permissionUpdate}"
+										onkeyup="return checkMaxLength(event, this, 201);" style="resize:none;height: 100px;width: 650px"/>
+									</h:panelGrid>
+								</h:panelGrid>
+									<h:panelGrid styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px;">
+									<rich:spacer style="width: 230px" />
+									<a4j:commandButton action="#{adminChannel.confirmationUpdate}" onclick="this.disabled=true" 
+									    oncomplete="this.disabled=false" value="Editar" styleClass="center"
+										style="width: 80px" reRender="msjValidate,confirmationUpdate"/>
+									<h:commandButton value="Cancelar" styleClass="center"
+										style="width: 80px" action="#{adminChannel.hideModalPanel}"/>
+									<rich:spacer style="width: 230px" />
+								</h:panelGrid>
+								<h:panelGroup>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput" />
+								</h:panelGroup>
+						</rich:panel>
+
+						<rich:spacer height="10" />
+
+						<rich:panel id="listacanales" style="width:700px;margin:auto; overflow: auto;background-color: #ffffff;">
+							<f:facet name="header">
+								<h:outputText value="Lista Canales" />
+							</f:facet>
+							<div id="scroll_horizontal">
+								<rich:dataTable value="#{adminChannel.listChannel}"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+									rowClasses="white,grey" var="list" id="lista" rows="10">
+
+									<rich:column width="100px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Código" />
+										</f:facet>
+										<h:outputText value="#{list.codeChannel}" />
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Nombre" />
+										</f:facet>
+										<div style="word-wrap: break-word;width:100px">
+										<h:outputText value="#{list.nameChannel}" styleClass="normal" />
+										 </div>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Descripción" />
+										</f:facet>
+											<div style="word-wrap: break-word;width:150px">
+										<h:outputText value="#{list.description}" styleClass="normal"/>
+										</div>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText style="white-space:pre-wrap" value="Recarga/ Asignación Mínima"/>
+										</f:facet>
+										<div>
+											<h:outputText value="#{list.rechargeValue}" styleClass="normal"/>					
+									    </div>
+									</rich:column>
+									<rich:column
+										rendered="#{adminChannel.permissionActiveInactive || adminChannel.permActiveRecharge}"
+										style="text-align:center;min-width: 55px;">
+										<f:facet name="header">
+											<h:outputText value="Estado" />
+										</f:facet>
+										<h:commandLink value="#{list.stateChanel}" action="#{adminChannel.confirmaActiveInactive}" 
+										rendered="#{list.stateChanel!='2'}">
+										<f:setPropertyActionListener value="#{list.stateChanel}" target="#{adminChannel.stateChanel}"/>
+										<f:setPropertyActionListener value="#{list.codeChannel}" target="#{adminChannel.codeChannel}"/>
+										<f:setPropertyActionListener value="#{list.idChannel}" target="#{adminChannel.channelId}"/>
+										<f:setPropertyActionListener value="#{list.nameChannel}" target="#{adminChannel.nameChannel}"/>
+										</h:commandLink>
+									</rich:column>
+									<rich:column rendered="#{adminChannel.permissionUpdate || adminChannel.permActiveRecharge}" style="text-align:center;min-width: 55px;">
+										<f:facet name="header">
+											<h:outputText value="Editar" />
+										</f:facet>
+										<h:commandLink value="Editar" action="#{adminChannel.panelUpdateChannel}" >
+											<f:setPropertyActionListener value="#{list.idChannel}" target="#{adminChannel.channelId}"/>
+											<f:setPropertyActionListener value="#{list.codeChannel}" target="#{adminChannel.codeChannel}"/>
+											<f:setPropertyActionListener value="#{list.stateChanel}" target="#{adminChannel.stateChanel}"/>
+											<f:setPropertyActionListener value="#{list.nameChannel}" target="#{adminChannel.nameChannel}"/>
+											<f:setPropertyActionListener value="#{list.description}" target="#{adminChannel.descriptionChannel}"/>
+											<f:setPropertyActionListener value="#{list.rechargeValue}" target="#{adminChannel.textRechargeValue}"/>
+											<a4j:support event="oncomplete" immediate="true" reRender="editRecharge"/>
+										</h:commandLink>										
+									</rich:column>
+
+									<rich:column rendered="#{adminChannel.permissionDelete}" style="text-align:center;min-width: 55px;">
+										<f:facet name="header">
+											<h:outputText value="Eliminar" />
+										</f:facet>
+										<h:commandLink value="Eliminar" action="#{adminChannel.ConfirmationDeleteChannel}" 
+											rendered="#{(list.findRealtionUmbral le 0) and (list.stateChanel ne '2')}" >
+										<f:setPropertyActionListener value="#{list.idChannel}" target="#{adminChannel.channelId}"/>
+											<f:setPropertyActionListener value="#{list.stateChanel}" target="#{adminChannel.stateChanel}"/>
+										<f:setPropertyActionListener value="#{list.codeChannel}" target="#{adminChannel.codeChannel}"/>
+										<f:setPropertyActionListener value="#{list.idChannel}" target="#{adminChannel.channelId}"/>
+										<f:setPropertyActionListener value="#{list.nameChannel}" target="#{adminChannel.nameChannel}"/>
+										</h:commandLink>
+									</rich:column>
+								</rich:dataTable>
+								<rich:datascroller align="center" for="lista" />
+							</div>
+						</rich:panel>
+						<rich:spacer height="5" />
+					</rich:panel>
+				</h:form>
+				
+				<rich:modalPanel id="msjValidate" showWhenRendered="#{adminChannel.showModalValidate}" 
+				autosized="true" onresize="return false" moveable="false" width="350" height="115" >
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText styleClass="bold" value="Mensaje - Administrar Canal"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup> 
+							<a4j:form>
+								<h:commandButton action="#{adminChannel.hideModal1}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+						<div style="width: 350px; word-wrap: break-word;">
+			      			<h:outputText value="#{adminChannel.message}" styleClass="normal"/>
+						</div>					
+					<h:form>
+						<rich:spacer height="5"/>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"/>
+							</h:panelGroup>
+			     			<h:panelGroup>
+			     				<h:commandButton value="Aceptar" action="#{adminChannel.hideModal1}" style="width: 80px"/>
+			     			</h:panelGroup>	     	
+			    		</h:panelGrid>
+					</h:form>
+				</rich:modalPanel>
+				
+				
+				<rich:modalPanel id="confirmationDelete" showWhenRendered="#{adminChannel.showModalConfirmationDelete}" 
+				autosized="true" onresize="return false;" moveable="false" width="350" height="115">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{adminChannel.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<div style="width: 350px; word-wrap: break-word;">
+						<h:outputText value="#{adminChannel.message}" styleClass="normal" />
+					</div>
+					<h:form>
+						<rich:spacer height="10"/>
+						<div align="center">
+							<h:panelGroup>
+							<a4j:region id="editando">
+								<a4j:commandButton id="send" value="Aceptar" style="width: 80px" action="#{adminChannel.deleteChannel}" 
+					     			 onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate">
+							        <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+				            	</a4j:commandButton>
+			                </a4j:region>						 
+			                <rich:spacer width="10"/>
+			              	<h:commandButton value="Cancelar" action="#{adminChannel.hideModal}" style="width: 80px"/>
+							</h:panelGroup>
+						</div>
+			    	</h:form>
+				</rich:modalPanel>
+				
+				
+				<rich:modalPanel id="confirmationCreate" showWhenRendered="#{adminChannel.showModalConfirmationCreate}" 
+				autosized="true" onresize="return false;" moveable="false" width="350" height="115">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{adminChannel.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<div style="width: 350px; word-wrap: break-word;">
+						<h:outputText value="#{adminChannel.message}" styleClass="normal" />
+					</div>
+					<h:form>
+					    <rich:spacer height="10"/>
+						<div align="center">
+							<h:panelGroup>
+							<a4j:region id="editando">
+								<a4j:commandButton id="send" value="Aceptar" style="width: 80px" action="#{adminChannel.createChannel}" 
+				     			 	onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate">
+						        	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+				                </a4j:commandButton>
+			                </a4j:region>						 
+			                <rich:spacer width="10"/>
+			                <h:commandButton value="Cancelar" action="#{adminChannel.hideModal}" style="width: 80px"/>
+							</h:panelGroup>
+						</div>
+			    	</h:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="confirmationRecharge" showWhenRendered="#{adminChannel.showModalConfirmationRecharge}" 
+				autosized="true" onresize="return false;" moveable="false" width="350" height="115">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{adminChannel.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					
+					<div style="width: 350px; word-wrap: break-word;">
+						<h:outputText value="#{adminChannel.message}" styleClass="normal" />
+					</div>
+					    <rich:spacer height="10"/>
+					    <a4j:form id="formE">					    
+						<div align="center">
+							<h:panelGroup>
+			     				<a4j:commandButton id="btn_accept" value="Aceptar" action="#{adminChannel.hideModal2}" style="width: 80px">
+									<a4j:support event="onclick" onsubmit="document.getElementById('formE:btn_accept').disabled=true;document.getElementById('formE:btn_cancel').disabled=true"
+									reRender="confirmationRecharge,selectedCheckBoxCreate,createRecharge,selectedCheckBoxEdit,editRecharge"/>										
+								</a4j:commandButton>							
+			                <rich:spacer width="10"/>
+			                	<a4j:commandButton id="btn_cancel" value="Cancelar" action="#{adminChannel.hideModal}" style="width: 80px"> 
+									<a4j:support event="onclick" onsubmit="document.getElementById('formE:btn_accept').disabled=true;document.getElementById('formE:btn_cancel').disabled=true"
+									reRender="confirmationRecharge,selectedCheckBoxCreate,createRecharge,selectedCheckBoxEdit,editRecharge"/>										
+								</a4j:commandButton>	
+							</h:panelGroup>
+						</div>
+						</a4j:form>			
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="confirmationUpdate" showWhenRendered="#{adminChannel.showModalConfirmationUpdate}" 
+				autosized="true" onresize="return false;" moveable="false" width="350" height="115" >
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{adminChannel.hideModal1}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<div style="width: 350px; word-wrap: break-word;">
+						<h:outputText value="#{adminChannel.message}" styleClass="normal" />
+					</div>
+					<h:form>
+					    <rich:spacer height="10"/>
+						<div align="center">
+							<h:panelGroup>
+							<a4j:region id="editando">
+								<a4j:commandButton id="send" value="Aceptar" style="width: 80px" action="#{adminChannel.updateChannel}" 
+					     			 onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate">
+							        <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+					            </a4j:commandButton>
+			                </a4j:region>						 
+			                <rich:spacer width="10"/>
+		                	<h:commandButton value="Cancelar" action="#{adminChannel.hideModal1}" style="width: 80px"/>
+							</h:panelGroup>
+						</div>
+			    	</h:form>
+				</rich:modalPanel>
+				
+				
+				<rich:modalPanel id="confirmationUpdateEC" showWhenRendered="#{adminChannel.showModalConfirmationUpdateEC}" 
+				autosized="true" onresize="return false;" moveable="false" width="350" height="115" >
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{adminChannel.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<div style="width: 350px; word-wrap: break-word;">
+						<h:outputText value="#{adminChannel.message}" styleClass="normal" />
+					</div>
+					<h:form>
+						<rich:spacer height="10"/>
+						<div align="center">
+							<h:panelGroup>
+							<a4j:region id="editando">					
+								<a4j:commandButton id="send" value="Aceptar" style="width: 80px" action="#{adminChannel.incativeActiveChannel}" 
+					     			 onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="msjValidate">
+							        <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+				            	</a4j:commandButton>
+			                </a4j:region>						 
+			                <rich:spacer width="10"/>
+		                	<h:commandButton value="Cancelar" action="#{adminChannel.hideModal}" style="width: 80px"/>
+							</h:panelGroup>
+						</div>
+			    	</h:form>
+				</rich:modalPanel>		
+				
+				<rich:modalPanel id="wait" autosized="true" width="350" height="115" moveable="false" resizeable="false">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+					<panelGrid columns="1">
+					<h:graphicImage  url="/img/procesando.gif" style="width: 50px;height: 50px"/>
+					<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+					</panelGrid >
+				</rich:modalPanel>
+				
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

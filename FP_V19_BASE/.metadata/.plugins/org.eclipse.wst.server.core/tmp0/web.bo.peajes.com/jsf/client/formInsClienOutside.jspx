@@ -1,0 +1,1052 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta content="no-cache" http-equiv="Pragma" />
+<meta content="no-cache" http-equiv="Cache-Control" />
+<meta content="no-store" http-equiv="Cache-Control" />
+<meta content="max-age=0" http-equiv="Cache-Control" />
+<meta content="-1" http-equiv="Expires" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/eyePasswordStyle.css" type="text/css" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Formulario de Preinscripción</title>
+</head>
+<script type="text/javascript"> 		
+		function textArea_blur(TxtArea,TxtInicial)  
+		{  
+			if(TxtArea.value == "")  
+			{  
+				TxtArea.value = TxtInicial;
+				
+				TxtArea.style.color='#848484';
+
+			}	
+
+			else{
+				if(TxtArea.value== 'mysuper@mail.com'){
+					TxtArea.style.color='#848484';
+				}
+				else{
+					TxtArea.style.color = '#000000';
+				}
+			}
+				
+		}  
+
+		function textArea_blur2()  
+		{  
+			var TxtArea=document.getElementById("Formulario:Email");
+
+			if(TxtArea.value == "")  
+			{  
+				TxtArea.value ='mysuper@mail.com';
+				
+				TxtArea.style.color='#848484';
+
+			}	
+
+			else{
+				if(TxtArea.value== 'mysuper@mail.com'){
+					TxtArea.style.color='#848484';
+				}
+				else{
+					TxtArea.style.color = '#000000';
+				}
+			}
+
+			var TxtArea2=document.getElementById("Formulario:Email2");
+
+			if(TxtArea2.value == "")  
+			{  
+				TxtArea2.value ='mysuper@mail.com';
+				
+				TxtArea2.style.color='#848484';
+
+			}	
+
+			else{
+				if(TxtArea2.value== 'mysuper@mail.com'){
+					TxtArea2.style.color='#848484';
+				}
+				else{
+					TxtArea2.style.color = '#000000';
+				}
+			}
+		} 
+		 
+		function textArea_focus(TxtArea,TxtInicial)  
+		{  
+			if(TxtArea.value == TxtInicial)  
+			{  
+				TxtArea.value="";  
+				TxtArea.style.color = '#000000';
+			}  
+		}  
+		 
+		function tecla(evt,TxtArea) {
+		 
+		 var evento = evt || window.event;
+		 var propiedad = evento.charCode || evento.keyCode;
+
+        // alert(propiedad);
+		 
+		 if(window.event){
+			keynum = evt.keyCode;
+		 }else{
+            keynum = propiedad;
+         }
+		 
+		 //alert("tecla: "+keynum);
+		  if(keynum == 0){	
+			alert("texto: "+TxtArea.value);
+		   if(TxtArea.value == ''){
+		    TxtArea.value = "mysuper@mail.com";
+		    TxtArea.style.color='#848484';
+			TxtArea.blur();
+		   }
+		   return false;
+		  } else {
+		   
+			  var evento = evt || window.event;
+				var propiedad = evento.charCode || evento.keyCode;
+				
+				if(window.event){
+				      keynum = evt.keyCode;
+				    }else{
+				      keynum = propiedad;
+				    }
+				if(keynum == 32){
+					return false;
+				}else{
+					return true;	
+				}		  		   
+		  } 		  
+		}
+				
+		</script>
+<body onload="textArea_blur2();" ondragstart="return false"
+	onmouseup="mouseUpBody();">
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/headerOutside.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="menuheader">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="bkContents span-24">
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:spacer height="5" />
+				<rich:messages style="color:red;" />
+				<a4j:outputPanel id="richNatura4j">
+					<h:form id="Formulario">
+						<rich:panel
+							style="width:700px;margin:auto; background-color: #ffffff;"
+							id="panelpp">
+							<f:facet name="header">
+								<h:outputText value="Formulario de Preinscripción"
+									styleClass="bold" />
+							</f:facet>
+						<!-- 	<rich:panel disabled="true" >
+								<h:selectOneRadio styleClass="bold"
+									value="#{formOutSideBean.STypePer}"
+									valueChangeListener="#{formOutSideBean.changeTypePers}"
+									immediate="true" id="s1">
+									<f:selectItem itemValue="1" itemLabel="#{msg.PerNat}" id="o1" />
+									<f:selectItem itemValue="2" itemLabel="#{msg.PerJur}" id="o2" />
+									<a4j:support immediate="true" event="onclick"
+										reRender="panel,panel1,richForma,richNatura,richNatura4j,especial" />
+								</h:selectOneRadio>
+							</rich:panel> -->
+							<rich:spacer height="10" />
+							<rich:panel id="panel">
+								<table width="100%">
+									<tr>
+										<td width="25%"><h:outputLabel value="#{msg.TipDoc}: "
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:selectOneMenu id="typeId"
+												value="#{formOutSideBean.userCodeType}"
+												valueChangeListener="#{formOutSideBean.changeTypeID}"
+												immediate="true" 
+												styleClass="normal" style="width: 150px;">
+												<f:selectItem itemValue="1" itemLabel="CC" />
+												<f:selectItem itemValue="2" itemLabel="CE" />
+											    <f:selectItem itemValue="3" itemLabel="NIT" />
+												<!--<a4j:support immediate="true" event="onchange"
+													reRender="panel1" />-->
+													<a4j:support immediate="true" event="onchange"
+										reRender="panel,panel1,richForma,richNatura,richNatura4j,especial" />
+											</h:selectOneMenu> 
+											<!-- <h:inputText value="#{formOutSideBean.userCodeTypeAux}"
+												styleClass="normal" rendered="#{!formOutSideBean.typePer}"
+												disabled="true" id="nit" style="width:140px" />
+											 -->	
+												</td>
+										<td width="6%"></td>
+										<td width="23%"></td>
+										<td width="23%"></td>
+									</tr>
+								</table>
+								<rich:spacer height="10" />
+								<table width="100%">
+									<tr>
+										<td width="25%"><h:outputLabel
+												value="No. de Identificación: "
+												rendered="#{formOutSideBean.typePer}" id="numdoc"
+												styleClass="bold" /> <h:outputLabel value="#{msg.nit}:"
+												rendered="#{!formOutSideBean.typePer}" id="numdocnit"
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText id="doc"
+												value="#{formOutSideBean.userCode}"
+												label="Número de documento" maxlength="15"
+												styleClass="normal" style="width:140px"
+												rendered="#{formOutSideBean.typePer}"
+												onkeypress="return numOnly(event)" autocomplete="off" /> <h:inputText
+												id="doc1" value="#{formOutSideBean.userCode}"
+												label="Número de documento" maxlength="14"
+												styleClass="normal" style="width:140px"
+												rendered="#{!formOutSideBean.typePer}"
+												onkeypress="return numOnly(event)" autocomplete="off" /></td>
+										<td width="6%"></td>
+										<td width="23%"><h:outputLabel
+												value="Dígito de Verificación:"
+												rendered="#{!formOutSideBean.typePer}" id="dv"
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												rendered="#{!formOutSideBean.typePer}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText id="dv1"
+												value="#{formOutSideBean.dv}" label="Digito verificacion"
+												maxlength="1" styleClass="normal" style="width:140px"
+												rendered="#{!formOutSideBean.typePer}"
+												onkeypress="return numOnly(event)" autocomplete="off" /></td>
+									</tr>
+								</table>
+								<rich:spacer height="10" />
+								<table width="100%">
+									<tr>
+										<td width="25%"><h:outputLabel value="#{msg.Nombre}: "
+												rendered="#{formOutSideBean.typePer}" id="nombretxt"
+												styleClass="bold" /> <h:outputLabel value="#{msg.RazSoc}: "
+												rendered="#{!formOutSideBean.typePer}" id="razsoctxt"
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText id="nom" maxlength="100"
+												value="#{formOutSideBean.userNames}" label="Nombres"
+												style="width:140px"
+												onkeypress="return alphaSpaceWithoutPoint(event)"
+												styleClass="normal" rendered="#{formOutSideBean.typePer}"
+												autocomplete="off">
+											</h:inputText> <h:inputText id="razsol" maxlength="100"
+												value="#{formOutSideBean.userNames}" label="Razón Social"
+												style="width:140px"
+												onkeypress="return noEspecialRazSol(event)"
+												styleClass="normal" rendered="#{!formOutSideBean.typePer}"
+												autocomplete="off">
+											</h:inputText></td>
+										<td width="6%"></td>
+										<td width="23%"><h:outputLabel value="#{msg.Apelli}: "
+												rendered="#{formOutSideBean.typePer}" id="apellidotxt"
+												styleClass="bold" /> <h:outputLabel value="#{msg.NombreR}: "
+												rendered="#{!formOutSideBean.typePer}" id="replegaltxt"
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText id="ape"
+												value="#{formOutSideBean.userSecondNames}"
+												styleClass="normal" rendered="#{formOutSideBean.typePer}"
+												style="width:140px"
+												onkeypress="return alphaSpaceWithoutPoint(event)"
+												label="Apellidos" maxlength="50" autocomplete="off">
+											</h:inputText> <h:inputText id="repreLegal"
+												value="#{formOutSideBean.userSecondNames}"
+												styleClass="normal" rendered="#{!formOutSideBean.typePer}"
+												style="width:140px"
+												onkeypress="return alphaSpaceWithoutPoint(event)"
+												label="Nombre Representante Legal" maxlength="50"
+												autocomplete="off">
+											</h:inputText></td>
+									</tr>
+								</table>
+								<table width="100%">
+									<tr>
+										<td width="25%"><h:outputLabel
+												value="País de Constitución Razón Social: "
+												rendered="#{!formOutSideBean.typePer}" styleClass="bold" />
+											<h:outputLabel value="#{msg.Asterisk}"
+												rendered="#{!formOutSideBean.typePer}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText id="pais" maxlength="50"
+												value="#{formOutSideBean.countryRS}" styleClass="normal"
+												style="width:140px"
+												onkeypress="return alphaSpaceWithoutPoint(event)"
+												rendered="#{!formOutSideBean.typePer}" autocomplete="off" />
+										</td>
+										<td width="6%"></td>
+										<td width="23%"></td>
+										<td width="23%"></td>
+									</tr>
+								</table>
+								<table width="100%">
+									<tr>
+										<td width="25%"><h:outputLabel value="#{msg.TipDocLR}: "
+												rendered="#{!formOutSideBean.typePer}" styleClass="bold" />
+											<h:outputLabel value="#{msg.Asterisk}"
+												rendered="#{!formOutSideBean.typePer}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:selectOneMenu id="typeIdRL"
+												value="#{formOutSideBean.legalCodeType}"
+												style="width: 150px;" rendered="#{!formOutSideBean.typePer}"
+												styleClass="normal">
+												<f:selectItem itemValue="1" itemLabel="CC" />
+												<f:selectItem itemValue="2" itemLabel="CE" />
+											</h:selectOneMenu></td>
+										<td width="6%"></td>
+										<td width="23%"><h:outputLabel
+												value="No. de Identificación Representante Legal: "
+												rendered="#{!formOutSideBean.typePer}" id="numdocRL"
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												rendered="#{!formOutSideBean.typePer}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText id="doc2"
+												value="#{formOutSideBean.legalCode}"
+												label="Número de documento" maxlength="15"
+												styleClass="normal" style="width:140px"
+												rendered="#{!formOutSideBean.typePer}"
+												onkeypress="return numOnly(event)" autocomplete="off" />
+									   </td>
+									</tr>
+								</table>
+							</rich:panel>
+							<rich:spacer height="10" />
+							<rich:panel id="panel1">
+								<table width="100%">
+									<tr>
+										<td width="25%"><h:outputLabel value="#{msg.Dir}: "
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText maxlength="50" id="dir"
+												label="Dirección" value="#{formOutSideBean.userAdress}"
+												style="width:140px" styleClass="normal"
+												rendered="#{formOutSideBean.typePer}" autocomplete="off">
+											</h:inputText> <h:inputText maxlength="50" id="dirJuridico"
+												label="Dirección" value="#{formOutSideBean.userAdress}"
+												style="width:140px" styleClass="normal"
+												rendered="#{!formOutSideBean.typePer}" autocomplete="off">
+											</h:inputText></td>
+										<td width="6%"></td>
+										<td width="23%"><h:outputLabel value="#{msg.Ciudad}: "
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:selectOneMenu id="city"
+												value="#{formOutSideBean.userCity}"
+												valueChangeListener="#{formOutSideBean.changeLocation}"
+												immediate="true" style="width: 150px;" styleClass="normal">
+												<f:selectItems value="#{formOutSideBean.cities}" />
+												<a4j:support immediate="true" event="onchange"
+													reRender="panel1" />
+											</h:selectOneMenu></td>
+									</tr>
+								</table>
+								<!-- Aqui esta lo de ciudad  -->
+								<table width="100%">
+									<tr>
+										<td width="25%"><h:outputLabel value="#{msg.CiuExt}: "
+												rendered="#{!formOutSideBean.forePer}" id="ciuexttxt"
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												rendered="#{!formOutSideBean.forePer}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText id="ciuE" maxlength="50"
+												value="#{formOutSideBean.foreignCity}"
+												label="Ciudad en el Extranjero" style="width:140px"
+												onkeypress="return alphaSpaceWithoutPoint(event)"
+												rendered="#{!formOutSideBean.forePer}" styleClass="normal"
+												autocomplete="off">
+											</h:inputText></td>
+										<td width="6%"></td>
+										<td width="23%"><h:outputLabel value="#{msg.PaisExt}: "
+												rendered="#{!formOutSideBean.forePer}" id="paisexttxt"
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												rendered="#{!formOutSideBean.forePer}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText id="paisE"
+												value="#{formOutSideBean.foreignCount}" styleClass="normal"
+												style="width:140px"
+												onkeypress="return alphaSpaceWithoutPoint(event)"
+												rendered="#{!formOutSideBean.forePer}"
+												label="País en el extranjero" maxlength="50"
+												autocomplete="off">
+											</h:inputText></td>
+									</tr>
+								</table>
+								<!-- Aqui finaliza lo de ciudad extranjero -->
+								<table width="100%">
+									<tr>
+										<td width="25%"><h:outputLabel value="Celular: "
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText maxlength="30" id="tel"
+												label="Teléfono" value="#{formOutSideBean.userPhone1}"
+												style="width:140px" styleClass="normal"
+												onkeypress="return numOnly(event)"
+												rendered="#{formOutSideBean.typePer}" autocomplete="off">
+											</h:inputText> <h:inputText maxlength="30" id="telJuridico"
+												label="Teléfono" value="#{formOutSideBean.userPhone1}"
+												style="width:140px" styleClass="normal"
+												onkeypress="return numOnly(event)"
+												rendered="#{!formOutSideBean.typePer}" autocomplete="off">
+											</h:inputText></td>
+										<td width="6%"></td>
+										<td width="23%"><h:outputLabel value="#{msg.Telefono2}: "
+												styleClass="bold" />
+										</td>
+										<td width="23%"><h:inputText maxlength="30" id="tel2"
+												label="Teléfono Opcional"
+												value="#{formOutSideBean.userPhone2}" style="width:140px"
+												styleClass="normal" onkeypress="return optionalPhone(event)"
+												onblur="return trimFunc(this)"
+												rendered="#{formOutSideBean.typePer}" autocomplete="off">
+											</h:inputText> <h:inputText maxlength="30" id="tel2Juridico"
+												label="Teléfono Opcional"
+												value="#{formOutSideBean.userPhone2}" style="width:140px"
+												styleClass="normal" onkeypress="return optionalPhone(event)"
+												onblur="return trimFunc(this)"
+												rendered="#{!formOutSideBean.typePer}" autocomplete="off">
+											</h:inputText></td>
+									</tr>
+								</table>
+							</rich:panel>
+							<rich:spacer height="10" />
+
+							<rich:panel>
+								<table width="100" id="forma">
+									<tr>
+										<td width="25%"><h:outputLabel value="Usuario: "
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%"><h:inputText maxlength="100" id="Email"
+												label="Correo Electrónico"
+												value="#{formOutSideBean.userEmail}" style="width:140px"
+												styleClass="normal"
+												onkeypress="return emailValidation(event)"
+												rendered="#{formOutSideBean.typePer}"
+												onblur="textArea_blur(this,'mysuper@mail.com')"
+												onfocus="textArea_focus(this,'mysuper@mail.com')"
+												autocomplete="off">
+											</h:inputText> <h:inputText maxlength="100" id="EmailJuridico"
+												label="Correo Electrónico"
+												value="#{formOutSideBean.userEmail}" style="width:140px"
+												styleClass="normal"
+												onkeypress="return emailValidation(event)"
+												rendered="#{!formOutSideBean.typePer}"
+												onblur="textArea_blur(this,'mysuper@mail.com')"
+												onfocus="textArea_focus(this,'mysuper@mail.com')"
+												autocomplete="off">
+											</h:inputText> <rich:toolTip
+												style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+												followMouse="false" direction="top-right" showDelay="500"
+												styleClass="normal"
+												value="Ingrese como Usuario su correo electrónico al cual se harán llegar todas las notificaciones del Sistema FacilPass."
+												for="Email" /> <rich:toolTip
+												style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+												followMouse="false" direction="top-right" showDelay="500"
+												styleClass="normal"
+												value="Ingrese como Usuario su correo electrónico al cual se harán llegar todas las notificaciones del Sistema FacilPass."
+												for="EmailJuridico" /></td>
+										<td width="6%"></td>
+										<td width="23%"><h:outputLabel
+												value="Confirmar Usuario: " styleClass="bold" /> <h:outputLabel
+												value="#{msg.Asterisk}" styleClass="asteriskMandatoryField" />
+										</td>
+										<td width="23%"><h:inputText maxlength="100" id="Email2"
+												label="Correo Electrónico"
+												value="#{formOutSideBean.userEmail2}" style="width:140px"
+												styleClass="normal"
+												onkeypress="return emailValidation(event)"
+												rendered="#{formOutSideBean.typePer}"
+												onblur="textArea_blur(this,'mysuper@mail.com')"
+												onfocus="textArea_focus(this,'mysuper@mail.com')"
+												autocomplete="off">
+											</h:inputText> <h:inputText maxlength="100" id="Email2Juridico"
+												label="Correo Electrónico"
+												value="#{formOutSideBean.userEmail2}" style="width:140px"
+												styleClass="normal"
+												onkeypress="return emailValidation(event)"
+												rendered="#{!formOutSideBean.typePer}"
+												onblur="textArea_blur(this,'mysuper@mail.com')"
+												onfocus="textArea_focus(this,'mysuper@mail.com')"
+												autocomplete="off">
+											</h:inputText> <rich:toolTip
+												style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+												followMouse="false" direction="top-right" showDelay="500"
+												styleClass="normal" value="Confirme su correo electrónico."
+												for="Email2" /> <rich:toolTip
+												style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+												followMouse="false" direction="top-right" showDelay="500"
+												styleClass="normal" value="Confirme su correo electrónico."
+												for="Email2Juridico" /></td>
+									</tr>
+								</table>
+							</rich:panel>
+							<rich:spacer height="10" />
+							<rich:panel id="richForma">
+
+								<rich:panel>
+									<h:panelGrid>
+										<h:outputLabel
+											value="Para establecer la contraseña tenga presente las siguientes recomendaciones."></h:outputLabel>
+										<h:outputLabel
+											value="1. La longitud de la contraseña debe ser de 7 a 12 caracteres"></h:outputLabel>
+										<h:outputLabel
+											value="2. La contraseña debe contener mínimo una mayúscula y una minúscula"></h:outputLabel>
+										<h:outputLabel
+											value="3. La contraseña debe tener mínimo un carácter especial como por ejemplo ;,#,$,%,/,(,),=,¿,?,',&quot;,*,-,+"></h:outputLabel>
+										<h:outputLabel
+											value="4. El sistema no acepta secuencias para la contraseña por ejemplo 12345 o abcde"></h:outputLabel>
+									</h:panelGrid>
+								</rich:panel>
+
+
+
+								<!-- dssssssssssssssssssssssssssss -->
+								<rich:panel style="border: 0">
+									<h:panelGrid columns="3">
+										<h:panelGroup>
+											<h:panelGroup style="width:150px;margin:auto;">
+												<table>
+													<tr>
+														<td style="height: 25px;"></td>
+													</tr>
+													<tr>
+														<td style="width: 15px;"></td>
+														<td width="40%"><h:panelGrid columns="2">
+																<h:outputLabel value="Contraseña: " styleClass="bold" />
+																<h:outputLabel value="#{msg.Asterisk}"
+																	styleClass="asteriskMandatoryField" />
+															</h:panelGrid></td>
+														<td width="60%"><h:graphicImage id="change1"
+																value="/img/transparente.png"
+																style="position: absolute;z-index: 1; width: 15px;margin-top: 2px;margin-left: 134px;"
+																onmouseover="showImageF1();"
+																onmouseout="showImageF11();" onmousedown="mouseDownF1()"
+																onmouseup="mouseUpF1()" styleClass="eyeDefault1" /> <h:inputSecret
+																value="#{formOutSideBean.userPassword}"
+																maxlength="#{formOutSideBean.maxSizePassword}"
+																id="Contrasena" label="Clave" styleClass="normal login"
+																style="position:absolute;z-index:0;width:150px;"
+																onkeyup="validateFormLnsClientOut()"
+																onkeypress="onkeypreTecF1();return alphaNum2(event);validateFormLnsClientOut();"
+																onclick="validateFormLnsClientOut()"
+																onchange="validateFormLnsClientOut()">
+																<a4j:support event="onchange" ajaxSingle="true" />
+															</h:inputSecret> <h:inputText id="newPassClear" styleClass="normal login"
+																style="position:absolute;z-index:0;width:150px;visibility : hidden;">
+
+															</h:inputText> <rich:spacer height="2px"></rich:spacer> <h:panelGrid
+																style="border: none;top: 20px;position: relative;">
+																<h:panelGroup id="levelText1"
+																	style="background-color:#D8D8D8; width:150px;height: 30px;border-radius: 10px;border-radius: 10px;position: absolute;text-align: center;line-height: 2.5; ">
+
+																	<h:outputLabel id="textLevel"
+																		style="color:#FFFFFF;text-align: center; " />
+																</h:panelGroup>
+															</h:panelGrid></td>
+													</tr>
+												</table>
+											</h:panelGroup>
+											<rich:spacer height="20" />
+
+											<h:panelGroup style="width:150px;margin:auto;">
+												<table>
+													<tr>
+														<td width="15%" style="width: 16px;"></td>
+														<td width="40%"><h:panelGrid columns="2">
+																<h:outputLabel value="Confirmar Contraseña: "
+																	styleClass="bold" />
+																<h:outputLabel value="#{msg.Asterisk}"
+																	styleClass="asteriskMandatoryField" />
+															</h:panelGrid></td>
+														<td width="60%">
+															<div class="cont2">
+																<h:graphicImage id="change2"
+																	value="/img/transparente.png"
+																	style="position: absolute;z-index: 1; width: 15px;margin-top: 2px;margin-left: 134px;"
+																	onmouseover="showImageF2();"
+																	onmouseout="showImageF21();"
+																	onmousedown="mouseDownF2()" onmouseup="mouseUpF2()"
+																	styleClass="eyeDefault2" />
+																<h:inputSecret
+																	maxlength="#{formOutSideBean.maxSizePassword}"
+																	value="#{formOutSideBean.userPassword2}"
+																	id="Contrasena2" label="Clave"
+																	styleClass="normal login"
+																	style="position:absolute;z-index:0;width:150px;"
+																	onkeyup="validateConionFormLnsClientOut()"
+																	onkeypress="onkeypreTecF2();validateConionFormLnsClientOut();return alphaNum2(event);"
+																	onclick="validateConionFormLnsClientOut()"
+																	onchange="validateConionFormLnsClientOut()">
+																	<a4j:support event="onchange" ajaxSingle="true" />
+																</h:inputSecret>
+																<h:inputText id="new1Clear" styleClass="normal login"
+																	style="position:absolute;z-index:0;width:150px;visibility : hidden;" />
+
+															</div> <rich:spacer height="2px"></rich:spacer> <h:panelGrid
+																style="border: none;top: 20px;position: relative;">
+																<h:panelGroup id="levelText2"
+																	style="background-color:#D8D8D8;width:150px;height: 30px;border-radius: 10px;;position: absolute;text-align: center;line-height: 2.5;">
+																	<h:outputLabel id="textLevelC" style="color:#FFFFFF;"></h:outputLabel>
+																</h:panelGroup>
+
+															</h:panelGrid></td>
+													</tr>
+												</table>
+											</h:panelGroup>
+
+										</h:panelGroup>
+										<rich:spacer width="110px"></rich:spacer>
+
+										<rich:panel id="panelImageComplete" style="width: 260px">
+											<h:panelGrid>
+												<h:panelGroup>
+													<h:outputLabel
+														value="Para establecer la contraseña debe cumplir las siguientes características."></h:outputLabel>
+												</h:panelGroup>
+												<h:panelGroup>
+													<h:panelGrid id="lower" columns="3"
+														style="width: 100%;color:red;">
+														<h:graphicImage url="/img/punto.png"
+															style="height: 5px; width: 5px; vertical-align: super;" />
+														<h:graphicImage id="imageLower" url="/img/err.png"
+															style="width: 20px;height: 20px" />
+														<h:outputLabel value="Al menos una letra minúscula." />
+													</h:panelGrid>
+												</h:panelGroup>
+												<h:panelGroup>
+													<h:panelGrid id="capital" columns="3"
+														style="width: 100%;color:red;">
+														<h:graphicImage url="/img/punto.png"
+															style="height: 5px; width: 5px; vertical-align: super;" />
+														<h:graphicImage id="imageCapital" url="/img/err.png"
+															style="width: 20px;height: 20px" />
+														<h:outputLabel value="Al menos una letra mayúscula." />
+													</h:panelGrid>
+												</h:panelGroup>
+												<h:panelGroup>
+													<h:panelGrid id="number" columns="3"
+														style="width: 75%;COLOR:red">
+														<h:graphicImage url="/img/punto.png"
+															style="height: 5px; width: 5px; vertical-align: super;" />
+														<h:graphicImage id="imageNumber" url="/img/err.png"
+															style="width: 20px;height: 20px" />
+														<h:outputLabel value="Al menos un número."
+															style="text-align: left;" />
+													</h:panelGrid>
+												</h:panelGroup>
+												<h:panelGroup>
+													<h:panelGrid id="character" columns="3"
+														style="width: 100%;color:red;">
+														<h:graphicImage url="/img/punto.png"
+															style="height: 5px; width: 5px; vertical-align: super;" />
+														<h:graphicImage id="imageCharacter" url="/img/err.png"
+															style="width: 20px;height: 20px" />
+														<h:outputLabel value="Al menos un carácter especial." />
+													</h:panelGrid>
+												</h:panelGroup>
+
+											</h:panelGrid>
+										</rich:panel>
+
+									</h:panelGrid>
+									<h:panelGroup style="width: 501px;">
+										<table style="width: 541px;">
+											<tr>
+
+												<td width="150%" style="width: 479px;">
+
+													<div
+														style="text-align: center; width: 340px; height: 35px; background-color: #3C8FB2; border-radius: 5px; line-height: 30px;">
+														<h:panelGroup style="width: 414px; ">
+
+															<h:outputLabel id="msjError" style="color:#FFFFFF;" />
+
+														</h:panelGroup>
+													</div></td>
+											</tr>
+										</table>
+									</h:panelGroup>
+								</rich:panel>
+							</rich:panel>
+
+							<rich:spacer height="10" />
+							<rich:panel id="richNatura" rendered="#{formOutSideBean.typePer}" styleClass="ajust">
+
+								<h:outputText value="#{formOutSideBean.policiesNatura}"
+									escape="false"
+									style="width: 680; height: auto;resize: none;display: compact;word-wrap: break-word;" />
+
+
+								<rich:spacer height="5" />
+
+
+								<h:selectBooleanCheckbox id="especial"
+									valueChangeListener="#{formOutSideBean.activatebutton1}"
+									immediate="true" value="#{formOutSideBean.aceptPersonCient}">
+									<a4j:support event="onclick" reRender="ButtonSave,Buttons0"
+										immediate="true" />
+								</h:selectBooleanCheckbox>
+
+								<h:outputLabel
+									value="He leído y acepto la política de tratamiento y protección de datos personales"
+									styleClass="bold" />
+
+
+							</rich:panel>
+
+							<rich:spacer height="10" />
+							<rich:panel id="captcha">
+								<table width="100%" align="center">
+									<tr>
+										<td width="19%" align="right"><h:outputLabel
+												value="Escriba los caracteres que ve en la siguiente imagen: "
+												styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /></td>
+										<td width="23%">
+											<div style="background-color: white;">
+												<a4j:region id="regCap" renderRegionOnly="true">
+													<h:graphicImage id="capimg"
+														value="#{facesContext.externalContext.requestContextPath}/../Captcha.jpg" />
+													<h:commandLink
+														onclick="document.getElementById('Formulario:captchaSellerInput').value=''">
+														<h:graphicImage value="/img/reversar.gif"
+															style="background-color:white;">
+														</h:graphicImage>
+														<a4j:support immediate="true" event="onclick"
+															reRender="regCap" ajaxSingle="true" limitToList="true" />
+													</h:commandLink>
+												</a4j:region>
+											</div> <br></br> <h:inputText id="captchaSellerInput"
+												value="#{formOutSideBean.captchaSellerInput}"
+												autocomplete="off" /> <br></br> <h:outputText
+												value="El Sistema distingue entre mayúsculas y minúsculas" />
+										</td>
+									</tr>
+								</table>
+							</rich:panel>
+
+							<rich:spacer height="10" />
+							<rich:panel id="ButtonSave">
+								<table width="100%" align="center">
+									<tr>
+										<td><h:outputLabel value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" /> <h:outputLabel
+												value="#{msg.MandFields}" styleClass="loginInput" />
+										</td>
+										<td><h:commandButton id="Buttons0" value="#{msg.Guardar}"
+												action="#{formOutSideBean.saveClienOutside}"
+												onclick="textArea_blur2()" styleClass="normal"
+												disabled="#{!formOutSideBean.enablesend}"
+												style="width: 80px; " /> <rich:spacer width="10" /> <h:commandButton
+												value="Cancelar" action="#{formOutSideBean.cancelRegisterM}"
+												styleClass="normal" rendered="#{formOutSideBean.typePer}"
+												style="width: 80px; " />
+										</td>
+									</tr>
+								</table>
+							</rich:panel>
+						</rich:panel>
+					</h:form>
+				</a4j:outputPanel>
+				<rich:spacer height="20" />
+				<rich:modalPanel id="panel" width="350" height="140"
+					showWhenRendered="#{formOutSideBean.create}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Inscripción de Clientes"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<a4j:commandButton action="#{formOutSideBean.hideModal}"
+									image="/img/close.png">
+									<a4j:support event="onclick" action="#{logoutMBean.logout}"
+										rendered="#{formOutSideBean.disabled}" />
+									<a4j:support event="oncomplete" action="successOut"
+										rendered="#{formOutSideBean.disabled}" />
+									<rich:componentControl for="panel" operation="hide"
+										event="onclick" />
+								</a4j:commandButton>
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{formOutSideBean.msg}" styleClass="normal" />
+
+					<h:panelGrid columns="1"
+						style="width: 100px; margin: auto; padding:5px; ">
+
+						<a4j:form>
+							<a4j:commandButton value="Aceptar"
+								action="#{formOutSideBean.hideModal}">
+								<a4j:support event="onclick" action="#{logoutMBean.logout}"
+									rendered="#{formOutSideBean.disabled}" />
+								<a4j:support event="oncomplete" action="successOut"
+									rendered="#{formOutSideBean.disabled}" />
+								<rich:componentControl for="panel" operation="hide"
+									event="onclick" />
+							</a4j:commandButton>
+						</a4j:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="contract" width="700" height="510"
+					showWhenRendered="#{formOutSideBean.contractModal}"
+					onresize="return false;" moveable="false"
+					style="word-wrap: break-word;">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="#{formOutSideBean.titleContract}"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton action="#{formOutSideBean.hideModalContract}"
+									image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{formOutSideBean.contract}" escape="false"
+						style="width: 668px; height: 396px;resize: none;overflow: auto;display: block;"
+						styleclass="someClass" />
+
+					<h:panelGrid columns="1"
+						style="width: 668px; margin: auto; padding:5px; ">
+						<h:form>
+							<h:selectBooleanCheckbox id="cb"
+								value="#{formOutSideBean.aceptcient}">
+								<a4j:support event="onclick"
+									action="#{formOutSideBean.activatebutton}" reRender="Buttons"
+									status="commonstatus">
+								</a4j:support>
+							</h:selectBooleanCheckbox>
+							<h:outputLabel
+								value="He leído y acepto los términos y condiciones"
+								styleClass="bold" />
+						</h:form>
+					</h:panelGrid>
+
+
+					<h:panelGrid id="Buttons" columns="1"
+						style="width: 668px; margin: auto; padding:0px; ">
+						<h:form>
+							<h:commandButton value="Aceptar"
+								action="#{formOutSideBean.openAceptation}"
+								disabled="#{!formOutSideBean.enableacept}" />
+							<rich:spacer width="10" />
+							<h:commandButton value="Volver"
+								action="#{formOutSideBean.hideModalContract}" />
+						</h:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="acept" width="400" height="115"
+					showWhenRendered="#{formOutSideBean.aceptation}"
+					onresize="return false;" moveable="false" autosized="true">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="ACEPTACIÓN DE TÉRMINOS Y CONDICIONES"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<a4j:form id="form">
+						<f:facet name="controls">
+							<h:panelGroup>
+								<h:form>
+									<h:commandButton action="#{formOutSideBean.cancelAceptation}"
+										image="/img/close.png">
+										<a4j:support event="oncomplete"
+											action="#{formOutSideBean.clearVar}"
+											reRender="typeId,doc,nom,ape,dir,tel,tel2,Email,city,doc1,dv1,pais,typeIdRL,doc2,ciuE,
+						   			paisE,captchaSellerInput,panel5,richNatura" />
+									</h:commandButton>
+								</h:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{formOutSideBean.msgAcept}"
+							styleClass="normal" style="height: auto;" />
+						<div align="center" style="margin-top: 10px">
+							<h:panelGroup>
+								<h:panelGroup>
+									<a4j:commandButton id="send" value="Si Acepto"
+										action="#{formOutSideBean.makeAceptation}">
+										<a4j:support event="onclick"
+											onsubmit="document.getElementById('form:send').disabled=true;document.getElementById('form:cancel').disabled=true" />
+										<a4j:support event="oncomplete"
+											action="#{formOutSideBean.clearVar}"
+											reRender="typeId,doc,nom,ape,dir,tel,tel2,Email,city,doc1,dv1,pais,typeIdRL,doc2,ciuE,
+									   			paisE,captchaSellerInput,panel,panel5,richNatura" />
+									</a4j:commandButton>
+								</h:panelGroup>
+								<rich:spacer width="10" />
+								<h:commandButton id="cancel" value="No Acepto"
+									action="#{formOutSideBean.cancelAceptation}" />
+							</h:panelGroup>
+						</div>
+					</a4j:form>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="acept2" width="400" height="115"
+					showWhenRendered="#{formOutSideBean.aceptation2}"
+					onresize="return false;" moveable="false" autosized="true">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="ACEPTACIÓN DE TÉRMINOS Y CONDICIONES"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<a4j:form id="form2">
+						<f:facet name="controls">
+							<h:panelGroup>
+								<h:form>
+									<h:commandButton action="#{formOutSideBean.cancelAceptation}"
+										image="/img/close.png">
+										<a4j:support event="oncomplete"
+											action="#{formOutSideBean.clearVar}"
+											reRender="typeId,doc,nom,ape,dir,tel,tel2,Email,city,doc1,dv1,pais,typeIdRL,doc2,ciuE,
+						   			paisE,captchaSellerInput,panel5,richNatura" />
+									</h:commandButton>
+								</h:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{formOutSideBean.msgAcept}"
+							styleClass="normal" style="height: auto;" />
+						<div align="center" style="margin-top: 10px">
+							<h:panelGroup>
+								<h:panelGroup>
+									<a4j:commandButton id="send2" value="Si Acepto"
+										action="#{formOutSideBean.makeAceptation2}">
+										<a4j:support event="onclick"
+											onsubmit="document.getElementById('form2:send2').disabled=true;document.getElementById('form2:cancel2').disabled=true" />
+										<a4j:support event="oncomplete"
+											action="#{formOutSideBean.clearVar}"
+											reRender="typeId,doc,nom,ape,dir,tel,tel2,Email,city,doc1,dv1,pais,typeIdRL,doc2,ciuE,
+								   			paisE,captchaSellerInput,panel,acept,panel5,richNatura" />
+									</a4j:commandButton>
+								</h:panelGroup>
+								<rich:spacer width="10" />
+								<h:commandButton id="cancel2" value="No Acepto"
+									action="#{formOutSideBean.cancelAceptation}" />
+							</h:panelGroup>
+						</div>
+					</a4j:form>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="panel5" width="350" height="115"
+					showWhenRendered="#{formOutSideBean.modal}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Inscripción de Clientes"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<a4j:commandButton action="#{formOutSideBean.hideModal}"
+									image="/img/close.png">
+									<a4j:support event="onclick" action="#{logoutMBean.logout}"
+										rendered="#{formOutSideBean.disabled}" />
+									<a4j:support event="oncomplete" action="successOut"
+										rendered="#{formOutSideBean.disabled}" />
+									<rich:componentControl for="panel5" operation="hide"
+										event="onclick" />
+								</a4j:commandButton>
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{formOutSideBean.msg}" styleClass="normal" />
+					<h:panelGrid columns="1"
+						style="width: 100px; margin: auto; padding:5px; ">
+						<a4j:form>
+							<a4j:commandButton value="Aceptar"
+								action="#{formOutSideBean.hideModal}">
+								<a4j:support event="onclick" action="#{logoutMBean.logout}"
+									rendered="#{formOutSideBean.disabled}" />
+								<a4j:support event="oncomplete" action="successOut"
+									rendered="#{formOutSideBean.disabled}" />
+								<rich:componentControl for="panel5" operation="hide"
+									event="onclick" />
+							</a4j:commandButton>
+						</a4j:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="panelcancelar" width="350" height="115"
+					showWhenRendered="#{formOutSideBean.cancelRegister}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Inscripción de Clientes"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton action="#{formOutSideBean.hideModal}"
+									image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{formOutSideBean.msgAcept}"
+						styleClass="normal" />
+					<rich:spacer width="10" />
+					<div align="center">
+						<a4j:form>
+							<a4j:commandButton value="Aceptar"
+								action="#{formOutSideBean.cancelAceptation}">
+								<a4j:support event="onclick" action="#{logoutMBean.logout}" />
+								<a4j:support event="oncomplete" action="successOut" />
+								<rich:componentControl for="panelcancelar" operation="hide"
+									event="onclick" />
+							</a4j:commandButton>
+							<rich:spacer width="10" />
+							<h:commandButton value="Cancelar"
+								action="#{formOutSideBean.hideModal}" />
+						</a4j:form>
+
+					</div>
+
+				</rich:modalPanel>
+			</div>
+			<f:subview id="footer">
+				<ui:include src="../content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<div>
+	<rich:messages style="color:red;" styleClass="bold"/>		
+	<h:form id="Formulario">
+		<rich:panel style="width:380px;">
+			<table width="100%">
+				<tr>
+						<td width="30%">
+							<h:outputLabel value="#{msg.Ciudad}: " styleClass="bold"/>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						</td>
+						<td width="70%">
+							<h:selectOneMenu value="#{editDataClientBean.city}" styleClass="normal" style="width: 195px;">
+								<f:selectItems value="#{editDataClientBean.cities}"/>
+							</h:selectOneMenu>	
+						</td>
+						<td width="23%">							
+						</td>
+				</tr>
+				<tr>
+					<td width="30%">
+						<h:outputLabel value="#{msg.Telefono1}: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>	
+					<td width="70%">
+						<h:inputText id="cel" label="Celular" value="#{editDataClientBean.userPhone1}" 
+							style="width: 190px;" styleClass="normal"
+							onkeypress="return numOnly(event)" maxlength="30">
+						</h:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td width="40%">
+						<h:outputLabel value="#{msg.Telefono2}: " styleClass="bold"/>
+					</td>	
+					<td width="60%">
+						<h:inputText id="tel" label="Teléfono Opcional"  value="#{editDataClientBean.userPhone2}" 
+							style="width: 190px; text-transform: uppercase" 
+							onkeypress="return optionalPhone(event)" maxlength="30">
+						</h:inputText>	
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">
+						<h:outputLabel value="#{msg.Dir}: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="70%">
+						<h:inputText id="dire" label="Dirección" value="#{editDataClientBean.userAdress}" 
+							maxlength="50" styleClass="normal" style="text-transform:uppercase; width: 190px;">
+						</h:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+					</td>
+					<td>
+						<a4j:commandButton value="Guardar" action="#{editDataClientBean.editDataClient}" style="width: 80px" onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelm,panelV,confirmacion"/> 
+						<rich:spacer width="20"/>
+						<h:commandButton value="Cancelar" action="#{editDataClientBean.hideModal2}" style="width: 80px"/>			 
+					</td>
+					<td>
+					</td>					
+				</tr>
+			</table>
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>	
+				<rich:modalPanel id="panelm" width="350" height="115" 
+					showWhenRendered="#{editDataClientBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Actualizar Información" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{editDataClientBean.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{editDataClientBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{editDataClientBean.hideModal}" style="width: 80px"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>		
+						<br />
+					</rich:modalPanel>
+					<rich:modalPanel id="panelV" width="350" height="115" 
+					showWhenRendered="#{editDataClientBean.showModalValidate}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Actualizar Información" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup> 
+								<a4j:form>
+									<h:commandButton action="#{editDataClientBean.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{editDataClientBean.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton value="Aceptar" action="#{editDataClientBean.hideModal2}" style="width: 80px"/>
+								</h:panelGroup>	     	
+							</h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>	
+					
+						<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{editDataClientBean.showConfirmation}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{editDataClientBean.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{editDataClientBean.modalMessage}" styleClass="normal"/>
+						<h:form> 
+						<h:panelGrid styleClass="tableBO" columns="3">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+							<h:panelGroup>
+					     		<a4j:region id="editando">
+						     		<a4j:commandButton id="send" value="Aceptar" action="#{editDataClientBean.saveDataClient}" style="width: 80px"
+						     		>
+					                  <a4j:support event="onclick"  
+					                 onsubmit="this.disabled=true" />
+					                  <a4j:support event="oncomplete" reRender="panelV" 
+					                 oncomplete="this.disabled=false"/>
+					                </a4j:commandButton>
+					               
+				                </a4j:region>
+				                <rich:spacer width="20"/>
+				                <h:commandButton value="Cancelar" action="#{editDataClientBean.hideModal2}" style="width: 80px"/>
+					     	</h:panelGroup> 
+						</h:panelGrid>
+						</h:form>
+						<br />
+					</rich:modalPanel>				
+				<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false" zindex="5000">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+				  	<h:outputText value="Transacción en proceso..."  style="font-size:12px;"/>
+				</rich:modalPanel>		
+</div>
+</f:view>
+</div>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<title>Lista de Usuarios</title>
+		<style type="text/css">
+			#scroll_horizontal {
+				width: 100%;
+				overflow: auto;
+				clear:both;
+				text-align: center;
+				margin :auto;
+			}
+		</style>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<rich:panel style="width:600 px;margin:auto;">
+						<f:facet name="header">
+							<h:outputText value="Administración de Usuarios" styleClass="bold"/>
+						</f:facet>
+						<h:form>
+							<div id="scroll_horizontal">
+								<rich:dataTable value="#{listUser.listUser}" var="item" id="lista" rows="15" width="800px">
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="No. de Identificación" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.userCode}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Nombres" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.userNames}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Apellidos" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.userSecondNames}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Correo Electrónico" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.userEmail}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Estado" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="Inactivo" rendered="#{ item.userState.userStateId == '1' }" styleClass="normal"/>
+										<h:outputText value="Activo" rendered="#{ item.userState.userStateId == '0' }" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Inactivar" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink value="Inactivar" action="#{listUser.changeStateUser}" styleClass="normal" disabled="#{item.userState.userStateId == '1'}">
+											<f:setPropertyActionListener target="#{listUser.userId}" value="#{item.userId}"/>
+										</h:commandLink>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Contraseña" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink value="Restablecer" action="#{listUser.confirmationRestartPassword}" styleClass="normal">
+											<f:setPropertyActionListener target="#{listUser.userId}" value="#{item.userId}"/>
+											<f:setPropertyActionListener target="#{listUser.userCode}" value="#{item.userCode}"/>
+											<f:setPropertyActionListener value="#{item.userSecondNames}" target="#{listUser.userSecondNames}"  />
+											<f:setPropertyActionListener value="#{item.userNames}" target="#{listUser.useLastName}"  />
+										</h:commandLink>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Preguntas Seguridad" styleClass="bold"/>
+										</f:facet>
+										<center>
+										<h:commandLink  value="Restablecer" action="#{listUser.confirmationRestartQuestion}"  styleClass="normal">
+											<f:setPropertyActionListener target="#{listUser.userId}" value="#{item.userId}"/>
+											<f:setPropertyActionListener target="#{listUser.userCode}" value="#{item.userCode}"/>
+											<f:setPropertyActionListener value="#{item.userSecondNames}" target="#{listUser.userSecondNames}"  />
+											<f:setPropertyActionListener value="#{item.userNames}" target="#{listUser.useLastName}"  />
+										</h:commandLink>
+										</center>
+									</rich:column>
+									
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Asignar" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink value="Roles" action="#{listUser.changePermission}" styleClass="normal">
+											<f:setPropertyActionListener target="#{listUser.userId}" value="#{item.userId}"/>
+										</h:commandLink>
+									</rich:column>
+								</rich:dataTable>
+								<rich:dataTable id="ws"
+										value="#{listUser.listaScroll}"							
+										var="item" rows="15">	
+								</rich:dataTable>
+								
+								<rich:datascroller for="ws" id="PTScroll" 
+									page="#{listUser.page}"
+									reRender="lista, PTScroll"
+									actionListener="#{listUser.dataScroller}">
+								</rich:datascroller>
+							</div>
+						</h:form>
+					</rich:panel>					
+					<rich:spacer height="20"/>				
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{listUser.disabled || listUser.reset}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Usuarios" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listUser.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listUser.msg}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+							    <h:panelGroup>
+							    	<h:commandButton value="Aceptar" action="#{listUser.hideModal}" style="width: 80px"/>
+							    </h:panelGroup>	     	
+						  	</h:panelGrid>
+						</h:form>	
+						<br />
+					</rich:modalPanel>	
+						
+				
+						<rich:modalPanel id="panelconfi" width="350" height="115" showWhenRendered="#{listUser.confirmResert}" autosized="true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Usuarios" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listUser.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<div style="width: 350px; word-wrap: break-word;">
+							<h:outputText value="#{listUser.msg}" styleClass="normal" />
+						</div>	
+						<h:form>
+							<rich:spacer height="15"/>
+							<div align="center">
+								<h:panelGroup>
+									<a4j:region id="pass">
+							     		<a4j:commandButton value="Aceptar" action="#{listUser.resetPassword}" style="width: 80px">
+						                	<a4j:support event="oncomplete" reRender="panel"/>
+								           	<a4j:status onstart="#{rich:component('wait')}.show()" for="pass"/>
+						                </a4j:commandButton>
+				                	</a4j:region>
+									 <rich:spacer width="10"/>
+									<h:commandButton value="Cancelar" action="#{listUser.hideModal}" style="width: 80px"/>
+								</h:panelGroup>
+							</div>
+						</h:form>
+					</rich:modalPanel>	
+					
+					<rich:modalPanel>
+						<rich:modalPanel id="panelconfiQue" width="350" height="115" showWhenRendered="#{listUser.confirmResertQuestion}" autosized="true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Usuarios" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listUser.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<div style="width: 350px; word-wrap: break-word;">
+							<h:outputText value="#{listUser.msg}" styleClass="normal" />
+						</div>
+						<h:form>
+							<rich:spacer height="15"/>
+							<div align="center">
+								<h:panelGroup>
+									<a4j:region id="pass">
+							     		<a4j:commandButton value="Aceptar" action="#{listUser.restartQuestionsSecurity}" style="width: 80px">
+						                	<a4j:support event="oncomplete" reRender="panel"/>
+								           	<a4j:status onstart="#{rich:component('wait')}.show()" for="pass"/>
+						                </a4j:commandButton>
+				                	</a4j:region>
+									 <rich:spacer width="10"/>
+									<h:commandButton value="Cancelar" action="#{listUser.hideModal}" style="width: 80px"/>
+								</h:panelGroup>
+							</div>
+						</h:form>	
+					</rich:modalPanel>	
+					
+					</rich:modalPanel>		
+					<rich:modalPanel id="paneler" width="400" height="450" showWhenRendered="#{listUser.update}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Asignar Roles a Usuario" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listUser.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="edituserrol">
+							<ui:include src="editPermission.jspx"/>
+						</f:subview>
+						<br />
+					</rich:modalPanel>		
+
+                    <rich:modalPanel id="panelC1" width="350" height="115" showWhenRendered="#{listUser.showConfirm}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listUser.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listUser.msg}" styleClass="normal"/>
+						
+					<a4j:form style="margin-top: 10px">
+						<div align="center">
+							<h:commandButton value="Aceptar" action="#{listUser.updateRole}" style="width: 80px"/>
+							<rich:spacer width="10" />
+							<h:commandButton value="Cancelar" action="#{listUser.hideModal}" style="width: 80px"/>
+						</div>
+
+					</a4j:form>
+					
+					</rich:modalPanel>		
+					
+					<rich:modalPanel id="panelConfir" width="350" height="115" showWhenRendered="#{listUser.updateRole}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Asignar Roles" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listUser.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listUser.msg}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{listUser.hideModal}" style="width: 80px"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+		    			</h:form>
+						<br />
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

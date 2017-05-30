@@ -1,0 +1,153 @@
+package jpa;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+
+import javax.persistence.*;
+
+/**
+ * Entity implementation class for Entity: TbAutomaticRecharge
+ *
+ */
+@Entity
+@Table(name="TB_AUTOMATIC_RECHARGE")
+public class TbAutomaticRecharge implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TB_AUTOMATIC_RECHARGE_GENERATOR")
+	@SequenceGenerator(name = "TB_AUTOMATIC_RECHARGE_GENERATOR", sequenceName = "TB_AUTOMATIC_RECHARGE_SEQ",allocationSize=1)
+	@Column(name="AUTOMATIC_RECHARGE_ID")
+	private Long automaticRechargeId;
+		
+	@Column(name="AUTOMATIC_RECHARGE_VALUE")
+	private Long automaticRechargeValue;
+	
+	@ManyToOne
+	@JoinColumn(name="ACCOUNT_ID")
+	private TbAccount accountId;
+	   
+	/*@Column(name="AUTOMATIC_RECHARGE_FRECUENCY")
+	private Long automaticRechargeFrecuency;*/
+	
+	@ManyToOne
+	@JoinColumn(name = "FRECUENCY_ID")
+	private TbFrequency frequencyId;
+	
+	@Column(name="AUTOMATIC_RECHARGE_DATE")
+	private Date automaticRechargeDate;
+	
+/*	@Column(name = "DATE_CHANGE_STATE")
+	private Timestamp dateChangeState;*/
+	
+	@Column(name = "ESTADO")
+	private Integer estado;
+	
+	@Column(name = "PROCESO")
+	private Integer proceso;
+	
+	@Column(name="LAST_EXECUTION")
+	private Timestamp lastExecution;
+	
+	@Column(name="NEXT_EXECUTION")
+	private Timestamp nextExecution;
+
+	public void setAutomaticRechargeId(Long automaticRechargeId) {
+		this.automaticRechargeId = automaticRechargeId;
+	}
+
+	public Long getAutomaticRechargeId() {
+		return automaticRechargeId;
+	}
+
+	public void setAutomaticRechargeValue(Long automaticRechargeValue) {
+		this.automaticRechargeValue = automaticRechargeValue;
+	}
+
+	public Long getAutomaticRechargeValue() {
+		return automaticRechargeValue;
+	}
+
+	public void setAutomaticRechargeDate(Date automaticRechargeDate) {
+		this.automaticRechargeDate = automaticRechargeDate;
+	}
+
+	public Date getAutomaticRechargeDate() {
+		return automaticRechargeDate;
+	}
+
+	/**
+	 * @param frequencyId the frequencyId to set
+	 */
+	public void setFrequencyId(TbFrequency frequencyId) {
+		this.frequencyId = frequencyId;
+	}
+
+	/**
+	 * @return the frequencyId
+	 */
+	public TbFrequency getFrequencyId() {
+		return frequencyId;
+	}
+
+	/**
+	 * @param accountId the accountId to set
+	 */
+	public void setAccountId(TbAccount accountId) {
+		this.accountId = accountId;
+	}
+
+	/**
+	 * @return the accountId
+	 */
+	public TbAccount getAccountId() {
+		return accountId;
+	}
+
+	/**
+	 * @param estado the estado to set
+	 */
+	public void setEstado(Integer estado) {
+		this.estado = estado;
+	}
+
+	/**
+	 * @return the estado
+	 */
+	public Integer getEstado() {
+		return estado;
+	}
+	
+	public Timestamp getLastExecution() {
+		return lastExecution;
+	}
+
+	public void setLastExecution(Timestamp lastExecution) {
+		this.lastExecution = lastExecution;
+	}
+
+	public void setNextExecution(Timestamp nextExecution) {
+		this.nextExecution = nextExecution;
+	}
+
+	public Timestamp getNextExecution() {
+		return nextExecution;
+	}
+
+	/**
+	 * @param proces the proceso to set
+	 */
+	public void setProceso(Integer proceso) {
+		this.proceso = proceso;
+	}
+
+	/**
+	 * @return the proceso
+	 */
+	public Integer getProceso() {
+		return proceso;
+	}
+
+
+}

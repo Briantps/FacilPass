@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<rich:panel style="width:700px;margin:auto;">
+		<f:facet name="header">
+			<h:outputText value="Datos de ingreso de paquete"/>
+		</f:facet>
+		<h:form>
+			<h:panelGrid columns="2">
+				<h:outputText value="Nombre"/>
+				<h:inputText value="#{testMBean.nombre}"/>
+				<a4j:commandLink value="Continuar" action="#{adminTask.doTask}" styleClass="normal"
+					reRender="panelInclusion">
+					<f:setPropertyActionListener value="1" target="#{adminTask.taskStepId}"/>
+				</a4j:commandLink>
+			</h:panelGrid>
+		</h:form>
+	</rich:panel>
+</ui:composition>

@@ -1,0 +1,30 @@
+package ejb;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.ejb.Remote;
+
+import util.ClientRecharge;
+import util.ReElectronicRecharge;
+
+import jpa.TbFrequency;
+
+@Remote
+public interface ElectronicRecharge {
+
+	public List<TbFrequency> getListFrequency();
+	
+	public Long insertElectronicRecharge(Long userId, Long idClientAccount, Long valueRecharge, Long frecuencySelect,
+			String ip, Long creationUser, Date dateRecharge);
+	
+	public List<ReElectronicRecharge> getAccountAsociatesByClient(Long userCode);
+	
+	public List<ClientRecharge> getAutomaticRechargebyClient(Long userId);
+	
+	public boolean undoElectronicRecharge(Long automaticRechargeId, String ip,
+			Long creationUser);
+
+	public boolean haveProductDissociation(Long idClientAccount);
+	
+}

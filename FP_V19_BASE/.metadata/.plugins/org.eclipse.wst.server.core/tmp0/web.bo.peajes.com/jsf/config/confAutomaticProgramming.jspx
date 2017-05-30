@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Formularios Programación Auntomática</title>
+</head>
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:spacer height="5" />
+				<rich:messages style="color:red;" styleClass="bold" />
+	
+				<h:form id="form">
+					<rich:panel id="principal">
+						<f:facet name="header">
+							<h:outputText value="Formularios Programación Automática" />
+						</f:facet>
+						<rich:panel id="FilterTypeRole">
+							<f:facet name="header">
+								<h:outputText value="Filtro" />
+							</f:facet>
+							<h:outputText value="Tipo: " styleClass="bold" />
+							<h:selectOneMenu id="slcroles" value="#{confAutomaticProgramming.typeConfAutoRecharId}"
+								style="width: auto;max-width: 600px" styleClass="normal">
+								<f:selectItems value="#{confAutomaticProgramming.listTypeConfAutRechar}" />
+								<a4j:support event="onchange"
+									action="#{confAutomaticProgramming.panelEditModal}"
+									reRender="form,FilterTypeRole,editarText,editor,editarText2" />
+									
+							</h:selectOneMenu>
+
+
+						</rich:panel>
+
+						<rich:spacer height="5" />
+
+						<rich:panel id="editarText"
+							rendered="#{confAutomaticProgramming.panelEdit}">
+							<f:facet name="header">
+								<h:outputText value="Edición" />
+							</f:facet>
+							
+							<div align="center" >
+								<rich:editor value="#{confAutomaticProgramming.textHtml}" rendered="#{confAutomaticProgramming.panelEditor}"
+									theme="advanced" id="editor" width="660"
+									plugins="spellchecker,pagebreak,style,layer,table,save,advhr,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking" 
+									language="es"
+									height="660" >
+									<a4j:support event="onchange" reRender="result,modalmsn" ajaxSingle="true" requestDelay="50"/>								 
+									<f:param name="theme_advanced_buttons1"	value="#{confAutomaticProgramming.themeOne}" />
+									<f:param name="theme_advanced_buttons2" value="#{confAutomaticProgramming.themeFour}" />
+									<f:param name="theme_advanced_buttons3" value="#{confAutomaticProgramming.themeTwo}" />
+									<f:param name="theme_advanced_buttons4" value="#{confAutomaticProgramming.themeTree}" />									
+									<f:param name="theme_advanced_resizing_max_width" value=  "660" />
+									<f:param name="theme_advanced_source_editor_width" value=  "660" />									
+									<f:param name="theme_advanced_toolbar_location" value="top" />
+									<f:param name="theme_advanced_toolbar_align" value="left" />
+									<f:param name="content_css" value="/web.bo.peajes.com/css/stylesEditor.css" />
+									<f:param name="theme_advanced_fonts" value="#{confAutomaticProgramming.themeFont}"/>
+									<f:param name="extended_valid_elements" value= "iframe[src|title|width|height|allowfullscreen|frameborder|class|id],object[classid|width|height|codebase|*],param[name|value|_value|*],embed[type|width|height|src|*]" />
+								</rich:editor>																								
+							</div>		
+							<h:panelGroup>
+								<div align="center">
+									<h:selectOneRadio  styleClass="bold" rendered="#{confAutomaticProgramming.panelRadio}"
+									value="#{confAutomaticProgramming.respRadio}"									
+									immediate="true" id="s1" style="width: 25%;">
+									<f:selectItem itemValue="1" itemLabel="Activo" id="o1"/>
+									<f:selectItem itemValue="0" itemLabel="Inactivo" id="o2" />									
+								</h:selectOneRadio>
+								</div>
+							</h:panelGroup>
+							<rich:spacer height="10" />
+							<h:panelGroup>
+								<div align="center">
+									<h:commandButton id="Butoon" value="Guardar"
+										action="#{confAutomaticProgramming.confirmation}" style="width: 80px">
+										<a4j:support event="oncomplete"
+											reRender="editarText,editarText2" />
+									</h:commandButton>
+									<rich:spacer width="20" />
+									<h:commandButton id="Butoon2" value="Cancelar"
+										action="#{confAutomaticProgramming.ocult1}" style="width: 80px">
+										<a4j:support event="oncomplete"
+											reRender="editarText,editarText2" />
+									</h:commandButton>
+								</div>
+							</h:panelGroup>						
+
+						</rich:panel>
+
+						<rich:spacer height="5" />
+						
+					</rich:panel>
+				</h:form>
+				
+				<rich:modalPanel id="modalmsn" width="350" height="115" showWhenRendered="#{confAutomaticProgramming.modal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Programación Automática de Recursos" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{confAutomaticProgramming.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{confAutomaticProgramming.msnModalOK}" styleClass="normal"/>
+						<rich:spacer height="20"/>
+						<h:form>
+						 <div align = "center" >
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+					     	<h:panelGroup>
+					     		<h:commandButton value="Aceptar" action="#{confAutomaticProgramming.ocult}"  />
+					     	</h:panelGroup>	     	
+					    </h:panelGrid>
+					    </div>
+					    </h:form>	
+						<br />
+					</rich:modalPanel>
+					
+					<!-- Mensaje de cancelar - Agregado por Cristhian Buchely 30-03-2017 -->
+					
+					<rich:modalPanel id="confirmacion1" width="340" height="115" showWhenRendered="#{confAutomaticProgramming.modalOption1}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación - Programación Automática de Recursos" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{confAutomaticProgramming.hideModal1}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{confAutomaticProgramming.msnModalOK1}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando1">					     		
+				                <h:commandButton id="send1" value="Aceptar" action="#{confAutomaticProgramming.aceptCancel}" style="width: 80px">
+								</h:commandButton>
+			                </a4j:region>
+			                <h:outputLabel value="" styleClass="bold"/>
+			                <h:commandButton value="Cancelar" action="#{confAutomaticProgramming.hideModal1}" style="width: 80px"/>
+				     	</h:panelGroup>   	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>
+					
+					<!-- Fin de mensaje -->
+					
+					<rich:modalPanel id="confirmacion" width="340" height="115" showWhenRendered="#{confAutomaticProgramming.modalOption}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación - Programación Automática de Recursos" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{confAutomaticProgramming.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{confAutomaticProgramming.msnModalOK}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form> 
+					<h:panelGrid columns="4" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+						<h:panelGroup>
+				     		<a4j:region id="editando">
+					     		<a4j:commandButton id="send" value="Aceptar" action="#{confAutomaticProgramming.createConfAuto}" style="width: 80px">
+				                	<a4j:support event="oncomplete" reRender="confirmacion,form,FilterTypeRole,editarText,editarText2,modalmsn"/>						           	
+				                </a4j:commandButton>
+			                </a4j:region>
+			                <h:outputLabel value="" styleClass="bold"/>
+			                <h:commandButton value="Cancelar" action="#{confAutomaticProgramming.hideModal}" style="width: 80px"/>
+				     	</h:panelGroup>   	 
+					</h:panelGrid>
+					</h:form>
+					<br />
+					</rich:modalPanel>
+					
+					
+						
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp"/>
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Verificación de Documentos</title>
+	</head>
+	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<rich:spacer height="5"/>
+					<h:form>
+						<f:loadBundle basename="staticText.messages" var="msg" />
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Verificación de Documentos de Afiliación" styleClass="bold"/>
+							</f:facet>
+							<rich:messages styleClass="bold" style="color: red;"/>
+							<rich:panel>
+			        			<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+									<h:outputText value="#{msg.TipDoc}: " styleClass="bold"/>
+									<h:selectOneMenu value="#{verificationBean.codeTypeId}">
+										<f:selectItems value="#{verificationBean.codeTypeList}"/> 
+									</h:selectOneMenu>
+									<h:panelGroup>
+										<h:outputText value="#{msg.NumDoc}: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText value="#{verificationBean.userCode}"
+										 onkeypress="return numOnly(event)"/>
+									<h:panelGroup>
+										<a4j:commandButton value="Buscar" action="#{verificationBean.search}">
+											<a4j:support event="oncomplete" reRender="panelData,pd,vo,panel1"/>
+										</a4j:commandButton>
+									</h:panelGroup>					
+								</h:panelGrid>
+								<h:panelGroup>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+								</h:panelGroup>
+							</rich:panel>
+							<rich:spacer height="20"/>
+		
+							<a4j:outputPanel id="panelData" layout="inline">
+								<rich:panel id="pd" rendered="#{verificationBean.showData}">
+									<f:facet name="header">
+										<h:outputText styleClass="bold" value="Cliente"/>
+									</f:facet>
+									<rich:spacer height="10"/>
+									<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+		                				<h:outputText value="Cliente: " styleClass="bold"></h:outputText>
+		                				<h:outputText value="#{verificationBean.client.userNames} #{verificationBean.client.userSecondNames}" styleClass="normal" 
+		            						rendered="#{verificationBean.client.tbCodeType.codeTypeId!=3}"/>
+		            					<h:outputText value="#{verificationBean.client.userNames} Rept. #{verificationBean.client.userSecondNames}" styleClass="normal" 
+		            						rendered="#{verificationBean.client.tbCodeType.codeTypeId==3}"/>
+		            					<h:outputLabel value="#{msg.NumDoc}: " styleClass="bold"></h:outputLabel>
+		            					<h:outputText value="#{verificationBean.client.userCode} - #{verificationBean.client.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+		          					</h:panelGrid>		
+									<rich:spacer height="10"/>
+									<rich:panel>
+										<h:outputText value="Verificación de la documentación del Cliente" styleClass="bold"/>		
+										
+                                        <h:panelGrid styleClass="tableBO" columns="1" style="margin: auto; size: 300px; padding:10px;">
+							
+                                          <h:panelGroup>
+                                            <h:selectOneRadio id="vo" value="#{verificationBean.type}"  style="font-weight: bold" >
+                                              <f:selectItem itemLabel="Validación Ok" itemValue="1"></f:selectItem>
+                                              <f:selectItem itemLabel="Rechazado" itemValue="2"></f:selectItem>
+                                                <a4j:support event="onclick"  reRender="ap,pg1"  />
+                                            </h:selectOneRadio>
+                                          </h:panelGroup>
+						                 </h:panelGrid>
+
+                                        <a4j:outputPanel id="ap">
+                                         <h:panelGrid id="pg1" styleClass="tableBO" columns="1" rendered="#{verificationBean.type==2}" style="margin: auto; size: 300px; padding:10px;">
+                                          <h:panelGroup>
+                                           <h:outputText id="obs"  value="Observación :" styleClass="bold" />
+                                           <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							              </h:panelGroup> 
+                                          <h:inputTextarea id="obs1" styleClass="normal" value="#{verificationBean.observation}"
+										         onkeyup="this.value = this.value.substring(0, 3500);"/>
+						                 </h:panelGrid>
+                                        </a4j:outputPanel>
+						
+                                        <h:panelGrid styleClass="tableBO" columns="1" style="margin: auto; size: 300px; padding:10px;">
+							              <h:panelGroup id="pg3">
+								            <h:commandButton value="Guardar" action="#{verificationBean.save}">
+									          <a4j:support event="oncomplete" reRender="panelData"/>
+								            </h:commandButton>
+							              </h:panelGroup>
+						                </h:panelGrid>
+ 							
+									</rich:panel>						
+									<rich:spacer height="10"/>						
+								</rich:panel>
+							</a4j:outputPanel>
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>		
+					<rich:modalPanel id="panel1" width="350" height="115" showWhenRendered="#{verificationBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Verificación de Documentos" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>	
+									<h:commandButton action="#{verificationBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{verificationBean.modalMessage}" styleClass="normal"/>
+                        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+                          <a4j:form>	
+							<h:commandButton value="Aceptar" action="#{verificationBean.hideModal}"/>
+					      </a4j:form>
+                        </h:panelGrid>
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

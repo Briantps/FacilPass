@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Orden de Pedido</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">				
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<rich:messages style="color:red;" styleClass="bold"/>
+					<a4j:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header"><h:outputText value="Nueva Orden de Pedido" styleClass="bold"/></f:facet>				
+							<rich:panel>
+								<h:panelGrid styleClass="tableBO" columns="5" style="size 300px; margin: auto; padding:10px; ">									
+									<h:outputText value=""/>
+									<h:outputText value=""/>
+									<h:outputText value=""/>
+									<h:outputText value="Punto Pedido: " styleClass="bold"/>
+									<h:selectOneMenu value="#{orderBean.station}" style="width: 130px;" styleClass="normal">
+										<f:selectItems value="#{orderBean.stations}"/>
+									</h:selectOneMenu>
+									<h:panelGroup>
+										<h:outputText value="Tipo Doc: " styleClass="bold"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:selectOneMenu id="tyd" value="#{orderBean.codeType}" styleClass="normal">
+											<f:selectItems value="#{orderBean.codeTypesList}"/>
+											<a4j:support event="onchange" action="#{orderBean.changeTypeDoc}" reRender="panelData,codc,sidcli,panelMessage"/>
+										</h:selectOneMenu>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:outputLabel value="#{msg.NumDoc}: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:inputText id="codc" value="#{orderBean.codeClient}" styleClass="normal"
+											converterMessage="Debe digitar un Número de Identificación de Cliente válido"
+											onkeypress="return numOnly(event)" maxlength="15">
+											<f:convertNumber integerOnly="true"/>
+											<f:validator validatorId="blank"/>
+										</h:inputText>
+									</h:panelGroup>
+									<h:commandButton value="Buscar" action="#{orderBean.search}"/>
+									<h:panelGroup>
+										<h:outputText value="Cliente: " styleClass="bold"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:selectOneMenu id="sidcli" value="#{orderBean.idClient}" style="width: 130px;" styleClass="normal">
+											<f:selectItems value="#{orderBean.clientNames}"/>
+											<a4j:support event="onchange" action="#{orderBean.changeClient}" reRender="panelData,codc,tyd,panelMessage"/>
+										</h:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGrid>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							</rich:panel>							
+							<rich:spacer height="5"/>				
+							<a4j:outputPanel id="panelMessage" layout="inline">
+							 	<rich:panel id="pm" rendered="#{orderBean.showMessage}">
+							 		<h:outputText id="message" value="No hay información para el cliente digitado." 
+										styleClass="bold" style="color: red; font-size: 16"/>
+								</rich:panel>
+							</a4j:outputPanel>							
+							<a4j:outputPanel id="panelData" layout="inline">
+							 	<rich:panel id="pd" rendered="#{orderBean.showData}">									
+									<h:panelGrid styleClass="tableBO" columns="4" style="margin: auto; size: 300px; padding:10px;">
+					                    <h:outputText value="Cliente:" styleClass="bold"></h:outputText>
+					                    <h:panelGroup>
+					                    	<h:outputText value="#{orderBean.client.userNames} #{orderBean.client.userSecondNames}" styleClass="normal" 
+					                    		rendered="#{orderBean.client.tbCodeType.codeTypeId!=3}"/>
+					                    	<h:outputText value="#{orderBean.client.userNames}" styleClass="normal" 
+					                    		rendered="#{orderBean.client.tbCodeType.codeTypeId==3}"/>
+					                    </h:panelGroup>
+					                    <h:outputText value="#{msg.NumDoc}:" styleClass="bold"></h:outputText>
+					                    <h:outputText value="#{orderBean.client.userCode} - #{orderBean.client.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+				               			<h:outputText value="Dependencia:" styleClass="bold"/>
+				               			<h:selectOneMenu value="#{orderBean.clientDataId}" styleClass="normal">
+				               				<f:selectItems value="#{orderBean.clientDataList}"/>
+				               				<a4j:support event="onchange" action="#{orderBean.changeOffice}" reRender="city,adre,pho,phoo,con,pbtt"/>
+				               			</h:selectOneMenu>
+				               			<h:outputText  value="Ciudad:" styleClass="bold"/>
+				               			<h:outputText id="city" value="#{orderBean.data.tbMunicipality.municipalityName}" styleClass="normal"/>
+				               			<h:outputText value="Dirección:" styleClass="bold"/>
+				               			<h:outputText id="adre" value="#{orderBean.data.userDataAddress}" styleClass="normal"/>
+				               			<h:outputText value=""/><h:outputText value=""/>
+				               			<h:outputText value="Teléfono:" styleClass="bold"/>
+				               			<h:outputText id="pho" value="#{orderBean.data.userDataPhone}" styleClass="normal"/>
+				               			<h:outputText value="Teléfono Opcional:" styleClass="bold"/>
+				               			<h:outputText id="phoo" value="#{orderBean.data.userDataOptionalPhone}" styleClass="normal"/>
+				               			<h:outputText value="Contacto:" styleClass="bold"/>
+				               			<h:outputText id="con" value="#{orderBean.data.userDataContact}" styleClass="normal"/>
+				               		</h:panelGrid>
+									<rich:spacer height="10"/>
+								</rich:panel>
+								<rich:spacer height="5"/>
+								<rich:panel id="pbtt" rendered="#{orderBean.showData}">								
+									<rich:dataTable id="datalist" value="#{orderBean.operationTypes}"
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+										var="list" rows="20" width="600px" rowClasses="white,white">
+										<h:column>
+											<h:outputText value="Digite el número de Operaciones de #{list.operType.operationTypeName} 
+												a realizar: " styleClass="normal" style="font-size: 15px;"/>
+										</h:column>
+										<h:column>
+											<h:inputText onkeypress="return numOnly(event)" maxlength="4" disabled="#{orderBean.showPdf}"
+												value="#{list.numberOfOperations}" converterMessage="Digite un número válido.">
+												<a4j:support event="onkeyup" reRender="tottrans"/>
+												<f:convertNumber integerOnly="true"/>
+											</h:inputText>
+										</h:column>
+									</rich:dataTable>									
+									<rich:spacer height="5"/>
+									<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+					                	<h:outputText value="Número Total de Operaciones a realizar: " styleClass="normal" style="color: #006A00; font-size: 18px;"/>
+					                	<h:inputText id="tottrans" disabled="true" value="#{orderBean.transNumber}" styleClass="normal"
+					                		required="true" requiredMessage="El Campo Número de Operaciones es Necesario"
+											converterMessage="Debe digitar un Número de Operaciones válido"
+											validatorMessage="El Valor mínimo de Operaciones a realizar es 1."
+											onkeypress="return numOnly(event)" maxlength="15">
+											<f:convertNumber integerOnly="true"/>
+											<f:validator validatorId="blank"/>
+											<f:validateLongRange minimum="1"/>
+					                	</h:inputText>
+					                	<h:outputText value=""/>
+					                	<h:panelGroup>
+					                		<h:commandButton rendered="#{!orderBean.showPdf}" value="Guardar" action="#{orderBean.printOrder}"/>
+						                	<h:commandLink id="clinkpdf" target="_blank" rendered="#{orderBean.showPdf}" value="" action="#{orderBean.printPdf}">
+												<img title="Imprimir" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+													style="cursor: pointer; border: 0px solid blue;" />
+						                	</h:commandLink>
+					                	</h:panelGroup>
+					                </h:panelGrid>
+								</rich:panel>
+							</a4j:outputPanel>				
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>						
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{orderBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Orden de Pedido" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{orderBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{orderBean.modalMessage}" styleClass="normal"/>
+						<br />
+					</rich:modalPanel>				
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

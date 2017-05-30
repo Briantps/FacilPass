@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Confirmar Orden de Pedido</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+
+	<a4j:form>
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header"><h:outputText value="Confirmar Orden de Pedido" styleClass="bold"/></f:facet>				
+		
+			<rich:dataGrid value="#{confirmOrder.orders}" var="order" columns="1" 
+				elements="1" width="600px">
+				
+				<h:panelGrid styleClass="tableBO" columns="4" style="margin: auto; size: 300px; padding:10px;">
+                    <h:outputText value="# Orden: " styleClass="bold"/>
+                    <h:outputText value="#{order.order.puchaseOrderNumber}" styleClass="bold"/>
+                    <h:outputText value="Cliente:" styleClass="bold"></h:outputText>
+                    <h:panelGroup>
+                    	<h:outputText value="#{order.order.tbUserData.tbSystemUser.userNames} #{order.order.tbUserData.tbSystemUser.userSecondNames}" styleClass="normal" 
+                    			rendered="#{order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeId!=3}"/>
+                    	<h:outputText value="#{order.order.tbUserData.tbSystemUser.userNames}" styleClass="normal" 
+                    			rendered="#{order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeId==3}"/>
+                    </h:panelGroup>
+                    <h:outputText value="Código:" styleClass="bold"></h:outputText>
+                    <h:outputText value="#{order.order.tbUserData.tbSystemUser.userCode} - #{order.order.tbUserData.tbSystemUser.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+              			<h:outputText value="Dependencia:" styleClass="bold"/>
+              			<h:outputText value="#{order.order.tbUserData.userDataOfficeName}" styleClass="normal"/>
+              			<h:outputText value="Ciudad:" styleClass="bold"/>
+              			<h:outputText value="#{order.order.tbUserData.tbMunicipality.municipalityName}" styleClass="normal"/>
+              			<h:outputText value="Valor Total :" styleClass="bold"/>
+					<h:outputText value="#{order.order.purchaseOrderValue}" styleClass="bold">
+						<f:convertNumber pattern="$#,##0.00"/>
+					</h:outputText>
+					<h:outputText/><h:outputText/><h:outputText/>
+					<h:commandLink value="Ver Detalle" action="#{confirmOrder.initShowDetail}" styleClass="bold">
+						<f:setPropertyActionListener value="#{order.order.purchaseOrderId}" target="#{confirmOrder.idOrder}"/>
+					</h:commandLink>
+					<h:outputText/><h:outputText/><h:outputText/>
+					<h:commandLink value="Ver Consignaciones Asociadas" action="#{confirmOrder.iniShowConsig}" styleClass="bold">
+						<f:setPropertyActionListener value="#{order.order.purchaseOrderId}" target="#{confirmOrder.idOrder}"/>
+					</h:commandLink>
+					<h:outputText/><h:outputText/><h:outputText/>
+					<h:commandButton value="Confirmar Orden" action="#{confirmOrder.initConfirm}">
+						<f:setPropertyActionListener value="#{order.order.purchaseOrderId}" target="#{confirmOrder.idOrder}"/>
+					</h:commandButton>
+				</h:panelGrid>
+
+				<f:facet name="footer">
+					<rich:datascroller/>
+            	</f:facet>
+			</rich:dataGrid>
+		</rich:panel>
+	</a4j:form>
+	<rich:spacer height="20"/>	
+		
+	<rich:modalPanel id="panel" width="350" height="100" showWhenRendered="#{confirmOrder.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Aprobar Orden de Pedido" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{confirmOrder.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{confirmOrder.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="150" showWhenRendered="#{confirmOrder.confirmationShow}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación - Aprobar Orden de Pedido" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{confirmOrder.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{confirmOrder.confirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{confirmOrder.confirm}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{confirmOrder.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="consigs" width="350" autosized="true" showWhenRendered="#{confirmOrder.consigShow}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Consiganciones Asociadas" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{confirmOrder.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<a4j:form>
+			<rich:panel styleClass="richPanel">
+								
+				<rich:dataGrid value="#{confirmOrder.po.conList}" var="con" columns="1" 
+					elements="1" width="600px">
+					<h:panelGrid style="width: 500px; margin: auto; padding:10px; " styleClass="tableBO" columns="2">
+								
+						<h:outputText value="Tipo de Consignación: " styleClass="bold"/>
+						<h:outputText value="#{con.tbPayType.payTypeName}" styleClass="normal"/>
+							
+						<h:outputText value="Fecha Consignación: " styleClass="bold" 
+							rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3 || con.tbPayType.payTypeId == 2}"/>
+						<h:outputText value="#{con.consignmentDate}" styleClass="normal" converter="TimestampConverter" 
+							rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3 || con.tbPayType.payTypeId == 2}"/>
+							
+						<h:outputText value="Cuenta: " styleClass="bold" rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3 || con.tbPayType.payTypeId == 2}"/>
+						<h:outputText value="#{con.tbBankAccount.bankAccountNumber}"
+							styleClass="normal" rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3 || con.tbPayType.payTypeId == 2}"/>
+							
+						<h:outputText value="Valor Pago: " styleClass="bold"/>
+						<h:outputText value="#{con.consignmentValue}" styleClass="normal" >
+							<f:convertNumber pattern="$#,##0.00"/>
+						</h:outputText>
+						
+						<h:outputText value="No. Cheque: " styleClass="bold" 
+							rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 }"/>
+						<h:outputText value="#{con.consignmentCheckNumber}" styleClass="normal"
+							rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 }"/>
+							
+						<h:outputText value="Banco Emisor: " styleClass="bold"
+							rendered="#{con.tbPayType.payTypeId == 1  || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 2}"/>
+						<h:outputText value="#{con.tbBank.bankName}" styleClass="normal"
+							rendered="#{con.tbPayType.payTypeId == 1  || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 2}"/>
+							
+						<h:outputText value="Oficina Consiganción: " styleClass="bold"
+							rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3}"/>
+						<h:outputText value="#{con.consignmentOffice}" styleClass="normal"
+							rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3}"/>
+							
+						<h:outputText value="Número Consiganción: " styleClass="bold"
+							rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3}"/>
+						<h:outputText value="#{con.consignmentNumber}" styleClass="normal"
+							rendered="#{con.tbPayType.payTypeId == 1 || con.tbPayType.payTypeId == 4 || con.tbPayType.payTypeId == 3}"/>
+							
+						<h:outputText value="Número Cuenta de Origen: " styleClass="bold" rendered="#{con.tbPayType.payTypeId == 2}"/>
+						<h:outputText value="#{con.originAccountNumber}" styleClass="normal" rendered="#{con.tbPayType.payTypeId == 2}"/>
+						
+						<h:outputText value="Estado: " styleClass="bold"/>
+						<h:outputText value="PENDIENTE POR APROBACIÓN" styleClass="bold"
+							rendered="#{con.consignmentState == 0}"/>
+						<h:outputText value="APROBADA" styleClass="bold"
+							rendered="#{con.consignmentState == 1}"/>
+					</h:panelGrid>
+					<f:facet name="footer">
+						<rich:datascroller/>
+		            </f:facet>
+				</rich:dataGrid>
+			</rich:panel>
+	    </a4j:form>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="detailss" width="350" autosized="true" showWhenRendered="#{confirmOrder.detailShow}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación - Aprobar Orden de Pedido" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{confirmOrder.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<a4j:form>
+			<rich:panel styleClass="richPanel">
+				<rich:dataTable id="datalist" value="#{confirmOrder.po.details}"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'" 
+					onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+					var="list" rows="20" width="600px" rowClasses="white,white">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Tipo de Operación" styleClass="bold"/>
+						</f:facet>
+						<h:outputText value=" #{list.tbOperationType.operationTypeName}" 
+							styleClass="normal" style="font-size: 15px;"/>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Valor Operación" styleClass="bold"/>
+						</f:facet>
+						<h:outputText value="#{list.detailOperationValue}" 
+							styleClass="normal" style="font-size: 15px;">
+							<f:convertNumber pattern="$#,##0.00"/>
+						</h:outputText>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Id Facial" styleClass="bold"/>
+						</f:facet>
+						<h:outputText value=" #{list.tbDevice.deviceCode}" 
+							styleClass="normal" style="font-size: 15px;"/>
+					</rich:column>
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="Estación Operación" styleClass="bold"/>
+						</f:facet>
+						<h:outputText value=" #{list.tbStation.stationName}" 
+							styleClass="normal" style="font-size: 15px;"/>
+					</rich:column>
+					<f:facet name="footer">
+						<rich:datascroller/>
+					</f:facet>
+				</rich:dataTable>
+			</rich:panel>
+		</a4j:form>
+		<br />
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

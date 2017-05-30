@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+	<head/>
+	<body>
+		<f:view>
+			<div>
+				<f:loadBundle basename="staticText.messages" var="msg" />		
+				<rich:panel>
+					<rich:panel>
+						<rich:toolTip style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;" followMouse="true" direction="top-right" showDelay="500" styleClass="normal">
+				            <span style="white-space:nowrap" styleClass="toolTipcolor">Seleccione la Forma en que se consignó el dinero.</span>
+				        </rich:toolTip>
+				        <h:selectOneRadio value="#{consigBean.consigType}" styleClass="normal">
+				        	<f:selectItems value="#{consigBean.consigTypesList}"/>
+				        	<a4j:support event="onclick" action="#{consigBean.changeForm}" reRender="checkForm" ajaxSingle="true"/>	        		
+			        	</h:selectOneRadio>
+					</rich:panel>
+					<rich:spacer height="5"/>
+					<a4j:outputPanel id="checkForm">
+						<rich:panel>
+							<h:panelGrid style="width: 500px; margin: auto; padding:10px; " 
+								styleClass="tableBO" columns="2" >
+								<h:outputText value="Concepto de Consignación: " styleClass="bold"/>
+								<h:selectOneMenu value="#{consigBean.consignmentConcept}">
+									<f:selectItems value="#{consigBean.consignmentConceptList}"/>
+								</h:selectOneMenu>
+								<h:panelGroup rendered="#{!consigBean.showCash}">
+									<h:outputText value="Fecha Consignación: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<rich:calendar id="consigDate" value="#{consigBean.consigDate}"                 		
+				                	cellWidth="20px" cellHeight="20px" datePattern="MM/dd/yyyy" 
+						            popup="true" style="padding:0px; width: 100px;" rendered="#{!consigBean.showCash}"> 	
+					        	</rich:calendar>
+						        <h:panelGroup rendered="#{!consigBean.showCash}">
+						        	<h:outputText value="Cuenta: " styleClass="bold" />
+					            	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					            </h:panelGroup>
+								<h:selectOneMenu value="#{consigBean.accountId}" style="width: 150px;"
+									rendered="#{!consigBean.showCash}">
+									<f:selectItems value="#{consigBean.accountList}"/>
+								</h:selectOneMenu>
+								<h:panelGroup>
+									<h:outputText value="Valor Consignación: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:inputText value="#{consigBean.consigValue}" maxlength="15" style="width: 150px;" onkeypress="return numOnly(event)" onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+								</h:inputText>
+								<h:panelGroup rendered="#{consigBean.showFormCheck}">
+									<h:outputText value="No. Cheque: " styleClass="bold" />
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>	
+								<h:inputText value="#{consigBean.numCheck}" style="width: 150px;" styleClass="normal" onkeypress="return alphaNumOnly(event)" maxlength="20" rendered="#{consigBean.showFormCheck}"/>
+								<h:panelGroup rendered="#{consigBean.checkTransfer}"> 
+									<h:outputText value="Banco Emisor: " styleClass="bold" />
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:selectOneMenu value="#{consigBean.idBank}" style="width: 150px;" rendered="#{consigBean.checkTransfer}">
+									<f:selectItems value="#{consigBean.bankList}"/>
+								</h:selectOneMenu>
+								<h:panelGroup rendered="#{consigBean.checkEff}">
+					            	<h:outputText value="Oficina de Consignación: " styleClass="bold" />
+					            	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					            </h:panelGroup>
+					            <h:inputText value="#{consigBean.configOffice}" style="width: 150px;" maxlength="50"
+						           	rendered="#{consigBean.checkEff}"/>
+					            <h:panelGroup rendered="#{consigBean.checkEff}">	
+					            	<h:outputText value="Número Consignación: " styleClass="bold" />
+						            <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					            </h:panelGroup>
+						        <h:inputText value="#{consigBean.consigNumber}" style="width: 150px;" maxlength="15" rendered="#{consigBean.checkEff}">
+								</h:inputText> 
+								<h:panelGroup rendered="#{consigBean.showTransfer}">
+									<h:outputText value="No. Cuenta Origen: " styleClass="bold" />
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>	
+								<h:inputText value="#{consigBean.originAccount}" style="width: 150px;" styleClass="normal"
+								 	onkeypress="return alphaNumOnly(event)" maxlength="20" rendered="#{consigBean.showTransfer}"/>
+							</h:panelGrid>
+							<rich:spacer height="10"/>
+						</rich:panel>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+					</a4j:outputPanel>
+				</rich:panel>
+			</div>
+		</f:view>
+	</body>
+</html>

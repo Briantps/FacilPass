@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Consulta Histórica de Recargas</title>
+<style type="text/css">
+	#scroll_horizontal {
+		width: 100%;
+		overflow: auto;
+		clear:both;
+		text-align: center;
+		margin :auto;
+	}
+</style>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5"><ui:include src="../menu/sideMenu.jsp"/></div>
+<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:panel styleClass="richPanel">
+		<f:facet name="header">
+			<h:outputText value="Consulta Histórica de Recargas" styleClass="bold"/>
+		</f:facet>
+		<a4j:form>
+		
+			<rich:panel>
+				<table width="100%">
+					<tr>
+						<td width="20%"></td>
+						<td width="80%">
+							<h:outputText value="Tipo Operación: " styleClass="bold"/>
+							<h:selectOneMenu value="#{consultHisRecharge.idOperationType}">
+								<f:selectItems value="#{consultHisRecharge.operationTypes}"/>
+							</h:selectOneMenu>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%">
+						 	<h:panelGroup>
+							 	<h:selectBooleanCheckbox value="#{consultHisRecharge.checkDate}" label="Rango Fechas">
+									<a4j:support event="onchange" reRender="panelDate"/>
+								</h:selectBooleanCheckbox>
+								<h:outputText value=" Rango Fechas" styleClass="bold"/>
+						 	</h:panelGroup>
+						</td>
+						<td width="80%">
+							<a4j:outputPanel id="panelDate">
+								<h:panelGrid style="width: 500px; margin: auto; padding:10px; " 
+									styleClass="tableBO"  columns="2" rendered="#{consultHisRecharge.checkDate}">
+									<h:panelGroup>
+										<h:outputText value="Fecha Inicial: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:outputText value="Fecha Final: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<rich:calendar id="beg_date" value="#{consultHisRecharge.begDate}"                 		
+				                        cellWidth="26px" cellHeight="22px" style="width:150px" 
+				                        datePattern="MM/dd/yyyy" popup="true" styleClass="normal"> 	
+				                    </rich:calendar>
+				                    <rich:calendar id="end_date" value="#{consultHisRecharge.endDate}"                 		
+			                        	cellWidth="26px" cellHeight="22px" style="width:150px" 
+			                        	datePattern="MM/dd/yyyy" popup="true"> 	
+			                        </rich:calendar>
+								</h:panelGrid>
+									
+							</a4j:outputPanel>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%">
+						 	<h:panelGroup>
+							 	<h:selectBooleanCheckbox value="#{consultHisRecharge.checkClient}" label="Rango Fechas">
+									<a4j:support event="onchange" reRender="panelClient"/>
+								</h:selectBooleanCheckbox>
+								<h:outputText value="#{msg.NumDoc} Cliente" styleClass="bold"/>
+						 	</h:panelGroup>
+						</td>
+						<td width="80%">
+							<a4j:outputPanel id="panelClient">
+								<h:panelGrid style="width: 500px; margin: auto; padding:10px; " 
+									styleClass="tableBO"  columns="2" rendered="#{consultHisRecharge.checkClient}">
+									<h:panelGroup>
+										<h:selectOneMenu value="#{consultHisRecharge.idClient}">
+											<f:selectItems value="#{consultHisRecharge.clients}"/>
+											<a4j:support event="onchange" reRender="namec" 
+												action="#{consultHisRecharge.changeName}"/>
+										</h:selectOneMenu>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText id="namec" value="#{consultHisRecharge.clientName}" styleClass="bold"
+										disabled="true"/>
+								</h:panelGrid>
+							</a4j:outputPanel>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%">
+						 	<h:panelGroup>
+							 	<h:selectBooleanCheckbox value="#{consultHisRecharge.checkTisc}" label="Rango Fechas">
+									<a4j:support event="onchange" reRender="panelDevice"/>
+								</h:selectBooleanCheckbox>
+								<h:outputText value=" Código o Facial" styleClass="bold"/>
+						 	</h:panelGroup>
+						</td>
+						<td width="80%">
+							<a4j:outputPanel id="panelDevice">
+								<h:panelGrid style="width: 500px; margin: auto; padding:10px; " 
+									styleClass="tableBO"  columns="2" rendered="#{consultHisRecharge.checkTisc}">
+									<h:panelGroup>
+										<h:selectOneMenu id="sCodes" value="#{consultHisRecharge.idDevice}">
+											<f:selectItems value="#{consultHisRecharge.deviceCodes}"/>
+											<a4j:support ajaxSingle="true" event="onchange" reRender="sFacial" />
+										</h:selectOneMenu>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:selectOneMenu id="sFacial" value="#{consultHisRecharge.idDevice}">
+											<f:selectItems value="#{consultHisRecharge.deviceFacials}"/>
+											<a4j:support ajaxSingle="true" event="onchange" reRender="sCodes"/>
+										</h:selectOneMenu>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+								</h:panelGrid>
+							</a4j:outputPanel>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%">
+						 	<h:panelGroup>
+							 	<h:selectBooleanCheckbox value="#{consultHisRecharge.checkValue}" label="Rango Fechas">
+									<a4j:support event="onchange" reRender="panelValue"/>
+								</h:selectBooleanCheckbox>
+								<h:outputText value=" Valor Operación" styleClass="bold"/>
+						 	</h:panelGroup>
+						</td>
+						<td width="80%">
+							<a4j:outputPanel id="panelValue">
+								<h:panelGrid style="width: 500px; margin: auto; padding:10px; " 
+									styleClass="tableBO"  columns="2" rendered="#{consultHisRecharge.checkValue}">
+									<h:panelGroup>
+										<h:inputText value="#{consultHisRecharge.value}" maxlength="10" style="width: 150px;"
+											onkeypress="return numOnly(event)">
+										</h:inputText>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+								</h:panelGrid>
+							</a4j:outputPanel>
+						</td>
+					</tr>
+					<tr>
+						<td width="20%"></td>
+						<td width="80%">
+							<h:panelGrid style="width: 500px; margin: auto; padding:10px; " 
+								styleClass="tableBO"  columns="2">
+								<h:commandButton value="Consultar" action="#{consultHisRecharge.consult}">
+									<a4j:support event="oncomplete" reRender="panelMessage,panelData"/>
+								</h:commandButton>
+								<h:commandButton value="Limpiar Resultados" action="#{consultHisRecharge.clear}" >
+									<a4j:support event="oncomplete" reRender="panelMessage,panelData"/>
+								</h:commandButton>
+							</h:panelGrid>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+						</td>
+					</tr>
+				</table>
+			</rich:panel>
+			<rich:spacer height="10"/>
+			
+			<a4j:outputPanel id="panelMessage" layout="inline">
+			 	<rich:panel id="pm" rendered="#{consultHisRecharge.showMessage}">
+			 		<h:outputText id="message" value="#{consultHisRecharge.message}" 
+						styleClass="bold" style="color: red; font-size: 16"/>
+				</rich:panel>
+			</a4j:outputPanel>
+			
+			<a4j:outputPanel id="panelData" layout="inline">
+			 	<rich:panel id="pd" rendered="#{consultHisRecharge.showData}">
+			 		<div id="scroll_horizontal">
+						<rich:extendedDataTable height="250px" width="800px"  
+							value="#{consultHisRecharge.details}" var="list" 
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+							rowClasses="white,grey" enableContextMenu="false">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Num de Orden" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value=" #{list.tbPurchaseOrder.puchaseOrderNumber}" 
+									styleClass="normal" style="font-size: 15px;"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Cliente" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value=" #{list.tbPurchaseOrder.tbUserData.tbSystemUser.userCode}" 
+									styleClass="normal" style="font-size: 15px;"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Nom Cliente" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value=" #{list.tbPurchaseOrder.tbUserData.userDataOfficeName}" 
+									styleClass="normal" style="font-size: 15px;"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Valor" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value="#{list.detailOperationValue}" 
+									styleClass="normal" style="font-size: 15px;">
+									<f:convertNumber pattern="$#,##0.00"/>
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Facial" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value=" #{list.tbDevice.deviceFacialId}" 
+									styleClass="normal" style="font-size: 15px;"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Código Disp" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value=" #{list.tbDevice.deviceCode}" 
+									styleClass="normal" style="font-size: 15px;"/>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Fecha Recarga" styleClass="bold"/>
+								</f:facet>
+								<h:outputText value=" #{list.rechargeDate}"
+									styleClass="normal" style="font-size: 15px;"/>
+							</rich:column>
+							<f:facet name="footer">
+								<rich:datascroller/>
+							</f:facet>	
+						</rich:extendedDataTable>
+					</div>
+					<h:commandLink id="clinkpdf" target="_blank" value="" action="#{consultHisRecharge.printPdf}">
+						<img title="Imprimir" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+							style="cursor: pointer; border: 0px solid blue;" />
+		            </h:commandLink>
+			 	</rich:panel>
+			 </a4j:outputPanel>
+		
+		</a4j:form>			
+	</rich:panel>
+	<rich:spacer height="20"/>
+
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

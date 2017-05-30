@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+</head>
+
+<script type="text/javascript"> 		
+var formSubmitted = false;
+function onSubmitButton() { 
+    if (!formSubmitted) {
+        formSubmitted = true;
+    } else {
+        // disable event propagation if form is already submitted
+        event.preventDefault();
+    }
+}
+</script>
+	
+<body>
+<div class="container">
+<f:view>
+<div>
+	<h:form id="Formulario">
+		<rich:panel style="width:460px;overflow: auto;display: block;">
+			<rich:dataTable id="listRol" rows="5" value="#{formInsUserBean.listRol}" var="item" style="width:400px;margin:auto;">
+				<rich:column>
+					<f:facet name="header"><h:outputText value="Nombre Rol" styleClass="bold"/></f:facet>
+					<h:outputText value="#{item.role.roleName}" styleClass="normal"/>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header"><h:outputText value="Asignar" styleClass="bold"/></f:facet>
+					<h:selectBooleanCheckbox value="#{item.active}"/>
+				</rich:column>
+				<f:facet name="footer">
+	                <rich:datascroller id="datascroller" for="listRol" />
+	            </f:facet>
+			</rich:dataTable>
+
+			<table width="100%">
+				<tr>
+					<td width="25%"></td>
+					<td width="25%"></td>
+					<td width="25%"></td>
+					<td width="25%"><h:commandButton value="Guardar" action="#{formInsUserBean.saveRole}" styleClass="normal" onclick="onSubmitButton();"/></td>
+				</tr>
+			</table>
+		
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>
+
+
+
+</div>
+</f:view>
+</div>
+</body>
+</html>

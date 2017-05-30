@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Registrar Consignación</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">				
+					<rich:spacer height="5"/>	
+					<rich:messages style="color:red;"/>
+					<a4j:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Registrar Consignación" styleClass="bold"/>
+							</f:facet>
+							<rich:panel>
+								<h:panelGrid style="width: 500px; margin: auto; padding:10px; " 
+									styleClass="tableBO" columns="2" >
+									<h:outputText value="Seleccione la cuenta asociada a la consignación: " styleClass="bold"/>
+									<h:selectOneMenu value="#{consigBean.idAccount}" style="width: 291px">
+										<f:selectItems value="#{consigBean.clients}"/>
+									</h:selectOneMenu>
+								</h:panelGrid>
+							</rich:panel>
+							<rich:spacer height="5"/>							
+							<f:subview id="consigd">
+								<ui:include src="/jsf/purchasing/consig.jspx"></ui:include>
+							</f:subview>							
+							<rich:spacer height="5"/>							
+							<rich:panel>
+								<h:panelGrid style="width: 300px; margin: auto; padding:10px; " 
+									styleClass="tableBO" columns="2" >
+									<h:outputText value="" />
+									<h:commandButton value="Guardar Consignación" action="#{consigBean.initConsig}"/>
+								</h:panelGrid>
+							</rich:panel>						
+						</rich:panel>
+					</a4j:form>				
+					<rich:spacer height="20"/>
+					<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{consigBean.confirmationShow}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Guardar Consignación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{consigBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{consigBean.corfirmMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{consigBean.registerConsig}"/>
+					     		</h:panelGroup>   	
+					     		<h:panelGroup>
+					     			<h:commandButton value="Cancelar" action="#{consigBean.hideModal}"  />
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </h:form>
+						<br />
+					</rich:modalPanel>					
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{consigBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Guardar Consignación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{consigBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{consigBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{consigBean.hideModal}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>		
+						<br />
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

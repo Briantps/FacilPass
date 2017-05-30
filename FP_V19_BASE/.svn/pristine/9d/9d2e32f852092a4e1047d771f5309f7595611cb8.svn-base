@@ -1,0 +1,222 @@
+[16.1.304.2124.030915]
+-Mantis 1434 Se estandariza el mensaje de confirmación ¿Está seguro de realizar la reactivación de la Cuenta: ****?
+-Mantis 1696 Se visualiza la última asociación PSE.
+-Mantis 1913-1863 Transacción Exitosa. Para hacer uso del servicio FacilPass; es necesario tener vehículos registrados y asignar recursos el cual será indicado en el momento en que se definan las categorías de los vehículos asociados.
+-Mantis 1924 Asocia cuenta con pse disociado
+-Mantis 1948 Al asociar cuenta  deja el valor 0 en el campo ACCOUNT_STATE_TYPE_ID de la tabla TB_ACCOUNT
+-Mantis 1954-1955 Se valida envió de saldo cuenta en el correo electronico
+-Mantis 1923 Se valida envió correcto de número de producto bancario 
+-Mantis 1981 Botón limpiar limpia la lista de destinatario
+-Mantis 1967 Se corrige incidencia reportada en mantis, para la creación del vehículo por el perfil cliente.
+-Mantis 1992 Se corrige la incidencia presentada en ver procesos del FRD120 y FRD064
+
+[16.1.333.2153.080915]
+-Mantis 1763	Se soluciona incidente de la ventana superpuesta al momento de modificar el parámetro 49, adicional para que aparezcan los botones de edición de texto se agrega un scripts en la carpeta de scripts.														
+-Mantis 1764	Se soluciona incidente de la ventana superpuesta al momento de modificar el parámetro 50, adicional para que aparezcan los botones de edición de texto se agrega un scripts en la carpeta de scripts.														
+-Mantis 1957	Se soluciona incidencia, en donde aparecia una cuenta desvinculada de una entidad Aval y asosciada a una entidad PSE en la lista de cuentas del módulo Recarga Programadamente														
+-Mantis 1958	Se soluciona incidencia de mensaje y botones.														
+-Mantis 2002	Se soluciona incidencia, para volver a transacciones exitosas del FRD064, el cual aplica para el dummy ServiciosConsumidos.														
+-Mantis 1975	Se soluciona incidencia de error gráfigo en comprobante de transacción.														
+-Mantis 1979	Se soluciona incidencia de Disclaimer, Comprobante de transacción.														
+-Mantis 1984	Se soluciona incidencia del texto generado en Ver Procesos.														
+-Mantis 1966	Se soluciona envío de notificación cuando hay timeOut.														
+-Mantis 1995	Permite crear una pregunta con 250 caracteres.														
+-Mantis 1935	Permite crear Preguntas con caracteres numericos. Ahora basado en el FRD														
+-Mantis 1962	Se amplia ventana de confirmación. (El otro incidente  no fue replicado ya que al  validar documentos no se cambia la contraseña).														
+-Mantis 2004	Se corrige titulo ventana emergente.														
+-Mantis 2007	Se permite eliminar caracteres especiales.														
+-Mantis 1890-1812-1938-1940	Recuperar contraseña debe permitir cambiarla automaticamente. Aclaro Hugo Lizarazo														
+-Mantis 2013	Se corrige texto de acuerdo al FRD														
+-Mantis 2012	Parametrización de hora va desde las 00:00:00 hasta 23:59:59														
+-Mantis 2008	Se envía parámetros de acuerdo al FRD														
+-Mantis 1952	Ala aplicación deja registro en ver procesos														
+-Mantis 1948-1954	Se envia saldo cuenta al correo														
+-Mantis 1950	Se modifica tamaño ventana 														
+-Mantis 1977	Esta incidencia corresponde a una mejora.														
+-Mantis 1976	"se resulve que el 0 a la izquierda no se muestre. Y se sustituye todos los 0 (ceros) que esten a la izquierda."														
+-Mantis 1978	se agrega validación para que el almacenamiento sea correcto														
+-Mantis 1972	Se configura la consulta ya que había una converción errónea,  coneverion de  CLOB a String														
+-Mantis 1974	se corrige validación en la pregunta 5 para que pueda ingresar caracteres mayor a 5														
+-Mantis 1973	se modifico interfaz y se agrego un scroll para que la políticas de datos personales se desplazara y los botones de aceptar u cancelar quedaran en un solo lugar														
+-Mantis 2018	Se ajusta los botones Aceptar y Volver que no queden al borde del modal.														
+-Mantis 2017	se modifica funcionalidad del check  que queda activo cuando cuando vuelve a iniciar el nuevo contrato y no Acepta el contrato.
+
+[16.1.389.2209.170915]
+-Mantis 2069	Se soluciona incidencia de ortografia en la palabra utilizará.														
+-Mantis 2107	Se soluciona incidencia de ortografia en la palabra ingresó.														
+-Mantis 2097	Se corrige el envío de la noficiación al momento de falla de la firma digital del contrato														
+-Mantis 2071	Se corrige tilde de la palabra Válida														
+-Mantis 2108	Se corrige visualización de la ventana de mesajes														
+-Mantis 2099	Se soluciona el incidente de la columna extra en la visualización, sin embargo ya que el componente siempre incluye la columna cuando se reajusta el tamaño de las otras columnas esta va a mostrarse														
+-Mantis 2059	Se soluciona el incidente permitiendo la acción de borrar los registros en el navegador Firefox														
+-Mantis 2116	Al restaurar contraseña se actualiza campo USER_PWD_DATE en la tabla tb_sytem_user 														
+-Mantis 2047:Se corrige incidencia en donde el mensaje de error no era el correspondiente al código 1360, por medio de Script.																										
+-Para la solución del mantis 2097 se debe eliminar el parametro tipo de identificación de la plantilla, y reasignar nuevamente despues de la ejecución de los scripts.																										
+-Mantis 2112:No es una incidencia ya que son eventos distintos según lo descrito en el FRD128																										
+-Mantis 2094: Se entrega la solución por la mantis 2097																										
+-Mantis 2065: Según validación del Ingeniero Hugo Lizarazo se concluye que no es una incidencia. Por lo tanto no se solucionará.																										
+-Mantis 2113: Según validación del Ingeniero Hugo Lizarazo se concluye que no es una incidencia. Por lo tanto no se solucionará.																										
+
+[16.1.407.2227.210915]
+-Mantis 2069	Se agrega ortografia.														
+-Mantis 2026	Se modifica para que en el campo POLICY_PERSONAL_DATA_ID quede asociado el valor correspondiente a usuario cliente y no el usuario master														
+-Mantis 2073	se cierra porque no se reproduce el incidente se valida con el tester														
+-Mantis 2029	"Se quitan las fuentes que no se presentan en el editor debido a que el navegador no las admite.
+-Observación se tiene que quitar los textos que tiene las fuentes wingdings y Simbol que hay en el momento en cliente maestro y cliente usuario
+"														
+-Mantis 2035	Se soluciona el incidente donde ya se muestra de forma correcta en los procesos el usuario que realizo la acción, para el administrador muestra Administrador FacilPass y para el usuario el nombre del usuario.														
+-Mantis 2034	Se soluciona el incidente donde ya se muestra de forma correcta en los procesos el usuario que realizo la acción, para el administrador muestra Administrador FacilPass y para el usuario el nombre del usuario.														
+-Mantis 2127	Se soluciona la novedad de la palabra, donde se asigna la tilde faltante.														
+-Mantis 2131	Se realiza la corrección en la incidencia de mensajes de preinscripción de clientes, por lo tanto se solicita validar el funcionamiento total del gestor de correos con el fin de observar el funcionamiento con la activación de las plantillas para los clientes y los usuarios administradores														
+-	Se realiza la corrección del funcionamiento para la opción Cuenta FacilPass->Contrato con el fin de mostrar la aceptaciones de contrato cuando no se tiene un contrato subido por un cliente, aprobado, o firmado.														
+-Mantis 1979	Se realiza la corrección de la visualización de disclaimer del comprobante FacilPass permitiendo el aumento o disminución de dicho texto														
+-Mantis 2110:La incidencia reportada no es una incidencia, ya que hacía falta la librería "jasperreports-fonts-3.7.4.jar" que se encuentra instalada en versión 15, perteneciente al FRD135.																										
+-Mantis 2115:La incidencia reportada no es una incidencia, ya que hacía falta la librería "jasperreports-fonts-3.7.4.jar" que se encuentra instalada en versión 15, perteneciente al FRD135.																										
+
+[16.1.422.2242.230915]
+-Mantis 2045	Se soluciona nueva incidencia en la generación del reporte de parametros de seguridad.														
+-Mantis 2114	Se soluciona incidencia, dejando las transacciones rechazadas y generando los xml de seguimiento de proceso cuando se genera un error en consumosSQDM.jar														
+-Mantis 2109	Se soluciona incidencia, en donde al descargar los archivos XML, se encontraban cruzados.														
+-Mantis 2119	Se realiza la corrección de la validación del campo valor del ajuste														
+-Mantis 2120	Se realiza la corrección de la visualización de los botones en la aceptación de terminos y condiciones del FRD128, esto se corrigió en la opción Cuenta FacilPass->Contrato y en el registro externo de la aplicación (Link registrarse)														
+-Mantis 2124	Se realiza la corrección de la visualización de los botones.														
+-Mantis 1979	Se sube la corrección del combrante solucionando la incidencia de la validación del tipo de letra sobre el disclaimer.														
+-Mantis 2078-2079	Se deja interfaz de acuerdo al AND-038 Autogestion Password_V3														
+-Mantis 2117	Se corrige mensaje de validación 														
+-Mantis 2083	Valida caracteres respuesta preguntas de seguridad														
+-Mantis 1890	Se deja interfaz de acuerdo al AND-038 Autogestion Password_V3														
+-Mantis 1934	Se muestra  lista con saltos de linea														
+-Mantis 2076	Se muestra pregunta en la ventana de confirmación con los espacios														
+-Mantis 2144	Se complementa fuerza de la contraseña de acuerdo a correo enviado por ximena														
+-Mantis 2146	Se centra campos del formulario (Mejora solicitado por QA)		
+-Mantis 1898: Esta incidencia se encuentra duplicada y se soluciona con la mantis 2119.																										
+-Mantis 2135: Se verifica con tester y no se logra replicar el incidente 																										
+-Mantis 2140: Se envia consulta sql filtro adminitación preguntas de seguridad																										
+-Mantis 2145: La Vigencia mínima de la contraseña se parametriza por días no por horas																										
+												
+[16.1.432.2252.280915]
+
+-Mantis 1528	Se ajustan los botones Aceptar y cancelar del mensaje de confirmación, en el módulo Usuarios/Administrar/Roles.														
+-	Se elimina el campo Styles del editor Wyziwyg, ya que no estaba generando ninguna funcionalidad en el editor.														
+-	Cliente-->crear cuentas cliente-->Perfil Admin. Al seleccionar un cliente y verificar la lista, el campo Estado muestra Activa si la cuenta esta asociada a un producto PSE o Activa Por Banco si la cuenta esta asociada a un producto AVAL														
+-Mantis 2152: De acuerdo a lo hablado con el Ingeniero Hugo Lizarazo, ésta no es una incidencia ya que Font Family hace referencia al nombre de la lista desplegable así como Font size, se verifica en la aplicación de Word y se evidencia que no existe como fuente																										
+
+[16.1.446.2266.131015]
+-Se ajusta la generación de archivos XML para Aval, ya que por la tilde contenida en el mensaje de error dentro del archivo, no se podia visualizar en ningú navegador.														
+-Se ajusta el parámetro 49 y 50 para el guardado de 4000 caracteres en base de datos ya que no lo permitía.														
+-Se agrega para todos los parámetros que contienen editor de texto, es decir 49, 50 y 54 scroll lado derecho de la columna "Valor Parámetro", cuando es de gran tamaño el texto.														
+-Se ajusta tamaño de la columna "Valor Parámetro" para los parámetros 49 y 50, esto también aplica para el parámetro 54.														
+-Se elima el botón de salto de línea en los editores de texto.														
+-Se soluciona inconveniente de visualización de los archivos XML PSE cuando contienen acentos en el texto														
+-Se soluciona bloqueo de notificaciones cuando no se puede obtener un id de usuario ya que no se encuentra logueado el usuarios, esto aplica especificamente para la notificación de url no autorizada.														
+-Se soluciona visualización de ventanas según el tipo de persona en la opción cuenta facilpass contrato para el frd128														
+-Se soluciona incidente  visualización de menu despues del rol administrador responder las preguntas de seguridad														
+-Se soluciona incidente validación vigencia de código otp despues de restablecer contraseña														
+
+[16.1.448.2268.151015]
+-Se sube corrección de incidente al momento de no poder crear la cuenta facilpass y no dar el rol de cliente.															JR	
+-Se corrige mensajes vigencia (lógica) logueo con otp			
+
+[16.1.452.2272.201015]
+-162	 El sistema abre ventana emergen después de seleccionar “Aceptar” al mensaje que ha enviado OTP  al correo con el siguiente mensaje.														
+-160	Se asocia producto PSE anteriormente disociado .														
+-161	Se soluciona incidente de campos obligatorios relacionado con FRD122														
+-159	Se asocia producto PSE anteriormente disociado .
+
+[16.1.458.2278.221015]
+-232	Al ingresar a la opción de cliente-crear cuenta cliente, lista  las cuentas del cliente
+-157	Se valida campos de texto cuando se inserta 0 (ceros) a la izquierda, mostrando el mensaje con formato indicado y sustituyendo todos los Ceros a la izquierda. 
+		En saldo bajo Admin se valida invalida el ingreso de numeros en el campo Nombre.
+		
+[16.1.459.2279.221015]
+-242   El cliente permite restablecer contraseña. (Se Modifica el método que toma los estados del cliente para evitar que este quede sin datos)
+
+[16.1.462.2282.281015]
+-265   Se soluciona la incidencia, en donde se eliminan los ceros a la izquierda.
+-302   FRD120-Al asignar recursos programadamente y al realizar clic sobre el boton Aceptar aparace error 
+-250   Al ingresar la contraseña y confirmar la contraseña el indicador de nivel de seguridad no muestra el nivel Bajo, ya que se ingresa una contraseña 
+	   donde tienes las 4 características, solo se muestra el nivel Bajo al ingresar la contraseña con las cuatro características, sT5$ muestra nivel Bajo, 
+	   pero si ingresamos sTT5$ no me muestra el nivel Bajo. 
+	   
+[16.1.470.2290.031115]
+-351   Se solicita probar restablecer contraseña  opción Clientes-->administrar-->Link Restablecer para clientes existentes en la versión 15 y  
+       nuevos de la versión 16   Se solicita probar restablecer contraseña  opción Usuarios-->administrar-->Link Restablecer para usuarios existentes en 
+       la versión 15 y  nuevos de la versión 16.	
+-387   Se solicita probar restablecer contraseña  opción Clientes-->administrar-->Link Restablecer para clientes existentes en la versión 15
+-384   Se solicita probar restablecer contraseña  opción Clientes-->administrar-->Link Restablecer para clientes nuevos
+
+[16.1.471.2291.061115]
+-Se cierra la ventana con el mensaje "Por favor espere" despues de crear las preguntas de seguridad al crear un cliente nuevo. 
+ Posteriormen solo se gurdan las 5 preguntas y respuestas asignadas por el cliente	
+[17.1.41.2358.090216]
+-1951-1955-10 	Consolidado pruebas CorfiColombiana	Cuando se ingresa al link reestablecer contraseña y se cancela en el mensaje restablecimiento de contraseña el sistema NO envia al formulario de login del BOS													
+-2010-2024		Se modifica proceso de cargue de listas en el Gestor de Correos para Procesos y Tipo de destinatarios, adiconal se agrega una validacion para tipo de destinatario para que no se muestre cuando el mensaje se ha configurado para este, se encuentre o no inactivo.														
+-2025			Se agrega modal de Procesando el cual evita que el usuario pueda seleccionar mas de una vez el boton Aceptar al momento de aplicar la objecion														
+													
+[17.1.198.2515.310516]
+
+[18.1.004.2524.280616]
+FRD 140-Recarga en linea
+- FRD 140 Recarga en Linea (Informacion Saldos): Se desarrolla Modulo Administración de Saldos para el RFD 140 el cual coresponde a la configuración de un Editor de texto y visualización de las cuentas facilpass.  Perfil Administrador
+- FRD 140 Recarga en Linea(Saldos):Se desarrolla modulo Consulta de saldos, la cual se visualizara las cuentas FacilPass con su respectivo número único de Recarga y el texto que se configuro en el Cons. Req. Gral 1.  perfil Cliente
+- FRD 140 - Recarga en linea -Generación Código NURE:Con el fin de implementar el código NURE a las cuentas FacilPass es necesario ajustar el módulo Asociación, ubicado en Gestión Bancaria / Asociar Producto Bancario, con el perfil Cliente, adicionalmente en los módulos de Cuentas de Banco / Crear Cuenta Bancaria y Clientes / Crear Cuenta Cliente con el perfil Administrador.
+- Redmine 3147:Se soluciona incidencia Con respecto a la modificacion y creción de vehiculo por parte de cliente. "FacilPass / Vehículos / Administrar Vehículos Admin // Modificar El sistema permite múltiples clic en el botón Guardar al momento de realizar la modificación del vehículo, lo que genera errores en el sistema"
+
+[18.1.006.2527.050716]
+- Redmine #3281: Se realiza modificación para la visualización del código nure sólo para  las cuentas Prepago y no sea visualizada para las cuentas Potpago.
+- FRD 140 Reportes FacilPass: Se entrega Reportes FacilPass Admin-->Reporte Transacciones de Asignación de Recursos-->perfil Admón
+- FRD 140 Se entrega el Modulo Asignacion de recursos Manualmente donde se pueden observar las recargas y reversos realizados y su respectivo PDF para descargar el comprobante
+
+[18.1.008.2529.070716]
+- Se soluciona incidente cuando se agrega una imagen muy amplia y esta se desborda en los formularios de Saldos y politica de Datos Personales
+- Redmine #3281: Se realiza modificacion para la visualizacion del codigo nure solo para  las cuentas Prepago y no sea visualizada para las cuentas Potpago.
+
+[18.1.011.2532.080716]
+- Redmine #3299 : Se soluciona incidente con desbordamiento de imágenes en el Modulo de Saldos. Adicionalmente se solucionan incidentes con los videos y desbordamiento
+- Redmine #3295: Se soluciona incidencia validando las cuentas que estan en los estados 1, 2 y 4
+- Se eliminan opciones avanzadas para Link e Imágenes en los editores de Texto, adicionalmente se agrega el icono de HTM para la modificacion del contenido por codigo.
+[18.1.013.2534.120716]
+- Redmine #3306: Reportes FacilPass Admin-->Reporte Transacciones de Asignación de Recursos-->Perfil Admón. Al dar clic en botón limpiar deja la fecha actual en los campos fecha inicial y fecha final
+- Redmine #3313: Reportes FacilPass Admin-->Reporte Transacciones de Asignación de Recursos-->Perfil Admón. El campo cuenta Facilpass controla  el ingreso de maximo 15 caracteres.
+
+[18.1.014.2535.150716]
+- Redmine #3320: Reportes FacilPass Admin-->Reporte Transacciones de Asignación de Recursos-->Perfil Admón. Se limita el ingreso de datos en el campo nure
+
+[18.1.018.2539.260716]
+- FRD 140 Recarga en linea: Se crea modulo de admninistración de canales el cual permitira al usuario crear modificar inactivar y eliminar un canal.
+- FRD 140 Recarga en linea: Se crea modulo de relacion convenio canales  el cual tiene la funcionalidad de relaizar la relación entre el canal y el convenio, tambien tiene acciones como crear y activar e inactivar
+- FRD 140 Recarga en linea: Se crea módulo Recarga en Línea-->Administrar Convenio  (perfil administrador), el cual tiene la funcionalidad de Crear, Modificar, Eliminar, Activar e Inactivar convenios.
+- Redmine #3338: Clientes--> Administrar (perfil administrador), al restablecer contraseña no debe cambiar el estado inactivo por admin. 
+
+[18.1.019.2540.270716]
+- FRD 140 Recarga en linea: Recarga en Línea-->Administrar Convenio  (perfil administrador), muestra en la grilla la relación convenio-banco que se encuentren activa.
+
+[18.1.021.2542.020816]
+- Redmine #3356 (FRD 140): Se soluciona incidencia agregandole el registro en la tabla TB_LOG  al momento de configurar Infromación Saldos.
+- Redmine #3352 (FRD 140): Se soluciona incidencia agregandole los nuevos caracteres con respecto al AND 040 Recarga en Linea
+
+[18.1.031.2552.050816]
+- Redmine #3381 (FRD 140): Se agrega validación para el campo mensaje de Información saldos cuando esta en banco o vacio infromandoel siguiente mensaje " El mensaje no puede estar vacío".
+- Redmine #3380 (FRD 140): se corrige palabra  del mensaje cuando le da clic en el boton cancelar en Información Saldos (Cacelar por Cancelar)
+- Redmine #3378 (FRD 140): se mitiga problema cuando ingresan un nombre canal y un nombre convenio muy largo desbordando el listado de la margen de la web, esto se dejo que visualizara 19 caracteres para que no se desbordara.
+- Redmine #3359 (FRD 140): Se soluciona incidencia de Editor de Texto cuando realizan la configuracion de Información saldos y permitiendo que no se vea desordenado.
+- Redmine #3372 (FRD 140): Se corrige palabra Crear canal por Editar canal.
+- Redmine #3366 (FRD 140): Se elimina la conversión a mayúscula al ingresar datos al campo nombre
+- Redmine #3365 (FRD 140): Se elimina la conversión a mayúscula al ingresar datos al campo nombre
+- Redmine #3369 (FRD 140): Al editar convenios se observa que al dar cancelar en el mensaje de confirmación redirige al formulario
+- Redmine #3371 (FRD 140): Se lista el nombre de la tabla tb_agreement
+- Redmine #3370 (FRD 140): Se ingresa el carácter punto (.) en la validación del campo nombre
+
+[18.1.032.2553.080816]
+- Redmine #3346: Se soluciona incidencia, correspondiente a el error generado por aplicación de la URL para la recarga PSE.
+
+[18.1.037.2558.100816]
+- Redmine #3408: Se agrega el Scroll o barra de desplazamiento en el eje de X
+- Redmine #3407: Se cambia el mesaje donde se muestran 50 caracteres invalidos como maximo
+- Redmine #3388: Al validar el documento de contrato para persona Juridica se esta dejando la cuenta como Comercial
+- Redmine #3359: Se controla el contenedor del editor de texto para que se visualice de la misma forma en el cliente como administrador
+- Redmine #3409: al restablecer contraseña o preguntas de seguridad, no tener cuentas facilpass o asociadas y tener el contrato validado no debe cambiarlo a pre-enrolado sino dejarlo en validado
+
+
+
+

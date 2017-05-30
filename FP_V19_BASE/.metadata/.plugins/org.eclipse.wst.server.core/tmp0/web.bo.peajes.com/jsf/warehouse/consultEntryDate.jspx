@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Consulta de Registros por Fecha</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+	<f:subview id="header">
+		<ui:include src="/jsf/content/header.jsp"/>
+	</f:subview>
+	<div class="span-24"><f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/></f:subview>
+	</div>
+	<div class="span-5">
+		<ui:include src="/jsf/menu/sideMenu.jsp"/>
+	</div>
+
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+	<h:form>
+		<f:loadBundle basename="staticText.messages" var="msg" />
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header">
+				<h:outputText value="Consulta de Registros por Fecha" styleClass="bold"/>
+			</f:facet>
+			
+			<rich:messages styleClass="bold" style="color: red;"/>
+			<rich:panel>
+				<h:panelGrid styleClass="tableBO" columns="4" style="size 300px; margin: auto; padding:10px; ">
+					<h:panelGroup>
+						<h:outputText value="Fecha Inicio: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>					
+					<rich:calendar id="initDate" value="#{entryOrderConsultBean.initDate}"                 		
+		                 cellWidth="20px" cellHeight="20px" datePattern="MM/dd/yyyy" 
+		                 popup="true" style="padding:0px; width: 100px;" 
+		                 required="true" requiredMessage="La Fecha de Inicio es Requerida."> 	
+		            </rich:calendar>
+		            <h:panelGroup>
+		            	<h:outputText value="Fecha Fin: " styleClass="bold"/>
+		            	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		            </h:panelGroup>
+					<rich:calendar id="endDate" value="#{entryOrderConsultBean.endDate}"                 		
+		                 cellWidth="20px" cellHeight="20px" datePattern="MM/dd/yyyy" 
+		                 popup="true" style="padding:0px; width: 100px;"
+		                 required="true" requiredMessage="La Fecha de Fin es Requerida."> 	
+		            </rich:calendar>
+					<h:outputText value="Estado: " styleClass="bold"/>
+					<h:selectOneMenu value="#{entryOrderConsultBean.warehouseStateId}">
+						<f:selectItems value="#{entryOrderConsultBean.stateList}"/>
+					</h:selectOneMenu>
+					<h:outputText/>
+					<h:commandButton value="Consultar" styleClass="bold"
+						action="#{entryOrderConsultBean.consultEntryByDate}">
+						<a4j:support event="oncomplete" reRender="panelresult"/>
+					</h:commandButton>
+				</h:panelGrid>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				<rich:spacer height="10"/>
+				
+				<a4j:outputPanel id="panelresult">
+					<rich:panel rendered="#{entryOrderConsultBean.showMessage}">
+						<h:outputText value="#{entryOrderConsultBean.message}" style="font-size: 20px; color: red;"
+							styleClass="bold"/>
+					</rich:panel>
+					<rich:panel rendered="#{entryOrderConsultBean.showData}">
+						<h:panelGrid styleClass="tableBO" columns="2" 
+							style="size 300px; margin: auto; padding:10px; ">
+							<h:outputText value="Puede Imprimir el Informe: " 
+								style="color: #008040; font-size: 18px" styleClass="bold"/>
+							<h:commandLink id="clinkpdf" target="_blank" value="" 
+								action="#{entryOrderConsultBean.printPdf}">
+								<img title="Imprimir" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+									style="cursor: pointer; border: 0px solid blue;" />
+			                </h:commandLink>
+			            </h:panelGrid>
+					</rich:panel>
+				</a4j:outputPanel>
+				<rich:spacer height="10"/>
+			</rich:panel>
+
+			<rich:spacer height="20"/>			
+			
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>	
+</div>
+	<f:subview id="footer">
+		<ui:include src="/jsf/content/footer.jsp"/>
+	</f:subview>
+</f:view>
+</div>
+</body>
+</html>

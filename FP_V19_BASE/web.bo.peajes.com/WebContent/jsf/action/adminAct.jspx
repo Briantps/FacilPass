@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<title>Administración de Acciones</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>				
+				<div class="span-24">
+					<f:subview id="headermenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>				
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">				
+					<rich:spacer height="5"/>
+					<h:form id="Formulario">
+						<rich:panel style="width:700px;margin:auto;">
+							<f:facet name="header">
+								<h:outputText value="Modificar Acción" styleClass="bold"/>
+							</f:facet>							
+							<rich:dataTable id="listAc" var="item" rows="15" value="#{adminActMBean.listAct}" style="width:500px;margin:auto;">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Acción" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.actionName}" styleClass="normal"/>
+								</rich:column>
+								<rich:column style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Modificar" styleClass="bold"/>
+									</f:facet>
+									<h:commandLink value="Modificar" action="#{adminActMBean.changeAct}" styleClass="normal">
+										<f:setPropertyActionListener target="#{adminActMBean.actId}" value="#{item.actionId}"/>
+									</h:commandLink>
+								</rich:column>
+								<f:facet name="footer">
+				                	<rich:datascroller id="datascroller" for="listAc" />
+				            	</f:facet>
+							</rich:dataTable>
+						</rich:panel>						
+					</h:form>
+					<rich:spacer height="20"/>
+					<rich:modalPanel id="panel" width="410" height="132" showWhenRendered="#{adminActMBean.update}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Modificar Acción" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminActMBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="updateAc">
+							<ui:include src="UpdateAct.jspx"/>
+						</f:subview>
+						<br />
+					</rich:modalPanel>				
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

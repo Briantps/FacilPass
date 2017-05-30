@@ -1,0 +1,680 @@
+package validator;
+
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Validation {
+	
+	public  static boolean isNumeric(String cod){
+		boolean res;
+
+		if(cod.matches("\\d*")){
+		    res= true;	
+		}
+		else{
+			res= false;
+		}
+		System.out.println("res isNumeric: " + res);
+        return res;
+	}
+	
+	
+	public static boolean isNumericPuntoYComa(String value){
+		boolean res;
+		int cont=0;
+		try{
+			
+			if(value.matches("[0-9.,]*")){
+				char actual, next;
+				for(int i=0;i<value.length()-1;i++){
+					actual= value.charAt(i);
+					next= value.charAt(i+1);
+					int actual1=(int)actual;
+					int next1= (int)next;
+					System.out.println("actual1: " + actual1+ " next1: " + next1);
+					if((actual1==44 && next1==46) || (actual1==46 && next1==44) || (actual1==44 && next1==44) || (actual1==46 && next1==46)){
+						System.out.println("Encontre caracteres seguidos");
+						cont++;
+					}
+				}
+			}
+			else{ 
+				res=false;
+			}
+			
+			if(cont==0){
+				System.out.println("Entre al if cont==0");
+				res=true;
+			}
+			else{
+				System.out.println("Entre al else");
+				res=false;
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+			res=false;
+		}
+		System.out.println("res isNumericPuntoYComa: "+res+ " cont: " + cont);
+		return res;
+	}
+	
+	
+	public static boolean isAlpha(String value){
+		boolean res;
+		if(value.matches("[a-zA-Z ]*")){
+			res=true;
+		}
+		else{ 
+			res=false;
+		}
+		System.out.println("res isAlpha: "+res);
+		return res;
+	}
+	
+	public static boolean isAlphaNum(String value){
+		boolean res;
+		if(value.matches("[a-zA-Z0-9 ]*")){
+			res=true;
+		}
+		else{ 
+			res=false;
+		}
+		System.out.println("res isAlpha: "+res);
+		return res;
+	}
+	
+	public static boolean isAlphaNumWithOutSpace(String value){
+		boolean res;
+		if(value.matches("[a-zA-Z0-9]*")){
+			res=true;
+		}
+		else{ 
+			res=false;
+		}
+		System.out.println("res isAlpha: "+res);
+		return res;
+	}
+	
+	/**
+	   * Validate date format with regular expression
+	   * @param date for validation
+	   * @return true valid date format, false invalid date format
+	   * http://www.mkyong.com/regular-expressions/how-to-validate-date-with-regular-expression/
+	   */
+	public static boolean isDate(String date){
+		String DATE_PATTERN = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/([0-9]{4})";
+		Pattern pattern = Pattern.compile(DATE_PATTERN);
+	    Matcher matcher = pattern.matcher(date);
+
+	     if(matcher.matches()){
+	    	 matcher.reset();
+	    	 if(matcher.find()){
+	         String day = matcher.group(1);
+		     String month = matcher.group(2);
+		     int year = Integer.parseInt(matcher.group(3));
+
+		     if (day.equals("31") &&
+		        (month.equals("4") || month .equals("6") || month.equals("9") ||
+	             month.equals("11") || month.equals("04") || month .equals("06") ||
+	             month.equals("09"))) {
+				return false;
+		     } else if (month.equals("2") || month.equals("02")) {
+				  if(year % 4==0){
+					  if(day.equals("30") || day.equals("31")){
+						  return false;
+					  }else{
+						  return true;
+					  }
+				  }else if(day.equals("29")||day.equals("30")||day.equals("31")){
+					  return false;
+			         }else{
+					  return true;
+				  }
+		      }else{
+		    	  return true;
+		      }
+		   }else{
+	    	      return false;
+		   }
+	     }else{
+		  return false;
+	     }
+	 }
+	
+	
+	public static boolean isAlphaNumCompany(String value){
+		boolean res=false;
+		try{
+			String var;
+			value=value!=null?value.toUpperCase():value;
+			var=value;
+            
+               /* var= var.replace("¡", " ");
+                var= var.replace("…", " ");
+                var= var.replace("Õ", " ");
+                var= var.replace("”", " ");
+                var= var.replace("⁄", " ");*/
+                System.out.println("valor de var: " + var);
+            
+			if(var.matches("[A-Z—¡…Õ”⁄a-zÒ·ÈÌÛ˙0-9 &/.,_-]*")){
+				
+				res=true;
+				System.out.println("Entre al primer if de isAlphaNumCompany");
+			}
+
+			else{ 
+				res=false;
+				System.out.println("Entre al else de isAlphaNumCompany");
+			}	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		System.out.println("res isAlphaNumCompany: "+res);
+		return res;
+	}
+	
+	public static boolean isAlphaNumCompany2(String value){
+		boolean res=false;
+		try{
+			String var;
+			value=value!=null?value.toUpperCase():value;
+			var=value;
+
+            System.out.println("valor de var: " + var);
+            
+			if(var.matches("[A-Z—¡…Õ”⁄a-zÒ·ÈÌÛ˙0-9 &/._-]*")){
+				
+				res=true;
+				System.out.println("Entre al primer if de isAlphaNumCompany");
+			}
+
+			else{ 
+				res=false;
+				System.out.println("Entre al else de isAlphaNumCompany");
+			}	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		System.out.println("res isAlphaNumCompany: "+res);
+		return res;
+	}
+	
+	public static boolean apellidoCliente(String value){
+		boolean res=false;
+		try{
+			String var;
+			value=value!=null?value.toUpperCase():value;
+			var=value;
+
+                System.out.println("valor de var: " + var);
+			if(var.matches("[A-Z—¡…Õ”⁄a-zÒ·ÈÌÛ˙ ]*")){
+				res=true;
+			}
+
+			else{ 
+				res=false;
+			}	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		System.out.println("res apellidoCliente: "+res);
+		return res;
+	}
+	
+	
+	public static boolean alphaNumSpaceNroContrato(String value){
+		boolean res;
+		try{
+
+			value=value!=null?value.toUpperCase():"";
+			String var;
+			var=value;
+			var= var.replace("(", "");
+			var= var.replace(")", "");
+			
+			if(var.matches("[A-Z—¡…Õ”⁄a-zÒ·ÈÌÛ˙0-9 /._-]*")){
+				res=true;
+				System.out.println("entre al primer if de alphaNumSpaceNroContrato");
+			}
+			else{
+				res=false;
+				System.out.println("Entre al eslse de alphaNumSpaceNroContrato");
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+			res=false;
+		}
+		System.out.println("res en alphaNumSpaceNroContrato: " + res);
+				
+		return res;
+	}
+	
+	public static boolean isNumericPuntoYComaNoConsecutive(String value){
+		boolean res=false;
+		char actual=0,siguiente=0;
+		boolean verif=false;
+		try{
+			if(value.matches("[0-9.,]*")){
+				verif=false;
+				for(int i=0; i<value.length();i++){
+					actual=value.charAt(i);
+					if(i<(value.length()-1)){
+						siguiente=value.charAt(i+1);
+					}else{
+						if(((((int)actual)== 44) || (((int)actual)== 46))){
+							System.out.println("Tiene . o , al final");
+							verif=true;
+							break;
+						}
+					}
+					if((i==0)&& ((((int)actual)== 44) || (((int)actual)== 46))){
+						System.out.println("Tiene . o , al inicio");
+						verif=true;
+						break;
+					}
+					if((i==0)&& ((((int)actual)== 44) || (((int)actual)== 46))){
+						System.out.println("Tiene . o , al inicio");
+						verif=true;
+						break;
+					}
+					if(((((int)actual)== 44) && (((int)siguiente)== 46)) || ((((int)actual)== 46) && (((int)siguiente)== 44))){
+						System.out.println("Tiene . y , seguidos en: "+i+" y "+(i+1));
+						verif=true;
+						break;
+					}
+				}				
+				if(verif){					
+					res=false;
+				}else{
+					res=true;
+				}	
+			}
+			else{ 
+				res=false;
+			}
+		}catch(Exception ex){
+			
+		}
+		System.out.println("res isNumericPuntoYComaNoConsecutive: "+res);
+		return res;
+	}
+	
+	
+	public static boolean isDisclaimer(String value){
+		boolean res=false;
+		try{
+			String var;
+			value=value!=null?value.toUpperCase():value;
+			var=value;
+            
+               /* var= var.replace("¡", " ");
+                var= var.replace("…", " ");
+                var= var.replace("Õ", " ");
+                var= var.replace("”", " ");
+                var= var.replace("⁄", " ");*/
+                System.out.println("valor de var: " + var);
+            
+			if(var.matches("[A-Z—¡…Õ”⁄a-zÒ·ÈÌÛ˙0-9 /.,;_()-]*")){
+				res=true;
+				System.out.println("Entre al primer if de isDisclaimer");
+			}
+			else{ 
+				res=false;
+				System.out.println("Entre al else de isDisclaimer");
+			}	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		System.out.println("res isDisclaimer: "+res);
+		return res;
+	}
+	
+	public static boolean isAlphaES(String value){
+		boolean res=false;
+		try{
+			String var;
+			value=value!=null?value.toUpperCase():value;
+			var=value;
+            
+               System.out.println("valor de var: " + var);
+            
+			if(var.matches("[A-Z—¡…Õ”⁄a-zÒ·ÈÌÛ˙ ]*")){
+				res=true;
+				System.out.println("Entre al primer if de isAlphaES");
+			}
+			else{ 
+				res=false;
+				System.out.println("Entre al else de isAlphaES");
+			}	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		System.out.println("res isAlphaES: "+res);
+		return res;
+	}
+	
+	public static boolean isEmail(String value){
+		boolean res=false;
+		try{
+			String var;
+			value=value!=null?value.toLowerCase():value;
+			var=value;
+            
+               System.out.println("valor de var: " + var);
+            
+			if(var.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+					+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){
+				res=true;
+				System.out.println("Entre al primer if de isEmail");
+			}
+			else{ 
+				res=false;
+				System.out.println("Entre al else de isEmail");
+			}	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		System.out.println("res isEmail: "+res);
+		return res;
+	}
+	
+	public static boolean isObservation(String value){
+		boolean res=false;
+		try{
+			String var;
+			value=value!=null?value.toUpperCase():value;
+			var=value;
+			if(var.matches("[A-Z—¡…Õ”⁄‹a-zÒ·ÈÌÛ˙¸0-9 !\"#$%&'()*+,-./:;<=>?@\\[\\]^_`{|}~]*")){
+				res=true;
+			}
+			else{ 
+				res=false;
+				System.out.println("Entre al else de isObservation");
+			}	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return res;
+	}
+	
+	/*public static boolean isObservationPSE(String value){
+		boolean res=false;
+		try{
+			String var;
+			value=value!=null?value.toUpperCase():value;
+			var=value;
+                System.out.println("valor de var: " + var);
+			if(var.matches("[A-Z—¡…Õ”⁄‹a-zÒ·ÈÌÛ˙¸ !\"'#$%&/@^()=ø?°*+,-.;\\s/]*")){
+				   res=true;
+				   System.out.println("Entre al primer if de isObservationPSE");
+			}
+			else{ 				
+				System.out.println("Entre al else de isObservationPSE");
+				char dato;
+				for (int i=0; i<var.length(); i++){
+					dato = var.charAt(i);
+					if ((((int)dato) ==8220) || (((int)dato) ==8217) || (((int)dato) ==92)) {
+						res =  true;					
+					} else {
+						res =  false;
+						break;
+					}
+				}
+			}	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		System.out.println("res isObservation: "+res);
+		return res;
+	}*/
+	
+	public static boolean isObservationPSE(String value){
+		boolean res=false;
+		try{
+				int tamanio = value.length();			
+				char dato;
+				for (int i=0; i<tamanio; i++){
+					dato = value.charAt(i);
+					
+					if ((((int)dato) ==147) || (((int)dato) ==146)|| (((int)dato) ==160) || (((int)dato) ==8220)|| (((int)dato) ==8217)) {
+						res =  true;
+					}else if ((((int)dato) >= 32) && (((int)dato) <=59)){
+						res =  true;						
+					} else if ((((int)dato) == 61)|| (((int)dato) == 63)||(((int)dato) == 92) || (((int)dato) == 161)){
+						res =  true;
+					}else if ((((int)dato) >= 65) && (((int)dato) <=90)){
+						res =  true;						
+					}else if ((((int)dato) >= 97) && (((int)dato) <=122)){
+						res =  true;						
+					}else if ((((int)dato) >= 191) && (((int)dato) <=252)){
+						res =  true;						
+					}else if ((((int)dato) == 10)|| (((int)dato) == 13)){
+						res =  true;
+					}else {
+						System.out.println("Dato no aceptado " + ((int)dato));
+						res =  false;
+						break;
+					}
+				}
+				
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return res;
+	}
+	
+	public static boolean isObservationEditorText(String value){
+		boolean res=false;
+		try{
+				int tamanio = value.length();			
+				char dato;
+				for (int i=0; i<tamanio; i++){
+					dato = value.charAt(i);
+					
+					if ((((int)dato) ==147) || (((int)dato) ==146)|| (((int)dato) ==160) || (((int)dato) ==8220)||(((int)dato) ==8221)|| (((int)dato) ==8217)) {
+						res =  true;
+					}else if ((((int)dato) >= 32) && (((int)dato) <=59)){
+						res =  true;						
+					} else if ((((int)dato) == 61)|| (((int)dato) == 63) ||(((int)dato) == 91)||(((int)dato) == 92)||(((int)dato) == 93) || (((int)dato) == 161)){
+						res =  true;
+					}else if ((((int)dato) >= 65) && (((int)dato) <=90)){
+						res =  true;						
+					}else if ((((int)dato) >= 97) && (((int)dato) <=122)){
+						res =  true;						
+					}else if ((((int)dato) >= 191) && (((int)dato) <=252)){
+						res =  true;						
+					}else if((((int)dato)==96)||(((int)dato)==239)||(((int)dato)==180)){
+						res=true;
+					}else if((((int)dato)== 123) ||((int)(dato)==125)){
+						res=true;
+					}else if((((int)dato)== 124)||(((int)dato)== 8211)){
+						res=true;
+					}else if((((int)dato)== 94) ||(((int)dato)== 64)||(((int)dato)== 60)||(((int)dato)== 62)){
+						res=true;
+					}else if ((((int)dato) == 10)|| (((int)dato) == 13) || (((int)dato) == 95)){
+						res =  true;
+					}else {
+						System.out.println("Dato no aceptado " + ((int)dato));
+						res =  false;
+						break;
+					}
+				}
+				
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return res;
+	}
+	
+	public static boolean validationQuestionCharacters(String value){
+		boolean res=false;
+		try{
+				int tamanio = value.length();			
+				char dato;
+				for (int i=0; i<tamanio; i++){
+					dato = value.charAt(i);
+					
+					if ((((int)dato) >= 91) && (((int)dato) <=96)){
+						res =  true;
+					}else if ((((int)dato) >= 32) && (((int)dato) <=47)){
+						res =  true;						
+					}else if ((((int)dato) >= 48) && (((int)dato) <=57)){
+						res =  true;						
+					}else if ((((int)dato) >= 58) && (((int)dato) <=64)){
+						res =  true;						
+					}else if ((((int)dato) >= 65) && (((int)dato) <=90)){
+						res =  true;						
+					}else if ((((int)dato) >= 91) && (((int)dato) <=96)){
+						res =  true;						
+					}else if ((((int)dato) >= 97) && (((int)dato) <=122)){
+						res =  true;						
+					}else if ((((int)dato) >= 123) && (((int)dato) <=126)){
+						res =  true;						
+					}else if ((((int)dato) >= 160) && (((int)dato) <=165)){
+						res =  true;						
+					}else if ((((int)dato) == 130) || (((int)dato) == 181) || (((int)dato) == 144) ||
+							 (((int)dato) == 214) || (((int)dato) == 224) || (((int)dato) == 233) || 
+							 (((int)dato) == 225) || (((int)dato) == 237) || (((int)dato) == 243) || 
+							 (((int)dato) == 250) || (((int)dato) == 241) || (((int)dato) == 209)){
+						res =  true;
+					}else {
+						System.out.println("Dato no aceptado " + ((int)dato));
+						res =  false;
+						break;
+					}
+				}
+				
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return res;
+	}
+	
+	
+	
+	public static boolean validationResponseCharacters(String value){
+		boolean res=false;
+		try{
+				int tamanio = value.length();			
+				char dato;
+				for (int i=0; i<tamanio; i++){
+					dato = value.charAt(i);
+					
+					if ((((int)dato) ==147) || (((int)dato) ==146)|| (((int)dato) ==160) || (((int)dato) ==8220)|| (((int)dato) ==8217)) {
+						res =  true;
+					}else if ((((int)dato) >= 32) && (((int)dato) <=47)){
+						res =  true;						
+					} else if ((((int)dato)==48)||(((int)dato)==49)||(((int)dato) == 61)|| (((int)dato) == 63)||(((int)dato) == 92) || (((int)dato) == 161)){
+						res =  true;
+					}else if ((((int)dato) >= 65) && (((int)dato) <=90)){
+						res =  true;						
+					}else if ((((int)dato) >= 97) && (((int)dato) <=122)){
+						res =  true;						
+					}else if ((((int)dato) >= 191) && (((int)dato) <=252)){
+						res =  true;						
+					}else if ((((int)dato) == 10)|| (((int)dato) == 13)){
+						res =  true;
+					}else {
+						System.out.println("Dato no aceptado " + ((int)dato));
+						res =  false;
+						break;
+					}
+				}
+				
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return res;
+	}
+	
+	
+	
+	public static boolean isEmail2(String userEmail){
+		boolean res=false;
+		
+		if(userEmail.matches("([sa-zA-Z@.+_0-9-]|\\s)+")){
+			res=true;
+		}
+		else{
+			res=false;
+		}
+		
+		return res;
+	}
+	
+	public static boolean aditional(String aditional){
+		boolean res=false;
+		
+		if(aditional.matches("([a-z]|[A-Z]|[0-9]|[/]|[(]|[)]|[_-]|[.]|[Ò—]|\\s)+")){
+			res=true;
+		}
+		else{
+			res=false;
+		}
+		
+		return res;
+	}
+	
+	
+	public static boolean descriptionAgreement(String value){	
+		try{
+			value=value!=null?value.toUpperCase():value;
+			String var=value;
+			
+			if(var.matches("([A-Z—¡…Õ”⁄a-zÒ·ÈÌÛ˙0-9 &/.,;_()-]|\\s)+")){
+				return true;
+			}
+			else{ 
+				return false;
+			}
+		}catch(Exception ex){
+				ex.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean nameAgreement(String value){	
+		try{
+			value=value!=null?value.toUpperCase():value;
+			String var=value;
+		        
+			if(var.matches("[A-Z—¡…Õ”⁄a-zÒ·ÈÌÛ˙ &/_-]*")){
+				return true;
+			}
+			else{ 
+				return false;
+			}
+		}catch(Exception ex){
+				ex.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * MÈtodo encargado de validar si el texto solo tiene saltos de linea 
+	 * @param texto
+	 * @return
+	 */
+	public static boolean containSpace(String message){		
+		int tamanio = message.length();				
+		ArrayList<String> list = new ArrayList<String>();		
+		char dato;
+		for (int i=0; i<tamanio; i++){
+			dato = message.charAt(i);
+			if ((int)dato != 160 && (int)dato != 32)
+				list.add(String.valueOf((int)dato));
+		}
+		
+		if (list.size() > 0) 
+			return false;
+		else
+			return true;
+	}
+	
+
+}

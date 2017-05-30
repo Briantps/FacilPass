@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:richx="http://www.thomassir.com/richx">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<title>Configuración motor de tareas</title>
+<style type="text/css">
+.rich-spinner-c {
+	width: 103px;
+	margin: 0 0 5px 0;
+}
+.item-spacing {
+	margin: 10px 0 10px 0;
+}
+
+</style>
+
+</head>
+<body>
+<div class="container"><f:view>
+	<f:subview id="header2">
+		<ui:include src="../content/header.jsp" />
+	</f:subview>
+	<div class="span-24"><f:subview id="header">
+		<ui:include src="../menu/menu.jsp" />
+	</f:subview></div>
+	<div class="span-5"><ui:include src="../menu/sideMenu.jsp" /></div>
+	<div class="bkContents span-18 prepend-1"><rich:spacer height="5" />
+	
+	<rich:modalPanel
+		id="wait" autosized="true" width="450" height="120" moveable="false"
+		resizeable="false">
+		<f:facet name="header">
+			<h:outputText value="Procesando" />
+		</f:facet>
+		<h:outputText value="Por favor espere..." />
+	</rich:modalPanel>
+	
+	<a4j:region id="taskDefOps">
+		<a4j:status onstart="#{rich:component('wait')}.show()"
+			onstop="#{rich:component('wait')}.hide()"
+			for="taskDefOps"/>
+			
+		<h:panelGrid columns="1">			
+			<rich:panel style="width:700px;margin:auto;">
+				<f:facet name="header">
+					<h:outputText value="Operaciones de tareas"/>
+				</f:facet>
+				<h:form binding="#{configTaskEng.init}">
+					<h:panelGrid style="width:250px" columns="2">
+						<h:commandButton action="#{configTaskEng.onClickStoreTaskDefinition}"
+							value="Guardar"/>
+					</h:panelGrid>
+				</h:form>
+			</rich:panel>
+			<rich:spacer height="10"/>
+			<rich:panel style="width:700px;margin:auto;">
+				<f:facet name="header">
+					<h:outputText value="Datos de tareas"/>
+				</f:facet>
+				<a4j:form>
+					<a4j:commandButton oncomplete="#{rich:component('addTask')}.show()"
+						value="Agregar"/>
+					<rich:spacer width="5" height="5"/>
+					<rich:dataTable id="taskTable" var="item"
+						value="#{configTaskEng.curTaskDefTasks}"
+						rows="15" rowKeyVar="row"
+						style="width:500px;margin:auto;">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Tipo" styleClass="bold" />
+							</f:facet>
+							<h:outputText value="#{richx:getTaskTypeName(item.id)}"
+								styleClass="normal" id="tskId" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Nombre" styleClass="bold" />
+							</f:facet>
+							<a4j:commandLink ajaxSingle="true" reRender="stepTable, curTaskName"
+								actionListener="#{configTaskEng.onClickTask}">
+								<h:outputText value="#{item.name}" styleClass="normal" id="tskName" />
+								<a4j:actionparam name="itemId" value="#{item.id}" />
+							</a4j:commandLink>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Acciones" styleClass="bold" />
+							</f:facet>
+							<a4j:commandLink ajaxSingle="true" id="editTsk"
+								actionListener="#{configTaskEng.onClickEditTask}"
+								oncomplete="#{rich:component('editTask')}.show()"
+								reRender="editTask">
+								<h:outputText value="Editar tarea" />
+								<a4j:actionparam name="itemId" value="#{item.id}" />
+							</a4j:commandLink>
+							<rich:spacer width="10"/>
+							<a4j:commandLink ajaxSingle="true" id="delTsk"
+								actionListener="#{configTaskEng.onClickEditTask}"
+								oncomplete="#{rich:component('delTaskDlg')}.show()">
+								<h:outputText value="Borrar tarea" />
+								<a4j:actionparam name="itemId" value="#{item.id}" />
+							</a4j:commandLink>
+						</rich:column>
+					</rich:dataTable>
+				</a4j:form>
+			</rich:panel>
+			
+			<rich:spacer height="10"/>
+			
+			<rich:panel style="width:700px;margin:auto;">
+				<f:facet name="header">
+					<h:outputText id="curTaskName" value="Pasos de la tarea '#{configTaskEng.currentTask.name}'"/>
+				</f:facet>
+				<h:form>
+					<a4j:commandButton oncomplete="#{rich:component('newStepNameDlg')}.show();"
+						value="Agregar"/>
+					<rich:dataTable id="stepTable" var="item"
+						value="#{configTaskEng.curTaskSteps}"
+						rows="15" rowKeyVar="row"
+						style="width:500px;margin:auto;">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Nombre" styleClass="bold" />
+							</f:facet>
+							<h:outputText value="#{item.name}"
+								styleClass="normal" id="stepName" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Acción registrada" styleClass="bold" />
+							</f:facet>
+							<h:outputText value="#{item.actions[0].name}"
+								styleClass="normal" id="stepAction" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Acciones" styleClass="bold" />
+							</f:facet>
+							<a4j:commandLink ajaxSingle="true" id="editStepAction"
+								actionListener="#{configTaskEng.onClickEditStep}"
+								oncomplete="#{rich:component('curStepNameDlg')}.show()"
+								reRender="curStepNameDlg">
+								<h:outputText value="Cambiar accion" />
+								<a4j:actionparam name="itemId" value="#{item.id}" />
+							</a4j:commandLink>
+							
+							<rich:spacer width="10"/>
+							<a4j:commandLink ajaxSingle="true" id="editUsr"
+								actionListener="#{configTaskEng.onClickEditStep}"
+								oncomplete="#{rich:component('curStepDlg')}.show()"
+								reRender="curStepDlg">
+								<h:outputText value="Editar" />
+								<a4j:actionparam name="itemId" value="#{item.id}" />
+							</a4j:commandLink>
+							
+							<rich:spacer width="10"/>
+							<a4j:commandLink ajaxSingle="true" id="delStep"
+								actionListener="#{configTaskEng.onClickEditStep}"
+								oncomplete="#{rich:component('delStepDlg')}.show()">
+								<h:outputText value="Borrar paso" />
+								<a4j:actionparam name="itemId" value="#{item.id}" />
+							</a4j:commandLink>
+						</rich:column>
+					</rich:dataTable>
+				</h:form>
+			</rich:panel>
+		</h:panelGrid>
+	</a4j:region>
+	
+	<richx:confirmDialog
+		dlgId="delTaskDlg"
+		title="Eliminacion de tareas"
+		message="¿Está seguro(a) de eliminar esta tarea?"
+		userBean="#{configTaskEng}"
+		action="onClickDelTask"
+		reRender="taskTable,stepTable"
+	/>
+	
+	<richx:confirmDialog
+		dlgId="delStepDlg"
+		title="Eliminacion de pasos"
+		message="¿Está seguro(a) de eliminar este paso?"
+		userBean="#{configTaskEng}"
+		action="onClickDelStep"
+		reRender="stepTable"
+	/>
+	
+	<richx:confirmDialog
+		dlgId="delCurStepParamDlg"
+		title="Eliminacion de parametros"
+		message="¿Está seguro(a) de eliminar este parametro?"
+		userBean="#{configTaskEng}"
+		action="onClickDelCurStepParam"
+		reRender="formcurStepDlg:tableParams"
+	/>
+	
+	<richx:confirmDialog
+		dlgId="delNewStepParamDlg"
+		title="Eliminacion de parametros"
+		message="¿Está seguro(a) de eliminar este parametro?"
+		userBean="#{configTaskEng}"
+		action="onClickDelNewStepParam"
+		reRender="tableParams"
+	/>
+	
+	<richx:usersDialog
+		dlgId="editTaskUsers"
+		availableUsers="#{configTaskEng.selectionForAvailableUsers}"
+		selectedUsers="#{configTaskEng.selectedUsers}"
+		userBean="#{configTaskEng}"
+		actionForButton="onClickStoreUsrsForCurTask"
+		reRender="taskTable"
+	/>
+	
+	<richx:usersDialog
+		dlgId="editNewTaskUsers"
+		availableUsers="#{configTaskEng.selectionForAvailableUsers}"
+		selectedUsers="#{configTaskEng.selectedUsers}"
+		userBean="#{configTaskEng}"
+		actionForButton="onClickStoreUsersForNewTask"
+		reRender="taskTable"
+	/>
+	
+	<richx:mailDialog
+		dlgId="mailDlg"
+		availableMails="#{configTaskEng.availableMails}"
+		selectedMails="#{configTaskEng.selectedMails}"
+		userBean="#{configTaskEng}"
+		action="onClickStoreMailsForNewTask"
+		reRender="taskTable"
+	/>
+	
+	<richx:mailDialog
+		dlgId="editMailDlg"
+		availableMails="#{configTaskEng.availableMails}"
+		selectedMails="#{configTaskEng.selectedMails}"
+		userBean="#{configTaskEng}"
+		action="onClickStoreMailsForCurTask"
+		reRender="taskTable"
+	/>
+	
+	<richx:taskDialog
+		dlgId="addTask"
+		usrsDlg="editNewTaskUsers"
+		mailDlg="mailDlg"
+		userBean="#{configTaskEng}"
+		processTypes="#{configTaskEng.processTypes}"
+		taskProcessType="#{configTaskEng.newTask.id}"
+		taskName="#{configTaskEng.newTask.name}"
+		action="onClickAddNewTask"
+		reRender="taskTable"
+		labelForActionBtn="Agregar Tarea"
+	/>
+	
+	<richx:taskDialog
+		dlgId="editTask"
+		usrsDlg="editTaskUsers"
+		mailDlg="editMailDlg"
+		userBean="#{configTaskEng}"
+		processTypes="#{configTaskEng.processTypes}"
+		taskProcessType="#{configTaskEng.currentTask.id}"
+		taskName="#{configTaskEng.currentTask.name}"
+		action="onClickChangeTask"
+		reRender="taskTable"
+		labelForActionBtn="Modificar"
+	/>
+	
+	<richx:editParamDialog
+		dlgId="editParamDlg"
+		title="Caracteristicas de parametro"
+		userBean="#{configTaskEng}"
+		name="#{configTaskEng.curStepParam.name}"
+		value="#{configTaskEng.curStepParam.value}"
+		action="onClickStoreCurStepParam"
+		reRender="curStepDlg"
+	/>
+	
+	<richx:editParamDialog
+		dlgId="newParamDlg"
+		title="Caracteristicas de parametro"
+		userBean="#{configTaskEng}"
+		name="#{configTaskEng.newStepParam.name}"
+		value="#{configTaskEng.newStepParam.value}"
+		action="onClickStoreNewStepParam"
+		reRender="formnewStepDlg:tableParams"
+	/>
+	
+	<richx:stepDialog
+		dlgId="curStepDlg"
+		editParamDlg="editParamDlg"
+		newParamDlg="newParamDlg"
+		confirmDlg="delCurStepParamDlg"
+		title="Parametros del paso"
+		btnLabel="Aplicar"
+		userBean="#{configTaskEng}"
+		initialState="#{configTaskEng.curTaskStep.stateInit}"
+		availableParams="#{configTaskEng.curTaskStep.actions[0].params}"
+		actionEditParam="onClickEditCurStepParam"
+		actionDeleteParam="onClickEditCurStepParam"
+		actionForButtonLabel="onClickChangeCurStep"
+		actionClosePanel="onClickUpdateCurStep"
+		reRender="stepTable"
+		rendered="#{configTaskEng.renderedCurStepDialog}"
+	/>
+	
+	<richx:changeStepNameDialog
+		dlgId="curStepNameDlg"
+		title="Cambiar paso"
+		userBean="#{configTaskEng}"
+		btnLabel="Modificar"
+		actionClosePanel="onClickUpdateCurStep"
+		stepName="#{configTaskEng.curTaskStep.name}"
+		stepActionName="#{configTaskEng.curTaskStep.actions[0].name}"
+		availableActions="#{configTaskEng.availableActions}"
+		actionForButtonLabel="onClickChangeCurStep"
+	/>
+	
+	<richx:stepDialog
+		dlgId="newStepDlg"
+		editParamDlg="editParamDlg"
+		newParamDlg="newParamDlg"
+		confirmDlg="delCurStepParamDlg"
+		title="Agregar paso"
+		btnLabel="Agregar"
+		userBean="#{configTaskEng}"
+		initialState="#{configTaskEng.newTaskStep.stateInit}"
+		availableParams="#{configTaskEng.newAction.params}"
+		actionEditParam="onClickEditNewStepParam"
+		actionDeleteParam="onClickEditNewStepParam"
+		actionForButtonLabel="onClickAddNewStep"
+		reRender="stepTable"
+		rendered="#{true}"
+	/>
+	
+	<richx:changeStepNameDialog
+		dlgId="newStepNameDlg"
+		title="Nuevo paso"
+		userBean="#{configTaskEng}"
+		btnLabel="Agregar"
+		stepName="#{configTaskEng.newTaskStep.name}"
+		stepActionName="#{configTaskEng.newTaskStep.actions[0].name}"
+		availableActions="#{configTaskEng.availableActions}"
+		actionForButtonLabel="onClickAddNewStep"
+		reRender="stepTable"
+	/>
+		
+	<rich:spacer height="20" /></div>
+	<f:subview id="footer">
+		<ui:include src="../content/footer.jsp" />
+	</f:subview>
+</f:view></div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Seleccionar Distribución de Fondos</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+<f:loadBundle basename="staticText.messages" var="msg" />
+ <rich:spacer height="5"/>	
+ <a4j:form id="configcta">
+  <rich:panel styleClass="richPanel">
+   <f:facet name="header">
+	<h:outputText value="Seleccionar Distribución de Fondos" styleClass="bold"/>
+   </f:facet>
+   <div align="left">
+   <h:outputText value="Esta opción le permitirá establecer la forma en la que se recarga su Dispositivo Electrónico TAG" style="font-weight:bold" styleClass="bold"/>
+   </div>
+   <h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+     <h:panelGroup>
+     	<h:outputText value="#{msg.CtaFP}: " styleClass="bold"/>
+     	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+     </h:panelGroup>    
+	 <h:selectOneMenu value="#{accountSettingsBean.idClientAccount}" 
+		style="width: 250px;" styleClass="normal">
+		<f:selectItems value="#{accountSettingsBean.clientAccounts}"/>
+		<a4j:support event="onchange" action="#{accountSettingsBean.changeAccounts}" 
+			reRender="panelData,panelDataCta,panelinfo"/>
+	 </h:selectOneMenu>
+      <h:outputText/>	 
+   	</h:panelGrid>
+   	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+	<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/> 
+    <a4j:outputPanel id="panelData" layout="inline">  
+	
+	<rich:panel rendered="#{accountSettingsBean.showData}" id="panelDataCta">
+	<h:panelGrid styleClass="tableBO" columns="2" 
+		style="size 300px; margin: auto; padding:10px; width: 400px; background-color: #F3F3F3; border-top-style: dashed; border-bottom-width: thin; border-bottom-style: dashed; border-left-color: #B1B1B1; border-top-color: #B1B1B1; border-right-color: #B1B1B1; border-left-style: dashed; border-right-width: thin; border-right-style: dashed; border-left-width: thin; border-bottom-color: #B1B1B1; border-top-width: thin">
+		<h:panelGroup>
+		<div style="text-align:right">
+			<h:outputText styleClass="bold" value="#{accountSettingsBean.msg1}"/>
+		</div>
+		</h:panelGroup>
+		<h:panelGroup>
+		<div style="text-align:left">
+			<h:outputText styleClass="bold" value="#{accountSettingsBean.totalBalance}" style="color: #005E2F; font-size: 18px">
+				<f:convertNumber pattern="$#,##0" />
+			</h:outputText>
+		</div>
+		</h:panelGroup>
+		<h:panelGroup>
+		<div style="text-align:right">
+			<h:outputText styleClass="bold" value="#{accountSettingsBean.msg2}"/>
+		</div>
+		</h:panelGroup>
+		<h:panelGroup>
+		<div style="text-align:left">
+			<h:outputText styleClass="bold" value="#{accountSettingsBean.availableBalance}" style="color: #005E2F; font-size: 18px">
+				<f:convertNumber pattern="$#,##0" />
+			</h:outputText>
+		</div>
+		</h:panelGroup>
+		</h:panelGrid>
+	<rich:spacer height="10"/>
+	<div id="scroll_horizontal">
+		<rich:dataTable width="300px" value="#{accountSettingsBean.devicesList}" var="list" rendered="#{accountSettingsBean.sizeDevicesList}"
+			onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+			rowClasses="white,grey" enableContextMenu="false" noDataLabel="La cuenta no tiene dispositivos asociados." 
+			style="vertical-align: middle; margin: auto; ">
+			<rich:column width="140px" sortBy="#{list.deviceCode}" sortable="true">
+				<f:facet name="header">
+					<h:outputText value="ID Interno" styleClass="bold"/>
+				</f:facet>
+				<h:outputText value=" #{list.deviceCode}" 
+					styleClass="normal" style="font-size: 12px;"/>
+			</rich:column>
+			<rich:column width="180px">
+				<f:facet name="header">
+					<h:outputText value="ID Facial" styleClass="bold"/>
+				</f:facet>
+				<h:outputText value=" #{list.deviceFacialId}" 
+					styleClass="normal" style="font-size: 12px;">
+				</h:outputText>
+			</rich:column>						
+			<rich:column width="100px" visible="#{accountSettingsBean.showBalance}">
+				<f:facet name="header">
+					<h:outputText value="Saldo Actual" styleClass="bold"/>
+				</f:facet>
+				<h:outputText value = "#{list.deviceCurrentBalance}"
+					styleClass = "normal" style = "font-size: 12px;">
+					<f:convertNumber pattern="$#,##0" />
+				</h:outputText>
+			</rich:column>
+			<rich:column width="100px" visible="#{accountSettingsBean.showManualDistribution}">
+				<f:facet name="header">
+					<h:outputText styleClass="bold" value="Distribuir"/>
+				</f:facet>
+				<h:commandLink value="DISTRIBUIR" styleClass="bold" action="#{accountSettingsBean.initRecharge}">
+					<f:setPropertyActionListener value="#{list.deviceId}" target="#{accountSettingsBean.deviceId}"/>
+				</h:commandLink>
+			</rich:column>
+	</rich:dataTable>	
+	</div>			
+	<rich:spacer height="10"/>
+</rich:panel>
+	
+	<rich:spacer height="10"/>
+   <rich:panel id="panelinfo" rendered="#{accountSettingsBean.showInfo}">
+   <h:outputText value="La cuenta FacilPass seleccionada se encuentra predeterminada como " styleClass="bold"/> 
+   <h:outputText value="#{accountSettingsBean.typeAccount}" style="color:red" styleClass="bold"/>
+   <h:outputText value=", si desea cambiarla seleccione otra opción." styleClass="bold"/>    
+     <h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+     	    	
+     	 <h:outputText value="Seleccione una Opción: " styleClass="bold"/>		 
+		 <h:selectOneMenu value="#{accountSettingsBean.idTypeDist}" 
+			styleClass="normal">
+			<f:selectItems value="#{accountSettingsBean.selectTypeDist}"/>
+			<a4j:support event="onchange" action="#{accountSettingsBean.changeOptions}" 
+			reRender="panelData"/>
+		 </h:selectOneMenu>	
+         <rich:spacer height="5"/>	<rich:spacer height="5"/>			 
+	     <h:commandButton value="Aplicar Cambios" action="#{accountSettingsBean.msgSave}">
+	       	<a4j:support event="oncomplete" reRender="panelData,panelDataCta"/>
+	     </h:commandButton>
+	  </h:panelGrid> 
+	  <rich:panel id="info">
+       <f:facet name="header">
+	<h:outputText value="Información" styleClass="bold"/>
+   </f:facet>
+   <div align="left">
+   <h:outputText value="#{accountSettingsBean.msgInfo}" style="font-weight:bold" styleClass="bold"/>
+   </div>
+     </rich:panel>
+     </rich:panel> 
+     
+   </a4j:outputPanel>	
+  </rich:panel>
+  <rich:spacer height="10"/>
+ </a4j:form> 
+</div>
+
+		<rich:modalPanel id="rechargeWindow" width="350" height="170" showWhenRendered="#{accountSettingsBean.showRechargeWindow}" onresize="return false;" moveable="false">
+			<f:facet name="header">
+				<h:panelGroup><h:outputText value="Distribuir" styleClass="bold"/></h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{accountSettingsBean.hideModal}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+			<h:form>		
+			<h:panelGrid columns="3" styleClass="tableBO">
+				<h:panelGroup><div class="span-1"></div></h:panelGroup>
+				<h:outputText styleClass="bold" value="Saldo Disponible:"/>
+				<h:outputText styleClass="bold" value="#{accountSettingsBean.availableBalance}" 
+					style="color: #005E2F; font-size: 18px">
+					<f:convertNumber pattern="$#,##0" />
+				</h:outputText>
+				<h:panelGroup><div class="span-1"></div></h:panelGroup>
+				<h:outputText styleClass="bold" value="Valor: "/>
+				<h:inputText value="#{accountSettingsBean.valueTxt}" autocomplete="off" onkeypress="return solonumeros(event)" maxlength="15" onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+				</h:inputText>
+				<h:panelGroup><div class="span-1"></div></h:panelGroup>
+				<h:panelGroup><div class="span-1"></div></h:panelGroup>
+		     	<h:panelGroup>
+		     		<h:commandButton value="Aceptar" action="#{accountSettingsBean.initConfirm}"/>
+		     	</h:panelGroup>   	
+		    </h:panelGrid>
+		    </h:form>
+			<br />
+		</rich:modalPanel>
+
+
+<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{accountSettingsBean.showConfirmationModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación - Seleccionar Distribución de Fondos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{accountSettingsBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{accountSettingsBean.modalConfirmationMessage}" styleClass="normal"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{accountSettingsBean.save}"/>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup>
+	     		<h:commandButton value="Cancelar" action="#{accountSettingsBean.hideModal}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{accountSettingsBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Seleccionar Distribución de Fondos" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{accountSettingsBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{accountSettingsBean.modalMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{accountSettingsBean.hideModal}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>	
+		<br />		
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirChange" width="350" height="115" showWhenRendered="#{accountSettingsBean.showchage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación - Distribuir Fondos Manualmente" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{accountSettingsBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{accountSettingsBean.messagechange}" styleClass="normal"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{accountSettingsBean.saveRecharge}"/>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup>
+	     		<h:commandButton value="Cancelar" action="#{accountSettingsBean.hideModal}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+	</rich:modalPanel>
+	
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

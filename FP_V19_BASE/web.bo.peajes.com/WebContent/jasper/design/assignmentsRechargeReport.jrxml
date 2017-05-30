@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Asignaciones y Recargas" pageWidth="1399" pageHeight="612" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1359" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="35"/>
+	<parameter name="initialDate" class="java.sql.Timestamp"/>
+	<parameter name="finalDate" class="java.sql.Timestamp"/>
+	<parameter name="paymentMethodId" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bankId" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="chanelId" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="agreementId" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codeTypeId" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="userCode" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="userNames" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="userSecondNames" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="userEmail" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="accountId" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="stateRechargeId" class="java.lang.Long"/>
+	<parameter name="plate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nure" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT * FROM TABLE(FUNC_ASSIGNMENTS_RECHARGE($P{initialDate},$P{finalDate},$P{paymentMethodId},$P{bankId},$P{chanelId},$P{agreementId},$P{codeTypeId},$P{userCode},$P{userNames},$P{userSecondNames},$P{accountId},$P{stateRechargeId},$P{plate},$P{nure}))]]>
+	</queryString>
+	<field name="fecha_transacion" class="java.sql.Timestamp"/>
+	<field name="modalidad" class="java.lang.String"/>
+	<field name="banco" class="java.lang.String"/>
+	<field name="convenio" class="java.math.BigDecimal"/>
+	<field name="nombre_convenio" class="java.lang.String"/>
+	<field name="canal" class="java.lang.String"/>
+	<field name="nure" class="java.lang.String"/>
+	<field name="tipo_identificacion" class="java.lang.String"/>
+	<field name="numero_identificacion" class="java.math.BigDecimal"/>
+	<field name="nombre_apellido" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="cuenta" class="java.math.BigDecimal"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="codigo_rechazo" class="java.lang.Number"/>
+	<field name="descripcion_rechazo" class="java.lang.String"/>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="215" height="79"/>
+				<imageExpression class="java.lang.String"><![CDATA["facilpass.PNG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="417" y="0" width="582" height="36" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[REPORTE ASIGNACIONES Y RECARGAS]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="1289" y="56" width="70" height="23" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="3" rightPadding="3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{finalDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1209" y="56" width="80" height="23"/>
+				<box rightPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Final:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="1289" y="36" width="70" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="3" rightPadding="3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{initialDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1209" y="36" width="80" height="20"/>
+				<box rightPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Inicial:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="23" splitType="Stretch">
+			<frame>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="1359" height="23" forecolor="#000000" backcolor="#81BC00"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+			</frame>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="60" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha Transacción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="60" y="0" width="85" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Modalidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="145" y="0" width="70" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Banco]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="215" y="0" width="60" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Convenio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="275" y="0" width="60" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Canal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="335" y="0" width="82" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Referencia de Recarga    ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="417" y="0" width="60" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Tipo Identificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="477" y="0" width="70" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Número de Identificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="547" y="0" width="120" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Nombre y  Apellidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="667" y="0" width="122" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Usuario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="789" y="0" width="60" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Cuenta FacilPass]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="849" y="0" width="150" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="999" y="0" width="70" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1069" y="0" width="70" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1139" y="0" width="70" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Código Rechazo ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1209" y="0" width="150" height="30" forecolor="#FFFFFF" backcolor="#6E6E6E"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<topPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="1.0" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[	Causal Rechazo ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy hh:mm:ss a" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="60" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_transacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="60" y="0" width="85" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{modalidad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="145" y="0" width="70" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{banco}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="215" y="0" width="60" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre_convenio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="275" y="0" width="60" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{canal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="335" y="0" width="82" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nure}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="417" y="0" width="60" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo_identificacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="477" y="0" width="70" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{numero_identificacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" mode="Transparent" x="547" y="0" width="120" height="25" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre_apellido}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="667" y="0" width="122" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="789" y="0" width="60" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{cuenta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="849" y="0" width="150" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="999" y="0" width="70" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="1069" y="0" width="70" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="1139" y="0" width="70" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{codigo_rechazo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="1209" y="0" width="150" height="25"/>
+				<box leftPadding="3">
+					<pen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<topPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<leftPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<bottomPen lineWidth="0.5" lineColor="#6E6E6E"/>
+					<rightPen lineWidth="0.5" lineColor="#6E6E6E"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion_rechazo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50" splitType="Stretch">
+			<frame>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="14" width="1359" height="25" forecolor="#D0B48E" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="115" height="25"/>
+					<box leftPadding="3"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[FECHA DE GENERACIÓN:]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy hh:mm:ss a">
+					<reportElement positionType="Float" x="115" y="0" width="100" height="25"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="1209" y="0" width="80" height="25" forecolor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Página  "+$V{PAGE_NUMBER}+"  de"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="1289" y="0" width="70" height="25"/>
+					<box leftPadding="3"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="572">
+			<frame>
+				<reportElement positionType="Float" x="0" y="0" width="1359" height="72"/>
+			</frame>
+			<staticText>
+				<reportElement positionType="Float" x="417" y="0" width="582" height="50" backcolor="#CCCCCC"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="false"/>
+				</textElement>
+				<text><![CDATA[El Reporte No Contiene Información]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

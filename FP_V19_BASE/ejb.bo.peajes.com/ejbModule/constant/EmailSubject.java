@@ -1,0 +1,61 @@
+/**
+ * 
+ */
+package constant;
+
+/**
+ * Enum for Email Subject according to email type.
+ * 
+ * @author tmolina
+ * @since 15-02-2011
+ */
+public enum EmailSubject {
+	
+	USERRESETPASSWORD(0),
+	USERCREATION(1), 
+	USERCHANGEPASSWORD(2),
+	CLIENTCREATION(0),
+	CLIENTRESETPASSWORD(1),
+	CLIENT_APPROVE_CONSIGNMENT_NOTIFY(2),
+	CLIENT_REJECT_CONSIGNMENT_NOTIFY(3),
+	CLIENT_CARD_RECHARGE_NOTIFY(4),
+	CLIENT_VERIFICATION(5),
+	CLIENT_VERIFICATION_FAIL(6),
+	CLIENT_ACCOUNT_CREATION(7),
+	CLIENT_REGISTER_PAY(8),
+	CLIENT_ALARM_BALANCE(9),
+	ALERT_DEVICE(0),
+	ALERT_ENTRY_ORDER(1),
+	CLIENT_CREATION_NOTE(11),
+	CLIENT_CREATE_NOTIFICATION(12),
+	CLIENT_ALARM_BALANCE_UMBRAL(10),
+	REQUEST_CLOSE_ACCOUNT(14),
+	CLOSE_ACCOUNT(15),
+	REACTIVATION_ACCOUNT(16),
+	CLIENT_CREATE_OBJECTION(0),
+	CLIENT_INVOICE(13),
+	ASSOCIATE_ACCOUNT_BANK(17),
+	RECHARGE_NOTIFICATION(18),
+	CHARGE_DOCUMENT(19),
+	BANK_ACCOUNT_CLIENT(20),
+	BANK_ACCOUNT(21),
+	ADMIN_CREATE_OBJECTION(22);
+
+	 private Integer id;
+
+	 /**
+	  * 
+	  * @param id
+	  */
+	 private EmailSubject(Integer id) {
+	   this.id = id;
+	 }
+
+	 /**
+	  * 
+	  * @return id
+	  */
+	 public Integer getId() {
+	  	 return id;
+	 }
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head/>
+<body>
+<div class="container">
+<f:view>
+<div>		
+		<rich:messages style="color:red" styleClass="normal"/>
+		<h:form>
+			<rich:panel>
+				<f:facet name="header"><h:outputText value="Nuevo Mensaje" styleClass="bold"/></f:facet>
+				
+				<h:panelGrid border="1" columns="2" >
+				 	<h:outputText value="Nombre Mensaje" styleClass="bold"/>
+				 	<h:inputText value="#{emailMBean.msgName}" size="77" styleClass="normal"
+						required="true" requiredMessage="Ingrese el nombre del mensaje." >
+						<f:validator validatorId="blank" />
+					</h:inputText>
+				  	<h:outputText value="Contenido del Mensaje" styleClass="bold"/>
+				  	<h:inputTextarea value="#{emailMBean.msgContent}" styleClass="normal" style="width: 406px"
+						required="true" requiredMessage="Ingrese el contenido del mensaje." >
+						<f:validator validatorId="blank" />
+					</h:inputTextarea>
+				</h:panelGrid>
+
+				<rich:spacer height="20" />
+				<h:inputHidden value="#{emailMBean.typeMail }" />
+				<table width="100%">
+					<tr>
+						<td width="25%"></td>
+						<td width="25%"></td>
+						<td width="25%"></td>
+						<td width="25%"><h:commandButton value="Guardar" action="#{emailMBean.saveMessage }" /></td>
+					</tr>
+				</table>	
+
+			</rich:panel>
+		</h:form>
+		<rich:spacer height="20" />
+</div>
+</f:view>
+</div>
+</body>
+</html>

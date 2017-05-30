@@ -1,0 +1,22 @@
+<?xml encoding="UTF-8"?>
+
+<!ELEMENT root (table)+>
+<!ATTLIST root
+  xmlns CDATA #FIXED ''
+  name NMTOKEN #REQUIRED
+  schema NMTOKEN #REQUIRED>
+
+<!ELEMENT table (field)>
+<!ATTLIST table
+  xmlns CDATA #FIXED ''
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT field (attribute)+>
+<!ATTLIST field
+  xmlns CDATA #FIXED ''
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT attribute (#PCDATA)>
+<!ATTLIST attribute
+  xmlns CDATA #FIXED ''
+  id CDATA #REQUIRED>

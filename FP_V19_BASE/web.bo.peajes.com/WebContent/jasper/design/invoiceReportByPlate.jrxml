@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reciboConsolidadoPeaje" language="groovy" pageWidth="1020" pageHeight="612" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="1000" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="BEG_DATE" class="java.sql.Timestamp"/>
+	<parameter name="END_DATE" class="java.sql.Timestamp"/>
+	<parameter name="USERID" class="java.lang.Long"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["/jasper/design/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="accountId" class="java.lang.Long"/>
+	<parameter name="mes" class="java.lang.String"/>
+	<parameter name="cliente" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select company_id, company_name, decode(fideicomiso,null,'-',fideicomiso) as fideicomiso,
+decode(nit_fideicomiso,null,'-',nit_fideicomiso) as nit_fideicomiso, decode(nro_contrato,null,'-',nro_contrato) as nro_contrato , disclaimer
+from tb_company where  company_type_id=1   order by company_id]]>
+	</queryString>
+	<field name="COMPANY_ID" class="java.math.BigDecimal"/>
+	<field name="COMPANY_NAME" class="java.lang.String"/>
+	<field name="FIDEICOMISO" class="java.lang.String"/>
+	<field name="NIT_FIDEICOMISO" class="java.lang.String"/>
+	<field name="NRO_CONTRATO" class="java.lang.String"/>
+	<field name="DISCLAIMER" class="java.lang.String"/>
+	<pageHeader>
+		<band height="124" splitType="Stretch">
+			<frame>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="1000" height="101" backcolor="#FFFFFF"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement positionType="Float" x="269" y="7" width="489" height="36" forecolor="#000000"/>
+					<box leftPadding="0"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="16" isBold="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[RECIBO CONSOLIDADO DE PEAJES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="269" y="44" width="239" height="18"/>
+					<box rightPadding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cliente:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="269" y="64" width="239" height="18"/>
+					<box rightPadding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ Mes:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="508" y="64" width="340" height="18"/>
+					<box leftPadding="3"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{mes}]]></textFieldExpression>
+				</textField>
+				<image>
+					<reportElement x="0" y="3" width="269" height="95"/>
+					<box>
+						<leftPen lineWidth="0.5"/>
+					</box>
+					<imageExpression class="java.lang.String"><![CDATA["facilpass.PNG"]]></imageExpression>
+				</image>
+				<subreport>
+					<reportElement x="508" y="44" width="340" height="18"/>
+					<subreportParameter name="USERID">
+						<subreportParameterExpression><![CDATA[$P{USERID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression class="java.lang.String"><![CDATA["cliente_subreport1.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+			<frame>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="101" width="1000" height="23" forecolor="#000000" backcolor="#81BC00"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+			</frame>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="59">
+			<subreport>
+				<reportElement x="0" y="0" width="1000" height="45"/>
+				<subreportParameter name="BEG_DATE">
+					<subreportParameterExpression><![CDATA[$P{BEG_DATE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="nitFideicomiso">
+					<subreportParameterExpression><![CDATA[$F{NIT_FIDEICOMISO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="accountId">
+					<subreportParameterExpression><![CDATA[$P{accountId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="disclaimer">
+					<subreportParameterExpression><![CDATA[$F{DISCLAIMER}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="END_DATE">
+					<subreportParameterExpression><![CDATA[$P{END_DATE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="nroContrato">
+					<subreportParameterExpression><![CDATA[$F{NRO_CONTRATO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fideicomiso">
+					<subreportParameterExpression><![CDATA[$F{FIDEICOMISO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="companyId">
+					<subreportParameterExpression><![CDATA[$F{COMPANY_ID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="companyName">
+					<subreportParameterExpression><![CDATA[$F{COMPANY_NAME}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="USERID">
+					<subreportParameterExpression><![CDATA[$P{USERID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["invoiceReportByPlate_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="69">
+			<frame>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="2" width="1000" height="25" forecolor="#D0B48E" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textField>
+					<reportElement style="Column header" positionType="Float" x="848" y="3" width="67" height="20" forecolor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="false" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Página  "+$V{PAGE_NUMBER}+"  de"]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy hh:mm:ss a">
+					<reportElement positionType="Float" x="188" y="3" width="660" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="3" width="188" height="20"/>
+					<box leftPadding="3"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[FECHA DE GENERACIÓN:]]></text>
+				</staticText>
+				<textField evaluationTime="Report">
+					<reportElement x="915" y="3" width="80" height="20"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="1" y="30" width="999" height="39"/>
+				<subreport>
+					<reportElement x="1" y="0" width="998" height="39" isPrintWhenDetailOverflows="true"/>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression class="java.lang.String"><![CDATA["subreport_1.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="86">
+			<frame>
+				<reportElement positionType="Float" x="1" y="0" width="999" height="77"/>
+				<staticText>
+					<reportElement positionType="Float" x="187" y="12" width="660" height="50" backcolor="#CCCCCC"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Double"/>
+						<leftPen lineWidth="1.0" lineStyle="Double"/>
+						<bottomPen lineWidth="1.0" lineStyle="Double"/>
+						<rightPen lineWidth="1.0" lineStyle="Double"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="24" isBold="false"/>
+					</textElement>
+					<text><![CDATA[El Reporte No Contiene Información]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</noData>
+</jasperReport>

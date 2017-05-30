@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Formulario de Preinscripción</title>
+</head>
+<script type="text/javascript"> 		
+		function textArea_blur(TxtArea,TxtInicial)  
+		{  
+			if(TxtArea.value == "")  
+			{  
+				TxtArea.value = TxtInicial;
+				TxtArea.style.color='#848484'
+			}
+		}  
+		 
+		function textArea_focus(TxtArea,TxtInicial)  
+		{  
+			if(TxtArea.value == TxtInicial)  
+			{  
+				TxtArea.value="";  
+				TxtArea.style.color = '#000000';
+			}  
+		}  
+
+		function textArea_blur2()  
+		{  
+			var TxtArea=document.getElementById("Formulario:Email");
+
+			if(TxtArea.value == "")  
+			{  
+				TxtArea.value ='ejemplo@mail.com';
+				
+				TxtArea.style.color='#848484';
+
+			}	
+
+			else{
+				if(TxtArea.value== 'ejemplo@mail.com'){
+					TxtArea.style.color='#848484';
+				}
+				else{
+					TxtArea.style.color = '#000000';
+				}
+			}
+
+			var TxtArea2=document.getElementById("Formulario:Email2");
+
+			if(TxtArea2.value == "")  
+			{  
+				TxtArea2.value ='ejemplo@mail.com';
+				
+				TxtArea2.style.color='#848484';
+
+			}	
+			else{
+				if(TxtArea2.value== 'ejemplo@mail.com'){
+					TxtArea2.style.color='#848484';
+				}
+				else{
+					TxtArea2.style.color = '#000000';
+				}
+			}
+		}
+	 
+		</script>
+<body onload="textArea_blur2();">
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="menuheader">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="../menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:spacer height="5" />
+				<rich:messages style="color:red;" />
+				<h:form id="Formulario">
+					<rich:panel style="width:600 px;margin:auto">
+						<f:facet name="header">
+							<h:outputText value="Formulario de Preinscripción"
+								styleClass="bold" />
+						</f:facet>
+						<!-- <rich:panel>
+							<h:selectOneRadio styleClass="bold"
+								value="#{formInsBean.STypePer}"
+								valueChangeListener="#{formInsBean.changeTypePers}"
+								immediate="true" id="s1">
+								<f:selectItem itemValue="1" itemLabel="#{msg.PerNat}" id="o1" />
+								<f:selectItem itemValue="2" itemLabel="#{msg.PerJur}" id="o2" />
+								<a4j:support immediate="true" event="onclick"
+									reRender="panel,panel1,richForma" />
+							</h:selectOneRadio>
+						</rich:panel>
+						-->
+						<rich:spacer height="10" />
+						<rich:panel id="panel">
+							<table width="100%">
+								<tr>
+									<td width="25%"><h:outputLabel value="#{msg.TipDoc}: "
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:selectOneMenu id="typeId"
+											value="#{formInsBean.userCodeType}"
+											valueChangeListener="#{formInsBean.changeTypeID}"
+											immediate="true" style="width: 150px;" styleClass="normal">
+											<f:selectItem itemValue="1" itemLabel="CC" />
+											<f:selectItem itemValue="2" itemLabel="CE" />
+											<f:selectItem itemValue="3" itemLabel="NIT" />
+											<a4j:support immediate="true" event="onchange"
+												reRender="panel,panel1,richForma" />
+										</h:selectOneMenu> <!-- <h:inputText value="#{formInsBean.userCodeTypeAux}"
+											styleClass="normal" rendered="#{!formInsBean.typePer}"
+											disabled="true" id="nit" style="width:140px" />
+											 --></td>
+									<td width="6%"></td>
+									<td width="23%"></td>
+									<td width="23%"></td>
+								</tr>
+							</table>
+							<rich:spacer height="10" />
+							<table width="100%">
+								<tr>
+									<td width="25%"><h:outputLabel
+											value="No. de Identificación: "
+											rendered="#{formInsBean.typePer}" id="numdoc"
+											styleClass="bold" /> <h:outputLabel value="#{msg.nit}:"
+											rendered="#{!formInsBean.typePer}" id="numdocnit"
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="doc"
+											value="#{formInsBean.userCode}" label="Número de documento"
+											maxlength="15" styleClass="normal" style="width:140px"
+											rendered="#{formInsBean.typePer}"
+											onkeypress="return numOnly(event)" autocomplete="off" /> <h:inputText
+											id="doc1" value="#{formInsBean.userCode}"
+											label="Número de documento" maxlength="14"
+											styleClass="normal" style="width:140px"
+											rendered="#{!formInsBean.typePer}"
+											onkeypress="return numOnly(event)" autocomplete="off" />
+									</td>
+									<td width="6%"></td>
+									<td width="23%"><h:outputLabel
+											value="Dígito de Verificación:"
+											rendered="#{!formInsBean.typePer}" id="dv" styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											rendered="#{!formInsBean.typePer}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="dv1"
+											value="#{formInsBean.dv}" label="Digito verificacion"
+											maxlength="1" styleClass="normal" style="width:140px"
+											rendered="#{!formInsBean.typePer}"
+											onkeypress="return numOnly(event)" autocomplete="off" />
+									</td>
+								</tr>
+							</table>
+							<rich:spacer height="10" />
+							<table width="100%">
+								<tr>
+									<td width="25%"><h:outputLabel value="#{msg.Nombre}: "
+											rendered="#{formInsBean.typePer}" id="nombretxt"
+											styleClass="bold" /> <h:outputLabel value="#{msg.RazSoc}: "
+											rendered="#{!formInsBean.typePer}" id="razsoctxt"
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="nom" maxlength="100"
+											value="#{formInsBean.userNames}" label="Nombres"
+											style="width:140px"
+											onkeypress="return alphaSpaceWithoutPoint(event)"
+											styleClass="normal" rendered="#{formInsBean.typePer}"
+											autocomplete="off">
+										</h:inputText> <h:inputText id="razsol" maxlength="100"
+											value="#{formInsBean.userNames}" label="Razón Social"
+											style="width:140px"
+											onkeypress="return noEspecialRazSol(event)"
+											styleClass="normal" rendered="#{!formInsBean.typePer}"
+											autocomplete="off">
+										</h:inputText>
+									</td>
+									<td width="6%"></td>
+									<td width="23%"><h:outputLabel value="#{msg.Apelli}: "
+											rendered="#{formInsBean.typePer}" id="apellidotxt"
+											styleClass="bold" /> <h:outputLabel value="#{msg.NombreR}: "
+											rendered="#{!formInsBean.typePer}" id="replegaltxt"
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="ape" maxlength="50"
+											value="#{formInsBean.userSecondNames}" label="Apellidos"
+											style="width:140px"
+											onkeypress="return alphaSpaceWithoutPoint(event)"
+											styleClass="normal" rendered="#{formInsBean.typePer}"
+											autocomplete="off">
+										</h:inputText> <h:inputText id="repreLegal" maxlength="50"
+											value="#{formInsBean.userSecondNames}"
+											label="Nombre Representante Legal" style="width:140px"
+											onkeypress="return alphaSpaceWithoutPoint(event)"
+											styleClass="normal" rendered="#{!formInsBean.typePer}"
+											autocomplete="off">
+										</h:inputText>
+									</td>
+								</tr>
+							</table>
+							<table width="100%">
+								<tr>
+									<td width="25%"><h:outputLabel
+											value="País de Constitución Razón Social:"
+											rendered="#{!formInsBean.typePer}" styleClass="bold" /> <h:outputLabel
+											value="#{msg.Asterisk}" rendered="#{!formInsBean.typePer}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="pais" maxlength="50"
+											value="#{formInsBean.countryRS}" styleClass="normal"
+											style="width:140px"
+											onkeypress="return alphaSpaceWithoutPoint(event)"
+											rendered="#{!formInsBean.typePer}" autocomplete="off" />
+									</td>
+									<td width="6%"></td>
+									<td width="23%"></td>
+									<td width="23%"></td>
+								</tr>
+							</table>
+							<table width="100%">
+								<tr>
+									<td width="25%"><h:outputLabel value="#{msg.TipDocLR}: "
+											rendered="#{!formInsBean.typePer}" styleClass="bold" /> <h:outputLabel
+											value="#{msg.Asterisk}" rendered="#{!formInsBean.typePer}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:selectOneMenu id="typeIdRL"
+											value="#{formInsBean.legalCodeType}"
+											rendered="#{!formInsBean.typePer}" style="width: 150px;"
+											styleClass="normal">
+											<f:selectItem itemValue="1" itemLabel="CC" />
+											<f:selectItem itemValue="2" itemLabel="CE" />
+										</h:selectOneMenu>
+									</td>
+									<td width="6%"></td>
+									<td width="23%"><h:outputLabel
+											value="No. de Identificación Representante Legal: "
+											rendered="#{!formInsBean.typePer}" id="numdocRL"
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											rendered="#{!formInsBean.typePer}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="doc2"
+											value="#{formInsBean.legalCode}" label="Número de documento"
+											maxlength="15" styleClass="normal" style="width:140px"
+											rendered="#{!formInsBean.typePer}"
+											onkeypress="return numOnly(event)" autocomplete="off" />
+									</td>
+								</tr>
+							</table>
+						</rich:panel>
+						<rich:spacer height="10" />
+						<rich:panel id="panel1">
+							<table width="100%">
+								<tr>
+									<td width="25%"><h:outputLabel value="#{msg.Dir}: "
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="dir" maxlength="50"
+											value="#{formInsBean.userAdress}" label="Dirección"
+											style="width:140px" styleClass="normal"
+											rendered="#{formInsBean.typePer}" autocomplete="off">
+										</h:inputText> <h:inputText id="dirJuridico" maxlength="50"
+											value="#{formInsBean.userAdress}" label="Dirección"
+											style="width:140px" styleClass="normal"
+											rendered="#{!formInsBean.typePer}" autocomplete="off">
+										</h:inputText>
+									</td>
+									<td width="6%"></td>
+									<td width="23%"><h:outputLabel value="#{msg.Ciudad}: "
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:selectOneMenu id="city"
+											value="#{formInsBean.userCity}"
+											valueChangeListener="#{formInsBean.changeLocation}"
+											immediate="true" style="width: 150px;" styleClass="normal">
+											<f:selectItems value="#{formInsBean.cities}" />
+											<a4j:support immediate="true" event="onchange"
+												reRender="panel1" />
+										</h:selectOneMenu>
+									</td>
+								</tr>
+							</table>
+							<!-- Aqui esta lo de ciudad  -->
+							<table width="100%">
+								<tr>
+									<td width="25%"><h:outputLabel value="#{msg.CiuExt}: "
+											rendered="#{!formInsBean.forePer}" id="ciuexttxt"
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											rendered="#{!formInsBean.forePer}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="ciuE" maxlength="50"
+											value="#{formInsBean.foreignCity}"
+											label="Ciudad en el Extranjero" style="width:140px"
+											onkeypress="return alphaSpaceWithoutPoint(event)"
+											rendered="#{!formInsBean.forePer}" styleClass="normal"
+											autocomplete="off">
+										</h:inputText>
+									</td>
+									<td width="6%"></td>
+									<td width="23%"><h:outputLabel value="#{msg.PaisExt}: "
+											rendered="#{!formInsBean.forePer}" id="paisexttxt"
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											rendered="#{!formInsBean.forePer}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="paisE"
+											value="#{formInsBean.foreignCount}" styleClass="normal"
+											style="width:140px"
+											onkeypress="return alphaSpaceWithoutPoint(event)"
+											rendered="#{!formInsBean.forePer}"
+											label="País en el extranjero" maxlength="50"
+											autocomplete="off">
+										</h:inputText>
+									</td>
+								</tr>
+							</table>
+							<!-- Aqui finaliza lo de ciudad extranjero -->
+							<table width="100%">
+								<tr>
+									<td width="25%"><h:outputLabel value="Celular: "
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="tel" maxlength="30"
+											value="#{formInsBean.userPhone1}" label="Teléfono"
+											style="width:140px" styleClass="normal"
+											onkeypress="return numOnly(event)"
+											rendered="#{formInsBean.typePer}" autocomplete="off">
+										</h:inputText> <h:inputText id="telJuridico" maxlength="30"
+											value="#{formInsBean.userPhone1}" label="Teléfono"
+											style="width:140px" styleClass="normal"
+											onkeypress="return numOnly(event)"
+											rendered="#{!formInsBean.typePer}" autocomplete="off">
+										</h:inputText>
+									</td>
+									<td width="6%"></td>
+									<td width="23%"><h:outputLabel value="#{msg.Telefono2}: "
+											styleClass="bold" /></td>
+									<td width="23%"><h:inputText id="tel2" maxlength="30"
+											value="#{formInsBean.userPhone2}" label="Teléfono Opcional"
+											style="width:140px" styleClass="normal"
+											onkeypress="return optionalPhone(event)"
+											onblur="return trimFunc(this)"
+											rendered="#{formInsBean.typePer}" autocomplete="off">
+										</h:inputText> <h:inputText id="tel2Juridico" maxlength="30"
+											value="#{formInsBean.userPhone2}" label="Teléfono Opcional"
+											style="width:140px" styleClass="normal"
+											onkeypress="return optionalPhone(event)"
+											rendered="#{!formInsBean.typePer}" autocomplete="off">
+										</h:inputText>
+									</td>
+								</tr>
+							</table>
+						</rich:panel>
+						<rich:spacer height="10" />
+
+
+						<rich:panel id="richForma">
+							<table width="100%" id="forma">
+								<tr>
+									<td width="25%"><h:outputLabel value="Usuario: "
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="Email" maxlength="100"
+											value="#{formInsBean.userEmail}" label="Correo Electrónico"
+											style="width:140px" styleClass="normal"
+											rendered="#{formInsBean.typePer}"
+											onblur="textArea_blur(this,'ejemplo@mail.com')"
+											onfocus="textArea_focus(this,'ejemplo@mail.com')"
+											onkeypress="return emailValidation(event)" autocomplete="off">
+										</h:inputText> <h:inputText id="EmailJuridico" maxlength="100"
+											value="#{formInsBean.userEmail}" label="Correo Electrónico"
+											style="width:140px" styleClass="normal"
+											rendered="#{!formInsBean.typePer}"
+											onblur="textArea_blur(this,'ejemplo@mail.com')"
+											onfocus="textArea_focus(this,'ejemplo@mail.com')"
+											onkeypress="return emailValidation(event)" autocomplete="off">
+										</h:inputText> <rich:toolTip
+											style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+											followMouse="false" direction="top-right" showDelay="500"
+											styleClass="normal"
+											value="Ingrese como Usuario el correo electrónico al cual se le harán llegar todas las notificaciones del Sistema FacilPass al cliente que desea crear."
+											for="Email" /> <rich:toolTip
+											style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+											followMouse="false" direction="top-right" showDelay="500"
+											styleClass="normal"
+											value="Ingrese como Usuario el correo electrónico al cual se le harán llegar todas las notificaciones del Sistema FacilPass al cliente que desea crear."
+											for="EmailJuridico" />
+									</td>
+									<td width="6%"></td>
+									<td width="23%"><h:outputLabel value="Confirmar Usuario: "
+											styleClass="bold" /> <h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</td>
+									<td width="23%"><h:inputText id="Email2" maxlength="100"
+											value="#{formInsBean.userEmail2}" label="Correo Electrónico"
+											style="width:140px" styleClass="normal"
+											rendered="#{formInsBean.typePer}"
+											onblur="textArea_blur(this,'ejemplo@mail.com')"
+											onfocus="textArea_focus(this,'ejemplo@mail.com')"
+											onkeypress="return emailValidation(event)" autocomplete="off">
+										</h:inputText> <h:inputText id="Email2Juridico" maxlength="100"
+											value="#{formInsBean.userEmail2}" label="Correo Electrónico"
+											style="width:140px" styleClass="normal"
+											rendered="#{!formInsBean.typePer}"
+											onblur="textArea_blur(this,'ejemplo@mail.com')"
+											onfocus="textArea_focus(this,'ejemplo@mail.com')"
+											onkeypress="return emailValidation(event)" autocomplete="off">
+										</h:inputText> <rich:toolTip
+											style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+											followMouse="false" direction="top-right" showDelay="500"
+											styleClass="normal"
+											value="Confirme el correo electrónico del cliente que desea crear."
+											for="Email2" /> <rich:toolTip
+											style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+											followMouse="false" direction="top-right" showDelay="500"
+											styleClass="normal"
+											value="Confirme el correo electrónico del cliente que desea crear."
+											for="Email2Juridico" />
+									</td>
+								</tr>
+							</table>
+						</rich:panel>
+						<rich:spacer height="10" />
+						<rich:panel>
+							<table width="100%" align="center">
+								<tr>
+									<td width="19%"><h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" /> <h:outputLabel
+											value="#{msg.MandFields}" styleClass="loginInput" />
+									</td>
+									<td width="23%"><h:commandButton value="#{msg.Guardar}"
+											action="#{formInsBean.validate}" onclick="textArea_blur2()"
+											styleClass="normal" />
+									</td>
+								</tr>
+							</table>
+						</rich:panel>
+					</rich:panel>
+				</h:form>
+				<rich:spacer height="20" />
+				<rich:modalPanel id="panelCon" width="350" height="115"
+					showWhenRendered="#{formInsBean.showModalConfir}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Inscripción de Clientes"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton action="#{formInsBean.hideModal}"
+									image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{formInsBean.msg}" styleClass="normal" />
+					<rich:panel style="border: none;">
+						<div align="center">
+							<h:form id="form3">
+								<h:panelGroup>
+									<a4j:region id="editando3">
+										<a4j:commandButton id="acept3" value="Aceptar"
+											action="#{formInsBean.saveClien}"
+											oncomplete="#{rich:component('wait')}.hide()">
+											<a4j:support event="onclick"
+												onsubmit="document.getElementById('form3:acept3').disabled=true;document.getElementById('form3:cancel3').disabled=true" />
+											<a4j:support event="oncomplete" reRender="panel5"
+												oncomplete="document.getElementById('form3:acept3').disabled=false;document.getElementById('form3:cancel3').disabled=false" />
+										</a4j:commandButton>
+										<a4j:status onstart="#{rich:component('wait')}.show()"
+											for="editando3">
+										</a4j:status>
+									</a4j:region>
+								</h:panelGroup>
+								<rich:spacer width="10" />
+								<h:commandButton id="cancel3" value="Cancelar"
+									action="#{formInsBean.hideModal}" />
+							</h:form>
+						</div>
+					</rich:panel>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="panel" width="350" height="140"
+					showWhenRendered="#{formInsBean.create}" onresize="return false;"
+					moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Inscripción de Clientes"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton action="#{formInsBean.hideModal}"
+									image="/img/close.png">
+									<a4j:support event="oncomplete"
+										action="#{formInsBean.clearVar}"
+										reRender="typeId,doc,nom,ape,dir,tel,tel2,Email,city,doc1,dv1,pais,typeIdRL,doc2,ciuE,paisE,panel5" />
+								</h:commandButton>
+								<rich:componentControl for="panel" attachTo="hidelink"
+									operation="hide" event="onclick" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{formInsBean.msg}" styleClass="normal" />
+					<h:panelGrid columns="1"
+						style="width: 100px; margin: auto; padding:5px; ">
+						<h:form>
+							<h:commandButton value="Aceptar"
+								action="#{formInsBean.hideModal}">
+								<a4j:support event="oncomplete" action="#{formInsBean.clearVar}"
+									reRender="typeId,doc,nom,ape,dir,tel,tel2,Email,city,doc1,dv1,pais,typeIdRL,doc2,ciuE,paisE,panel5" />
+								<rich:componentControl for="panel" attachTo="hidelink"
+									operation="hide" event="onclick" />
+							</h:commandButton>
+						</h:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+
+				<rich:spacer height="20" />
+				<rich:modalPanel id="panel5" width="350" height="115"
+					showWhenRendered="#{formInsBean.modal}" onresize="return false;"
+					moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Inscripción de Clientes"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton action="#{formInsBean.hideModal}"
+									image="/img/close.png">
+									<a4j:support event="oncomplete"
+										action="#{formInsBean.clearVar}"
+										reRender="typeId,doc,nom,ape,dir,tel,tel2,Email,city,doc1,dv1,pais,typeIdRL,doc2,ciuE,paisE,panel5" />
+								</h:commandButton>
+								<rich:componentControl for="panel5" attachTo="hidelink"
+									operation="hide" event="onclick" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{formInsBean.msg}" styleClass="normal" />
+					<h:panelGrid columns="1"
+						style="width: 100px; margin: auto; padding:5px; ">
+						<h:form>
+							<h:commandButton value="Aceptar"
+								action="#{formInsBean.hideModal}">
+								<a4j:support event="oncomplete" action="#{formInsBean.clearVar}"
+									reRender="typeId,doc,nom,ape,dir,tel,tel2,Email,city,doc1,dv1,pais,typeIdRL,doc2,ciuE,paisE,panel5" />
+								<rich:componentControl for="panel5" attachTo="hidelink"
+									operation="hide" event="onclick" />
+							</h:commandButton>
+						</h:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+				<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Transacción en proceso..."
+						style="font-size:12px;" />
+				</rich:modalPanel>
+			</div>
+			<f:subview id="footer">
+				<ui:include src="../content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

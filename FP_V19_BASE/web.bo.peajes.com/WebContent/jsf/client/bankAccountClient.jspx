@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Administración de Cuentas de Bancos</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+	<f:subview id="header">
+		<ui:include src="/jsf/content/header.jsp"/>
+	</f:subview>
+	<div class="span-24"><f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/></f:subview>
+	</div>
+	<div class="span-5">
+		<ui:include src="/jsf/menu/sideMenu.jsp"/>
+	</div>
+
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+	<h:form>
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header">
+				<h:outputText value="Administración Productos Bancarios" styleClass="bold"/>
+			</f:facet>
+			
+			<rich:messages styleClass="bold" style="color: red;"/>
+			<rich:panel>
+				<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+					<h:commandButton value="Agregar Producto Bancario" action="#{bankAccountClientBean.initAddBank}"/>
+				</h:panelGrid>
+			</rich:panel>
+
+			<rich:spacer height="20"/>
+			
+			<a4j:outputPanel id="panelData" layout="inline">
+				<rich:panel id="pd">
+					<f:facet name="header">
+						<h:outputText styleClass="bold" value="Bancos"/>
+					</f:facet>
+					
+					<rich:spacer height="10"/>
+					<rich:extendedDataTable id="datalist" value="#{bankAccountClientBean.bankAccountList}" 
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#FFFFFF'" styleClass="bold"
+								var="list" rows="20" width="650px" rowClasses="white,white"
+								height="300px" enableContextMenu="false" noDataLabel="No hay cuentas de Bancos Registrados.">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Titular"/>
+							</f:facet>
+							<h:outputText value="#{list.bankAccountHolder}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Nit Titular"/>
+							</f:facet>
+							<h:outputText value="#{list.bankAccountHolderNit}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Banco"/>
+							</f:facet>
+							<h:outputText value="#{list.product.bankName}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Producto Bancario"/>
+							</f:facet>
+							<h:outputText value="#{list.bankAccountNumber}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Tipo Cuenta"/>
+							</f:facet>
+							<h:outputText value="#{list.bankAccountType.productTypeDescription}" styleClass="normal"/>
+						</rich:column>
+					</rich:extendedDataTable>
+					
+				</rich:panel>
+			</a4j:outputPanel>
+			
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>	
+	
+	<rich:modalPanel id="panel" width="410" height="400" showWhenRendered="#{bankAccountClientBean.showInsert}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Crear Producto Bancario" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{bankAccountClientBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+	    <f:subview id="insertBank"><ui:include src="insertBankAccountClient.jspx"/></f:subview>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panelm" width="350" height="100" showWhenRendered="#{bankAccountClientBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Cuenta de Banco" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{bankAccountClientBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{bankAccountClientBean.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+	
+</div>
+	<f:subview id="footer">
+		<ui:include src="/jsf/content/footer.jsp"/>
+	</f:subview>
+</f:view>
+</div>
+</body>
+</html>

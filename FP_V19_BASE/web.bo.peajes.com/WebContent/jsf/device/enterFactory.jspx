@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	   
+	<head>
+	    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<meta content="no-cache" http-equiv="Pragma" />
+		<meta content="no-cache" http-equiv="Cache-Control" />
+		<meta content="no-store" http-equiv="Cache-Control" />
+		<meta content="max-age=0" http-equiv="Cache-Control" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Fabricantes</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>                  
+				</div>			
+				<div class="bkContents span-18 prepend-1">	            		
+					<f:loadBundle basename="staticText.messages" var="msg" />  
+			  		<rich:spacer height="5"/>	
+			  		<rich:messages styleClass="bold" style="color: red;"/>
+			 		<h:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Fabricantes" styleClass="bold"/>
+							</f:facet>
+							<rich:panel style="width:600 px;margin:auto;">   
+								<f:facet name="header">
+									<h:outputText value="Filtro de Búsqueda" styleClass="bold"/>
+								</f:facet>
+								<h:panelGrid styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px; ">  
+			 						<h:outputText value="Fabricante: "  styleClass="bold"/>  
+			 						<h:inputText id="miInput" value="#{enterFactory.searchTagTypeName}"   
+			 						style="width:380px; text-transform: uppercase" 
+									onkeypress="return alphaNumSpaceOnly2(event)" maxlength="50"/>
+									<h:commandButton value="Consultar" action="#{enterFactory.searchFilter}">
+										<a4j:support event="oncomplete" reRender="panelData"/>
+									</h:commandButton>	
+									<h:commandButton value="Limpiar" action="#{enterFactory.clearFilter}" style="width: 70px">
+										<a4j:support event="oncomplete" reRender="panelData"/>
+									</h:commandButton>
+								</h:panelGrid>
+				 			</rich:panel>
+									
+							<rich:spacer height="20"/>						
+							<a4j:outputPanel id="panelData" layout="inline">
+								<rich:panel id="pd">
+									<f:facet name="header">
+										<h:outputText styleClass="bold" value="Lista Fabricantes"/>   
+									</f:facet>								  
+									<h:panelGrid styleClass="tableBO" columns="2" style="size 300px;">
+										<h:commandButton value="Nuevo Fabricante" action="#{enterFactory.initAddFactory}"/>
+									</h:panelGrid>
+									<div id="scroll_horizontal">									
+										<rich:dataTable id="dtable" width="800" value="#{enterFactory.listAllInfoTagTypes}" var="list" rows="15" 
+														onRowMouseOver="this.style.backgroundColor='#F1F1F1'" 
+														onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+														rowClasses="white,grey">
+										<rich:column style="width: 50px;text-align:center;">
+											<f:facet name="header">
+											<h:outputText styleClass="bold" value="Código Fabricante"/>
+											</f:facet>
+											<h:outputText value="#{list.tagTypeCodeU}" styleClass="normal"/>   
+										</rich:column>				
+										<rich:column style="width: 50px;text-align:center;">
+											<f:facet name="header">
+											<h:outputText styleClass="bold" value="Fabricante"/>
+											</f:facet>
+											<h:outputText value="#{list.tagTypeNameU}" styleClass="normal"/>   
+										</rich:column>
+										<rich:column style="width: 50px;text-align:center;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Tamaño ID Tag"/>
+											</f:facet>
+											<h:outputText value="#{list.serialLengthU}" styleClass="normal"/>
+										</rich:column>
+										<rich:column width="50px" style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value=""/>
+											</f:facet>
+											<h:commandLink value="Editar" action="#{enterFactory.panelEdit}" styleClass="bold">
+												<f:setPropertyActionListener value="#{list.tagTypeIdU}" target="#{enterFactory.tagTypeId}"/>
+											</h:commandLink>  
+										</rich:column>
+										<rich:column width="50px" style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value=""/>
+											</f:facet>
+											<h:commandLink value="Eliminar" action="#{enterFactory.showConfirmRemove}"        styleClass="bold">
+												<f:setPropertyActionListener value="#{list.tagTypeIdU}" target="#{enterFactory.tagTypeId}"/>
+												<f:setPropertyActionListener value="#{list.tagTypeNameU}" target="#{enterFactory.tagTypeName}"/>
+											</h:commandLink> 
+										</rich:column>
+									    </rich:dataTable>
+										<rich:datascroller align="center" for="dtable" />
+									</div>	
+								</rich:panel>
+							</a4j:outputPanel>	
+						</rich:panel>					
+					</h:form>
+					<rich:spacer height="20"/>	
+					
+	
+					<rich:modalPanel id="panelEdit" width="370" height="195" 
+					showWhenRendered="#{enterFactory.showEdit}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Editar Fabricante" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+                            <h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterFactory.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:form id="Formulario">
+							<rich:panel style="width:350px;">
+							<table width="100%">
+							<tr>
+								<td width="40%">
+									<h:outputText value="Código Fabricante:" styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</td>
+								<td width="60%">
+									<h:inputText id="tagTypeCode" value="#{enterFactory.tagTypeCode}" 
+										disabled="true" style="width:155px; text-transform: uppercase"
+										onkeypress="return numOnly(event)" maxlength="2"/>
+								</td>
+							</tr>
+							<tr>
+								<td width="40%">
+									<h:outputText value="Fabricante:" styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</td>
+								<td width="60%">
+									<h:inputText id="tagTypeName" value="#{enterFactory.tagTypeName}" 
+										style="width:155px; text-transform: uppercase" 
+										onkeypress="return alphaNumSpaceOnly2(event)" maxlength="50"/>
+								</td> 
+							</tr>
+							<tr>
+								<td width="40%">
+									<h:outputText value="Tamaño ID Tag:" styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</td>
+								<td width="60%">							
+										<h:inputText id="serialLength" value="#{enterFactory.serialLength}" 
+										onkeypress="return numOnly(event)" style="width:155px;"  maxlength="2"/> 
+								</td>
+							</tr>
+							<tr>
+							<td width="10%">
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							</td>
+							<td width="10%">
+								<h:commandButton value="Guardar"  action="#{enterFactory.editFactory}"/>
+								<rich:spacer width="20" />	
+								<h:commandButton value="Cancelar" action="#{enterFactory.hideModal2}"/>
+							 </td>
+						   </tr>
+							</table>
+							</rich:panel>
+						</h:form>
+						<br />
+					</rich:modalPanel>	
+					
+					
+					<rich:modalPanel id="panel" width="370" height="195" 
+					showWhenRendered="#{enterFactory.showInsert}" onresize="return false;" moveable="false">  
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Nuevo Fabricante" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterFactory.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="insertFactory">
+							<ui:include src="insertFactory.jspx"/>
+						</f:subview>
+						<br/>
+					</rich:modalPanel>	
+						
+					
+					<rich:modalPanel id="panelModal" width="350" height="115" 
+					showWhenRendered="#{enterFactory.showModalResponse}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Fabricantes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterFactory.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{enterFactory.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{enterFactory.hideModal2}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+						
+									
+					<rich:modalPanel id="panelModalEdit" width="350" height="115" 
+					showWhenRendered="#{enterFactory.showModalValidateE}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Fabricantes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterFactory.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{enterFactory.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{enterFactory.hideModal}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="confirmacionDelete" width="350" height="115" 
+					showWhenRendered="#{enterFactory.showModalDelete}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterFactory.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{enterFactory.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form> 
+							<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+								<h:panelGroup><div class="span-1"></div></h:panelGroup> 
+								<h:panelGroup><h:commandButton value="Aceptar" action="#{enterFactory.delete}"/></h:panelGroup>   	
+								<h:panelGroup><h:commandButton value="Cancelar" action="#{enterFactory.hideModal2}"  /></h:panelGroup>	      	 
+							</h:panelGrid>
+				    	</h:form>
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="panelV" width="350" height="115" 
+					showWhenRendered="#{enterFactory.showModalValidateI}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Fabricantes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup> 
+								<a4j:form>
+									<h:commandButton action="#{enterFactory.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{enterFactory.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{enterFactory.hideModal3}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>	
+					
+					<rich:modalPanel id="confirmacion" width="350" height="115" 
+					showWhenRendered="#{enterFactory.showConfirmationE}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterFactory.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{enterFactory.corfirmMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+					     	<h:panelGroup><h:commandButton value="Aceptar" action="#{enterFactory.saveFactory}" /></h:panelGroup>   	
+					     	<h:panelGroup><h:commandButton value="Cancelar" action="#{enterFactory.hideModal2}"  /></h:panelGroup>	     	
+					    </h:panelGrid>
+						</h:form>
+						<br />
+					</rich:modalPanel>	
+					
+					
+					<rich:modalPanel id="confirmacionInsert" width="350" height="115" 
+					showWhenRendered="#{enterFactory.showConfirmationI}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterFactory.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{enterFactory.corfirmMessage}" styleClass="normal"/>
+						<h:form>
+						<h:panelGrid styleClass="tableBO" columns="3" style="width:200px;margin:auto;padding-right:53px;">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+					     	<h:panelGroup><h:commandButton value="Aceptar" action="#{enterFactory.insertFactory}" /></h:panelGroup>   	
+					     	<h:panelGroup><h:commandButton value="Cancelar" action="#{enterFactory.hideModal2}"  /></h:panelGroup>	    
+						</h:panelGrid>
+						</h:form>
+					</rich:modalPanel>	
+					
+
+				    </div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

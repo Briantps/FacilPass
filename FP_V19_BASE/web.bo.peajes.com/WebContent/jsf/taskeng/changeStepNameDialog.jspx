@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 
+  Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<rich:modalPanel id="#{dlgId}" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="#{title}" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<c:if test="#{actionClosePanel != null}">
+						<a4j:commandLink actionListener="#{userBean[actionClosePanel]}"
+							onclick="#{rich:component(dlgId)}.hide()">
+							<h:graphicImage value="/img/close.png" id="#{dlgId}_hidelink" />
+						</a4j:commandLink>
+					</c:if>
+					<c:if test="#{actionClosePanel == null}">
+						<a4j:commandLink onclick="#{rich:component(dlgId)}.hide()">
+							<h:graphicImage value="/img/close.png" id="#{dlgId}_hidelink" />
+						</a4j:commandLink>
+					</c:if>
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<a4j:form id="form#{dlgId}">
+			<rich:messages style="color:red;" />
+			
+			<h:panelGrid columns="2">
+				<h:outputText value="Nombre:" />
+				<h:inputText id="stepName" value="#{stepName}" style="margin: 10px 0 10px 0"/>
+
+				<h:outputText value="Accion:" />
+				<rich:comboBox id="newStepAction" value="#{stepActionName}"
+					defaultLabel="Seleccione una accion"
+					converter="RowIdToNameConverter"
+					style="margin: 10px 0 10px 0">
+					<f:selectItems value="#{availableActions}" />
+				</rich:comboBox>
+			</h:panelGrid>
+			<rich:spacer height="10" />
+			
+			<a4j:commandButton action="#{userBean[actionForButtonLabel]}"
+				onclick="#{rich:component(dlgId)}.hide()"
+				value="#{btnLabel}"
+				reRender="#{reRender}"
+				style="margin: 10px 0 10px 0"/>
+		</a4j:form>
+	</rich:modalPanel>
+</ui:component>

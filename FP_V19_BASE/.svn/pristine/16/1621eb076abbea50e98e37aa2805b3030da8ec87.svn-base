@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<title>Reporte Parámetros de Seguridad</title>
+</head>
+<body >
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="../menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	
+	<rich:spacer height="5"/>
+	<rich:panel>
+		<f:facet name="header">
+			<h:outputText value="Parámetros de Seguridad" styleClass="bold"/>
+		</f:facet>
+
+		<h:form id="form" target="_blank">
+			<rich:panel>
+				<h:panelGrid style="width: 200px; margin: auto; padding:10px;" columns="2">
+					<h:commandLink id="clinkpdf" target="_blank" value="" action="#{securityParametersReportBean.execute}">
+						<img title="Generar" src="/web.bo.peajes.com/img/generar_btn.gif" 
+						style="cursor: pointer; border: 0px solid blue;" />
+						<f:setPropertyActionListener target="#{securityParametersReportBean.exportOption}" value="PDF"/>
+	           		</h:commandLink>
+	           		<h:commandLink id="clinkExcel" target="_blank" value="" action="#{securityParametersReportBean.execute}">
+						<img title="Generar" src="/web.bo.peajes.com/img/generar_xls_btn.gif" style="cursor: pointer; border: 0px solid blue;" />
+						<f:setPropertyActionListener target="#{securityParametersReportBean.exportOption}" value="EXCEL"/>
+							 </h:commandLink>
+				</h:panelGrid>					
+			</rich:panel>
+		</h:form>
+	</rich:panel>		
+	<rich:spacer height="20"/>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="../content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

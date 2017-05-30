@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head/>
+<body>
+<div class="container">
+<f:view>
+<div>		
+		<h:form>
+			<rich:panel>
+				<f:facet name="header"><h:outputText value="Seleccione el Mensaje" styleClass="bold"/> </f:facet>
+				<rich:dataTable var="item" value="#{emailMBean.mssgs}" border="1" cellpadding="5">
+					<f:facet name="header">
+		                <rich:columnGroup>
+		                    <rich:column><h:outputText value="Id Mensaje" styleClass="bold"/></rich:column>
+		                    <rich:column><h:outputText value="Nombre Mensaje" styleClass="bold"/></rich:column>
+		                    <rich:column><h:outputText value="Contenido Mensaje" styleClass="bold"/></rich:column>
+							<rich:column><h:outputText value="Seleccionar Mensaje" styleClass="bold"/></rich:column>
+						</rich:columnGroup>
+		            </f:facet>
+	
+					<rich:column><h:outputText value="#{item.id}" styleClass="normal"/></rich:column>
+		            <rich:column><h:outputText value="#{item.name}" styleClass="normal"/></rich:column>
+		            <rich:column><h:outputText value="#{item.content}" styleClass="normal"/></rich:column>
+		            <rich:column style="text-align: center;">
+		            	<h:commandLink value="Selecionar" action="#{emailMBean.successSelectMsg}" styleClass="normal">
+							<f:setPropertyActionListener target="#{emailMBean.def.selectedMsg}" value="#{item.id}"/>
+						</h:commandLink>
+		            </rich:column>
+				</rich:dataTable>
+			</rich:panel>
+		</h:form>
+		<rich:spacer height="20" />
+</div>
+</f:view>
+</div>
+</body>
+</html>

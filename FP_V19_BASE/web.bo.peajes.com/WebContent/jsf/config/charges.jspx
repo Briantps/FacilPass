@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Registro de Cargos</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />  
+			  		<rich:spacer height="5"/>
+			  		
+			 		<h:form id="chargesform">
+			  			<rich:panel styleClass="richPanel">
+			   				<f:facet name="header">
+								<h:outputText value="Registro de Nuevo Cargo" styleClass="bold"/>
+			   				</f:facet>
+			   				
+			   				<h:panelGrid styleClass="tableBO" columns="2" style="size 300px;">
+			     				<h:panelGroup>
+			     					<h:outputText value="Nombre de Cargo: " styleClass="bold" />
+			     					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			     				</h:panelGroup>
+			     				<h:inputText value="#{chargesBean.nameCharge1}" onkeypress="return alphaSpaceOnly(event)" maxlength="50" onkeyup="onlyText(this)" >							
+				 				</h:inputText>				 				
+				 				<h:panelGroup>
+				 					<h:outputText value="El Cargo Tiene Valor: " styleClass="bold"/>
+				 					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				 				</h:panelGroup>
+				 				<h:selectOneMenu value="#{chargesBean.textTypeValue}" style="width: 175px;" styleClass="normal">
+									<f:selectItems value="#{chargesBean.typeValues}"/>
+									<a4j:support event="onchange" action="#{chargesBean.changeTypeValue}" reRender="bv"/>
+				 				</h:selectOneMenu>
+								<h:outputText value="Valor: " styleClass="bold"/>
+			     				<h:inputText id="bv" value="#{chargesBean.valueChargeTxt}" disabled="#{!chargesBean.typeValue}"
+                                  onkeypress="return solonumeros(event)" maxlength="15" onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+				 				</h:inputText>				 				
+				 				<h:panelGroup>
+				 					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				 				</h:panelGroup>
+				 				<h:commandButton value="Guardar" action="#{chargesBean.msgSave}" style="width: 80px">
+				       				<a4j:support event="oncomplete" reRender="panelData"/>
+								</h:commandButton>
+			   				</h:panelGrid> 
+			   			</rich:panel>
+			  		</h:form>
+			  		<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{chargesBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Cargos" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{chargesBean.hide}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{chargesBean.msgModal}" styleClass="normal"/>
+						<h:form>
+						    <rich:spacer height="10"/>
+							<div align="center">
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{chargesBean.apply}" style="width: 80px"/>
+					     		</h:panelGroup> 
+					     		<rich:spacer width="20" />  	
+					     		<h:panelGroup>
+					     			<h:commandButton value="Cancelar" action="#{chargesBean.hide}" style="width: 80px"/>
+					     		</h:panelGroup>	     	
+				    		</div>
+				    	</h:form>
+					</rich:modalPanel>				
+			  		<rich:spacer height="5"/>	
+					<rich:panel style="width:600 px;margin:auto;" id="panelData">
+						<f:facet name="header">
+							<h:outputText value="Listado de Cargos Existentes" styleClass="bold"/>
+						</f:facet>
+						<h:form>
+							<div id="scroll_horizontal">
+								<rich:dataTable value="#{chargesBean.listCargos}" var="item" id="lista" rows="15" width="800px">
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Nombre de Cargo" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.chargeDescription}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="El Valor es" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.chargeTypeValueText}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Valor" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.chargeValue}" styleClass="normal">
+											<f:convertNumber currencySymbol="$" groupingUsed="true" maxFractionDigits="0" type="currency" />
+										</h:outputText>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Editar" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink value=" Editar Cargo" action="#{chargesBean.panelEdit}" styleClass="normal">
+											<f:setPropertyActionListener target="#{chargesBean.chargeId}" value="#{item.chargeId}"/>
+										</h:commandLink>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Eliminar" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink value=" Eliminar Cargo" action="#{chargesBean.panelDelete}" styleClass="normal">
+											<f:setPropertyActionListener target="#{chargesBean.chargeId}" value="#{item.chargeId}"/>
+										</h:commandLink>
+									</rich:column>
+								</rich:dataTable>
+								<rich:datascroller align="center" for="lista" />
+							</div>
+						</h:form>
+					</rich:panel>				
+					<rich:modalPanel id="panelEdit" width="400" height="230" showWhenRendered="#{chargesBean.showEdit}" onresize="return false;" moveable="false">
+						<rich:panel style="width:600 px;margin:auto;">
+							<f:facet name="header">
+								<h:panelGroup>
+									<h:outputText value="Editar Cargo" styleClass="bold"/>
+								</h:panelGroup>
+							</f:facet>
+							<f:facet name="controls">
+								<h:panelGroup>
+									<a4j:form>
+										<h:commandButton action="#{chargesBean.hideEdit}" image="/img/close.png" />
+									</a4j:form>
+								</h:panelGroup>
+							</f:facet>		  		  
+					  		<h:form>
+					   			<rich:spacer height="5"/>					   			
+					    		<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+						     		<h:panelGroup>
+						     			<h:outputText value="Nombre de Cargo: " styleClass="bold"/>
+						     			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						     		</h:panelGroup>
+						     		<h:inputText value="#{chargesBean.nameCharge}" onkeypress="return alphaSpaceOnly(event)" maxlength="50" onkeyup="onlyText(this)">							
+							 		</h:inputText>
+							 		<h:panelGroup>
+							 			<h:outputText value="El Cargo Tiene Valor: " styleClass="bold"/>
+							 			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							 		</h:panelGroup>
+							 		<h:selectOneMenu value="#{chargesBean.textTypeValue}" style="width: 175px;" styleClass="normal">
+										<f:selectItems value="#{chargesBean.typeValues}"/>
+										<a4j:support event="onchange" action="#{chargesBean.changeTypeValue}" reRender="bvedit"/>
+							 		</h:selectOneMenu>
+									<h:outputText value="Valor: " styleClass="bold"/>
+						     		<h:inputText id="bvedit" value="#{chargesBean.valueChargeTxt}" disabled="#{!chargesBean.typeValue}"
+                                       onkeypress="return solonumeros(event)" maxlength="15" onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+                                          
+							 		</h:inputText>				  
+						   		</h:panelGrid>
+						   		<div align="center">
+						   			<h:commandButton value="Guardar" action="#{chargesBean.msgSaveEdit}" style="width: 80px">
+							       		<a4j:support event="oncomplete" reRender="confirmacionEdit,panel"/>
+									</h:commandButton>
+									<rich:spacer width="20" />
+									<h:commandButton value="Cancelar" action="#{chargesBean.hideEdit}" style="width: 80px">
+							       		<a4j:support event="oncomplete" reRender="confirmacionEdit,panel"/>
+									</h:commandButton>
+						   		</div>
+					  		</h:form>
+						</rich:panel>
+					</rich:modalPanel>				
+					<rich:modalPanel id="confirmacionEdit" width="350" height="115" showWhenRendered="#{chargesBean.showModalEdit}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Editar Cargo" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{chargesBean.hideEdit}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{chargesBean.msgModal}" styleClass="normal"/>
+						<h:form>
+						<rich:spacer height="10"/>
+							<div align="center">
+				     			<h:panelGroup>
+				     				<h:commandButton value="Aceptar" action="#{chargesBean.edit}" style="width: 80px">
+				     				  <a4j:support event="oncomplete" reRender="panelData"/>
+				     				</h:commandButton>
+				     			</h:panelGroup>
+				     			<rich:spacer width="20" />   	
+				     			<h:panelGroup>
+				     				<h:commandButton value="Cancelar" action="#{chargesBean.hideEdit}" style="width: 80px"/>
+				     			</h:panelGroup>	     	
+				    		</div>
+				    	</h:form>
+					</rich:modalPanel>				
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{chargesBean.showError}" onresize="return false;" moveable="false"
+					zindex="5000">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Registro de Cargos" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{chargesBean.hideError}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{chargesBean.msgError}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{chargesBean.hideError}" style="width: 80px"/>
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </h:form>	
+						<br />
+					</rich:modalPanel>
+					<rich:modalPanel id="confirmacionDelete" width="350" height="115" showWhenRendered="#{chargesBean.showModalDelete}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Eliminación de Cargo" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{chargesBean.hideDelete}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{chargesBean.msgModal}" styleClass="normal"/>
+						<h:form>
+						<rich:spacer height="10"/>
+							<div align="center">
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{chargesBean.delete}" style="width: 80px"/>
+					     		</h:panelGroup> 
+					     		<rich:spacer width="20" />  	
+					     		<h:panelGroup>
+					     			<h:commandButton value="Cancelar" action="#{chargesBean.hideDelete}" style="width: 80px"/>
+					     		</h:panelGroup>	     	
+				    		</div>	
+				    	</h:form>
+					</rich:modalPanel>
+			   	</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

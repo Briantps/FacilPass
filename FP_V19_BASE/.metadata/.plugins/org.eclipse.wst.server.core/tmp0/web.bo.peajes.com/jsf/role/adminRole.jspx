@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<title>Administración de Roles</title>
+	</head>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">		  		
+					<rich:spacer height="5"/>	
+					<h:form>
+						<rich:panel style="width:700px;margin:auto;">
+							<f:facet name="header">
+								<h:outputText value="Administración de Roles" styleClass="bold"/>
+							</f:facet>
+							<rich:dataTable id="listRole" rows="15" var="item" value="#{adminRoleMBean.listRoles}" style="width:300px;margin:auto;">
+								<h:column>
+									<f:facet name="header">
+										<h:outputText value="Rol" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.roleName}" styleClass="normal"/>
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputText value="Tipo Rol" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{item.tbTypeRole.typeRoleDescription}" styleClass="normal"/>
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputText value="Modificar" styleClass="bold"/>
+									</f:facet>
+									<h:commandLink value="Modificar" action="#{adminRoleMBean.changeRole}" styleClass="normal">
+										<f:setPropertyActionListener target="#{adminRoleMBean.roleId}" value="#{item.roleId}"/>
+										<f:setPropertyActionListener target="#{adminRoleMBean.typeRoleId}" value="#{item.tbTypeRole.typeRoleId}"/>
+									</h:commandLink>
+								</h:column>
+								<f:facet name="footer">
+					                <rich:datascroller id="datascroller" for="listRole" />
+					            </f:facet>
+							</rich:dataTable>
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>				
+					<rich:modalPanel id="panel" width="375" height="210" showWhenRendered="#{adminRoleMBean.update}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Modificar Rol" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminRoleMBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="ModRol">
+							<ui:include src="UpdateRole.jspx"/>
+						</f:subview>
+					</rich:modalPanel>					
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Asignar Recursos Programadamente</title>
+</head>
+<script type="text/javascript">
+	function getFocus(numero) {
+		if (numero == 1){
+   			setTimeout(function(){document.getElementById("formPrincipal:balanceAcount").focus();},1000);
+		}
+	}
+</script>
+<body onload="getFocus(#{electronicRechargeBean.numFocus})">
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="/jsf/content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="/jsf/menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+
+			<div class="bkContents span-18 prepend-1">
+				<rich:spacer height="5" />
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				
+				<h:form id="formPrincipal">
+					<rich:panel styleClass="richPanel">
+						<f:facet name="header">
+							<h:outputText value="Programación Automática de Recursos"
+								styleClass="bold" />
+						</f:facet>
+
+						<h:panelGrid columns="2" columnClasses="firstColumn,secondColumn">  <!--  RABF - Aca inicia mi hpanelGrid de dos columnas para dejar a la derecha el mensaje de ayuda-->
+
+							<h:panelGrid columns="1">  <!-- RABF - Aca inicia mi hpanelGrid de una columna para dejar todo a la izquierda-->
+
+								<h:panelGroup id="pgParam" rendered="#{electronicRechargeBean.prepaidMethod}">
+									<h:outputLabel value="#{electronicRechargeBean.paramMsg}" styleClass="bold" />
+								</h:panelGroup>
+						
+								<h:panelGrid columns="2" id="campos" >
+									<!-- Campo cuenta FacilPass -->
+									<h:panelGroup>
+										<h:outputLabel value="#{msg.CtaFP}: " styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<!--  RABF  agregue la region -->
+									<a4j:region id="regCliAcc">
+										<h:selectOneMenu id="types1"
+											value="#{electronicRechargeBean.idClientAccount}"
+											style="width: 175px;">
+											<f:selectItems value="#{electronicRechargeBean.clientAccounts}"/>
+											<a4j:support event="onchange"
+												action="#{electronicRechargeBean.modalityAccount}"
+												reRender="formPrincipal,panel,pgParam" oncomplete="#{rich:component('wait')}.hide()"/>
+										</h:selectOneMenu>
+										<!--  RABF  -->
+										<a4j:status onstart="#{rich:component('wait')}.show()"
+												onstop="#{rich:component('wait')}.hide()"
+												for="regCliAcc">
+										</a4j:status>
+									</a4j:region>
+									<!-- Campo tipo de programacion -->	
+									<h:panelGroup>
+										<h:outputText value="Tipo Programación" styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:selectOneMenu id="typeProgramming"
+										value="#{electronicRechargeBean.typeProgrammingSelect}" style="width: 175px;">
+										<f:selectItems value="#{electronicRechargeBean.typeProgramming}" />
+										<rich:toolTip event="onmouseover"
+														style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+														horizontalOffset="40" followMouse="false"
+														direction="top-right" showDelay="250" styleClass="normal"
+														value="#{electronicRechargeBean.typeProgrammingHelpTooltip}" for="typeProgramming"/>
+										<a4j:support event="onchange"
+											action="#{electronicRechargeBean.frequencySelected}"
+											reRender="formPrincipal" />
+									</h:selectOneMenu>
+									
+									<!-- Campos de frecuencia -->
+									<h:panelGroup rendered="#{electronicRechargeBean.typeFrequency}">
+										<h:outputText value="#{msg.FrecVrRec}: " styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:selectOneMenu id="typeFrequency" rendered="#{electronicRechargeBean.typeFrequency}"
+										value="#{electronicRechargeBean.frecuencySelect}" style="width: 175px;">
+										<f:selectItems value="#{electronicRechargeBean.frecuecyList}" />
+										<rich:toolTip event="onmouseover"
+														style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+														horizontalOffset="40" followMouse="false"
+														direction="top-right" showDelay="250" styleClass="normal"
+														value="#{electronicRechargeBean.frequncyHelpTooltip}" for="typeFrequency"/>
+									</h:selectOneMenu>
+									<!-- Valor a recargar -->
+									<h:panelGroup rendered="#{electronicRechargeBean.typeFrequency}">
+										<h:outputLabel value="#{electronicRechargeBean.msgBalValue}" styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:inputText id="valueRecharge" rendered="#{electronicRechargeBean.typeFrequency}"
+										value="#{electronicRechargeBean.valueRechText}"
+										style="width:173px" onkeypress="return solonumeros(event)"
+										maxlength="15"
+										onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+										<rich:toolTip event="onclick"
+														style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+														horizontalOffset="40" followMouse="false"
+														direction="top-right" showDelay="250" styleClass="normal"
+														value="#{electronicRechargeBean.valueFieldToolTip}" for="valueRecharge"/>
+									</h:inputText>
+									<!-- Fecha inicial -->
+									<h:panelGroup rendered="#{electronicRechargeBean.typeFrequency}">
+										<h:outputText value="#{msg.FechaI}: " styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:panelGroup id="pCalendar" rendered="#{electronicRechargeBean.typeFrequency}">
+										<rich:calendar id="initDate" rendered="#{electronicRechargeBean.typeFrequency}"
+											value="#{electronicRechargeBean.dateRecharge}" cellWidth="26px"
+											cellHeight="22px" style="width:155px" datePattern="dd/MM/yyyy"
+											popup="true" styleClass="normal">
+										</rich:calendar>
+										<rich:toolTip event="onmouseover"
+														style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+														horizontalOffset="40" followMouse="false"
+														direction="top-right" showDelay="250" styleClass="normal"
+														value="#{electronicRechargeBean.initialDateTooltip}" for="pCalendar"/>
+									</h:panelGroup>
+																
+									<!-- Campos Saldo Mínimo -->
+									<h:panelGroup rendered="#{electronicRechargeBean.typeMinimumBalance}">
+										<h:outputLabel value="#{msg.SalFaPass}: " styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:inputText id="balanceAcount" rendered="#{electronicRechargeBean.typeMinimumBalance}"
+										value="#{electronicRechargeBean.balanceAcount}"
+										style="width:173px" onkeypress="return solonumeros(event)"
+										maxlength="15"
+										onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+										<rich:toolTip event="onclick"
+															style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+															horizontalOffset="40" followMouse="false"
+															direction="top-right" showDelay="500" styleClass="normal"
+															value="#{electronicRechargeBean.minimumBalanceHelpTooltip}" for="balanceAcount"/>
+										<a4j:support event="onblur"
+										action="#{electronicRechargeBean.onBalanceBlur}"
+										reRender="formPrincipal,panel" />
+									</h:inputText>
+									<!-- Campos Valor a recargar -->
+									<h:panelGroup rendered="#{electronicRechargeBean.typeMinimumBalance}">
+										<h:outputLabel value="#{electronicRechargeBean.msgBalValue}" styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:inputText id="assingRecharge" rendered="#{electronicRechargeBean.typeMinimumBalance}"
+										value="#{electronicRechargeBean.valueRechText}"
+										style="width:173px" onkeypress="return solonumeros(event)"
+										maxlength="15"
+										onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+										<rich:toolTip event="onclick"
+															style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+															horizontalOffset="40" followMouse="false"
+															direction="top-right" showDelay="500" styleClass="normal"
+															value="#{electronicRechargeBean.valueFieldToolTip}" for="assingRecharge"/>
+									</h:inputText>
+									<!-- Tipo de persona -->
+									<h:panelGroup rendered="#{electronicRechargeBean.personTypeVisible}">
+										<h:outputLabel value="#{msg.TipPersona}: " styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:panelGroup
+										rendered="#{electronicRechargeBean.personTypeVisible}">
+										<div align="center">
+											<h:selectOneRadio styleClass="bold"
+												rendered="#{electronicRechargeBean.personTypeVisible}"
+												value="#{electronicRechargeBean.respRadioPerson}"
+												immediate="true" id="s1">
+												<f:selectItems value="#{electronicRechargeBean.personList}"/>
+											</h:selectOneRadio>
+										</div>
+									</h:panelGroup>
+		
+									<!-- Seleccione la entidad -->
+									<h:panelGroup rendered="#{electronicRechargeBean.entityVisible}">
+										<h:outputLabel value="#{msg.RecAutEnt}: " styleClass="bold" />
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField" />
+									</h:panelGroup>
+									<h:panelGroup rendered="#{electronicRechargeBean.entityVisible}">
+										<div align="center">
+											<h:selectOneRadio styleClass="bold"
+												rendered="#{electronicRechargeBean.entityVisible}"
+												value="#{electronicRechargeBean.avalId}"
+												immediate="true" id="ent1">
+												<h:panelGrid columns="#{electronicRechargeBean.graphicCount}">
+													<h:graphicImage value="#{electronicRechargeBean.graphic1Path}" width="45" height="45" rendered="#{electronicRechargeBean.graphic1Enabled}"/>
+													<h:graphicImage value="#{electronicRechargeBean.graphic2Path}" width="45" height="45" rendered="#{electronicRechargeBean.graphic2Enabled}"/>
+													<h:graphicImage value="#{electronicRechargeBean.graphic3Path}" width="45" height="45" rendered="#{electronicRechargeBean.graphic3Enabled}"/>
+													<h:graphicImage value="#{electronicRechargeBean.graphic4Path}" width="45" height="45" rendered="#{electronicRechargeBean.graphic4Enabled}"/>
+												</h:panelGrid>
+		
+												<f:selectItems value="#{electronicRechargeBean.entityList}"/>
+											</h:selectOneRadio>
+		
+										</div>
+									</h:panelGroup>
+									<!-- Boton y obligatorios -->
+									<h:panelGroup>
+										<h:outputLabel value="#{msg.Asterisk}"
+											styleClass="asteriskMandatoryField" />
+										<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput" />
+									</h:panelGroup>						
+									
+									<h:commandButton value="#{msg.Crear}" rendered="#{electronicRechargeBean.typeMinimumBalance || electronicRechargeBean.typeFrequency}"
+										action="#{electronicRechargeBean.addElectronicRecharge}"
+										styleClass="normal" style="width: 80px">
+										<a4j:support event="oncomplete" reRender="panelData,confirmacion" />
+									</h:commandButton>
+									
+								</h:panelGrid>
+						
+						
+							</h:panelGrid>  <!-- RABF - Aca se acaba mi hpanelGrid -->
+
+						<!-- CAMPO AYUDA VARIABLE -->
+						<h:panelGrid> 
+							<h:outputText value="#{electronicRechargeBean.messageHTML}" escape="false" />
+						</h:panelGrid>
+						
+						</h:panelGrid>  <!-- RABF - Aca se acaba el hpanelGrid para dejar la ayuda a la derecha-->
+						
+
+						<rich:spacer height="10" />
+
+						<a4j:outputPanel id="panelData" layout="inline">
+							<rich:panel id="pd" style="clear: both;">
+								<f:facet name="header">
+									<h:outputText styleClass="bold"
+										value="Lista Recargas / Asignaciones de recursos programadas" />
+								</f:facet>
+
+								<rich:spacer height="10" />
+								<div id="scroll_horizontal">
+									<rich:dataTable value="#{electronicRechargeBean.automaticRechargeList}" var="list" id="lista" rows="15" width="800px">
+										<rich:column width="150px" style="text-align:center;">
+											<f:facet name="header"><h:outputText value="Fecha Creación"/></f:facet>
+											<h:outputText value="#{list.automaticRechargeDate}" styleClass="normal"/>
+										</rich:column>
+										<rich:column width="150px" style="text-align:center;">
+											<f:facet name="header"><h:outputText value="Tipo Programación"/></f:facet>
+											<h:outputText value="#{list.programmingType} " styleClass="normal">
+											  <f:converter converterId="programmingConverter"/>
+											</h:outputText> 
+										</rich:column>	
+										<rich:column width="150px" style="text-align:center;">
+											<f:facet name="header"><h:outputText value="Cuenta FacilPass"/></f:facet>
+											<h:outputText value="#{list.accountId}" styleClass="normal"/>
+										</rich:column>
+										
+										<rich:column width="150px" style="text-align:center;">
+											<f:facet name="header"><h:outputText value="Valor a Recargar/Asignar"/></f:facet>
+											<h:outputText value="#{list.automaticRechargeValue}" styleClass="normal">
+											 <f:convertNumber currencySymbol="$" groupingUsed="true" maxFractionDigits="0" type="currency" />
+											</h:outputText>
+										</rich:column>
+										
+										<rich:column width="150px" style="text-align:center;">
+											<f:facet name="header"><h:outputText value="Saldo Mínimo"/></f:facet>
+											<h:outputText value="#{list.minimumBalance}" styleClass="normal"> <!-- HEY MODIFY THIS AFTER TEST THE FORM -->
+											 <f:convertNumber currencySymbol="$" groupingUsed="true" maxFractionDigits="0" type="currency" />
+											</h:outputText>
+										</rich:column>
+										
+										<rich:column width="150px" style="text-align:center;">
+											<f:facet name="header"><h:outputText value="Frecuencia"/></f:facet>
+											<h:outputText value="#{list.frequencyDescript}" styleClass="normal"/>
+										</rich:column>
+										
+										<rich:column width="150px" style="text-align:center;">
+											<f:facet name="header"><h:outputText value="Entidad"/></f:facet>
+											<h:outputText value="#{list.bankName}" styleClass="normal"/>
+										</rich:column>
+										
+										<rich:column width="150px" style="text-align:center;">
+											<f:facet name="header"><h:outputText value="Producto Bancario"/></f:facet>
+											<h:outputText value="#{list.bankAccountNumber}" styleClass="normal"/>
+										</rich:column>
+										
+										<rich:column id="columnDelete" width="100px" style="text-align:center;">
+											<f:facet name="header"><h:outputText styleClass="bold" value="Desactivar"/></f:facet>
+											<h:commandLink id="deleteLink" value="Eliminar" action="#{electronicRechargeBean.showConfirmRemovePage}" styleClass="bold" >
+												<f:setPropertyActionListener value="#{list.automaticRechargeId}" target="#{electronicRechargeBean.automaticRechargeId}"/>
+												
+											</h:commandLink>
+											<rich:toolTip event="onmouseover" 
+								  						style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+								  						horizontalOffset="40" followMouse="false"
+								  						direction="top-right" showDelay="500" styleClass="normal"
+								  						value="#{electronicRechargeBean.linkDeletetooltip}" for="columnDelete"/>
+									    </rich:column>
+									    
+									</rich:dataTable>
+									<rich:datascroller align="center" for="lista" />
+								</div>
+							</rich:panel>
+						</a4j:outputPanel>
+					</rich:panel>
+				</h:form>
+				<rich:spacer height="20" />
+
+
+				<rich:modalPanel id="panel" width="350" height="#{electronicRechargeBean.adviceHeight}"
+					showWhenRendered="#{electronicRechargeBean.showModal}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Asignar Recursos Programadamente"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{electronicRechargeBean.hideModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{electronicRechargeBean.modalMessage}"
+						styleClass="normal" />
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:form reRender="formPrincipal,typeProgramming">
+									<h:commandButton value="Aceptar" action="#{electronicRechargeBean.hideModal}" style="width: 80px"/>
+								</a4j:form>
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:form>
+					<br />
+				</rich:modalPanel>
+
+
+				<rich:modalPanel id="confirmacion" width="350" height="115"
+					showWhenRendered="#{electronicRechargeBean.showConfirmation}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton action="#{electronicRechargeBean.hideModal}"
+									image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{electronicRechargeBean.modalMessage}"
+						styleClass="normal" />
+					<a4j:form id="form">
+						<h:message for="send" />
+						<rich:spacer height="10" />
+						<div align="center">
+							<a4j:region id="editando">
+								<a4j:commandButton id="send" value="Aceptar"
+									action="#{electronicRechargeBean.saveElectronicRecharge}"
+									oncomplete="#{rich:component('wait')}.hide()" style="width: 80px">
+									<a4j:support event="onclick"
+										onsubmit="document.getElementById('form:send').disabled=true;document.getElementById('form:cancel').disabled=true" />
+									<a4j:support event="oncomplete" reRender="panel,panelData"
+										oncomplete="document.getElementById('form:send').disabled=false;document.getElementById('form:cancel').disabled=false" />
+								</a4j:commandButton>
+								<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+							</a4j:region>
+							<rich:spacer width="20" />
+							<h:commandButton id="cancel" value="Cancelar" action="#{electronicRechargeBean.hideModal}" style="width: 80px"/>
+						</div>
+					</a4j:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="confirmacionEliminar" width="350" height="115" showWhenRendered="#{electronicRechargeBean.showConfirmationDelete}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{electronicRechargeBean.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{electronicRechargeBean.corfirmMessage}" styleClass="normal"/>
+					<a4j:form id="form1">
+					<h:message for="send"/>
+					<rich:spacer height="10"/>
+					  <div align="center">
+						<a4j:region id="editando">
+				     			<a4j:commandButton id="send" value="Aceptar" action="#{electronicRechargeBean.cancelElectronicRechargePage}" style="width: 80px">
+					                <a4j:support event="oncomplete" reRender="panelmDelete"/>					                					           
+				               </a4j:commandButton>
+				        </a4j:region>
+				     	<rich:spacer width="20"/> 
+				     		<h:commandButton value="Cancelar" action="#{electronicRechargeBean.hideModal}" style="width: 80px"/>
+				      </div>
+				    </a4j:form>
+				</rich:modalPanel>
+				
+				
+				<rich:modalPanel id="panelmDelete" width="350" height="115" showWhenRendered="#{electronicRechargeBean.showModalDelete}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Mensaje - Desactivar Recursos Programados" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{electronicRechargeBean.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{electronicRechargeBean.modalMessage}" styleClass="normal"/>
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+				     		<h:panelGroup>
+				     			<h:commandButton value="Aceptar" action="#{electronicRechargeBean.hideModal}" style="width: 80px">
+				     				<a4j:support event="oncomplete" reRender="panelData,confirmacion" />				     			
+								</h:commandButton>				     			
+				     		</h:panelGroup>	     	
+				    	</h:panelGrid>
+				    </h:form>	
+					<br />
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Por favor espere..." style="font-size:12px;" />
+					<h:form>
+						<h:commandLink disabled="true">
+							<h:graphicImage value="/img/procesando.gif" />
+						</h:commandLink>
+					</h:form>
+				</rich:modalPanel>
+
+
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

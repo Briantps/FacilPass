@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Registrar Dispositivo</title>
+	</head>	
+	<style>
+		.centerDiv{
+		  	position: absolute;
+			left: 40%;
+			top: 63%;
+			width: 320px;
+			height: 44px;
+		}
+	</style>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">			
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>					
+					<rich:panel styleClass="richPanel">
+						<f:facet name="header">
+							<h:outputText value="Registrar Dispositivo" styleClass="bold"/>
+						</f:facet>	
+						<a4j:form>
+							<rich:messages style="color: red;" styleClass="bold"/>
+							<rich:panel>
+								<h:panelGrid style="width: 600px;" 
+									styleClass="tableBO" columns="2">									
+									<h:panelGroup>									
+										<h:outputText value="Seleccione el Tipo Dispositivo: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+
+                                    <h:panelGroup>
+									  <h:selectOneMenu id="tyd" value="#{enterDevice.typeDevId}" styleClass="normal" style="width: 200px">
+										<f:selectItems value="#{enterDevice.devicesTypes}"/>
+										<a4j:support event="onchange" action="#{enterDevice.changeTypeDevice}"/>
+									</h:selectOneMenu>
+                                    </h:panelGroup>
+							
+									<h:panelGroup>
+										<h:outputText value="Seleccione el Fabricante: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+                                    
+                                    <h:panelGroup>
+									  <h:selectOneMenu id="pttagsel" value="#{enterDevice.tagTypeId}" style="width: 200px">
+										<f:selectItems value="#{enterDevice.typeList}"/>
+										<a4j:support event="onchange" action="#{enterDevice.changeTypeList}" 
+											reRender="tisc"/>
+									</h:selectOneMenu>		
+                                    </h:panelGroup>							
+								
+									<h:panelGroup>
+										<h:outputText value="Id Interno Dispositivo: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField" />
+									</h:panelGroup>	
+
+                                 
+                                    <h:panelGroup>							
+									  <h:inputText id="tisc" value="#{enterDevice.deviceCode}"
+										maxlength="#{enterDevice.deviceLength}" label="ID Dispositivo" onkeypress="return onlyHexa(event);"
+										onblur="return mayus(this)" style="width: 200px"/>
+								    </h:panelGroup>
+                                </h:panelGrid>
+
+                                <rich:separator height="4"  lineType="double"/>
+
+                                <h:panelGrid style="width: 660px;" 
+									styleClass="tableBO" columns="2">		
+									<h:panelGroup>
+										<h:outputText value="Seleccione la Empresa: " style="width: 190px" styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+
+                                    <h:panelGroup>
+                                    <rich:spacer width="20"/>
+									  <h:selectOneMenu value="#{enterDevice.companyTagId}" styleClass="normal" style="width: 200px">
+										<f:selectItems value="#{enterDevice.companyTagList}"/>
+                                        <a4j:support event="onchange" reRender="couriers,rollos" ajaxSingle="true"/>
+									  </h:selectOneMenu>
+									  <h:commandLink id="clickImageCompany" action="#{enterDevice.initAddCompanyTag}">
+											<h:graphicImage id="imagenAddCompany" url="/img/agregar.png" rendered="#{enterDevice.permAdd}" styleClass="buttonAgregar" />
+									  </h:commandLink>	
+                                    </h:panelGroup>
+                                    	
+									<h:panelGroup>
+										<h:outputText value="Courier: " styleClass="bold"  style="width: 200px"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+
+                                    <h:panelGroup>
+                                      <rich:spacer width="20"/>
+									  <h:selectOneMenu id="couriers" value="#{enterDevice.courierId}" styleClass="normal" style="width: 200px">
+										<f:selectItems value="#{enterDevice.courierList}"/>
+                                        <a4j:support event="onchange" reRender="rollos"  ajaxSingle="true"/>
+									  </h:selectOneMenu>
+									  <h:commandLink id="clickImageCourier" action="#{enterDevice.initAddCourier}">
+											<h:graphicImage id="imagenAddCourier" url="/img/agregar.png" rendered="#{enterDevice.permAdd}" styleClass="buttonAgregar"/>
+									  </h:commandLink>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup>
+										<h:outputText value="Rollo: " styleClass="bold" style="width: 200px"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+
+                                    <h:panelGroup>
+                                    <rich:spacer width="20"/>
+									  <h:selectOneMenu id="rollos" value="#{enterDevice.rolloId}" styleClass="normal" style="width: 200px">
+										<f:selectItems value="#{enterDevice.rollList}"/>
+									  </h:selectOneMenu>
+									  <h:commandLink id="clickImageRoll" action="#{enterDevice.initAddRoll}">
+											<h:graphicImage id="imagenAddRoll" url="/img/agregar.png" rendered="#{enterDevice.permAdd}" styleClass="buttonAgregar"/>
+									  </h:commandLink>
+                                    </h:panelGroup>
+	
+									<h:panelGroup>
+										<h:outputText value="Id Facial/serial: " styleClass="bold" style="width: 200px"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+
+                                    <h:panelGroup>
+                                    <rich:spacer width="20"/>
+									  <h:inputText value="#{enterDevice.facial}" maxlength="20" styleClass="normal"
+										label="Serial" onkeypress="return alphaNumOnly2(event)" style="width: 195px"/>
+									</h:panelGroup>
+
+								</h:panelGrid>
+                                <div align="center">
+                                 <rich:spacer width="10"/>
+                                  <h:commandButton value="Guardar" action="#{enterDevice.save}"  style="width: 80px"/>
+                                </div>
+
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>	
+							</rich:panel>
+						</a4j:form>	
+					</rich:panel>
+					<rich:spacer height="20"/>			
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{enterDevice.showModal}"  onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Registrar Dispositivo" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{enterDevice.modalMessage}" styleClass="normal"/>						
+						<h:form>
+						 <div class="centerDiv">	
+				    		<h:commandButton value="Aceptar" action="#{enterDevice.hideModal}" style="width: 80px"/>
+						 </div>  
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="addCompanyTag" width="435" showWhenRendered="#{enterDevice.showInsertCompanyTag}" 
+					 autosized = "true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Crear Empresa" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+							<h:form id="Insertar">
+								<rich:panel style="width:415px;">
+									<h:panelGrid styleClass="tableBO" columns="2" style="size:100%; padding:10px;">
+										<h:panelGroup>
+											<h:outputText value="Nombre Empresa: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+								        <h:inputText value="#{enterDevice.companyTagName}" maxlength="50" 
+								                     onkeypress="return CompanyCourierRoll(event)" style="width: 200px"/>
+										<h:panelGroup>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+										</h:panelGroup>
+										<h:panelGroup>
+											<a4j:commandButton value="Crear" action="#{enterDevice.validationAddCompanyTag}" style="width: 90px"
+											onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelModalValidateCo,confirmationCompanyTag"/>
+											<rich:spacer width="20"/>	
+											<h:commandButton value="Cancelar" action="#{enterDevice.hideModal}" style="width: 90px"/>
+										</h:panelGroup>
+									</h:panelGrid>
+								</rich:panel>
+							</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="addCourier" width="435" showWhenRendered="#{enterDevice.showInsertCourier}" 
+					 autosized = "true" onresize="return false;" moveable="false" style="resize: none; overflow: auto;word-wrap: break-word;">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Crear Courier" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterDevice.hideModal1}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+							<h:form id="addCourier1">
+								<rich:panel style="width:415px;">
+									<h:panelGrid styleClass="tableBO" columns="2" style="size:100%; padding:10px;">
+									 	<h:panelGroup>
+											<h:outputText value="Empresa: " styleClass="bold"/>
+										</h:panelGroup>
+								        <h:outputText value="#{enterDevice.companyTagName}"  style="width: 200px; display: inline-block;"/>
+							            <h:panelGroup>
+											<h:outputText value="Id Courier: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>				            
+									  	<h:inputText value="#{enterDevice.courierIdNew}" maxlength="15" 
+					                     onkeypress="return numOnly(event)" style="width: 195px"/>
+										<h:panelGroup>
+											<h:outputText value="Nombre Courier: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+								        <h:inputText value="#{enterDevice.courierName}" maxlength="50" 
+								                     onkeypress="return CompanyCourierRoll(event)" style="width: 195px; display: inline-block;"/>
+										<h:panelGroup>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+										</h:panelGroup>
+										<h:panelGroup>
+											<a4j:commandButton value="Crear" action="#{enterDevice.validationAddCourier}" style="width: 90px"
+											onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelModalValidateC,confirmationCourier"/>
+											<rich:spacer width="20"/>	
+											<h:commandButton value="Cancelar" action="#{enterDevice.hideModal1}" style="width: 90px"/>
+										</h:panelGroup>
+									</h:panelGrid>
+								</rich:panel>
+							</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="addRoll" width="435" showWhenRendered="#{enterDevice.showInsertRoll}" 
+					 autosized = "true" onresize="return false;" moveable="false" style="resize: none; overflow: auto;word-wrap: break-word;">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Crear Rollo" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+							<h:form id="addRoll1">
+								<rich:panel style="width:415px;">
+									<h:panelGrid styleClass="tableBO" columns="2" style="size:100%; padding:10px;">
+										<h:panelGroup>
+											<h:outputText value="Empresa: " styleClass="bold"/>
+										</h:panelGroup>
+								        <h:outputText value="#{enterDevice.companyTagName}" style="width: 200px; display: inline-block;"/>
+										<h:panelGroup>
+											<h:outputText value="Courier: " styleClass="bold"/>
+										</h:panelGroup>
+								        <h:outputText value="#{enterDevice.courierName}" style="width: 200px; display: inline-block;"/>
+										<h:panelGroup>
+											<h:outputText value="Nombre Rollo: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+								        <h:inputText value="#{enterDevice.rollName}" maxlength="50" 
+								                     onkeypress="return CompanyCourierRoll(event)" style="width: 195px"/>
+								        <h:panelGroup>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+										</h:panelGroup>
+										<h:panelGroup>
+											<a4j:commandButton value="Crear" action="#{enterDevice.validationAddRoll}" style="width: 90px"
+											onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelModalValidateR,confirmationRoll"/>
+											<rich:spacer width="20"/>	
+											<h:commandButton value="Cancelar" action="#{enterDevice.hideModal}" style="width: 90px"/>
+										</h:panelGroup>
+									</h:panelGrid>
+								</rich:panel>
+							</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panelModalValidateCo" width="350" height="115" showWhenRendered="#{enterDevice.showModalValidateCompanyTag}" 
+					onresize="return false;" moveable="false">
+							<f:facet name="header">
+								<h:panelGroup>
+									<h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/>
+								</h:panelGroup>
+							</f:facet>
+							<f:facet name="controls">
+								<h:panelGroup>
+									<a4j:form>
+										<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+									</a4j:form>
+								</h:panelGroup>
+							</f:facet>
+							<h:outputText value="#{enterDevice.modalMessage}" styleClass="normal"/>
+							<h:form>
+								<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+							     	<h:panelGroup>
+							     		<h:commandButton value="Aceptar" action="#{enterDevice.hideModal3}" style="width:75px"/>
+							     	</h:panelGroup>	     	
+							    </h:panelGrid>
+							</h:form>
+							<br/>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panelModalValidateC" width="350" height="115" showWhenRendered="#{enterDevice.showModalValidateCourier}" 
+						onresize="return false;" moveable="false">
+							<f:facet name="header">
+								<h:panelGroup>
+									<h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/>
+								</h:panelGroup>
+							</f:facet>
+							<f:facet name="controls">
+								<h:panelGroup>
+									<a4j:form>
+										<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+									</a4j:form>
+								</h:panelGroup>
+							</f:facet>
+							<h:outputText value="#{enterDevice.modalMessage}" styleClass="normal"/>
+							<h:form>
+								<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+							     	<h:panelGroup>
+							     		<h:commandButton value="Aceptar" action="#{enterDevice.hideModal4}" style="width:75px"/>
+							     	</h:panelGroup>	     	
+							    </h:panelGrid>
+							</h:form>
+							<br/>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panelModalValidateR" width="350" height="115" showWhenRendered="#{enterDevice.showModalValidateRoll}" 
+						onresize="return false;" moveable="false">
+							<f:facet name="header">
+								<h:panelGroup>
+									<h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/>
+								</h:panelGroup>
+							</f:facet>
+							<f:facet name="controls">
+								<h:panelGroup>
+									<a4j:form>
+										<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+									</a4j:form>
+								</h:panelGroup>
+							</f:facet>
+							<h:outputText value="#{enterDevice.modalMessage}" styleClass="normal"/>
+							<h:form>
+								<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+							     	<h:panelGroup>
+							     		<h:commandButton value="Aceptar" action="#{enterDevice.hideModal5}" style="width:75px"/>
+							     	</h:panelGroup>	     	
+							    </h:panelGrid>
+							</h:form>
+							<br/>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="confirmationCompanyTag" width="350" height="115" 
+						showWhenRendered="#{enterDevice.showModalConfirmationCompanyTag}" autosized="true" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<div style="width: 350px; word-wrap: break-word;">
+						<h:outputText value="#{enterDevice.modalMessage}" styleClass="normal"/>
+					</div>
+					<h:form>
+					<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+				     	<h:panelGroup>
+				     		<a4j:commandButton value="Aceptar" action="#{enterDevice.insertCompanyTag}" style="width:80px"
+				     	    onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panel"/>
+				     	</h:panelGroup>   	
+				     	<h:panelGroup><h:commandButton value="Cancelar" action="#{enterDevice.hideModal3}" style="width:80px"/></h:panelGroup>	     	
+				    </h:panelGrid>
+					</h:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="confirmationCourier" width="350" height="115" 
+						showWhenRendered="#{enterDevice.showModalConfirmationCourier}" autosized="true" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<div style="width: 350px; word-wrap: break-word;">
+						<h:outputText value="#{enterDevice.modalMessage}" styleClass="normal"/>
+					</div>
+					<h:form>
+					<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+				     	<h:panelGroup>
+				     		<a4j:commandButton value="Aceptar" action="#{enterDevice.insertCourier}" style="width:80px"
+				     		onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panel"/>
+				     	</h:panelGroup>   	
+				     	<h:panelGroup><h:commandButton value="Cancelar" action="#{enterDevice.hideModal4}" style="width:80px"/></h:panelGroup>	     	
+				    </h:panelGrid>
+					</h:form>
+				</rich:modalPanel>
+				
+				
+				<rich:modalPanel id="confirmationRoll" width="350" height="115" 
+						showWhenRendered="#{enterDevice.showModalConfirmationRoll}" autosized="true" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{enterDevice.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<div style="width: 350px; word-wrap: break-word;">
+						<h:outputText value="#{enterDevice.modalMessage}" styleClass="normal"/>
+					</div>
+					<h:form>
+					<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+				     	<h:panelGroup>
+				     		<a4j:commandButton value="Aceptar" action="#{enterDevice.insertRoll}" style="width:80px"
+				     		onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panel"/>
+				     	</h:panelGroup>   	
+				     	<h:panelGroup><h:commandButton value="Cancelar" action="#{enterDevice.hideModal5}" style="width:80px"/></h:panelGroup>	     	
+				    </h:panelGrid>
+					</h:form>
+				</rich:modalPanel>
+	
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

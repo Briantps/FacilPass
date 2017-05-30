@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Crear Cuenta Cliente</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<a4j:form>
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header"><h:outputText value="Creación de Cuenta de Cliente" styleClass="bold"/></f:facet>				
+			<rich:panel>
+				<h:panelGrid styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px; ">				
+					<h:outputText value="Tipo Identificación: " styleClass="bold"/>
+					<h:selectOneMenu id="tyd" value="#{accountClient.codeType}" styleClass="normal">
+						<f:selectItems value="#{accountClient.codeTypesList}"/>
+						<a4j:support event="onchange" action="#{accountClient.clearFilter}" reRender="panelData,codc,sidcli"/>
+					</h:selectOneMenu>
+					<h:outputText value="No. de Identificación + DV: " styleClass="bold"/>
+					<h:inputText id="codc" value="#{accountClient.codeClient}" styleClass="normal"
+							onkeypress="return numOnly(event)" maxlength="15" style="width:153px;">
+						<a4j:support event="onkeyup" action="#{accountClient.clearFilter}" reRender="panelData" ajaxSingle="true"/>
+		           </h:inputText> 											
+				   <h:outputText value="Nombre:" styleClass="bold"/>
+		           <h:inputText value="#{accountClient.userNames}" styleClass="normal"  maxlength="100" style="text-transform:uppercase;width:153px;" onkeypress="return noEspecialRazSol(event)">
+		             <a4j:support event="onkeyup" action="#{accountClient.clearFilter}" reRender="panelData" ajaxSingle="true"/>
+		           </h:inputText>		           		
+		           <h:outputText value="Apellidos:" styleClass="bold"/>
+		           <h:inputText value="#{accountClient.userSecondNames}" styleClass="normal"  maxlength="100" style="text-transform:uppercase;width:153px;" onkeypress="return alphaSpaceWithoutPoint(event)">
+		             <a4j:support event="onkeyup" action="#{accountClient.clearFilter}" reRender="panelData" ajaxSingle="true"/>
+		           </h:inputText>
+		        </h:panelGrid>
+		           
+	           <table width="100px">
+				  <div align="center">
+					<h:panelGroup>
+					 <h:commandButton value="Buscar" action="#{accountClient.searchClient}" style="width: 80px">
+						<a4j:support event="oncomplete" reRender="panelData"/>
+					 </h:commandButton>
+					 <rich:spacer width="20"/>
+					 <h:commandButton value="Limpiar" action="#{accountClient.clearFilter}" style="width: 80px"/>
+					</h:panelGroup>
+				  </div>
+			   </table>									
+                
+                <!-- <h:panelGrid styleClass="tableBO" columns="2" style="size 200px; margin: auto; padding:10px; ">
+                    <h:panelGroup>
+                      <h:outputText value="Cliente:  " styleClass="bold" style="width:5%"/>
+                    </h:panelGroup>
+
+					<h:panelGroup>
+						<h:selectOneMenu id="sidcli" value="#{accountClient.idClient}" style="width: 280px;" styleClass="normal">
+							<f:selectItems value="#{accountClient.clientNames}"/>
+							<a4j:support event="onchange" action="#{accountClient.changeClient}" reRender="panelData,codc,tyd"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>-->
+			</rich:panel>
+			
+			<rich:spacer height="5"/>
+			
+			<a4j:outputPanel id="panelData" layout="inline">
+			 	<rich:panel id="pd" rendered="#{accountClient.showData}">
+					<h:panelGrid styleClass="tableBO" columns="4" style="margin: auto; size: 300px; padding:10px;">
+	                    <h:outputText value="Cliente: " styleClass="bold"></h:outputText>
+	                    <h:panelGroup>
+	                    	<h:outputText value="#{accountClient.client.userNames} #{accountClient.client.userSecondNames}" styleClass="normal" 
+	                    			rendered="#{accountClient.client.tbCodeType.codeTypeId!=3}"/>
+	                    	<h:outputText value="#{accountClient.client.userNames}" styleClass="normal" 
+	                    			rendered="#{accountClient.client.tbCodeType.codeTypeId==3}"/>
+	                    </h:panelGroup>
+	                    <h:outputText value="No. de Identificación + DV: " styleClass="bold"></h:outputText>
+	                    <h:outputText value="#{accountClient.client.userCode} - #{accountClient.client.tbCodeType.codeTypeDescription}" 
+	                    	styleClass="normal"/>
+               		</h:panelGrid>
+					<rich:spacer height="10"/>
+					
+                       <div id="scroll_horizontal">
+					   <rich:dataTable id="dTable" width="800" value="#{accountClient.accountList}" var="list" rows="10"
+                             onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'" 
+	                         rowClasses="white,grey">
+						
+								<rich:column width="100px" sortBy="#{list.accountIdU}" sortable="true">
+									<f:facet name="header">
+										<h:outputText value="Cuenta" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value=" #{list.accountIdU}" 
+										styleClass="normal" style="font-size: 12px;"/>
+								</rich:column>
+								<rich:column width="90px">
+									<f:facet name="header">
+										<h:outputText value="Saldo" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{list.accountBalanceU}" 
+										styleClass="normal" style="font-size: 12px;">
+										<f:convertNumber currencySymbol="$" groupingUsed="true" maxFractionDigits="0" type="currency" />
+									</h:outputText>
+								</rich:column>
+								<rich:column width="138px" sortable="true" sortBy="#{list.accountOpeningDateU}">
+									<f:facet name="header">
+										<h:outputText value="Fecha Apertura" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value=" #{list.accountOpeningDateU}"
+										styleClass="normal" style="font-size: 10px;"/>
+								</rich:column>
+                                <rich:column  width="185px">
+									<f:facet name="header">
+										<h:outputText value="Tipo de Cuenta" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value=" #{list.nameTypeU}" 
+										styleClass="normal" style="font-size: 12px;">
+									</h:outputText>
+								</rich:column>
+                                <rich:column width="62px">
+									<f:facet name="header">
+										<h:outputText value="Máx.Tags" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="#{list.maxDeviceU}" 
+										styleClass="normal" style="font-size: 12px;" rendered="#{list.maxDeviceU!=999}">
+									</h:outputText>
+                                    <h:outputText value="Ilimitado" 
+										styleClass="normal" style="font-size: 12px;" rendered="#{list.maxDeviceU==999}">
+									</h:outputText>
+								</rich:column>
+                                <rich:column width="70px">
+									<f:facet name="header">
+										<h:outputText value="Infracción" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="Si" 
+										styleClass="normal" style="font-size: 12px; color:red;" rendered="#{list.accountBalanceU&lt;0}">
+									</h:outputText>
+                                    <h:outputText value="No" 
+										styleClass="normal" style="font-size: 12px;" rendered="#{list.accountBalanceU&gt;0}">
+									</h:outputText>
+                                    <h:outputText value="No" 
+										styleClass="normal" style="font-size: 12px;" rendered="#{list.accountBalanceU==0}">
+									</h:outputText>
+								</rich:column>
+                                  <rich:column width="150px">
+									<f:facet name="header">
+										<h:outputText value="Estado" styleClass="bold"/>
+									</f:facet>
+									<h:outputText value="Activa Por Banco" 
+										styleClass="normal" style="font-size: 12px;color:green;" rendered="#{list.accountStateTypeU==0 and list.bankU==1}">
+									</h:outputText>
+									<h:outputText value="Activa" 
+										styleClass="normal" style="font-size: 12px;color:green;" rendered="#{list.accountStateTypeU==0 and list.bankU==0}">
+									</h:outputText>
+                                    <h:outputText value="Pendiente Activación" 
+										styleClass="normal" style="font-size: 12px; color:red;" rendered="#{list.accountStateTypeU==1}">
+									</h:outputText>
+									<h:outputText value="Pendiente Por Recarga Inicial" 
+										styleClass="normal" style="font-size: 12px; color:red;" rendered="#{list.accountStateTypeU==7}">
+									</h:outputText>
+                                    <h:outputText value="Pendiente de Cierre" 
+										styleClass="normal" style="font-size: 12px;" rendered="#{list.accountStateTypeU==2}">
+									</h:outputText>
+                                    <h:outputText value="Para Cerrar" 
+										styleClass="normal" style="font-size: 12px;" rendered="#{list.accountStateTypeU==3}">
+									</h:outputText>
+                                    <h:outputText value="Cerrada" 
+										styleClass="normal" style="font-size: 12px;" rendered="#{list.accountStateTypeU==4}">
+									</h:outputText>
+                                    <h:outputText value="Suspendida" 
+										styleClass="normal" style="font-size: 12px;" rendered="#{list.accountStateTypeU==5}">
+									</h:outputText>
+									
+								</rich:column>
+                         <f:facet name="footer">
+            	             <rich:datascroller for="dTable"/>
+           	            </f:facet>
+						</rich:dataTable>
+                       </div>
+				</rich:panel>
+				<rich:spacer height="5"/>
+				<rich:panel rendered="#{accountClient.showData}">
+	                <h:commandButton value="Crear Cuenta de Cliente" action="#{accountClient.chooseAccountType}"/> 
+				</rich:panel>
+			</a4j:outputPanel>
+
+		</rich:panel>
+	</a4j:form>
+	<rich:spacer height="20"/>	
+		
+
+    <rich:modalPanel id="showt" width="550" height="250" showWhenRendered="#{accountClient.showType}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Crear Cuenta FacilPass y Asociarla a Cuenta Bancaria del Cliente" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+       <a4j:form id="form">
+        <h:panelGrid columns ="2">
+		  <h:panelGroup>
+		  	<h:outputText value="Tipo Cuenta FacilPass: " styleClass="bold"/>
+		  	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		  </h:panelGroup>
+          <h:selectOneMenu id="types2" value="#{accountClient.idType}">
+            <f:selectItems value="#{accountClient.types}"></f:selectItems>
+          </h:selectOneMenu>
+          <h:panelGroup>
+          	<h:outputText value="Banco Producto: " styleClass="bold"/>
+          	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+          </h:panelGroup>
+          <h:selectOneMenu id="banks" value="#{accountClient.idBank}">
+            <f:selectItems value="#{accountClient.banks}"></f:selectItems>
+            <a4j:support event="onchange" reRender="products"></a4j:support>
+          </h:selectOneMenu>
+          <h:panelGroup>
+          	<h:outputText value="Producto Cliente: " styleClass="bold"/>
+          	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+          </h:panelGroup>
+          <h:selectOneMenu id="products" value="#{accountClient.idProduct}">
+            <f:selectItems value="#{accountClient.products}"></f:selectItems>
+          </h:selectOneMenu>
+
+        </h:panelGrid>
+		<rich:spacer height="10"/>
+		
+		<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+              <a4j:commandButton id="send" value="Crear Cuenta FacilPass" action="#{accountClient.initCreateAccount}" reRender="confirmacion"> 
+              </a4j:commandButton>
+            </h:panelGroup>   	
+	     	<h:panelGroup>
+              <h:commandButton id="cancel" value="Cancelar" action="#{accountClient.hideModal}"/>
+            </h:panelGroup>	     	
+	    </h:panelGrid>
+	    <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+	    </a4j:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{accountClient.showConfirmation}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{accountClient.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{accountClient.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<a4j:form>
+		<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     	  <a4j:region id="editando">
+	     	    <a4j:commandButton id="btnAceptar" value="Aceptar" action="#{accountClient.createAccount}" oncomplete="#{rich:component('wait')}.hide()" reRender="panel1" style="width: 80px"/>
+	     	     <rich:componentControl for="confirmacion" attachTo="hidelink" operation="hide" event="onclick" />
+	     	    <a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+			    </a4j:status>
+	     	  </a4j:region>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup>
+	     	  <h:commandButton id="btnCancelar" value="Cancelar" action="#{accountClient.hideModal}" style="width: 80px"/>
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </a4j:form>
+	</rich:modalPanel>
+
+	<rich:modalPanel id="panel1" width="350" height="115" showWhenRendered="#{accountClient.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Cuenta de Cliente" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{accountClient.hideModal}" image="/img/close.png" />
+                     <rich:componentControl for="panel1" attachTo="hidelink" operation="hide" event="onclick" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{accountClient.modalMessage}" styleClass="normal"/>
+		<a4j:form>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding-left:12px; ">
+		    <h:commandButton value="Aceptar" action="#{accountClient.hideModal}" style="width: 80px"/>
+            <rich:componentControl for="panel1" attachTo="hidelink" operation="hide" event="onclick" />      
+        </h:panelGrid>
+        </a4j:form> 
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Transacción en proceso..."  style="font-size:12px;"/>
+	</rich:modalPanel> 
+	
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

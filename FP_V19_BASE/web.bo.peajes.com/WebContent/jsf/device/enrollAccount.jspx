@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Enrolar Dispositivo a Cuenta</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:messages style="color:red;" styleClass="bold"/>
+	<a4j:form>
+		<rich:panel styleClass="richPanel">
+			<f:facet name="header">
+				<h:outputText value="Asociar Dispositivo a Cuenta de Cliente" styleClass="bold"/>
+			</f:facet>	
+				
+			<rich:panel>	
+				<h:panelGrid styleClass="tableBO" columns="4" style="size 300px; margin: auto; padding:10px; ">
+					<h:panelGroup>
+						<h:outputText value="Tipo Disp.: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:selectOneMenu id="tyd" value="#{deviceAccount.typeDevId}" styleClass="normal">
+							<f:selectItems value="#{deviceAccount.devicesTypes}"/>
+							<a4j:support event="onchange" action="#{deviceAccount.changeTypeDev}" 
+								reRender="panelData,codc,sidcli,panel,sidclid"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:outputText value="Facial: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:inputText id="codc" value="#{deviceAccount.facial}" styleClass="normal" maxlength="20" onkeypress="return alphaNumOnly(event)">							
+						</h:inputText>
+                        <rich:spacer width="5"/>
+						<h:commandButton value="Buscar" action="#{deviceAccount.search}"/>
+					</h:panelGroup>
+					<h:outputText/><h:outputText/>
+					<h:panelGroup>
+						<h:outputText value="Dispositivos: " styleClass="bold"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:selectOneMenu id="sidclid" value="#{deviceAccount.deviceId}" style="width: 280px;" styleClass="normal">
+							<f:selectItems value="#{deviceAccount.facials}"/>
+							<a4j:support event="onchange" action="#{deviceAccount.changeDevice}" 
+								reRender="panelData,codc,tyd,panel, pd2"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+			</rich:panel>		
+			<rich:spacer height="5"/>
+			
+			
+			<a4j:outputPanel id="panelData" layout="inline">
+				<rich:panel id="pd" rendered="#{deviceAccount.showData}">
+					<f:facet name="header">
+						<h:outputText styleClass="bold" value="Información Dispositivo"/>
+					</f:facet>
+					
+					<rich:spacer height="10"/>
+					
+					<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+	                    <h:outputText value="ID Dispositivo: " styleClass="bold"/>
+	                    <h:outputText value="#{deviceAccount.device.deviceCode} " styleClass="normal"/>
+	                    <h:outputText value="Facial: " styleClass="bold"/>
+	                    <h:outputText value="#{deviceAccount.device.deviceFacialId}" styleClass="normal"/>
+	                    <h:outputText value="Estado: " styleClass="bold"/>
+	                    <h:outputText value="#{deviceAccount.device.tbDeviceState.deviceStateDescription}" styleClass="normal"/>
+               		</h:panelGrid>
+					
+					<rich:spacer height="10"/>
+					<rich:extendedDataTable height="150px" width="550px" value="#{deviceAccount.accountList}" var="list" 
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+						rowClasses="white,grey" enableContextMenu="false" noDataLabel="El dispositivo no tiene cuentas asociadas." 
+						style="vertical-align: middle; position: relative">
+						<rich:column width="150px" sortBy="#{list.tbAccount.accountId}" sortable="true">
+							<f:facet name="header">
+								<h:outputText value="Número de Cuenta" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value=" #{list.tbAccount.accountId}" 
+								styleClass="normal" style="font-size: 15px;"/>
+						</rich:column>
+						<rich:column width="200px" sortable="true" sortBy="#{list.tbAccount.tbSystemUser.userNames} #{list.tbAccount.tbSystemUser.userSecondNames}">
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Nombre Cliente"/>
+							</f:facet>
+							<h:outputText value="#{list.tbAccount.tbSystemUser.userNames} #{list.tbAccount.tbSystemUser.userSecondNames}"
+								styleClass="normal" rendered="#{list.tbAccount.tbSystemUser.tbCodeType.codeTypeId != 3}"/>
+							<h:outputText value="#{list.tbAccount.tbSystemUser.userNames}"
+								styleClass="normal" rendered="#{list.tbAccount.tbSystemUser.tbCodeType.codeTypeId == 3}"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Estado Relación"/>
+							</f:facet>
+							<h:outputText value="Activa" styleClass="normal" rendered="#{list.relationState == 0}"/>
+							<h:outputText value="Inactiva" styleClass="normal" rendered="#{list.relationState == 1}"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText styleClass="bold" value="Placa"/>
+							</f:facet>
+							<h:outputText value="#{list.tbVehicle.vehiclePlate}" styleClass="normal" />
+						</rich:column>
+					</rich:extendedDataTable>
+				</rich:panel>
+				
+				<rich:spacer height="10"/>
+				
+				<rich:panel id="pd2" rendered="#{deviceAccount.showSaveRelation}">
+					<h:panelGrid styleClass="tableBO" columns="2" 
+						style="size 300px; margin: auto; padding:10px; ">
+						<h:panelGroup>
+							<h:outputText value="Seleccione la Cuenta Cliente: " styleClass="bold"/>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:selectOneMenu id="sidcli" value="#{deviceAccount.idClientAccount}" 
+								style="font-size:11px;width: 400px;" styleClass="normal">
+								<f:selectItems value="#{deviceAccount.clientAccounts}"/>
+							</h:selectOneMenu>
+						</h:panelGroup>
+						
+						<h:panelGroup>
+							<h:outputText value="Seleccione Vehículo: " styleClass="bold"/>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:selectOneMenu id="sidvehi" value="#{deviceAccount.idVehicle}" 
+								style="font-size:11px;width: 200px;" styleClass="normal">
+								<f:selectItems value="#{deviceAccount.listVehicle}"/>
+							</h:selectOneMenu>
+						</h:panelGroup>
+						
+						<h:panelGroup>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+						</h:panelGroup>
+						
+						<h:commandButton value="Asociar Dispositivo a Cuenta" action="#{deviceAccount.initSave}"/>
+					</h:panelGrid>
+				</rich:panel>
+			</a4j:outputPanel>			
+		</rich:panel>
+	</a4j:form>
+	<rich:spacer height="20"/>	
+
+	<rich:modalPanel id="panel" width="350" height="120" showWhenRendered="#{deviceAccount.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Enrolar dispositivo" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{deviceAccount.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{deviceAccount.modalMessage}" styleClass="normal"/>
+        <h:panelGrid columns="1" style="width: 99px; margin: auto; padding:0px; ">
+          <a4j:form>
+			<br/>
+			 <rich:spacer width="12"/>
+			<h:commandButton value="Aceptar" action="#{deviceAccount.hideModal}"/>  
+		  </a4j:form>
+        </h:panelGrid>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{deviceAccount.showConfirmation}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+        <f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{deviceAccount.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{deviceAccount.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="8"/>
+		<a4j:form>
+		<rich:spacer height="10" />
+		<h:panelGrid columns="4" style="width: 120px; margin: auto; ">
+	     	<h:panelGroup>
+                <a4j:region id="editando">
+	     		  <a4j:commandButton value="Aceptar" action="#{deviceAccount.saveProcess}"  oncomplete="#{rich:component('wait')}.hide()" reRender="panel"/>
+                  <a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+				  </a4j:status>
+                </a4j:region>
+	     	</h:panelGroup>  
+	     	 <rich:spacer width="9" /> 	
+	     	<h:panelGroup>
+	     		<a4j:commandButton id="cancel" value="Cancelar" action="#{deviceAccount.hideModal}"  />
+                <rich:componentControl for="confirmacion" attachTo="cancel" operation="hide" event="onclick" />
+	     	</h:panelGroup>	   
+	     		  	
+	    </h:panelGrid>
+	    </a4j:form>
+		<br />
+	</rich:modalPanel>
+
+    <rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Transacción en proceso..."  style="font-size:12px;"/>
+	</rich:modalPanel> 
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

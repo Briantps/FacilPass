@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Asignar Recursos Manualmente</title>
+</head>
+<script language="javascript" type="text/javascript">
+function nonelink(elementId){			
+			document.getElementById("recharge:dtable:"+elementId+":clinkpdf").className="disabledlink";		
+			setTimeout(function(){document.getElementById("recharge:dtable:"+elementId+":clinkpdf").className="enabledlink";},2000);
+	}
+</script>
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+				<rich:spacer height="5" />
+
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<a4j:form id="recharge">
+					<rich:panel styleClass="richPanel">
+						<f:facet name="header">
+							<h:outputText value="Asignar Recursos Manualmente"
+								styleClass="bold" />
+						</f:facet>
+						<h:outputText
+							value="La Asignación de Recursos a la cuenta FacilPass es a partir de $ #{rechargeClient.valMinText}"
+							styleClass="bold" rendered="#{rechargeClient.messageMinrecharge}" />
+						<rich:spacer height="2" />
+						<h:panelGrid styleClass="tableBO" columns="2"
+							style="size 350px; margin: auto; padding:10px; ">
+							<h:panelGroup>
+								<h:outputText value="Cuenta FacilPass: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:region id="editAcc">
+									<h:selectOneMenu id="cuenta" value="#{rechargeClient.idClientAccount}"
+										style="width: 250px;" styleClass="normal">
+										<f:selectItems value="#{rechargeClient.clientAccounts}" />
+										<a4j:support event="onchange"
+											action="#{rechargeClient.changeAccount}"
+											reRender="boton,tipo,sEnti,entidad,s1,buttonpse,panelBoton
+											,panelEnti,recharge,panelHisto,s1Group,pending"></a4j:support>
+									</h:selectOneMenu>								
+									<rich:toolTip
+										style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+										followMouse="false" direction="top-right" showDelay="500"
+										styleClass="normal" 
+										for="cuenta">
+										<h:outputText value="#{rechargeClient.tooltipCuenta}"
+										escape="false"></h:outputText>
+									</rich:toolTip>
+									<a4j:status onstart="#{rich:component('wait')}.show()" 
+									onstop="#{rich:component('wait')}.hide()"
+									for="editAcc">
+									</a4j:status>
+								</a4j:region>
+							</h:panelGroup>
+							<h:panelGroup id="tipo"
+								rendered="#{rechargeClient.showPseAccount}">
+								<h:outputText value="Tipo de persona: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+							</h:panelGroup>
+							<h:panelGroup rendered="#{rechargeClient.showPseAccount}" id="s1Group">
+								<h:selectOneRadio styleClass="bold"
+									value="#{rechargeClient.typePer}" immediate="true" id="s1"
+									style="width: 170px;"
+									rendered="#{rechargeClient.showPseAccount}">
+									<f:selectItem itemValue="0" itemLabel="Natural" id="o1" />
+									<f:selectItem itemValue="1" itemLabel="Jurídica" id="o2" />
+								</h:selectOneRadio>
+								<rich:toolTip
+									style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+									followMouse="false" direction="top-right" showDelay="500"
+									styleClass="normal" 
+									for="s1">
+									<h:outputText value="#{rechargeClient.tooltipPersona}"
+									escape="false"></h:outputText>
+								</rich:toolTip>
+							</h:panelGroup>
+							<h:panelGroup id="entidad"
+								rendered="#{rechargeClient.showPseAccount}">
+								<h:outputText value="Entidad: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+							</h:panelGroup>
+							<h:panelGroup id="panelEnti"
+								rendered="#{rechargeClient.showPseAccount}">
+								<h:selectOneMenu id="sEnti"
+									value="#{rechargeClient.idPseEntity}" style="width: 250px;"
+									styleClass="normal">
+									<f:selectItems value="#{rechargeClient.pseEntities}"/>
+								</h:selectOneMenu>
+								<rich:toolTip
+									style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+									followMouse="false" direction="top-right" showDelay="500"
+									styleClass="normal" 
+									for="sEnti">
+									<h:outputText value="#{rechargeClient.tooltipEntidad}"
+									escape="false"></h:outputText>
+								</rich:toolTip>
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:outputText value="Valor a Asignar: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:inputText id="valueRecharge"
+									value="#{rechargeClient.valueRechText}" styleClass="normal"
+									style="width:140px" onkeypress="return solonumeros(event)"
+									maxlength="15"
+									onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+								</h:inputText>
+								<rich:toolTip
+									style="background-color:#E2E2F3; color: #000000; border-color:#E2E2F3;"
+									followMouse="false" direction="top-right" showDelay="500"
+									styleClass="normal"	for="valueRecharge">
+									<h:outputText value="#{rechargeClient.tooltipValor}"
+									escape="false"></h:outputText>
+								</rich:toolTip>
+							</h:panelGroup>
+							<rich:spacer height="5" />
+							<rich:spacer height="5" />
+						</h:panelGrid>
+						<rich:spacer height="5" />
+						<div align="center">
+							<a4j:outputPanel id="panelBoton">
+								<h:commandButton id="boton" value="Aceptar"
+									action="#{rechargeClient.msgSave}"
+									disabled="#{rechargeClient.showBotton}"
+									rendered="#{!rechargeClient.showPseAccount}">
+									<a4j:support event="oncomplete"
+										reRender="panelData,panelBoton,panelPSE,panelHisto" />
+								</h:commandButton>								
+								<a4j:commandButton id="buttonpse" value="" styleClass="buttonpse"
+								action="#{rechargeClient.msgSavePse}"
+										disabled="#{rechargeClient.showBotton}"
+										rendered="#{rechargeClient.showPseAccount}" 
+										onclick="this.disabled=true;this.className='buttonpseBlock';document.getElementById('recharge:cancel').disabled=true;"
+										oncomplete="this.disabled=false;this.className='buttonpse';document.getElementById('recharge:cancel').disabled=false;"
+										reRender="panel,panelPse,confirmacionPse,confirmacion">							
+								</a4j:commandButton>							
+									<!--<a4j:commandLink id="linkpse" value=""
+										action="#{rechargeClient.msgSavePse}"
+										disabled="#{rechargeClient.showBotton}"
+										rendered="#{rechargeClient.showPseAccount}" 
+										onclick="this.setAttribute('onclick', 'disabled = true;');"
+										oncomplete="this.disabled=false;"
+										reRender="panel,panelPse,confirmacionPse,confirmacion">
+										<img title="FacilPago"
+											src="/web.bo.peajes.com/img/pse_img.png" alt="Pago PSE"
+											 style="cursor: pointer; border: 0px solid blue;"/>									
+										
+									</a4j:commandLink> -->	
+																	
+							</a4j:outputPanel>
+							<rich:spacer width="40" />
+							<h:commandButton id="cancel" value="Cancelar"
+								action="#{rechargeClient.cancel}">
+								<a4j:support event="oncomplete"
+									reRender="panelData,panelBoton,panelPSE,panelHisto" />
+							</h:commandButton>
+						</div>
+						<rich:spacer height="5" />
+						<h:outputLabel value="#{msg.Asterisk}"
+							styleClass="asteriskMandatoryField" />
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput" />
+					</rich:panel>
+					<rich:spacer height="20" />
+					<a4j:outputPanel id="panelHisto" layout="inline"
+						rendered="#{rechargeClient.showRechargeList}">
+						<rich:panel id="pd">
+							<f:facet name="header">
+								<h:panelGroup>
+									<h:outputText styleClass="bold"
+										value="Histórico Asignación de Recursos" />
+									<h:outputText styleClass="bold" value=" FacilPago"
+										rendered="#{rechargeClient.showPseAccount}" />
+								</h:panelGroup>
+							</f:facet>
+							<rich:spacer height="10" />
+							<rich:dataTable id="dtable" width="800"
+								value="#{rechargeClient.rechargeList}" var="list" rows="10"
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+								rowClasses="white,grey">
+								<rich:column width="180px" style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Fecha" />
+									</f:facet>
+									<h:outputText value="#{list.umbralTime}"
+										style="font-size: 11.5px;"
+										converter="TimeStampToStringDateConverter">
+									</h:outputText>
+								</rich:column>
+								<rich:column width="100px" style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Tipo" />
+									</f:facet>
+									<h:outputText value="#{list.typeRecharge}" styleClass="normal" />
+								</rich:column>
+								<rich:column width="120px" style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Valor" />
+									</f:facet>
+									<h:outputText value="#{list.umbralValue}" styleClass="normal">
+										<f:convertNumber currencySymbol="$" groupingUsed="true"
+											maxFractionDigits="0" type="currency" />
+									</h:outputText>
+								</rich:column>
+								<rich:column width="110px" style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Entidad" />
+									</f:facet>
+									<h:outputText value="#{list.rechargeBank}" styleClass="normal" />
+								</rich:column>
+								<rich:column width="160px" style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="Estado" />
+									</f:facet>
+									<h:outputText value="#{list.umbralState}" styleClass="normal" />
+								</rich:column>
+								<rich:column width="120px" style="text-align:center;" rendered="#{rechargeClient.showPseAccount}">
+									<f:facet name="header">
+										<h:outputText value="Comprobante" />
+									</f:facet>
+									<h:commandLink id="clinkpdf" target="_blank" value="" onclick="enablebutton()"
+										action="#{rechargeClient.downloadVoucher}" rendered="#{list.verReporte}">
+										<img title="Imprimir" src="/web.bo.peajes.com/img/pdf-icon-md.png" alt="Imprimir"
+										style="cursor: pointer; border: 0px solid blue;width: 35%;height: 15%" />
+										<f:setPropertyActionListener value="#{list.umbralId}" target="#{rechargeClient.expUmbralId}"/>
+					           		</h:commandLink>
+								</rich:column>
+								<f:facet name="footer">
+									<rich:datascroller for="dtable"/>
+								</f:facet>
+							</rich:dataTable>
+						</rich:panel>
+					</a4j:outputPanel>
+				</a4j:form>
+				<rich:spacer height="20" />
+				
+				<rich:modalPanel id="pending" width="900" style="min-height: 115px;max-height: 600px;" autosized="true"
+					showWhenRendered="#{rechargeClient.showPending}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText
+								value="Transacciones Pendientes - Asignación de Recursos Manual"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form id="frmXP">
+								<h:commandButton id="closeXP" action="#{rechargeClient.cancel}"
+									image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{rechargeClient.msgModal}"
+						styleClass="normal" />
+						<a4j:form id="formPen" style="overflow-y: auto;display: block;min-height: 115px;max-height: 500px;">
+							<rich:spacer height="10" />
+							<a4j:outputPanel id="panelPending" layout="inline">
+							<rich:panel id="pd" style="overflow-x: hidden;">
+								<f:facet name="header">
+									<h:panelGroup>
+										<h:outputText styleClass="bold"
+											value="Transacciones Pendientes" />
+									</h:panelGroup>
+								</f:facet>
+								<rich:spacer height="10" />
+								<rich:dataTable id="dtablePending" width="800"
+									value="#{rechargeClient.pendingRechargeList}" var="list" rows="10"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+									rowClasses="white,grey">
+									<rich:column width="180px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Fecha" />
+										</f:facet>
+										<h:outputText value="#{list.umbralTime}"
+											style="font-size: 11.5px;"
+											converter="TimeStampToStringDateConverter">
+										</h:outputText>
+									</rich:column>
+									<rich:column width="100px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Tipo" />
+										</f:facet>
+										<h:outputText value="#{list.typeRecharge}" styleClass="normal" />
+									</rich:column>
+									<rich:column width="120px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Valor" />
+										</f:facet>
+										<h:outputText value="#{list.umbralValue}" styleClass="normal">
+											<f:convertNumber currencySymbol="$" groupingUsed="true"
+												maxFractionDigits="0" type="currency" />
+										</h:outputText>
+									</rich:column>
+									<rich:column width="110px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Entidad" />
+										</f:facet>
+										<h:outputText value="#{list.rechargeBank}" styleClass="normal" />
+									</rich:column>
+									<rich:column width="160px" style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Estado" />
+										</f:facet>
+										<h:outputText value="#{list.umbralState}" styleClass="normal" />
+									</rich:column>
+									<f:facet name="footer">
+										<rich:datascroller for="dtablePending" page="#{rechargeClient.page}"/>
+									</f:facet>
+								</rich:dataTable>
+							</rich:panel>
+						</a4j:outputPanel>
+						<rich:spacer height="10" />
+						<div align="center">
+							<h:commandButton id="acp1" value="Aceptar"
+								action="#{rechargeClient.hideModals}"/>
+							<rich:spacer width="20" />
+							<h:commandButton id="cancel2" value="Cancelar"
+								action="#{rechargeClient.cancel}"/>
+						</div>
+					</a4j:form>
+				</rich:modalPanel>
+								
+				<rich:modalPanel id="confirmacion" width="350" height="115"
+					showWhenRendered="#{rechargeClient.showConfirmationModal}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText
+								value="Confirmación - Asignación de Recursos Manual"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form id="frmX">
+								<h:commandButton id="closeX" action="#{rechargeClient.cancel}"
+									image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{rechargeClient.msgModal}"
+						styleClass="normal" />
+					<a4j:form id="form">
+						<h:message for="send" />
+						<rich:spacer height="10" />
+						<div align="center">
+							<a4j:region id="editando">
+								<a4j:commandButton id="send" value="Aceptar"
+									action="#{rechargeClient.save}"
+									oncomplete="#{rich:component('wait')}.hide()">
+									<a4j:support event="onclick"
+										onsubmit="document.getElementById('form:send').disabled=true;document.getElementById('frmX:closeX').disabled=true;" />
+									<a4j:support event="oncomplete" reRender="panel,panelPse"
+										oncomplete="document.getElementById('form:send').disabled=false;document.getElementById('frmX:closeX').disabled=false;" />
+								</a4j:commandButton>
+								<a4j:status onstart="#{rich:component('wait')}.show()"
+									for="editando">
+								</a4j:status>
+							</a4j:region>
+							<rich:spacer width="20" />
+							<h:commandButton id="cancel" value="Cancelar"
+								action="#{rechargeClient.cancel}" rendered="#{!rechargeClient.showPseAccount}"/>
+							<h:commandButton id="cancel1" value="Cancelar"
+								action="#{rechargeClient.cancelPSE}" rendered="#{rechargeClient.showPseAccount}"/>
+						</div>
+					</a4j:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="confirmacionPse" width="350" height="115"
+					autosized="true"
+					showWhenRendered="#{rechargeClient.showConfirmationModalPSE}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText
+								value="Confirmación - Asignación de Recursos Manual"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton action="#{rechargeClient.hideModals}"
+									image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{rechargeClient.msgModal}"
+						styleClass="normal" style="height: auto;"/>
+						
+					<a4j:form id="form2" style="margin-top: 10px">
+						<div align="center">
+							<h:commandButton id="acep" value="Aceptar"
+								action="#{rechargeClient.hideModals}" />
+							<rich:spacer width="20" />
+							
+							<h:commandButton id="clinkvercom"  value="Ver Comprobante"
+								action="#{rechargeClient.downloadVoucher}" onclick="this.form.target='_blank';return true;">
+								<a4j:support event="onclick" reRender="confirmacionPse,recharge"></a4j:support>
+								<a4j:support event="onblur" action="this.form.target='_self';return true;" reRender="confirmacionPse"></a4j:support>
+								<f:setPropertyActionListener value="-1" target="#{rechargeClient.expUmbralId}"/>
+							</h:commandButton>
+						</div>
+					</a4j:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="panel" width="350" height="115"
+					showWhenRendered="#{rechargeClient.showModal}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Asignación de Recursos Manual"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{rechargeClient.cancel}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{rechargeClient.msgModal}"
+						styleClass="normal" />
+					<rich:spacer height="10" />
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:commandButton value="Aceptar"
+									action="#{rechargeClient.cancel}" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:form>
+					<br />
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="panelPse" autosized="true" width="350" height="115"
+					showWhenRendered="#{rechargeClient.showModalPSE}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Asignación de Recursos Manual"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{rechargeClient.hideModals}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{rechargeClient.msgModal}"
+						styleClass="normal" style="height: auto;"/>
+					<h:form>
+						<rich:spacer height="10" />
+						<div align="center">
+							<h:commandButton value="Aceptar"
+								action="#{rechargeClient.hideModals}" />
+						</div>
+					</h:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+				  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+				  	<h:form>
+       				<h:commandLink disabled="true">
+       				<h:graphicImage value="/img/procesando.gif" />
+     					</h:commandLink>
+    					</h:form>
+				</rich:modalPanel>
+
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

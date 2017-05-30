@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="roleReport" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Helvetica" isBold="false" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<parameter name="filterValue" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+  rol.role_name,
+  opt.option_name,
+  act.action_name
+FROM
+  tb_role rol
+  INNER JOIN re_role_option_action rroa ON rroa.role_id = rol.role_id
+  INNER JOIN re_option_action roa ON roa.option_action_id = rroa.option_action_id
+  INNER JOIN tb_option opt ON opt.option_id = roa.option_id
+  INNER JOIN tb_action act ON act.action_id = roa.action_id
+  where rol.role_id=$P{filterValue}
+  and -1 <>$P{filterValue}
+UNION
+SELECT
+  rol.role_name,
+  opt.option_name,
+  act.action_name
+FROM
+  tb_role rol
+  INNER JOIN re_role_option_action rroa ON rroa.role_id = rol.role_id
+  INNER JOIN re_option_action roa ON roa.option_action_id = rroa.option_action_id
+  INNER JOIN tb_option opt ON opt.option_id = roa.option_id
+  INNER JOIN tb_action act ON act.action_id = roa.action_id
+  where -1 =$P{filterValue}
+ORDER BY 1,2,3]]>
+	</queryString>
+	<field name="ROLE_NAME" class="java.lang.String"/>
+	<field name="OPTION_NAME" class="java.lang.String"/>
+	<field name="ACTION_NAME" class="java.lang.String"/>
+	<variable name="currentPage" class="java.lang.Integer" resetType="Page">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+	</variable>
+	<group name="role">
+		<groupExpression><![CDATA[$F{ROLE_NAME}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<frame>
+					<reportElement x="0" y="0" width="572" height="40"/>
+					<staticText>
+						<reportElement mode="Opaque" x="0" y="20" width="269" height="20" backcolor="#CCCCCC"/>
+						<box>
+							<topPen lineWidth="0.75"/>
+							<leftPen lineWidth="0.75"/>
+							<bottomPen lineWidth="0.75"/>
+							<rightPen lineWidth="0.75"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[Opción]]></text>
+					</staticText>
+					<staticText>
+						<reportElement mode="Opaque" x="269" y="20" width="303" height="20" backcolor="#CCCCCC"/>
+						<box>
+							<topPen lineWidth="0.75"/>
+							<leftPen lineWidth="0.75"/>
+							<bottomPen lineWidth="0.75"/>
+							<rightPen lineWidth="0.75"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<text><![CDATA[Acción]]></text>
+					</staticText>
+					<textField>
+						<reportElement mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#81BC00"/>
+						<box leftPadding="5">
+							<pen lineWidth="0.5"/>
+							<topPen lineWidth="0.5"/>
+							<leftPen lineWidth="0.5"/>
+							<bottomPen lineWidth="0.5"/>
+							<rightPen lineWidth="0.5"/>
+						</box>
+						<textElement verticalAlignment="Middle">
+							<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA["Rol: " + $F{ROLE_NAME}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupHeader>
+	</group>
+	<pageHeader>
+		<band height="97">
+			<frame>
+				<reportElement mode="Transparent" x="0" y="0" width="572" height="97" backcolor="#FFFFFF"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textField isBlankWhenNull="true">
+					<reportElement x="269" y="0" width="303" height="29"/>
+					<box leftPadding="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="16" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[new String("Permisos Por Rol")]]></textFieldExpression>
+				</textField>
+				<image scaleImage="RealHeight">
+					<reportElement x="0" y="2" width="269" height="95"/>
+					<box>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<imageExpression class="java.lang.String"><![CDATA["facilpass.PNG"]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="572" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="0" y="0" width="269" height="20"/>
+					<box leftPadding="3">
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{OPTION_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="269" y="0" width="303" height="20"/>
+					<box leftPadding="3">
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{ACTION_NAME}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="51">
+			<elementGroup>
+				<rectangle>
+					<reportElement mode="Opaque" x="0" y="25" width="572" height="25" forecolor="#333333" backcolor="#CCCCCC"/>
+				</rectangle>
+				<textField pattern="dd/MM/yyyy hh:mm:ss aa">
+					<reportElement x="0" y="31" width="269" height="14"/>
+					<box leftPadding="3"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Fecha De Generación: " + (new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")).format(new java.util.Date())]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Auto">
+					<reportElement x="269" y="31" width="303" height="14"/>
+					<box rightPadding="7"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Página " + $V{currentPage} + " de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="93">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="572" height="50" backcolor="#F7F5F5"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[El Reporte No Contiene Información]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

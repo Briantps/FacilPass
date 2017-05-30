@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;constant.EFrecuency&apos; to &apos;EFrequency&apos;&#x0D;&#x0A;- Original project: &apos;web.bo.peajes.com&apos;&#x0D;&#x0A;- Original element: &apos;constant.EFrecuency&apos;&#x0D;&#x0A;- Renamed element: &apos;constant.EFrequency&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;EFrecuency&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;constant{EFrecuency.java[EFrecuency" matchStrategy="1" name="EFrequency" qualified="false" references="true" similarDeclarations="false" stamp="1494357287392" textual="false" version="1.0"/>
+</session>

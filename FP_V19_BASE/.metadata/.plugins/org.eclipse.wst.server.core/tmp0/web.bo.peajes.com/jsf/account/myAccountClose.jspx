@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Cancelar Cuenta FacilPass</title>
+</head>
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+  <rich:spacer height="5"/>	
+ <h:form id="configcta">
+  <rich:panel styleClass="richPanel">
+   <f:facet name="header">
+	<h:outputText value="Cancelar Cuenta FacilPass" styleClass="bold"/>
+   </f:facet>
+   <div align="left">
+   <h:outputText value="Esta opción le permitirá Cancelar o Cerrar la Cuenta FacilPass" style="font-weight:bold" styleClass="bold"/>
+   </div>					
+   <h:panelGrid styleClass="tableBO" columns="1" style="size 300px; margin: auto; padding:10px; ">
+     <h:panelGroup>
+     	<h:outputText value="Seleccione la Cuenta: "  styleClass="bold"/>
+     	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+     </h:panelGroup>    
+	 <h:selectOneMenu value="#{accountCloseBean.idAccClient}" 
+		style="width: 250px;" styleClass="normal">
+		<f:selectItems value="#{accountCloseBean.clientAccounts}"/>		
+	 </h:selectOneMenu>
+      <h:outputText/>
+      <rich:spacer height="5"/>
+      <h:outputText value="Escriba el motivo por el cual desea cerrar la cuenta: "  styleClass="bold"/>
+      <h:inputTextarea id="note" value="#{accountCloseBean.reason}" cols="30" rows="5" style="resize: none;">
+      </h:inputTextarea> 
+      <rich:spacer height="5"/>
+     <h:commandButton value="Aceptar" action="#{accountCloseBean.msgSave}">
+	       	<a4j:support event="oncomplete" reRender="panelData"/>
+	 </h:commandButton>	 
+   	</h:panelGrid>
+   	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+	<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+ </rich:panel>
+ <rich:spacer height="20" />
+ </h:form>
+ 
+ <rich:modalPanel id="confirmacion" width="350" height="140" showWhenRendered="#{accountCloseBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{accountCloseBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{accountCloseBean.modalMessage}" styleClass="normal"/>
+		<a4j:form id="form">
+		<rich:spacer height="10"/>
+		<div align="center">	
+	     	 <a4j:region id="editando">	     	  
+	     		<a4j:commandButton id="acept" value="Aceptar" action="#{accountCloseBean.apply}" oncomplete="#{rich:component('wait')}.hide()">
+	     		   <a4j:support event="onclick"  
+	                  onsubmit="document.getElementById('form:acept').disabled=true;document.getElementById('form:cancel').disabled=true" />
+	                  <a4j:support event="oncomplete" reRender="panel" 
+	                  oncomplete="document.getElementById('form:acept').disabled=false;document.getElementById('form:cancel').disabled=false"/>
+	     		</a4j:commandButton>
+	     		<a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+				</a4j:status>
+	     	 </a4j:region>	
+	     	 <rich:spacer width="20"/>
+     		<h:commandButton id="cancel" value="Cancelar" action="#{accountCloseBean.hideModal}"  />
+    	</div>	
+	   </a4j:form>
+	</rich:modalPanel> 
+	
+	<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{accountCloseBean.showError}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Cancelar Cuenta FacilPass" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{accountCloseBean.hideError}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{accountCloseBean.msgError}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{accountCloseBean.hideError}"  />
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>	
+		<br />
+	</rich:modalPanel> 
+	
+	<rich:modalPanel id="wait" autosized="true" width="350" 
+		height="110" moveable="false" resizeable="false">
+		<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  	<h:outputText value="Por favor espere ..."  style="font-size:12px;"/>
+	</rich:modalPanel> 
+</div>
+
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

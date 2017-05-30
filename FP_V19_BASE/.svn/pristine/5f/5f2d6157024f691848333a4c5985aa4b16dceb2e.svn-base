@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Conciliación Diaria</title>
+<script type="text/javascript">
+	function validarSize (campo, limite) {
+		if (campo.value.length > limite){
+			campo.value = campo.value.substring(0, limite);
+		} 
+	}
+	
+	function function1(placa){
+		if(placa.value.length >= 4){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	function searchbtn(evt){
+		var charCode = (evt.which) ? evt.which : window.event.keyCode;
+		if (charCode == 13){
+			var bnt = document.getElementById("form:botonBuscar");
+			bnt.click();
+		}
+	}
+	</script>
+</head>
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<rich:spacer height="5" />
+
+				<h:form id="form">
+					<rich:panel id="principal">
+						<f:facet name="header">
+							<h:outputText value="Cierre Diario" />
+						</f:facet>
+						<rich:panel id="filtrosCliente">
+							<f:facet name="header">
+								<h:outputText value="Filtrar por" />
+							</f:facet>
+							<h:panelGrid styleClass="tableBO" columns="5"
+								style="size:300px; margin: auto; padding:10px; ">
+
+								<h:outputText value="Tipo ID:" styleClass="bold" rendered="#{dailyConciliationBean.permManageConc}" />
+								<h:selectOneMenu id="tipos" rendered="#{dailyConciliationBean.permManageConc}"
+									value="#{dailyConciliationBean.typeId}" style="width:157px;">
+									<f:selectItems value="#{dailyConciliationBean.typeList}" />
+								</h:selectOneMenu>
+
+								<h:outputText value="No. Identificación: " styleClass="bold" rendered="#{dailyConciliationBean.permManageConc}" />
+								<h:inputText value="#{dailyConciliationBean.codClient}" rendered="#{dailyConciliationBean.permManageConc}"
+									styleClass="normal" maxlength="15" 
+									onkeypress="return numOnly(event);searchbtn(event)"
+									style="width:153px;">
+								</h:inputText>
+								<rich:spacer height="1" rendered="#{dailyConciliationBean.permManageConc}"/>
+
+								<h:outputText value="Nombre: " styleClass="bold" rendered="#{dailyConciliationBean.permManageConc}"/>
+								<h:inputText value="#{dailyConciliationBean.nomClient}" rendered="#{dailyConciliationBean.permManageConc}"
+									styleClass="normal"
+									style="text-transform:uppercase;width:153px;"
+									onkeypress="return noEspecialRazSol(event)">
+								</h:inputText>
+
+								<h:outputText value="Apellidos: " styleClass="bold" rendered="#{dailyConciliationBean.permManageConc}"/>
+								<h:inputText value="#{dailyConciliationBean.apeClient}" rendered="#{dailyConciliationBean.permManageConc}"
+									styleClass="normal"
+									style="text-transform:uppercase;width:153px;"
+									onkeypress="return alphaSpaceWithoutPoint(event)">
+								</h:inputText>
+								<rich:spacer height="10" rendered="#{dailyConciliationBean.permManageConc}"/>
+
+								<h:outputText value="Usuario: " styleClass="bold" rendered="#{dailyConciliationBean.permManageConc}"/>
+								<h:inputText value="#{dailyConciliationBean.user}" rendered="#{dailyConciliationBean.permManageConc}"
+									styleClass="normal" style="width:153px;"
+									onkeypress="return emailValidation(event)">
+								</h:inputText>
+
+								<h:panelGroup>
+									<h:outputText value="Fecha del Cierre: " styleClass="bold" />
+									<h:outputLabel value="#{msg.Asterisk}"
+										styleClass="asteriskMandatoryField" />
+								</h:panelGroup>
+
+								<rich:calendar id="closing_date"
+									value="#{dailyConciliationBean.fechaCierre}" cellWidth="26px"
+									cellHeight="22px" style="width:150px" inputStyle="width:143px"
+									datePattern="dd/MM/yyyy" popup="true" styleClass="normal">
+								</rich:calendar>
+								<rich:spacer height="10" rendered="#{dailyConciliationBean.permManageConc}"/>
+
+							</h:panelGrid>
+
+							<div align="center">
+								<h:commandButton id="botonBuscar" value="Buscar"
+									action="#{dailyConciliationBean.search}">
+									<a4j:support event="oncomplete" reRender="outputB,dTable"
+										immediate="true" />
+								</h:commandButton>
+								<rich:spacer width="20" />
+								<h:commandButton value="Limpiar"
+									action="#{dailyConciliationBean.reset}">
+									<a4j:support immediate="true" event="oncomplete"
+										reRender="outputB,dTable,clientes1,couriers,rollos,output,richE,table,outputP,outputP1,richP,richP1,outputChange,richC,outputCobro,richCb,observ,cobro, clientes1,couriers,rollos" />
+								</h:commandButton>
+							</div>
+						</rich:panel>
+
+						<rich:spacer height="10" />
+
+						<rich:panel id="outputB"
+							rendered="#{dailyConciliationBean.showSummary}">
+							<f:facet name="header">
+								<h:outputText value="Resumen de Cierre" />
+							</f:facet>
+
+							<h:panelGrid styleClass="tableBO" columns="4"
+								style="size 350px; margin: auto; padding:10px; ">
+								<h:outputText value="Usuario:" styleClass="bold" />
+								<h:outputText value="#{dailyConciliationBean.nameUser}"
+									styleClass="bold" />
+								<h:outputText value="Fecha del Sistema:" styleClass="bold" />
+								<h:outputText value="#{dailyConciliationBean.systemDate}"
+									styleClass="bold" />
+								<h:outputText value="Clientes creados:" styleClass="bold" />
+								<h:outputText value="#{dailyConciliationBean.numberClients}"
+									styleClass="bold" />
+								<h:outputText value="Fecha del Cierre:" styleClass="bold" />
+								<h:outputText value="#{dailyConciliationBean.sFechaCierre}"
+									styleClass="bold" />
+								<h:outputText value="Valor Recaudado:" styleClass="bold" rendered="#{dailyConciliationBean.permManageConc}"/>
+								<h:outputText value="#{dailyConciliationBean.valueConcTxt}" rendered="#{dailyConciliationBean.permManageConc}"
+									styleClass="bold" />
+								<rich:spacer width="1" rendered="#{dailyConciliationBean.permManageConc}"/>
+								<rich:spacer width="1" rendered="#{dailyConciliationBean.permManageConc}"/>
+								<h:outputText value="Valor Efectivo:" styleClass="bold" />
+								<h:inputText id="valorEfectivo"
+									value="#{dailyConciliationBean.valueCashTxt}"
+									styleClass="normal" style="width:140px"
+									onkeypress="return solonumeros(event)" maxlength="15"
+									onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+								</h:inputText>
+								<rich:spacer width="1" />
+								<rich:spacer width="1" />
+								<h:outputText value="Diferencia:" styleClass="bold" />
+								<h:outputText value="#{dailyConciliationBean.valueDiffTxt}" rendered="#{dailyConciliationBean.permManageConc}"
+									styleClass="bold" />
+								<h:outputText value="#{dailyConciliationBean.textDiffTxt}" 
+								style="color: #{dailyConciliationBean.textDiffTxt=='SI' ? 'red' : 'black' };" 
+								rendered="#{!dailyConciliationBean.permManageConc}"
+									styleClass="bold" />
+								<rich:spacer width="1" />
+								<rich:spacer width="1" />
+
+							</h:panelGrid>
+
+							<div align="center">
+								<h:commandButton id="botonPrecierre" value="Precierre"
+									action="#{dailyConciliationBean.preCloseDaily}">
+									<a4j:support event="oncomplete" reRender="outputB,dTable"
+										immediate="true" />
+								</h:commandButton>
+								<rich:spacer width="20" />
+								<h:commandButton id="botonCierre" value="Cierre"
+									action="#{dailyConciliationBean.closeDaily}">
+									<a4j:support event="oncomplete" reRender="outputB,dTable"
+										immediate="true" />
+								</h:commandButton>
+								<rich:spacer width="20" />
+								<h:commandButton id="botonModificar" value="Modificar" rendered="#{dailyConciliationBean.permUpdateConc}"
+									action="#{dailyConciliationBean.saveChange}">
+									<a4j:support event="oncomplete" reRender="outputB,dTable"
+										immediate="true" />
+								</h:commandButton>
+								<rich:spacer width="20" />
+								<h:commandButton id="botonAbrir" value="Abrir Conciliación" rendered="#{dailyConciliationBean.permOpenConc}"
+									action="#{dailyConciliationBean.openDailyConc}">
+									<a4j:support event="oncomplete" reRender="outputB,dTable"
+										immediate="true" />
+								</h:commandButton>
+							</div>
+						</rich:panel>
+
+						<rich:spacer height="10" />
+
+						<a4j:outputPanel id="clientsP">
+							<rich:panel id="clientes"
+								rendered="#{dailyConciliationBean.showClients}">
+								<f:facet name="header">
+									<h:outputText value="Listado de Clientes" />
+								</f:facet>
+
+								<div id="scroll_horizontal">
+									<rich:dataTable id="dTable" width="800"
+										value="#{dailyConciliationBean.dailyConcDetails}"
+										var="cliente"
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+										rowClasses="white,grey">
+
+										<rich:column width="150px">
+											<f:facet name="header">
+												<h:outputText value="Fecha Creación" styleClass="bold" />
+											</f:facet>
+											<h:outputText value="#{cliente.userId.userRegistrationDate}"
+												styleClass="normal" style="font-size: 12px;"
+												converter="DateToStringDateConverter" />
+										</rich:column>
+										<rich:column width="50px">
+											<f:facet name="header">
+												<h:outputText value="Tipo ID" styleClass="bold" />
+											</f:facet>
+											<h:outputText
+												value="#{cliente.userId.tbCodeType.codeTypeAbbreviation}"
+												styleClass="normal" style="font-size: 12px;" />
+										</rich:column>
+										<rich:column width="120px">
+											<f:facet name="header">
+												<h:outputText value="No. Identificación" styleClass="bold" />
+											</f:facet>
+											<h:outputText value="#{cliente.userId.userCode}"
+												styleClass="normal" style="font-size: 12px;" />
+										</rich:column>
+										<rich:column width="150px">
+											<f:facet name="header">
+												<h:outputText value="Nombre" styleClass="bold" />
+											</f:facet>
+											<h:outputText value="#{cliente.userId.userNames}"
+												styleClass="normal" style="font-size: 12px;" />
+										</rich:column>
+										<rich:column width="150px">
+											<f:facet name="header">
+												<h:outputText value="Apellidos" styleClass="bold" />
+											</f:facet>
+											<h:outputText value="#{cliente.userId.userSecondNames}"
+												styleClass="normal" style="font-size: 12px;" />
+										</rich:column>
+										<rich:column width="150px">
+											<f:facet name="header">
+												<h:outputText value="Usuario" styleClass="bold" />
+											</f:facet>
+											<h:outputText value="#{cliente.userId.userEmail}"
+												styleClass="normal" style="font-size: 12px;" />
+										</rich:column>
+										<rich:column width="100px">
+											<f:facet name="header">
+												<h:outputText value="Cuenta FP" styleClass="bold" />
+											</f:facet>
+											<h:outputText value="#{cliente.accountId.accountId}"
+												styleClass="normal" style="font-size: 12px;" />
+											<!--  rendered="#{dailyConciliationBean.showsss}" -->
+										</rich:column>
+										<rich:column width="150px">
+											<f:facet name="header">
+												<h:outputText value="Placa" styleClass="bold" />
+											</f:facet>
+											<h:outputText value="#{cliente.vehicleId.vehiclePlate}"
+												styleClass="normal" style="font-size: 12px;" />
+										</rich:column>
+										<rich:column width="150px" rendered="#{dailyConciliationBean.permManageConc}">
+											<f:facet name="header">
+												<h:outputText value="Valor" styleClass="bold" />
+											</f:facet>
+											<h:outputText value="#{cliente.rechargeValue}"
+												styleClass="normal" style="font-size: 12px;">
+												<f:convertNumber currencySymbol="$" groupingUsed="true"
+													maxFractionDigits="0" type="currency" />
+											</h:outputText>
+										</rich:column>
+										<f:facet name="footer">
+											<rich:datascroller for="dTable" />
+										</f:facet>
+									</rich:dataTable>
+								</div>
+
+							</rich:panel>
+						</a4j:outputPanel>
+
+					</rich:panel>
+				</h:form>
+
+				<rich:modalPanel id="panelAlter" width="370" height="220"
+					showWhenRendered="#{dailyConciliationBean.showAlterConc}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Conciliación Diaria"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{dailyConciliationBean.hideModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:form>
+						<h:panelGrid columns="1" styleClass="tableBO">
+							<h:outputText
+								value="Digite la observación de la modificación de la conciliación."
+								styleClass="normal" />
+							<h:panelGroup>
+								<div align="center">
+									<h:panelGroup>
+										<h:panelGroup>
+											<h:outputText id="ob" value="Observación: " styleClass="bold" />
+											<h:outputLabel id="askob" value="#{msg.Asterisk}"
+												styleClass="asteriskMandatoryField" />
+										</h:panelGroup>
+										<h:inputTextarea id="obt"
+											value="#{dailyConciliationBean.observation}"
+											style="width:170px; height:50px;resize: none;">
+										</h:inputTextarea>
+									</h:panelGroup>
+								</div>
+							</h:panelGroup>
+						</h:panelGrid>
+						<h:panelGrid columns="1" styleClass="tableBO">
+							<h:panelGroup>
+								<div align="center">
+									<h:panelGroup>
+										<h:panelGroup>
+											<h:commandButton value="Aceptar"
+												action="#{dailyConciliationBean.alterDailyConc}">
+											</h:commandButton>
+										</h:panelGroup>
+										<rich:spacer width="10" />
+										<h:commandButton value="Cancelar"
+											action="#{dailyConciliationBean.cancelar}"/>
+									</h:panelGroup>
+								</div>
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:form>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="confirmacion" width="370" height="115"
+					showWhenRendered="#{dailyConciliationBean.showConfirmation}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Conciliación Diaria"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form id="fc1">
+								<h:commandButton id="bc1"
+									action="#{dailyConciliationBean.hideModal}" disabled="false"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<a4j:form id="formE">
+						<h:panelGrid columns="1" styleClass="tableBO"
+							style="width:300px;margin:auto;padding-right:0px; ">
+							<h:panelGroup>
+								<h:outputText value="#{dailyConciliationBean.corfirmMessage}"
+									styleClass="normal" />
+								<rich:spacer height="10" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<rich:spacer width="63" />
+								<a4j:commandButton id="bAcceptar2" value="Aceptar"
+									action="#{dailyConciliationBean.confirmationCloseDaily}">
+									<a4j:support event="onclick"
+										onsubmit="document.getElementById('formE:bAcceptar2').disabled=true;document.getElementById('formE:bCancelar2').disabled=true;document.getElementById('fc1:bc1').disabled=true" />
+									<a4j:support event="oncomplete" reRender="panelm,panelm1" />
+								</a4j:commandButton>
+								<rich:spacer width="15" />
+								<a4j:commandButton id="bCancelar2" value="Cancelar"
+									action="#{dailyConciliationBean.cancelar}" reRender="panelm" />
+							</h:panelGroup>
+
+						</h:panelGrid>
+					</a4j:form>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="confirmacion2" width="370" height="115"
+					showWhenRendered="#{dailyConciliationBean.showConfirmation2}"
+					moveable="false" onresize="return false;">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Conciliación Diaria"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form id="fc2">
+								<h:commandButton id="bc2"
+									action="#{dailyConciliationBean.hideModal}" disabled="false"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{dailyConciliationBean.corfirmMessage}"
+						styleClass="normal" />
+					<rich:spacer height="10" />
+					<a4j:form id="formu">
+						<h:panelGrid columns="3" styleClass="tableBO"
+							style="width:250px; height:150px; margin: auto; padding-right:53px; ">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:commandButton id="bCambio1" value="Aceptar"
+									action="#{dailyConciliationBean.showSaveChange}">
+									<a4j:support event="onclick"
+										onsubmit="document.getElementById('formu:bCambio1').disabled=true;document.getElementById('formu:bCancelar1').disabled=true;document.getElementById('fc2:bc2').disabled=true" />
+									<a4j:support event="oncomplete"
+										reRender="panelm,panelm1,panelAlter" />
+								</a4j:commandButton>
+
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:commandButton id="bCancelar1" value="Cancelar"
+									action="#{dailyConciliationBean.cancelar}" reRender="panelm" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</a4j:form>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="confirmacion3" width="370" height="115"
+					showWhenRendered="#{dailyConciliationBean.showConfirmation3}"
+					moveable="false" onresize="return false;">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Conciliación Diaria"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form id="fc3">
+								<h:commandButton id="bc3"
+									action="#{dailyConciliationBean.hideModal}" disabled="false"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{dailyConciliationBean.corfirmMessage}"
+						styleClass="normal" />
+					<rich:spacer height="10" />
+					<a4j:form id="formulario">
+						<h:panelGrid columns="3" styleClass="tableBO"
+							style="width:250px; height:150px; margin: auto; padding-right:53px; ">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:commandButton id="reponer" value="Aceptar"
+									action="#{dailyConciliationBean.confirmationOpenDailyConc}">
+									<a4j:support event="onclick"
+										onsubmit="document.getElementById('formulario:reponer').disabled=true;document.getElementById('formulario:cancelar').disabled=true;document.getElementById('fc3:bc3').disabled=true" />
+									<a4j:support event="oncomplete" reRender="panelm,panelm1" />
+
+								</a4j:commandButton>
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:commandButton id="cancelar" value="Cancelar"
+									action="#{dailyConciliationBean.cancelar}" reRender="panelm" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</a4j:form>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="panelm1" width="370" height="115"
+					showWhenRendered="#{dailyConciliationBean.showModal}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Conciliación Diaria"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{dailyConciliationBean.hideModal1}"
+									image="/img/close.png">
+									<a4j:support event="onclick"
+										action="#{dailyConciliationBean.hideModal1}"
+										reRender="panelm1"></a4j:support>
+								</h:commandButton>
+								<rich:componentControl for="panelm1" attachTo="hidelink"
+									operation="hide" event="onclick" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{dailyConciliationBean.message}"
+						styleClass="normal" />
+					<h:panelGrid columns="1"
+						style="width: 100px; margin: auto; padding-left:12px;">
+						<a4j:form>
+							<h:commandButton value="Aceptar"
+								action="#{dailyConciliationBean.hideModal1}">
+								<a4j:support event="oncomplete"
+									oncomplete="document.getElementById('formulario:reponer').disabled=false;document.getElementById('formulario:cancelar').disabled=false;document.getElementById('formu:bCambio1').disabled=false;document.getElementById('formu:bCancelar1').disabled=false;document.getElementById('formE:bAcceptar2').disabled=false;document.getElementById('formE:bCancelar2').disabled=false" />
+							</h:commandButton>
+							<rich:componentControl for="panelm1" attachTo="hidelink"
+								operation="hide" event="onclick" />
+						</a4j:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="panelm" width="370" height="115"
+					showWhenRendered="#{dailyConciliationBean.showModalError}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Conciliación Diaria"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{dailyConciliationBean.hideModal}"
+									image="/img/close.png">
+									<a4j:support event="onclick"
+										action="#{dailyConciliationBean.hideModal}" reRender="panelm"></a4j:support>
+								</h:commandButton>
+								<rich:componentControl for="panelm" attachTo="hidelink"
+									operation="hide" event="onclick" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{dailyConciliationBean.message}"
+						styleClass="normal" />
+					<h:panelGrid columns="1"
+						style="width: 100px; margin: auto; padding-left:12px;">
+						<a4j:form>
+							<h:commandButton value="Aceptar"
+								action="#{dailyConciliationBean.hideModal}">
+								<a4j:support event="oncomplete"
+									reRender="clientes1,couriers,rollos,output,richE,table" />
+							</h:commandButton>
+							<rich:componentControl for="panelm" attachTo="hidelink"
+								operation="hide" event="onclick" />
+						</a4j:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="panelm2" width="370" height="115"
+					showWhenRendered="#{dailyConciliationBean.showModalError2}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Conciliación Diaria"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{dailyConciliationBean.hideModal2}"
+									image="/img/close.png">
+									<a4j:support event="onclick"
+										action="#{dailyConciliationBean.hideModal2}"
+										reRender="panelm2"></a4j:support>
+								</h:commandButton>
+								<rich:componentControl for="panelm2" attachTo="hidelink"
+									operation="hide" event="onclick" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{dailyConciliationBean.message}"
+						styleClass="normal" />
+					<h:panelGrid columns="1"
+						style="width: 100px; margin: auto; padding-left:12px;">
+						<a4j:form>
+							<h:commandButton value="Aceptar"
+								action="#{dailyConciliationBean.hideModal2}">
+							</h:commandButton>
+							<rich:componentControl for="panelm2" attachTo="hidelink"
+								operation="hide" event="onclick" />
+						</a4j:form>
+					</h:panelGrid>
+				</rich:modalPanel>
+
+				<rich:modalPanel id="wait" autosized="true" width="370" height="110"
+					moveable="false" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Transacción en proceso..."
+						style="font-size:12px;" />
+				</rich:modalPanel>
+
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

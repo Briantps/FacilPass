@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">  
+<head>   
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />      
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />  
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" /> 
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+	<title>Cargue Masivo TAGs</title>
+</head>
+<style>
+	.top {
+	    vertical-align: top;    
+	}
+	.info {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #C3C3C3; border-collapse: collapse;    
+	}
+	.info2 {
+	    height: 300px;
+	    overflow: auto;
+	    border: 1px solid #C3C3C3; border-collapse: collapse;    
+	}
+</style>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="/jsf/content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu">
+		<ui:include src="/jsf/menu/menu.jsp"/>
+	</f:subview>
+</div>
+<div class="span-5">
+	<ui:include src="/jsf/menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:panel style="width: 730px;">	
+		<f:facet name="header">
+			<h:outputText value="Cargue Masivo TAGs" styleClass="bold"/>
+		</f:facet>
+		<h:form>
+		  
+		<rich:panel styleClass="richPanel"> 	 	
+			<rich:spacer/>		
+			<h:panelGrid columns="1">
+	            <h:outputText value="Los dispositivos ingresados por esta opción serán creados con tipo PREPAGO y con estado PREACTIVO. La estructura del archivo de Excel es la siguiente, recuerde que los campos son obligatorios para la creación del dispositivo en el sistema." 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+				<rich:spacer/>  
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" border="1">
+				<h:panelGroup>
+				<h:outputText value="Columna" styleClass="bold" style="text-align:center"/>
+		        </h:panelGroup>
+	            <h:outputText value="Descripción" styleClass="bold" style="text-align:center"/>
+				<h:panelGroup>
+				<h:outputText value="ID Interno" 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+		        </h:panelGroup>
+	            <h:outputText value="Campo par, hexadecimal en mayúscula, tamaño definido por el fabricante." 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	            <h:outputText value="ID Facial" 
+	            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+		        <h:outputText value="Campo alfanumérico en mayúscula, tamaño mínimo 1 y máximo 20 caracteres." 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>  
+				<h:outputText value="ID Courier" 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+		        <h:outputText value="Campo numérico. Llave principal de la tabla Tb_courier, mínimo 1 y máximo 15 caracteres." 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+	            <h:outputText value="ID Rollo " 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>
+		        <h:outputText value="Campo numérico. Llave principal de la tabla Tb_roll, mínimo 1 y máximo 15 caracteres." 
+		            	style="color: #000000; font-family: 'Arial'; font-size: 12px"/>       	
+			</h:panelGrid>						
+		
+			<table width="100%">
+				<tr>
+					<td width="30%">
+						<h:outputLabel value="Seleccione el Fabricante: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="60%">
+						<h:selectOneMenu id="pttagsel" value="#{chargeMassiveTagsBean.tagTypeId}" disabled="#{chargeMassiveTagsBean.disableFields}" style="width: 200px">
+							<f:selectItems value="#{chargeMassiveTagsBean.typeList}"/>
+							<a4j:support event="onchange" action="#{chargeMassiveTagsBean.changeTypeList}" reRender="panelData"/>
+						</h:selectOneMenu>	
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">
+						<h:outputLabel value="Seleccione la Empresa: " styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</td>
+					<td width="60%">
+						<h:selectOneMenu id="companyTagList" value="#{chargeMassiveTagsBean.companyTagId}"  disabled="#{chargeMassiveTagsBean.disableFields}" style="width: 200px">
+							<f:selectItems value="#{chargeMassiveTagsBean.companyTagList}"/>
+							<a4j:support event="onchange" action="#{chargeMassiveTagsBean.changeTypeList}" reRender="panelData"/>
+						</h:selectOneMenu>
+						<rich:spacer width="10"/>
+						<h:commandLink value="Administrar" rendered="#{chargeMassiveTagsBean.permAdd}">
+							<f:setPropertyActionListener target="#{chargeMassiveTagsBean.stateAddCompany}" value="1"/>
+						</h:commandLink>
+					</td>
+				</tr>
+			</table>	
+			<h:panelGroup>
+			      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			      <h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+			</h:panelGroup>
+		  
+		<a4j:outputPanel id="panelData" layout="inline">  
+			<rich:panel id="pd" rendered="#{chargeMassiveTagsBean.showData}"> 		
+				<h:panelGrid columns="1" columnClasses="top,top">	
+					<rich:fileUpload id="upload" addControlLabel="Subir Archivo" fileUploadListener="#{chargeMassiveTagsBean.loadFile}"  
+			              maxFilesQuantity="1" ontyperejected="javascript:Richfaces.showModalPanel('panelextension');"
+						  doneLabel="Documento Cargado Correctamente"         
+			              immediateUpload="#{chargeMassiveTagsBean.autoUpload}" listWidth="100%" listHeight="70px"
+			              acceptedTypes="XLS,xls,XLSX,xlsx" allowFlash="#{chargeMassiveTagsBean.useFlash}">
+						<a4j:support event="onclick">	           
+							<f:setPropertyActionListener value="#{chargeMassiveTagsBean.tagTypeId}" target="#{chargeMassiveTagsBean.tagTypeId}"/>
+						</a4j:support>
+						<a4j:support event="onuploadcomplete" reRender="info,upload,panel,panel3,confirmacionFac,panelError,panel2,panel5">	
+						</a4j:support>
+			        </rich:fileUpload>
+				</h:panelGrid>
+			</rich:panel>
+		</a4j:outputPanel>
+	</rich:panel>	
+	<rich:spacer height="10"/>  
+	
+		
+	<a4j:outputPanel id="panelError">
+		<rich:panel id="rich1" rendered="#{chargeMassiveTagsBean.showErrorFile}">
+			<h:panelGrid style="vertical-align: middle; margin: auto;" columns="2">
+				<h:outputText value="Log de Errores Cargue Masivo TAGs" styleClass="normal" style="color: #008040; font-size: 18px"/>
+				<h:commandLink id="clinkpdf" target="_blank" value="" 
+					action="#{chargeMassiveTagsBean.printPdf}">
+					<img title="Imprimir" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+					style="cursor: pointer; border: 0px solid blue;" />
+                          <f:setPropertyActionListener target="#{chargeMassiveTagsBean.exportOption}" value="PDF"/>
+           		</h:commandLink>
+			</h:panelGrid>					
+		</rich:panel>
+	</a4j:outputPanel>
+	
+	
+	</h:form>	
+	</rich:panel>
+	<rich:spacer height="10"/>	
+	
+	<rich:modalPanel id="panelextension" width="350" height="115" showWhenRendered="#{chargeMassiveTagsBean.showMessage4}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">        
+			<h:panelGroup>    
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal7}" image="/img/close.png" /> 
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="Revise que su documento tenga las extensiones xls, xlsx para subirlo." styleClass="normal"/> 
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal7}" style="width: 75px"/>
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+	
+	
+	 <rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{chargeMassiveTagsBean.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">   
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" >
+                    </h:commandButton>
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+        <rich:spacer height="10"/>
+        <h:form>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+		   <h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal}" style="width: 75px">
+           </h:commandButton>
+        </h:panelGrid>
+        </h:form>
+         <br />
+	</rich:modalPanel>
+	
+	
+	 <rich:modalPanel id="showModalAdmin" width="350" height="115" showWhenRendered="#{chargeMassiveTagsBean.showModalAdmin}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">   
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal7}" image="/img/close.png" >
+                    </h:commandButton>
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+        <rich:spacer height="10"/>
+        <h:form>
+        <h:panelGrid columns="1" style="width: 100px; margin: auto; padding:5px; ">
+		   <h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal7}" style="width: 75px">
+           </h:commandButton>
+        </h:panelGrid>
+        </h:form>
+         <br />
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="panel2" width="350" height="115"  showWhenRendered="#{chargeMassiveTagsBean.showMessage2}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal2}" image="/img/close.png" >
+                    </h:commandButton>
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+        <rich:spacer height="10"/>
+        <h:form>
+        <h:panelGrid columns="2" style="width: 100px; margin: auto; padding:5px; ">
+		    <h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal2}" style="width: 75px"/>
+        </h:panelGrid>
+        </h:form>
+        <br />
+	</rich:modalPanel>  
+	
+	
+	<rich:modalPanel id="panel3" width="350" height="115" showWhenRendered="#{chargeMassiveTagsBean.showMessage3}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">   
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal7}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<a4j:region id="editando">
+		     		<a4j:commandButton id="send" value="Aceptar" action="#{chargeMassiveTagsBean.saveTags}" style="width: 80px">
+	                	<a4j:support event="oncomplete" reRender="panel"/>
+			           	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+	                </a4j:commandButton>
+               </a4j:region>
+               <rich:spacer width="20"/>
+               <h:commandButton value="Cancelar" action="#{chargeMassiveTagsBean.cancelLoad}" style="width: 75px"/>
+	     	</h:panelGroup>	     	
+	    </h:panelGrid>       
+	    </h:form>
+		<br />  
+	</rich:modalPanel>  
+	
+	<rich:modalPanel id="panel5" width="350" height="115"  showWhenRendered="#{chargeMassiveTagsBean.showMessage5}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal7}" image="/img/close.png" >
+                    </h:commandButton>
+				</a4j:form>
+			</h:panelGroup>    
+		</f:facet>
+		<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+        <rich:spacer height="10"/>
+        <h:form>
+        <h:panelGrid columns="2" style="width: 100px; margin: auto; padding:5px; ">
+		    <h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal7}" style="width: 75px"/>
+        </h:panelGrid>
+        </h:form>
+        <br />
+	 </rich:modalPanel>
+	
+	 <rich:modalPanel id="confirmacionFac" width="465" height="210" showWhenRendered="#{chargeMassiveTagsBean.showValidationFactory}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Seleccionar Fabricante" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal7}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:form id="Formulario">
+			<rich:panel style="width:440px;">			
+				<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 200px; padding:1px;">
+					<h:panelGroup>  
+						<h:outputLabel value="Seleccione el Fabricante: "  styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>
+					<h:selectOneMenu id="pttagsel" value="#{chargeMassiveTagsBean.tagTypeId}" style="width: 200px">
+						<f:selectItems value="#{chargeMassiveTagsBean.typeList}"/>
+						<a4j:support event="onchange" action="#{chargeMassiveTagsBean.changeTypeList}" reRender="companysel"/>
+					</h:selectOneMenu>
+					<h:panelGroup>  
+						<h:outputLabel value="Seleccione la Empresa: "  styleClass="bold"/>
+						<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+					</h:panelGroup>
+					<h:selectOneMenu id="companysel" value="#{chargeMassiveTagsBean.companyTagId}" style="width: 200px">
+						<f:selectItems value="#{chargeMassiveTagsBean.companyTagList}"/>
+						<a4j:support event="onchange" action="#{chargeMassiveTagsBean.changeTypeList}"/>
+					</h:selectOneMenu>	
+		     		 <h:panelGroup>  
+				      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+				     </h:panelGroup>
+						<h:commandButton value="Guardar" action="#{chargeMassiveTagsBean.validateFactory}" style="width: 70px"/>
+				</h:panelGrid>												
+			</rich:panel>
+		</h:form>
+	</rich:modalPanel>	 
+ 
+ 	<rich:panel rendered="#{chargeMassiveTagsBean.showOcult}" style="width:730px;">
+ 	<h:form>
+		<h:panelGrid style="width: 700px;" styleClass="tableBO" columns="4">	
+			<h:panelGroup>
+				<h:outputText value="Empresa: " styleClass="bold"  style="width: 200px"/>
+			</h:panelGroup>
+		    <rich:spacer width="65"/>
+            <h:panelGroup>
+			  <h:selectOneMenu value="#{chargeMassiveTagsBean.companyTagIdNew}" styleClass="normal" style="width: 200px">
+				<f:selectItems value="#{chargeMassiveTagsBean.companyTagList}"/>
+                   <a4j:support event="onchange" reRender="couriers,rollos" ajaxSingle="true"/>
+			  </h:selectOneMenu>
+			  <h:commandLink id="clickImageCompany" action="#{chargeMassiveTagsBean.initAddCompanyTag}">
+					<h:graphicImage id="imagenAddCompany" url="/img/agregar.png" styleClass="buttonAgregar"/>
+			  </h:commandLink>	
+            </h:panelGroup>
+            <rich:spacer width="50"/>               	
+			<h:panelGroup>
+				<h:outputText value="Courier: " styleClass="bold"  style="width: 200px"/>
+			</h:panelGroup>
+			<rich:spacer width="65"/>
+            <h:panelGroup>
+			  <h:selectOneMenu id="couriers" value="#{chargeMassiveTagsBean.courierId}" styleClass="normal" style="width: 200px">
+				<f:selectItems value="#{chargeMassiveTagsBean.courierList}"/>
+              		<a4j:support event="onchange" reRender="rollos" ajaxSingle="true"/>
+			  </h:selectOneMenu>
+			  <h:commandLink id="clickImageCourier" action="#{chargeMassiveTagsBean.initAddCourier}">
+				<h:graphicImage id="imagenAddCourier" url="/img/agregar.png" styleClass="buttonAgregar"/>
+			  </h:commandLink>
+            </h:panelGroup>
+            <rich:spacer width="50"/>
+            <h:panelGroup>
+				<h:outputText value="Rollo: " styleClass="bold"  style="width: 200px"/>
+			</h:panelGroup>
+			<rich:spacer width="65"/>
+            <h:panelGroup>
+			  <h:selectOneMenu id="rollos" value="#{chargeMassiveTagsBean.rolloId}" styleClass="normal" style="width: 200px">
+				<f:selectItems value="#{chargeMassiveTagsBean.rolloList}"/>
+			  </h:selectOneMenu>
+			  <h:commandLink id="clickImageRoll" action="#{chargeMassiveTagsBean.initAddRoll}">
+					<h:graphicImage id="imagenAddRoll" url="/img/agregar.png" styleClass="buttonAgregar"/>
+			  </h:commandLink>
+            </h:panelGroup>
+            <rich:spacer width="50"/>
+		</h:panelGrid>
+		
+	     
+            <rich:spacer width="390"/>
+		    <h:commandLink value="Ocultar" rendered="#{chargeMassiveTagsBean.permAdd}">
+				<f:setPropertyActionListener target="#{chargeMassiveTagsBean.stateAddCompany}" value="0"/>
+			</h:commandLink>
+		</h:form>
+	</rich:panel>  									
+	
+	<rich:modalPanel id="addCompanyTag" width="435" showWhenRendered="#{chargeMassiveTagsBean.showInsertCompanyTag}" 
+					 autosized = "true" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Crear Empresa" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+			<h:form id="addCompanyTag1">
+				<rich:panel style="width:415px;">
+					<h:panelGrid styleClass="tableBO" columns="2" style="padding:10px;">
+						<h:panelGroup>
+							<h:outputText value="Nombre Empresa: " styleClass="bold"/>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+						</h:panelGroup>
+				        <h:inputText value="#{chargeMassiveTagsBean.companyTagName}" maxlength="50" 
+				                     onkeypress="return CompanyCourierRoll(event)" style="width: 200px"/>
+						<h:panelGroup>
+							<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+						</h:panelGroup>
+						<h:panelGroup>
+							<a4j:commandButton value="Crear" action="#{chargeMassiveTagsBean.validationAddCompanyTag}" style="width: 90px"
+							onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelModalValidateCompany,confirmationCompanyTag"/>
+							<rich:spacer width="20"/>	
+							<h:commandButton value="Cancelar" action="#{chargeMassiveTagsBean.hideModal}" style="width: 90px"/>
+						</h:panelGroup>
+					</h:panelGrid>
+				</rich:panel>
+			</h:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="addCourier" width="435" showWhenRendered="#{chargeMassiveTagsBean.showInsertCourier}" 
+		 autosized ="true" onresize="return false;" moveable="false" style="resize: none; overflow: auto;word-wrap: break-word;">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Crear Courier" styleClass="bold"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+				<h:form id="addCourier1">
+					<rich:panel style="width:415px;">
+						<h:panelGrid styleClass="tableBO" columns="2" style="padding:10px;">
+						 	<h:panelGroup>
+								<h:outputText value="Empresa: " styleClass="bold"/>
+							</h:panelGroup>
+					        <h:outputText value="#{chargeMassiveTagsBean.companyTagName}" style="width: 200px; display: inline-block;"/>
+					        <h:panelGroup>
+								<h:outputText value="Id Courier: " styleClass="bold"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</h:panelGroup>
+					        <h:inputText value="#{chargeMassiveTagsBean.courierIdNew}" maxlength="15" 
+					                     onkeypress="return numOnly(event)" style="width: 195px"/>
+							<h:panelGroup>
+								<h:outputText value="Nombre Courier: " styleClass="bold"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</h:panelGroup>
+					        <h:inputText value="#{chargeMassiveTagsBean.courierName}" maxlength="50" 
+					                     onkeypress="return CompanyCourierRoll(event)" style="width: 195px"/>
+							<h:panelGroup>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:commandButton value="Crear" action="#{chargeMassiveTagsBean.validationAddCourier}" style="width: 90px"
+								onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelModalValidateCourier,confirmationCourier"/>
+								<rich:spacer width="20"/>	
+								<h:commandButton value="Cancelar" action="#{chargeMassiveTagsBean.hideModal}" style="width: 90px"/>
+							</h:panelGroup>
+						</h:panelGrid>
+					</rich:panel>
+				</h:form>
+		</rich:modalPanel>
+		
+		<rich:modalPanel id="addRoll" width="435" showWhenRendered="#{chargeMassiveTagsBean.showInsertRoll}" 
+		 autosized = "true" onresize="return false;" moveable="false" style="resize: none; overflow: auto;word-wrap: break-word;">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Crear Rollo" styleClass="bold"/>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<a4j:form>
+						<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+					</a4j:form>
+				</h:panelGroup>
+			</f:facet>
+				<h:form id="addRoll1">
+					<rich:panel style="width:415px;">
+						<h:panelGrid styleClass="tableBO" columns="2" style="padding:10px;">
+							<h:panelGroup>
+								<h:outputText value="Empresa: " styleClass="bold"/>
+							</h:panelGroup>
+					        <h:outputText value="#{chargeMassiveTagsBean.companyTagName}" style="width: 200px; display: inline-block;"/>
+							<h:panelGroup>
+								<h:outputText value="Courier: " styleClass="bold"/>
+							</h:panelGroup>
+					        <h:outputText value="#{chargeMassiveTagsBean.courierName}" style="width: 200px; display: inline-block;"/>
+							<h:panelGroup>
+								<h:outputText value="Nombre Rollo: " styleClass="bold"/>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</h:panelGroup>
+					        <h:inputText value="#{chargeMassiveTagsBean.rollName}" maxlength="50" 
+					                     onkeypress="return CompanyCourierRoll(event)" style="width: 195px"/>
+							<h:panelGroup>
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+							</h:panelGroup>
+							<h:panelGroup>
+								<a4j:commandButton value="Crear" action="#{chargeMassiveTagsBean.validationAddRoll}" style="width: 90px"
+								onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelModalValidateRollo,confirmationRoll"/>
+								<rich:spacer width="20"/>	
+								<h:commandButton value="Cancelar" action="#{chargeMassiveTagsBean.hideModal}" style="width: 90px"/>
+							</h:panelGroup>
+						</h:panelGrid>
+					</rich:panel>
+				</h:form>
+		</rich:modalPanel>
+		
+		<rich:modalPanel id="panelModalValidateCompany" width="350" height="115" showWhenRendered="#{chargeMassiveTagsBean.showModalValidateCompanyTag}" 
+			onresize="return false;" moveable="false">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/>
+					</h:panelGroup>
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<a4j:form>
+							<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+						</a4j:form>
+					</h:panelGroup>
+				</f:facet>
+				<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+				<h:form>
+					<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+				     	<h:panelGroup>
+				     		<h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal3}" style="width:75px"/>
+				     	</h:panelGroup>	     	
+				    </h:panelGrid>
+				</h:form>
+				<br/>
+		</rich:modalPanel>
+		
+		<rich:modalPanel id="panelModalValidateCourier" width="350" height="115" showWhenRendered="#{chargeMassiveTagsBean.showModalValidateCourier}" 
+			onresize="return false;" moveable="false">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/>
+					</h:panelGroup>
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<a4j:form>
+							<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+						</a4j:form>
+					</h:panelGroup>
+				</f:facet>
+				<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+				<h:form>
+					<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+				     	<h:panelGroup>
+				     		<h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal4}" style="width:75px"/>
+				     	</h:panelGroup>	     	
+				    </h:panelGrid>
+				</h:form>
+				<br/>
+		</rich:modalPanel>
+		
+		<rich:modalPanel id="panelModalValidateRollo" width="350" height="115" showWhenRendered="#{chargeMassiveTagsBean.showModalValidateRoll}" 
+			onresize="return false;" moveable="false">
+				<f:facet name="header">
+					<h:panelGroup>
+						<h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/>
+					</h:panelGroup>
+				</f:facet>
+				<f:facet name="controls">
+					<h:panelGroup>
+						<a4j:form>
+							<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+						</a4j:form>
+					</h:panelGroup>
+				</f:facet>
+				<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+				<h:form>
+					<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+				     	<h:panelGroup>
+				     		<h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal5}" style="width:75px"/>
+				     	</h:panelGroup>	     	
+				    </h:panelGrid>
+				</h:form>
+				<br/>
+		</rich:modalPanel>
+		
+		<rich:modalPanel id="confirmationCompanyTag" width="350" height="115" 
+			showWhenRendered="#{chargeMassiveTagsBean.showModalConfirmationCompanyTag}" autosized="true" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<div style="width: 350px; word-wrap: break-word;">
+			<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal" />
+		</div>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<a4j:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.insertCompanyTag}" style="width:80px"
+	     		onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panel"/>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{chargeMassiveTagsBean.hideModal3}" style="width:80px"/></h:panelGroup>	     	
+	    </h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="confirmationCourier" width="350" height="115" 
+			showWhenRendered="#{chargeMassiveTagsBean.showModalConfirmationCourier}" autosized="true" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<div style="width: 350px; word-wrap: break-word;">
+			<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal" />
+		</div>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<a4j:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.insertCourier}" style="width:80px"
+	     		onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelShowModal"/>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{chargeMassiveTagsBean.hideModal4}" style="width:80px"/></h:panelGroup>	     	
+	    </h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+	
+	<rich:modalPanel id="confirmationRoll" width="350" height="115" 
+			showWhenRendered="#{chargeMassiveTagsBean.showModalConfirmationRoll}" autosized="true" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<div style="width: 350px; word-wrap: break-word;">
+			<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+		</div>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup>
+	     		<a4j:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.insertRoll}" style="width:80px"
+	     		onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelShowModal"/>
+	     	</h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{chargeMassiveTagsBean.hideModal5}" style="width:80px"/></h:panelGroup>	     	
+	    </h:panelGrid>
+		</h:form>
+	</rich:modalPanel>
+	
+	
+		<rich:modalPanel id="panelShowModal" width="350" height="115" showWhenRendered="#{chargeMassiveTagsBean.showModal}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Mensaje - Cargue Masivo TAGs" styleClass="bold"/>
+			</h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{chargeMassiveTagsBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{chargeMassiveTagsBean.message}" styleClass="normal"/>
+		<rich:spacer height="10"/>					
+		<h:form>
+		 <h:panelGrid columns="2" style="width: 100px; margin: auto; padding:5px; ">
+		    <h:commandButton value="Aceptar" action="#{chargeMassiveTagsBean.hideModal}" style="width: 75px"/>
+        </h:panelGrid>  
+		</h:form>
+		<br/>
+	</rich:modalPanel>  
+	
+</div>
+<f:subview id="footer">
+	<ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+
+<rich:modalPanel id="wait" autosized="true" width="350" 
+	height="110" moveable="false" resizeable="false">
+	<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+</rich:modalPanel>
+
+</f:view>
+</div>
+</body>
+</html>

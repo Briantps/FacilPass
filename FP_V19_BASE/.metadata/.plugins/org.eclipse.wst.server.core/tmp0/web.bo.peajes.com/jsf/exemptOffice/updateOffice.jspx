@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<div>
+	<a4j:outputPanel id="errorp">
+		<h:outputText styleClass="bold" value="#{exemptOfficeBean.errorMessage}"
+		   style="color: red;" rendered="#{exemptOfficeBean.showError}"/>
+	</a4j:outputPanel>	
+	<h:form id="Formulario">
+		<rich:panel style="width:350px;">
+			<f:loadBundle basename="staticText.messages" var="msg" />
+			<h:panelGrid styleClass="tableBO" columns="2" 
+				style="size 600px; margin: auto; padding:10px; ">
+				<h:panelGroup>
+					<h:outputText value="Tipo: " styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<h:inputText value="#{exemptOfficeBean.typeName}"
+					maxlength="100"/>
+				<h:panelGroup>
+					<h:outputText value="Dependencia: " styleClass="bold"/>
+					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+				</h:panelGroup>
+				<h:inputText value="#{exemptOfficeBean.officeName}"
+					maxlength="100" id="Nombre" />
+				<h:outputText value="Dirección: " styleClass="bold"/>
+				<h:inputText value="#{exemptOfficeBean.officeAddress}" styleClass="normal"
+					maxlength="100"/>
+				<h:outputText value="Teléfono: " styleClass="bold"/>
+				<h:inputText value="#{exemptOfficeBean.officePhone}" styleClass="normal"
+					maxlength="20"/>
+				<h:outputText value="Fax: " styleClass="bold"/>
+				<h:inputText value="#{exemptOfficeBean.officeFax}" styleClass="normal"
+					maxlength="20"/>
+				<h:outputText value="E-Mail: " styleClass="bold"/>
+				<h:inputText value="#{exemptOfficeBean.officeEmail}" styleClass="normal"
+					maxlength="100"/>
+				<h:outputText value="Autoriza: " styleClass="bold"/>
+				<h:inputText value="#{exemptOfficeBean.authoreizedBy}" styleClass="normal"
+					maxlength="100"/>
+				<h:outputText/>
+				<h:commandButton value="Editar"  styleClass="bold" 
+						action="#{exemptOfficeBean.editOffice}">
+					<a4j:support event="oncomplete" reRender="errorp"/>
+				</h:commandButton>
+			</h:panelGrid>
+			<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+		</rich:panel>
+	</h:form>
+	<rich:spacer height="20"/>	
+
+</div>
+</f:view>
+</div>
+</body>
+</html>

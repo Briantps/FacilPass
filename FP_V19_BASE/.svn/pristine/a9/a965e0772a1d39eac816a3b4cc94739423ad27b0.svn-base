@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml" 
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html" 
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta content="no-cache" http-equiv="Pragma" />
+		<meta content="no-cache" http-equiv="Cache-Control" />
+		<meta content="no-store" http-equiv="Cache-Control" />
+		<meta content="max-age=0" http-equiv="Cache-Control" />
+		<meta content="-1" http-equiv="Expires" />
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Restablecer Contraseña-Preguntas de Seguridad</title>
+	</head>
+	
+	<script>
+	function getFocus() {		
+		document.getElementById("formulario:rp1").focus();		
+	}  
+	setTimeout(getFocus, 1000);
+	</script>
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader"><ui:include src="../menu/menu.jsp"/></f:subview>
+				</div>			
+				<div class="bkContents span-24">
+					<h:form id="formulario">
+				    <f:loadBundle basename="staticText.messages" var="msg" />
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Restablecer Contraseña-Preguntas de Seguridad" styleClass="bold"/>
+							</f:facet>
+							
+							<h:panelGrid styleClass="tableBO" columns="1" style="size 350px; margin: auto; padding:10px; ">
+									<h:panelGroup>
+								   		<h:outputText value="Pregunta 1: #{passwordReset.preg1}" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp1"  value="#{passwordReset.resp1}" maxlength="250" onkeypress="return Observation(event)" style="width: 645px;"></h:inputText>
+							      	</h:panelGroup>
+							      	
+							      	<h:panelGroup>
+								   		<h:outputText value="Pregunta 2: #{passwordReset.preg2}" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp2"  value="#{passwordReset.resp2}" maxlength="250" onkeypress="return Observation(event)" style="width: 645px;"></h:inputText>
+							      	</h:panelGroup>
+							      	
+		              			   <h:panelGroup>
+								   		<h:outputText value="Pregunta 3: #{passwordReset.preg3}" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp3"  value="#{passwordReset.resp3}" maxlength="250" onkeypress="return Observation(event)" style="width: 645px;"></h:inputText>
+							      	</h:panelGroup>
+							      	
+							      	<h:panelGroup>
+								   		<h:outputText value="Pregunta 4: #{passwordReset.preg4}" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp4"  value="#{passwordReset.resp4}" maxlength="250" onkeypress="return Observation(event)" style="width: 645px;"></h:inputText>
+							      	</h:panelGroup>
+							      	
+		              			    <h:panelGroup>
+								   		<h:outputText value="Pregunta 5: #{passwordReset.preg5}" styleClass="bold"/>
+								   		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		              					<h:inputText id="rp5"  value="#{passwordReset.resp5}" maxlength="250" onkeypress="return Observation(event)" style="width: 645px;"></h:inputText>
+							      	</h:panelGroup>
+								</h:panelGrid>
+								
+								<table width="100px">
+									<rich:spacer height="5"/>	
+									<div align="center">
+										<h:panelGroup>
+										 	<h:commandButton value="Aceptar"  action="#{passwordReset.resetValidateResponses}" styleClass="center" style="width: 100px"/>
+										 	<rich:spacer width="10"/>	
+										 	<h:commandButton value="Cancelar" action="#{passwordReset.cancelResponse}" styleClass="center" style="width: 100px"/>
+										</h:panelGroup>
+									</div>
+									<h:panelGroup>
+					                 	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+					                </h:panelGroup>	
+								</table> 
+						</rich:panel>
+					</h:form>
+					<rich:spacer height="20"/>   		
+
+					<!--Modal que muestra mensajes generales-->
+					<rich:modalPanel id="panelm" width="350" height="125" showWhenRendered="#{passwordReset.showMsj}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText styleClass="bold" value="Mensaje - Restablecer Contraseña"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{passwordReset.hideModal}" image="/img/close.png" />	
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{passwordReset.modalMessage}"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<rich:spacer height="15"/>
+							<div align="center">
+								<h:panelGroup>
+								<h:commandButton value="Aceptar" action="#{passwordReset.logout}" style="width: 80px"/>					 
+				                <rich:spacer width="10"/>
+				              	<h:commandButton value="Cancelar" action="#{passwordReset.hideModal}" style="width: 80px"/>
+								</h:panelGroup>
+							</div>
+				    	</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panelModalValidate" width="350" height="115" 
+					showWhenRendered="#{passwordReset.showModalValidate}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Restablecer Contraseña" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{passwordReset.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{passwordReset.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{passwordReset.hideModal}" onclick="getFocus()" style="width: 80px"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panelModalClose" width="350" height="115" 
+					showWhenRendered="#{passwordReset.showMsjClose}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Restablecer Contraseña" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{loginMBean.logout}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{passwordReset.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{loginMBean.logout}" style="width: 80px"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+		
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

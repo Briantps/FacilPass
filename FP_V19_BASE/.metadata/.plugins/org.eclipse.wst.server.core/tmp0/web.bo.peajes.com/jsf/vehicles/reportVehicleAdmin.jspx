@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<title>Reporte de Vehículos</title>
+<style type="text/css">
+.rich-spinner-c {
+	width: 103px;
+	margin: 0 0 5px 0;
+}
+</style>
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+</head>
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header2">
+				<ui:include src="../content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="header">
+					<ui:include src="../menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="../menu/sideMenu.jsp" />
+			</div>
+			<div class="bkContents span-18 prepend-1">
+				<rich:spacer height="5" />
+				<h:form>
+					<rich:panel style="width:700px;margin:auto;">
+						<f:facet name="header">
+							<h:outputText value="Reporte de vehículos" styleClass="bold" />
+						</f:facet>
+						<rich:panel style="width:600 px;margin:auto;">
+							<f:facet name="header">
+								<h:outputText value="Filtrar por" styleClass="bold" />
+							</f:facet>
+							<h:panelGrid styleClass="tableBO" columns="4"
+								style="size 350px; margin: auto; padding:10px; ">
+								<h:outputText value="Tipo Identificación:" styleClass="bold" />
+								<h:selectOneMenu value="#{reportVehicleBeanAdmin.codeType}"
+									style="width: 145px;" styleClass="normal">
+									<f:selectItems value="#{reportVehicleBeanAdmin.codeTypesList}" />
+									<a4j:support event="onclick"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+									<a4j:support event="onkeyup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:selectOneMenu>
+								<h:outputText value="No. Identificación:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.numberDoc}"
+									styleClass="normal" style="width:140px"
+									onkeypress="return numOnly(event)" maxlength="15">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Nombre:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.firstName}"
+									styleClass="normal" maxlength="150"
+									style="width:140px; text-transform: uppercase"
+									onkeypress="return noEspecialRazSol(event)">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Apellidos:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.lastName}"
+									styleClass="normal" maxlength="150"
+									style="width:140px; text-transform: uppercase"
+									onkeypress="return alphaSpaceWithoutPoint(event)">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Usuario:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.email}" maxlength="100"
+									styleClass="normal" style="width:140px"
+									onkeypress="return emailValidation(event)">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Cuenta FacilPass:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.account}"
+									styleClass="normal" style="width:140px"
+									onkeypress="return numOnly(event)" maxlength="15">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Placa:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.placaFil}"
+									styleClass="normal"
+									style="width:140px; text-transform: uppercase"
+									onkeypress="return alphaNumOnly2(event)" maxlength="15">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Categoría:" styleClass="bold" />
+								<h:selectOneMenu value="#{reportVehicleBeanAdmin.categoryType}"
+									styleClass="normal" converter="RowIdToNameConverter"
+									style="width: 145px;">
+									<f:selectItems value="#{reportVehicleBeanAdmin.listCategories}" />
+									<a4j:support event="onclick"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:selectOneMenu>
+								<h:outputText value="Adicional 1:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.ad1Fil}"
+									styleClass="normal" style="width:140px" maxlength="100"
+									onkeypress="return alphaNumSpaceSimple(event)">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Adicional 2:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.ad2Fil}"
+									styleClass="normal" style="width:140px" maxlength="100"
+									onkeypress="return alphaNumSpaceSimple(event)">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Adicional 3:" styleClass="bold" />
+								<h:inputText value="#{reportVehicleBeanAdmin.ad3Fil}"
+									styleClass="normal" style="width:140px" maxlength="100"
+									onkeypress="return alphaNumSpaceSimple(event)">
+									<a4j:support event="onmouseup"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</h:inputText>
+								<h:outputText value="Fecha Inicial:" styleClass="bold" />
+								<rich:calendar id="beg_date"
+									value="#{reportVehicleBeanAdmin.dateIni}" cellWidth="26px"
+									cellHeight="22px" style="width:150px" inputStyle="width:143px"
+									datePattern="dd/MM/yyyy" popup="true" styleClass="normal">
+									<a4j:support event="onclick"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</rich:calendar>
+								<h:outputText value="Fecha Final:" styleClass="bold" />
+								<rich:calendar id="end_date"
+									value="#{reportVehicleBeanAdmin.dateEnd}" cellWidth="26px"
+									cellHeight="22px" style="width:150px" inputStyle="width:143px"
+									datePattern="dd/MM/yyyy" popup="true" styleClass="normal">
+									<a4j:support event="onclick"
+										action="#{reportVehicleBeanAdmin.ocult}" reRender="panelData" />
+								</rich:calendar>
+							</h:panelGrid>
+							<rich:spacer height="10" />
+							<table width="100%">
+								<div align="center">
+									<h:panelGroup>
+										<h:commandButton value="Buscar"
+											action="#{reportVehicleBeanAdmin.searchFilter}" style="width: 80px">
+											<a4j:support event="oncomplete" reRender="panelData" />
+										</h:commandButton>
+										<rich:spacer width="20" />
+										<h:commandButton value="Limpiar"
+											action="#{reportVehicleBeanAdmin.clearFilter}" style="width: 80px">
+											<a4j:support event="oncomplete" reRender="panelData" />
+										</h:commandButton>
+									</h:panelGroup>
+								</div>
+							</table>
+						</rich:panel>
+					</rich:panel>
+					<rich:spacer height="10" />
+					<a4j:outputPanel id="panelData">
+						<rich:panel id="rich1"
+							rendered="#{reportVehicleBeanAdmin.showReport}">
+							<rich:spacer width="5" />
+							<h:panelGrid style="width: 172px; margin: auto; padding:10px;"
+								columns="2">
+								<h:commandLink id="clinkpdf" target="_blank" value=""
+									action="#{reportVehicleBeanAdmin.printPdf}">
+									<img title="Imprimir"
+										src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir"
+										style="cursor: pointer; border: 0px solid blue;" />
+									<f:setPropertyActionListener
+										target="#{reportVehicleBeanAdmin.exportOption}" value="PDF" />
+								</h:commandLink>
+								<h:commandLink id="clinkexcel" target="_blank" value=""
+									action="#{reportVehicleBeanAdmin.printPdf}">
+									<img title="Imprimir"
+										src="/web.bo.peajes.com/img/generar_xls_btn.gif"
+										alt="Imprimir"
+										style="cursor: pointer; border: 0px solid blue;" />
+									<f:setPropertyActionListener
+										target="#{reportVehicleBeanAdmin.exportOption}" value="EXCEL" />
+								</h:commandLink>
+							</h:panelGrid>
+						</rich:panel>
+					</a4j:outputPanel>
+				</h:form>
+				<rich:spacer height="20" />
+				<rich:modalPanel id="panel" width="350" height="115"
+					showWhenRendered="#{reportVehicleBeanAdmin.showModal}"
+					onresize="return false;" moveable="false" zindex="5000">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Reporte de Vehículos"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{reportVehicleBeanAdmin.hideModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{reportVehicleBeanAdmin.msg}"
+						styleClass="normal" />
+					<rich:spacer height="10" />
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:commandButton value="Aceptar"
+									action="#{reportVehicleBeanAdmin.hideModal}" style="width: 80px"/>
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:form>
+					<br />
+				</rich:modalPanel>
+			</div>
+			<f:subview id="footer">
+				<ui:include src="../content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

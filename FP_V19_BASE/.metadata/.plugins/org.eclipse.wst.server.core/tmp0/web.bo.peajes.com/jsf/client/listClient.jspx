@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">       
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<meta content="no-cache" http-equiv="Pragma" />
+		<meta content="no-cache" http-equiv="Cache-Control" />
+		<meta content="no-store" http-equiv="Cache-Control" />
+		<meta content="max-age=0" http-equiv="Cache-Control" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />    
+		<title>Lista Clientes</title>                
+	</head>	
+	<body>
+		<div class="container">   
+			<f:view>
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>    
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">		
+					<rich:spacer height="5"/>	
+					<rich:panel style="width:600 px;margin:auto;">  
+						<f:facet name="header">
+							<h:outputText value="Administración de Clientes" styleClass="bold"/>
+						</f:facet> 
+						<h:form>
+				 			<rich:panel style="width:600 px;margin:auto;">    
+								<f:facet name="header">
+									<h:outputText value="Filtrar por" styleClass="bold"/>   
+								</f:facet>
+								<h:panelGrid styleClass="tableBO" columns="4" style="size 350px; margin: auto; padding:10px; ">
+									<h:outputText value="Tipo Identificación:"  styleClass="bold"/>
+									<h:selectOneMenu value="#{listClient.codeTypeSearch}" style="width: 145px;" styleClass="normal">
+										<f:selectItems value="#{listClient.codeTypesList}"/>		
+			 						</h:selectOneMenu>        
+			 						<h:outputText value="No. Identificación:"  styleClass="bold"/>
+			 						<h:inputText value="#{listClient.numberDocSearch}" styleClass="normal" style="width:140px" onkeypress="return numOnly(event)" maxlength="15" />
+			 						<h:outputText value="Nombre:"  styleClass="bold"/>
+			 						<h:inputText value="#{listClient.userNameSearch}" styleClass="normal" style="width:140px; text-transform: uppercase" onkeypress="return noEspecialRazSol(event)"/>
+			 						<h:outputText value="Apellidos:"  styleClass="bold"/>
+			 						<h:inputText value="#{listClient.secondNameSearch}" styleClass="normal" style="width:140px; text-transform: uppercase" onkeypress="return alphaSpaceWithoutPoint(event)"/>
+			 						<h:outputText value="Usuario:"  styleClass="bold"/>   
+			 						<h:inputText value="#{listClient.userEmailSearch}" styleClass="normal" style="width:140px" onkeypress="return emailValidation(event)"/>
+			 						<h:outputText value="Cuenta FacilPass:"  styleClass="bold"/>
+			 						<h:inputText value="#{listClient.accountIdSearch}" styleClass="normal" style="width:140px" onkeypress="return numOnly(event)" maxlength="15" />
+			 						<h:outputText value="Placa:"  styleClass="bold"/> 
+			 						<h:inputText value="#{listClient.plateSearch}" styleClass="normal" style="width:140px; text-transform: uppercase" onkeypress="return alphaNumOnly(event)"  maxlength="12"/>
+ 								</h:panelGrid>
+ 								
+								<table width="100px">
+									<rich:spacer height="5"/>	
+									<div align="center">
+										<h:panelGroup>
+										 <h:commandButton value="Buscar" action="#{listClient.searchFilter}" style="width: 80px">
+											<a4j:support event="oncomplete" reRender="panelData"/>
+										 </h:commandButton>	
+										 <rich:spacer width="20"/>
+										 <h:commandButton value="Limpiar" action="#{listClient.clearFilter}" style="width: 80px">
+											<a4j:support event="oncomplete" reRender="panelData"/>
+										 </h:commandButton>
+										</h:panelGroup>
+									</div>
+								</table>
+				 			</rich:panel>				 
+				 			<rich:spacer height="10"/>
+				 			<rich:panel id="panelData" style="width:600 px;margin:auto;">
+				  				<f:facet name="header">  
+				  					<h:outputText value="Listado de Clientes" styleClass="bold"/>
+				  				</f:facet>
+				    			<div id="scroll_horizontal">   
+									<rich:dataTable value="#{listClient.listAllInfoClients}" var="item" id="lista" rows="11" width="800px">   
+										<rich:column style="text-align:center;">  
+											<f:facet name="header">
+												<h:outputText value="Tipo Identificación" styleClass="bold"/>
+											</f:facet>
+											<h:outputText value="#{item.codeTypeAbbrU}" styleClass="normal2"/>
+										</rich:column>
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="No. Identificación" styleClass="bold"/>
+											</f:facet>  
+											<h:commandLink  value="#{item.numberDocU}" action="#{listClient.initEditClient}">
+											<f:setPropertyActionListener value="#{item.codeTypeU}" target="#{listClient.codeType}"/>
+											<f:setPropertyActionListener value="#{item.numberDocU}" target="#{listClient.numberDoc}"/>  
+											<f:setPropertyActionListener value="#{item.userIdU}" target="#{listClient.userId}"/>
+											<f:setPropertyActionListener value="#{item.accountIdU}" target="#{listClient.accountId}"/>  
+											<f:setPropertyActionListener value="#{item.placaU}" target="#{listClient.plate}"/>
+											<f:setPropertyActionListener value="#{item.balanceAccountU}" target="#{listClient.balanceAccount}"/> 
+											<f:setPropertyActionListener value="#{item.nameBankU}" target="#{listClient.nameBank}"/> 
+											<f:setPropertyActionListener value="#{item.digitsBankU}" target="#{listClient.digitsBank}"/> 
+											<f:setPropertyActionListener value="#{item.stateDescU}" target="#{listClient.stateDesc}"/>
+											<f:setPropertyActionListener value="#{item.stateIdU}" target="#{listClient.stateId}"/>
+											<f:setPropertyActionListener value="#{item.distributionTypeU}" target="#{listClient.typeDistr}"/>
+											<f:setPropertyActionListener value="#{item.categoryU}" target="#{listClient.category}"/> 
+											<f:setPropertyActionListener value="#{item.cityU}" target="#{listClient.city}"/>  	
+											<f:setPropertyActionListener value="#{item.optionalPhoneU}" target="#{listClient.userPhone2}"/>    										
+											<f:setPropertyActionListener value="#{item.tagIdU}" target="#{listClient.tagId}"/>   
+											<f:setPropertyActionListener value="#{item.facialU}" target="#{listClient.facial}"/>
+											</h:commandLink>    
+										</rich:column>        
+										<rich:column style="text-align:center;"> 
+											<f:facet name="header">  
+												<h:outputText value="Nombre" styleClass="bold"/>
+											</f:facet>	
+											<h:commandLink  value="#{item.nameU}" action="#{listClient.initEditClient}">
+											<f:setPropertyActionListener value="#{item.codeTypeU}" target="#{listClient.codeType}"/>
+											<f:setPropertyActionListener value="#{item.numberDocU}" target="#{listClient.numberDoc}"/>  
+											<f:setPropertyActionListener value="#{item.userIdU}" target="#{listClient.userId}"/>  
+											<f:setPropertyActionListener value="#{item.accountIdU}" target="#{listClient.accountId}"/>  
+											<f:setPropertyActionListener value="#{item.placaU}" target="#{listClient.plate}"/>
+											<f:setPropertyActionListener value="#{item.balanceAccountU}" target="#{listClient.balanceAccount}"/> 
+											<f:setPropertyActionListener value="#{item.nameBankU}" target="#{listClient.nameBank}"/> 
+											<f:setPropertyActionListener value="#{item.digitsBankU}" target="#{listClient.digitsBank}"/> 
+											<f:setPropertyActionListener value="#{item.stateDescU}" target="#{listClient.stateDesc}"/>
+											<f:setPropertyActionListener value="#{item.stateIdU}" target="#{listClient.stateId}"/>
+											<f:setPropertyActionListener value="#{item.distributionTypeU}" target="#{listClient.typeDistr}"/>
+											<f:setPropertyActionListener value="#{item.categoryU}" target="#{listClient.category}"/> 
+											<f:setPropertyActionListener value="#{item.cityU}" target="#{listClient.city}"/>  											
+											<f:setPropertyActionListener value="#{item.tagIdU}" target="#{listClient.tagId}"/>
+											<f:setPropertyActionListener value="#{item.optionalPhoneU}" target="#{listClient.userPhone2}"/>  										
+											<f:setPropertyActionListener value="#{item.facialU}" target="#{listClient.facial}"/>
+											</h:commandLink>
+										</rich:column>
+										<rich:column style="text-align:center;"> 
+											<f:facet name="header">  
+												<h:outputText value="Apellidos" styleClass="bold"/>
+											</f:facet>	
+											<h:commandLink  value="#{item.secondNameU}" action="#{listClient.initEditClient}">
+											<f:setPropertyActionListener value="#{item.codeTypeU}" target="#{listClient.codeType}"/>
+											<f:setPropertyActionListener value="#{item.numberDocU}" target="#{listClient.numberDoc}"/>  
+											<f:setPropertyActionListener value="#{item.userIdU}" target="#{listClient.userId}"/>
+											<f:setPropertyActionListener value="#{item.accountIdU}" target="#{listClient.accountId}"/>  
+											<f:setPropertyActionListener value="#{item.placaU}" target="#{listClient.plate}"/>
+											<f:setPropertyActionListener value="#{item.balanceAccountU}" target="#{listClient.balanceAccount}"/> 
+											<f:setPropertyActionListener value="#{item.nameBankU}" target="#{listClient.nameBank}"/> 
+											<f:setPropertyActionListener value="#{item.digitsBankU}" target="#{listClient.digitsBank}"/> 
+											<f:setPropertyActionListener value="#{item.stateDescU}" target="#{listClient.stateDesc}"/>
+											<f:setPropertyActionListener value="#{item.stateIdU}" target="#{listClient.stateId}"/>
+											<f:setPropertyActionListener value="#{item.distributionTypeU}" target="#{listClient.typeDistr}"/>
+											<f:setPropertyActionListener value="#{item.categoryU}" target="#{listClient.category}"/> 
+											<f:setPropertyActionListener value="#{item.cityU}" target="#{listClient.city}"/>  
+											<f:setPropertyActionListener value="#{item.optionalPhoneU}" target="#{listClient.userPhone2}"/>  																			
+											<f:setPropertyActionListener value="#{item.tagIdU}" target="#{listClient.tagId}"/>
+											<f:setPropertyActionListener value="#{item.facialU}" target="#{listClient.facial}"/>
+											</h:commandLink>
+										</rich:column>
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Usuario" styleClass="bold"/>
+											</f:facet>
+											<h:outputText value="#{item.emailU}" styleClass="normal"/>    
+										</rich:column>  
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Cuenta FacilPass" styleClass="bold"/>
+											</f:facet>
+											<h:outputText value="#{item.accountIdU}" styleClass="normal2"/>
+										</rich:column>  
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Placa" styleClass="bold"/>  
+											</f:facet>
+											<h:outputText value="#{item.placaU}" styleClass="normal2"/>    
+										</rich:column>
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Categoría" styleClass="bold"/>  
+											</f:facet>
+											<h:outputText value="#{item.categoryU}"/>    
+										</rich:column>
+										<rich:column style="text-align:center;">   
+											<f:facet name="header">
+												<h:outputText value="Contraseña" styleClass="bold"/>
+											</f:facet>
+											<h:commandLink value="Restablecer" action="#{listClient.confirmRestPasword}" styleClass="normal2">
+														<f:setPropertyActionListener target="#{listClient.codeTypeAbbr}" value="#{item.codeTypeAbbrU}"/>
+													    <f:setPropertyActionListener target="#{listClient.userId}" value="#{item.userIdU}"/> 
+														<f:setPropertyActionListener target="#{listClient.numberDoc}" value="#{item.numberDocU}"/>  
+														<f:setPropertyActionListener target="#{listClient.userName}" value="#{item.nameU}"/> 
+														<f:setPropertyActionListener target="#{listClient.secondName}" value="#{item.secondNameU}"/> 	
+											</h:commandLink>
+										</rich:column> 
+										<rich:column style="text-align:center;">   
+											<f:facet name="header">
+												<h:outputText value="Preguntas Seguridad" styleClass="bold"/>
+											</f:facet>
+											<center>
+											<h:commandLink value="Restablecer" action="#{listClient.confirmResetQuetion}" styleClass="normal2">
+												<f:setPropertyActionListener target="#{listClient.codeTypeAbbr}" value="#{item.codeTypeAbbrU}"/>																						
+												<f:setPropertyActionListener target="#{listClient.userId}" value="#{item.userIdU}"/>  
+											    <f:setPropertyActionListener target="#{listClient.numberDoc}" value="#{item.numberDocU}"/>  
+												<f:setPropertyActionListener target="#{listClient.userName}" value="#{item.nameU}"/> 
+												<f:setPropertyActionListener target="#{listClient.secondName}" value="#{item.secondNameU}"/> 										
+											</h:commandLink>
+											</center>
+										</rich:column> 
+									</rich:dataTable>
+									
+									<rich:dataTable id="ws"
+										value="#{listClient.listaScroll}"							
+										var="item" rows="11">	
+									</rich:dataTable>
+									<rich:datascroller for="ws" id="PTScroll" 
+										page="#{listClient.page}"
+										reRender="lista, PTScroll"
+										actionListener="#{listClient.dataScroller}">
+									</rich:datascroller>            
+								</div>
+		                		<h:commandLink id="clinkpdf" target="_blank" value="" action="#{listClient.imprimirReporte}">
+						   			<img title="Generar Listado Total de Clientes" src="/web.bo.peajes.com/img/generar_xls_btn.gif" alt="Imprimir"
+						     			style="cursor: pointer; border: 0px solid blue;" />
+				        		</h:commandLink>
+				 			</rich:panel>		         
+						</h:form>
+					</rich:panel>			
+					<rich:spacer height="20"/>	
+					
+					<rich:modalPanel id="panelCliente" width="660" showWhenRendered="#{listClient.showEdit}" 
+					autosized ="true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Modificar Datos Cliente" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">  
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listClient.hideModal3}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+							<h:form id="Formulario">
+								<rich:panel style="width:760px;">			
+									<h:panelGrid styleClass="tableBO" columns="4" style="margin: auto; size: 150px; padding:1px;">
+										<h:outputLabel value="Tipo Identificación:" styleClass="bold"/>
+										<h:outputText value="#{listClient.codeTypeAbbr}"/>   
+										<h:outputLabel value="No. Identificación:" styleClass="bold"/>
+										<h:outputText value="#{listClient.numberDoc}"/>
+										<h:panelGroup>
+											<h:outputLabel value="Nombre:" styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"  rendered="#{listClient.codeType!=1}"/>
+										</h:panelGroup>									
+										<h:inputText maxlength="100" value="#{listClient.userName}" 
+										             rendered="#{listClient.codeType==3}" onkeypress="return noEspecialRazSol(event)"/>								
+										<h:panelGroup layout="block" style="width: 160px; word-wrap: break-word;" rendered="#{listClient.codeType!=3}">
+											<h:outputText value="#{listClient.userName}"/>
+										</h:panelGroup>
+										<h:panelGroup>
+											<h:outputLabel value="Apellidos:" styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"  rendered="#{listClient.codeType!=1}"/>
+										</h:panelGroup>	
+										<h:inputText maxlength="100" value="#{listClient.secondName}" 
+										             rendered="#{listClient.codeType==3}" onkeypress="return alphaSpaceOnly(event)"
+										             style="text-transform:uppercase;width: 165px"/>								
+										<h:panelGroup layout="block" style="width: 160px; word-wrap: break-word;" rendered="#{listClient.codeType!=3}">
+											<h:outputText value="#{listClient.secondName}"/>
+										</h:panelGroup>
+										<h:panelGroup>
+											<h:outputLabel value="Usuario:" styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+										<h:inputText maxlength="50" value="#{listClient.userEmail}" style="width:165px;"/>
+										<h:outputLabel value="Cuenta FacilPass:" styleClass="bold"/>
+										<h:outputText value="#{listClient.accountId}"/>
+										<h:outputLabel value="Estado:" styleClass="bold"/>
+										<h:outputText value="#{listClient.stateDesc}"/>
+										<h:panelGroup>
+											<h:outputLabel value="Celular:" styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>  
+										<h:inputText value="#{listClient.userPhone1}" label="Celular" 
+													onkeypress="return numOnly(event)" maxlength="30" style="width:165px;"/>
+										<h:outputLabel value="Teléfono Opcional:" styleClass="bold"/>
+										<h:inputText value="#{listClient.userPhone2}" label="Teléfono Opcional"
+													 onkeypress="return alphaNumSpaceOnly(event)" maxlength="30" style="width:165px;"/>
+										<h:panelGroup>  
+											<h:outputLabel value="Dirección:" styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+										<h:inputText maxlength="50" value="#{listClient.userAdress}" 
+													 style="text-transform:uppercase; width:165px;"/>
+										<h:panelGroup>
+											<h:outputLabel value="Ciudad (Departamento): "  styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>	  
+										<h:selectOneMenu value="#{listClient.city}" style="width: 170px;">
+											<f:selectItems value="#{listClient.cities}"/>  
+										</h:selectOneMenu>	   
+										<h:outputLabel value="Tipo Distribución: " styleClass="bold"/>
+										<h:outputText value="#{listClient.typeDistr}"/>  
+										<h:outputLabel value="Saldo:" styleClass="bold"/>
+										<h:outputText value="#{listClient.balanceAccount}"/>   
+										<h:outputLabel value="Banco:"  styleClass="bold"/>
+										<h:outputText value="#{listClient.nameBank}"/>   
+										<h:outputLabel value="Producto Bancario:" styleClass="bold"/>
+										<h:outputText value="#{listClient.digitsBank}"/>   
+										<h:outputLabel value="Placa:"  styleClass="bold"/>
+										<h:outputText value="#{listClient.plate}"/>    
+										<h:outputLabel value="Categoría:" styleClass="bold"/>
+										<h:outputText value="#{listClient.category}"/>  
+										<h:outputLabel value="Tag ID:" styleClass="bold"/>
+										<h:outputText value="#{listClient.tagId}" style="font-size:11px"/>    
+										<h:outputLabel value="Facial:" styleClass="bold"/>
+										<h:outputText value="#{listClient.facial}" style="font-size:11px"/> 
+										<rich:spacer/>  
+										<rich:spacer/>    
+										<h:panelGroup>  
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+										    <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>	
+										<h:panelGroup>	    							
+											<h:commandButton value="Activar" rendered="#{listClient.stateId==5}" action="#{listClient.showConfirmActivateUserXAdmin}" style="width: 80px"/>
+											<h:commandButton value="Inactivar" rendered="#{listClient.stateId==2}" action="#{listClient.showConfirmInactivateUserXAdmin}" style="width: 80px"/>
+										</h:panelGroup>	  
+										<h:commandButton value="Guardar" action="#{listClient.editDataClient}" style="width: 80px"/>
+		                                <h:commandButton value="Cancelar" action="#{listClient.hideModal3}" style="width: 80px"/>  		  					
+									</h:panelGrid>  
+								</rich:panel>
+							</h:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="panelConfirmRestarQ" width="350" height="115" showWhenRendered="#{listClient.showConfirResetQuestion}" autosized="true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Clientes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup> 
+								<a4j:form>
+									<h:commandButton action="#{listClient.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<div style="width: 350px; word-wrap: break-word;">
+							<h:outputText value="#{listClient.modalMessage}" styleClass="normal" />
+						</div>
+						<h:form>
+							<rich:spacer height="15"/>
+							<div align="center">
+								<h:panelGroup>
+								<a4j:region id="qt">
+						     		<a4j:commandButton value="Aceptar" action="#{listClient.resetSecurityQuestions}" style="width: 80px">
+					                	<a4j:support event="oncomplete" reRender="paneResetQuesti"/>
+							           	<a4j:status onstart="#{rich:component('wait')}.show()" for="qt"/>
+					                </a4j:commandButton>
+				                </a4j:region>
+									<rich:spacer width="10"/>
+									<h:commandButton value="Cancelar" action="#{listClient.hideModal2}" style="width: 80px"/>
+								</h:panelGroup>
+								</div>
+				    	</h:form>
+					</rich:modalPanel>	
+									
+									<rich:modalPanel id="paneResetQuesti" width="350" height="115" showWhenRendered="#{listClient.showResetQuestion}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Clientes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup> 
+								<a4j:form>
+									<h:commandButton action="#{listClient.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listClient.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton value="Aceptar" action="#{listClient.hideModal2}" style="width: 80px"/>
+								</h:panelGroup>	     	
+							</h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>	
+						
+					<rich:modalPanel id="panelV" width="350" height="115" showWhenRendered="#{listClient.showConfirRestPass}" autosized="true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Clientes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup> 
+								<a4j:form>
+									<h:commandButton action="#{listClient.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<div style="width: 350px; word-wrap: break-word;">
+							<h:outputText value="#{listClient.modalMessage}" styleClass="normal" />
+						</div>
+						<h:form>
+							<rich:spacer height="15"/>
+							<div align="center">
+								<h:panelGroup>
+								<a4j:region id="pass">
+						     		<a4j:commandButton value="Aceptar" action="#{listClient.resetPassword}" style="width: 80px">
+					                	<a4j:support event="oncomplete" reRender="panelVi"/>
+							           	<a4j:status onstart="#{rich:component('wait')}.show()" for="pass"/>
+					                </a4j:commandButton>
+				                </a4j:region>
+									<rich:spacer width="10"/>
+									<h:commandButton value="Cancelar" action="#{listClient.hideModal2}" style="width: 80px"/>
+								</h:panelGroup>
+								</div>
+					    	</h:form>
+						</rich:modalPanel>
+									
+					
+					<rich:modalPanel id="panelVi" width="350" height="115" showWhenRendered="#{listClient.showModalValidate}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Clientes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup> 
+								<a4j:form>
+									<h:commandButton action="#{listClient.hideModal2}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listClient.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton value="Aceptar" action="#{listClient.hideModal2}" style="width: 80px"/>
+								</h:panelGroup>	     	
+							</h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>	
+					
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{listClient.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Clientes" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listClient.hideModal3}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listClient.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>  
+								</h:panelGroup>
+								<h:panelGroup>  
+									<h:commandButton value="Aceptar" action="#{listClient.hideModal}" style="width: 80px"/>
+								</h:panelGroup>	     	
+							</h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+						
+						
+					<rich:modalPanel id="confirmacionInactivar" width="350" height="115" showWhenRendered="#{listClient.showConfirmationI}" onresize="return false;" moveable="false"> 
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listClient.hideModal3}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listClient.modalMessage}" styleClass="normal"/>
+						<h:form>
+						<h:panelGrid columns="1" styleClass="tableBO">
+							<h:panelGroup>
+								<div align="center">
+								 	<h:panelGroup>
+						     			<h:panelGroup>
+		              					   <a4j:region id="editando">
+					     				   	   <a4j:commandButton value="Aceptar" action="#{listClient.inactivateUserXAdmin}" style="width: 80px">
+					                	       	<a4j:support event="oncomplete" reRender="panel,panelVi"/>
+							                  	<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+					            		   	   </a4j:commandButton>
+				                			</a4j:region>		
+						     			</h:panelGroup>
+						     			<rich:spacer width="10" />
+										<h:commandButton value="Cancelar" action="#{listClient.hideModal3}" style="width: 80px"/>
+									</h:panelGroup>
+								 </div>
+							</h:panelGroup>    	
+						</h:panelGrid>
+						</h:form>
+					</rich:modalPanel> 	
+					
+					<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{listClient.showConfirmation}" onresize="return false;" moveable="false">
+							<f:facet name="header">
+								<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+							</f:facet>
+							<f:facet name="controls">
+								<h:panelGroup>
+									<a4j:form>
+										<h:commandButton action="#{listClient.hideModal3}" image="/img/close.png" />
+									</a4j:form>
+								</h:panelGroup>
+							</f:facet>
+							<h:outputText value="#{listClient.modalMessage}" styleClass="normal"/>
+							<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO">
+						    	<h:panelGroup>
+									<div align="center">
+									 	<h:panelGroup>
+							     			<h:panelGroup>
+						              			<a4j:region id="editando">
+									     			<a4j:commandButton value="Aceptar" action="#{listClient.saveDataClient}" style="width: 80px">
+									                <a4j:support event="oncomplete" reRender="panelVi"/>
+											        <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+									            	</a4j:commandButton>
+								                </a4j:region>		
+						            		</h:panelGroup>
+							     			<rich:spacer width="10" />
+							     			<h:commandButton value="Cancelar" action="#{listClient.hideModal3}" style="width: 80px"/>
+							     		</h:panelGroup>
+									 </div>
+								</h:panelGroup>
+						    </h:panelGrid> 
+					    </h:form>
+					</rich:modalPanel>	
+					
+					<rich:modalPanel id="confirmacionActivar" width="350" height="115" showWhenRendered="#{listClient.showConfirmationA}" onresize="return false;" moveable="false"> 
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listClient.hideModal3}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listClient.modalMessage}" styleClass="normal"/>
+						<h:form>
+						<h:panelGrid columns="1" styleClass="tableBO">
+					    	<h:panelGroup>
+								<div align="center">
+								 	<h:panelGroup>
+						     			<h:panelGroup>
+					              			<a4j:region id="editando">
+								     			<a4j:commandButton value="Aceptar" action="#{listClient.activateUserXAdmin}" style="width: 80px">
+								                <a4j:support event="oncomplete" reRender="panel,panelVi"/>
+										        <a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+								            	</a4j:commandButton>
+							                </a4j:region>		
+					            		</h:panelGroup>
+						     			<rich:spacer width="10" />
+						     			<h:commandButton value="Cancelar" action="#{listClient.hideModal3}" style="width: 80px"/>
+						     		</h:panelGroup>
+								 </div>
+							</h:panelGroup>
+					    </h:panelGrid> 
+						</h:form>
+					</rich:modalPanel>
+							<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+				  	<h:outputText value="Por favor espere..."  style="font-size:12px;"/>
+				  	<h:form>
+       				<h:commandLink disabled="true">
+       				<h:graphicImage value="/img/procesando.gif" />
+     					</h:commandLink>
+    					</h:form>
+				</rich:modalPanel>
+			</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

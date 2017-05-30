@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+<title>Cuentas Asociadas a Productos Bancarios</title>
+</head>
+   
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+<div class="span-24">
+	<f:subview id="menuheader"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div> 
+<div class="span-5">
+	<ui:include src="../menu/sideMenu.jsp"/>
+</div>
+<div class="bkContents span-18 prepend-1">
+    <f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:panel style="width:600 px;margin:auto;">
+	<f:facet name="header"><h:outputText value="Editars Usuario" styleClass="bold"/></f:facet>
+		<h:form>
+		<div id="scroll_horizontal">
+     		<rich:dataTable value="#{autheAdminAuthoUserBean.userList}" var="item" id="lista" rows="15" width="800px">
+     		<rich:column>
+				<f:facet name="header"><h:outputText value="#{msg.NumDoc}" styleClass="bold"/></f:facet>
+				<h:outputText value="#{item.userCode}" styleClass="normal"/>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header"><h:outputText value="#{msg.Nombre}" styleClass="bold"/></f:facet>
+				<h:outputText value="#{item.userNames}" styleClass="normal"/>
+			</rich:column>  
+			<rich:column>
+				<f:facet name="header"><h:outputText value="#{msg.Apelli}" styleClass="bold"/></f:facet>
+				<h:outputText value="#{item.userSecondNames}" styleClass="normal"/>
+			</rich:column> 
+			<rich:column>
+				<f:facet name="header"><h:outputText value="#{msg.correo}" styleClass="bold"/></f:facet>
+				<h:outputText value="#{item.userEmail}" styleClass="normal"/>
+			</rich:column>
+			<rich:column>
+				<f:facet name="header"><h:outputText value="#{msg.Editar}" styleClass="bold"/></f:facet>
+				<h:commandLink value="Editar" action="#{autheAdminAuthoUserBean.initEditUser}" onclick="return confirm('¿Esta seguro que desea editar los datos del usuario?')" styleClass="bold">
+					<f:setPropertyActionListener value="#{item.userCode}" target="#{autheAdminAuthoUserBean.userCode}"/>
+				</h:commandLink>
+			</rich:column>
+ 		</rich:dataTable> 
+		<rich:datascroller align="center" for="lista" />
+		</div>
+		</h:form>
+	</rich:panel>
+	
+	<rich:spacer height="20"/>
+	
+    <rich:modalPanel id="panele" width="620" height="400" showWhenRendered="#{autheAdminAuthoUserBean.showEdit}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Editar Datos Usuario" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">   
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{autheAdminAuthoUserBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>  
+		</f:facet>
+		<f:subview id="edit"><ui:include src="updateUserSystem.jspx"/></f:subview>
+		<br />
+	</rich:modalPanel>
+	
+	<rich:modalPanel id="panelm" width="350" height="100" showWhenRendered="#{autheAdminAuthoUserBean.showModal}">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Editar Datos Usuario" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{autheAdminAuthoUserBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{autheAdminAuthoUserBean.modalMessage}" styleClass="normal"/>
+		<br />
+	</rich:modalPanel>
+
+</div>
+<f:subview id="footer">
+	<ui:include src="../content/footer.jsp"/>
+</f:subview>
+</f:view>
+</div>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<metadatadoc version="2.0">
+	<sub_view subview_name="Logical" id="FDCC5E5A-D290-892C-05E3-C254BFBFF3AF" generator="null" visible="true" comment="" notes="" sv_type="main_view" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="">
+		<alter type="created">
+			<user>root</user>
+			<timestamp>2010-06-04 16:25:43</timestamp>
+		</alter>
+		<alter type="changed">
+			<user>root</user>
+			<timestamp>2010-06-04 16:25:43</timestamp>
+		</alter>
+		<main_display name="Logical" objectid="FDCC5E5A-D290-892C-05E3-C254BFBFF3AF" notation="0" show_all_details="true" show_names_only="false" show_elements="false" show_datatype="false" show_keys="false" auto_route="true" box_in_box="true" comment="" notes="">
+			<objectid role="represents" type="Entity" oid="96851DA2-3C95-2AD2-CD84-839349E2AD91" viewid="9F6BD380-41A1-DE28-50DE-A9E7D80F2B2F" tv_generator_id="null" viewnumber="0">
+				<graphical>
+					<parameter name="background_color" value="NULL" />
+					<parameter name="foreground_color" value="NULL" />
+					<parameter name="h" value="110.0" />
+					<parameter name="use_default_color" value="true" />
+					<parameter name="w" value="321.0" />
+					<parameter name="x" value="50.0" />
+					<parameter name="y" value="106.0" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Entity" oid="881C0195-8C92-8AAC-938E-FCA0A6B570DE" viewid="A0B52C07-38E5-6B77-1667-CC26FA5FB0E1" tv_generator_id="null" viewnumber="0">
+				<graphical>
+					<parameter name="background_color" value="NULL" />
+					<parameter name="foreground_color" value="NULL" />
+					<parameter name="h" value="111.0" />
+					<parameter name="use_default_color" value="false" />
+					<parameter name="w" value="321.0" />
+					<parameter name="x" value="810.0" />
+					<parameter name="y" value="140.0" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Entity" oid="49DA8249-31D8-2F09-382D-87C5E8CB958C" viewid="495A34B4-BFE1-EB50-9207-D56D3FCF7588" tv_generator_id="null" viewnumber="0">
+				<graphical>
+					<parameter name="background_color" value="NULL" />
+					<parameter name="foreground_color" value="NULL" />
+					<parameter name="h" value="110.0" />
+					<parameter name="use_default_color" value="true" />
+					<parameter name="w" value="321.0" />
+					<parameter name="x" value="30.0" />
+					<parameter name="y" value="394.0" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Entity" oid="9D098F85-34D2-50F0-BA80-0A207F738172" viewid="75E9B16A-4619-5E09-E543-54A0F16BE974" tv_generator_id="null" viewnumber="0">
+				<graphical>
+					<parameter name="background_color" value="NULL" />
+					<parameter name="foreground_color" value="NULL" />
+					<parameter name="h" value="221.0" />
+					<parameter name="use_default_color" value="true" />
+					<parameter name="w" value="321.0" />
+					<parameter name="x" value="490.0" />
+					<parameter name="y" value="450.0" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Entity" oid="4EC3E64C-BF8E-758D-76A5-C64F615F20F5" viewid="1E1F64A1-DDB1-36AA-9059-D770EED773C7" tv_generator_id="null" viewnumber="0">
+				<graphical>
+					<parameter name="background_color" value="NULL" />
+					<parameter name="foreground_color" value="NULL" />
+					<parameter name="h" value="111.0" />
+					<parameter name="use_default_color" value="true" />
+					<parameter name="w" value="321.0" />
+					<parameter name="x" value="420.0" />
+					<parameter name="y" value="200.0" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Entity" oid="75758805-4C7E-65E0-35B2-33981C9AE7C5" viewid="48E590A0-D057-7CD5-CCE8-5DE421E1759B" tv_generator_id="null" viewnumber="0">
+				<graphical>
+					<parameter name="background_color" value="NULL" />
+					<parameter name="foreground_color" value="NULL" />
+					<parameter name="h" value="110.0" />
+					<parameter name="use_default_color" value="true" />
+					<parameter name="w" value="326.0" />
+					<parameter name="x" value="55.0" />
+					<parameter name="y" value="778.0" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Entity" oid="29833347-4311-1124-76A4-C05DB68D44FE" viewid="6B773315-91B7-30F3-CE86-3A78F57507A9" tv_generator_id="null" viewnumber="0">
+				<graphical>
+					<parameter name="background_color" value="NULL" />
+					<parameter name="foreground_color" value="NULL" />
+					<parameter name="h" value="110.0" />
+					<parameter name="use_default_color" value="true" />
+					<parameter name="w" value="326.0" />
+					<parameter name="x" value="55.0" />
+					<parameter name="y" value="578.0" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Relation" oid="2969BAB0-7C54-D92B-3301-C83328905AC5" source="881C0195-8C92-8AAC-938E-FCA0A6B570DE" target="96851DA2-3C95-2AD2-CD84-839349E2AD91" viewid_source="A0B52C07-38E5-6B77-1667-CC26FA5FB0E1" viewid_target="9F6BD380-41A1-DE28-50DE-A9E7D80F2B2F">
+				<points>
+					<point x_coordinate="970.5" y_coordinate="140.0" />
+					<point x_coordinate="611.5" y_coordinate="174.5" />
+					<point x_coordinate="611.5" y_coordinate="140.0" />
+					<point x_coordinate="210.5" y_coordinate="106.0" />
+				</points>
+				<labels>
+					<source x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<target x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<main_label x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+				</labels>
+				<graphical>
+					<parameter name="use_default_color" value="true" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Relation" oid="92E17B2D-9994-E7D5-C021-88119D8657F2" source="49DA8249-31D8-2F09-382D-87C5E8CB958C" target="4EC3E64C-BF8E-758D-76A5-C64F615F20F5" viewid_source="495A34B4-BFE1-EB50-9207-D56D3FCF7588" viewid_target="1E1F64A1-DDB1-36AA-9059-D770EED773C7">
+				<points>
+					<point x_coordinate="190.5" y_coordinate="394.0" />
+					<point x_coordinate="406.5" y_coordinate="428.0" />
+					<point x_coordinate="406.5" y_coordinate="234.5" />
+					<point x_coordinate="580.5" y_coordinate="200.0" />
+				</points>
+				<labels>
+					<source x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<target x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<main_label x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+				</labels>
+				<graphical>
+					<parameter name="use_default_color" value="true" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Relation" oid="8C70B657-8311-9BB4-B4CA-A4ED05BDC099" source="49DA8249-31D8-2F09-382D-87C5E8CB958C" target="96851DA2-3C95-2AD2-CD84-839349E2AD91" viewid_source="495A34B4-BFE1-EB50-9207-D56D3FCF7588" viewid_target="9F6BD380-41A1-DE28-50DE-A9E7D80F2B2F">
+				<points>
+					<point x_coordinate="190.5" y_coordinate="394.0" />
+					<point x_coordinate="183.5" y_coordinate="312.0" />
+					<point x_coordinate="203.5" y_coordinate="312.0" />
+					<point x_coordinate="210.5" y_coordinate="106.0" />
+				</points>
+				<labels>
+					<source x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<target x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<main_label x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+				</labels>
+				<graphical>
+					<parameter name="use_default_color" value="true" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Relation" oid="EE103D88-AF9F-E0F3-4436-7CB690058C00" source="881C0195-8C92-8AAC-938E-FCA0A6B570DE" target="9D098F85-34D2-50F0-BA80-0A207F738172" viewid_source="A0B52C07-38E5-6B77-1667-CC26FA5FB0E1" viewid_target="75E9B16A-4619-5E09-E543-54A0F16BE974">
+				<points>
+					<point x_coordinate="895.0" y_coordinate="140.0" />
+					<point x_coordinate="977.5" y_coordinate="343.5" />
+					<point x_coordinate="657.5" y_coordinate="343.5" />
+					<point x_coordinate="575.0" y_coordinate="450.0" />
+				</points>
+				<labels>
+					<source x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<target x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<main_label x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+				</labels>
+				<graphical>
+					<parameter name="use_default_color" value="true" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Relation" oid="BB1109A1-35FE-4320-57BB-44256BE6E0F6" source="9D098F85-34D2-50F0-BA80-0A207F738172" target="4EC3E64C-BF8E-758D-76A5-C64F615F20F5" viewid_source="75E9B16A-4619-5E09-E543-54A0F16BE974" viewid_target="1E1F64A1-DDB1-36AA-9059-D770EED773C7">
+				<points>
+					<point x_coordinate="650.5" y_coordinate="450.0" />
+					<point x_coordinate="657.5" y_coordinate="428.5" />
+					<point x_coordinate="587.5" y_coordinate="428.5" />
+					<point x_coordinate="580.5" y_coordinate="200.0" />
+				</points>
+				<labels>
+					<source x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<target x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<main_label x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+				</labels>
+				<graphical>
+					<parameter name="use_default_color" value="true" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Relation" oid="5DB30B59-1A38-0BEA-8BBD-71673C8B683C" source="49DA8249-31D8-2F09-382D-87C5E8CB958C" target="29833347-4311-1124-76A4-C05DB68D44FE" viewid_source="495A34B4-BFE1-EB50-9207-D56D3FCF7588" viewid_target="6B773315-91B7-30F3-CE86-3A78F57507A9">
+				<points>
+					<point x_coordinate="190.5" y_coordinate="394.0" />
+					<point x_coordinate="197.5" y_coordinate="534.0" />
+					<point x_coordinate="225.0" y_coordinate="534.0" />
+					<point x_coordinate="218.0" y_coordinate="578.0" />
+				</points>
+				<labels>
+					<source x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<target x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<main_label x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+				</labels>
+				<graphical>
+					<parameter name="use_default_color" value="true" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Relation" oid="BE1EFFC7-0C7A-CE0B-6802-195B454BAC03" source="29833347-4311-1124-76A4-C05DB68D44FE" target="75758805-4C7E-65E0-35B2-33981C9AE7C5" viewid_source="6B773315-91B7-30F3-CE86-3A78F57507A9" viewid_target="48E590A0-D057-7CD5-CCE8-5DE421E1759B">
+				<points>
+					<point x_coordinate="218.0" y_coordinate="578.0" />
+					<point x_coordinate="218.0" y_coordinate="733.0" />
+					<point x_coordinate="218.0" y_coordinate="733.0" />
+					<point x_coordinate="218.0" y_coordinate="778.0" />
+				</points>
+				<labels>
+					<source x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<target x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<main_label x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+				</labels>
+				<graphical>
+					<parameter name="use_default_color" value="true" />
+				</graphical>
+			</objectid>
+			<objectid role="represents" type="Relation" oid="9869838C-0DD4-3256-7AF6-23CC8D723B56" source="75758805-4C7E-65E0-35B2-33981C9AE7C5" target="9D098F85-34D2-50F0-BA80-0A207F738172" viewid_source="48E590A0-D057-7CD5-CCE8-5DE421E1759B" viewid_target="75E9B16A-4619-5E09-E543-54A0F16BE974">
+				<points>
+					<point x_coordinate="218.0" y_coordinate="778.0" />
+					<point x_coordinate="442.5" y_coordinate="826.0" />
+					<point x_coordinate="442.5" y_coordinate="553.5" />
+					<point x_coordinate="650.5" y_coordinate="450.0" />
+				</points>
+				<labels>
+					<source x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<target x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+					<main_label x_coordinate="-1.0" y_coordinate="-1.0" width="-1.0" height="-1.0" />
+				</labels>
+				<graphical>
+					<parameter name="use_default_color" value="true" />
+				</graphical>
+			</objectid>
+			<alter type="created">
+				<user>root</user>
+				<timestamp>2010-06-10 09:26:49</timestamp>
+			</alter>
+			<alter type="changed">
+				<user>root</user>
+				<timestamp>2010-06-10 09:28:06</timestamp>
+			</alter>
+		</main_display>
+		<subordinate_displays />
+	</sub_view>
+</metadatadoc>

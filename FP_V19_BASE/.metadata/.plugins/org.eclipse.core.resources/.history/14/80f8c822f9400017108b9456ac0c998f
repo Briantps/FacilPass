@@ -1,0 +1,164 @@
+package util.ws;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import jpa.TbWebServices;
+
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.WSClient;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.delegate.WSDelegate;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.dto.AddTransactionRequestDTO;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.dto.AddTransactionResponseDTO;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.dto.FeeDTO;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.dto.GetTransactionRequestDTO;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.dto.GetTransactionResponseDTO;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.dto.PersonalDataDTO;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.dto.ReferenceDTO;
+import com.corficolombiana.facilpass.ws.connector.gpmntcommerce.dto.SecretListDTO;
+import com.facilpass.util.MessageParser;
+import com.facilpass.util.classes.SimpleTagMessageParser;
+
+import constant.EEmailParam;
+import constant.EmailProcess;
+import ejb.Process;
+import ejb.email.Outbox;
+
+@Stateless(mappedName = "util/ws/WSservices")
+public class WSservicesEJB implements WSservices {
+	
+	@PersistenceContext(unitName = "bo")
+	private EntityManager em;
+
+	@EJB(mappedName="ejb/Process")
+	private Process process;
+	
+	@EJB(mappedName ="ejb/email/Outbox")
+	private Outbox outbox;
+	
+	
+	
+	@Override
+	public AddTransactionResponseDTO addTransactionRequest(Long rqUID, String channel, Date clientDt, String ipAddr, String idType, String idNum, String agreementId, String portalURL, Collection<SecretListDTO> secretList, PersonalDataDTO personalData, FeeDTO fee, Collection<ReferenceDTO> reference, String trnType,Long userId,Long accountId){
+		//Se instancia con la libreria Creada para obtener el Response RS
+		String url=null;
+		
+		String RESPONCE_TYPE_COD = null;
+		String codeError=null;
+		AddTransactionResponseDTO response=null;
+		url=this.getWebServicesUrl(3L);
+		try {
+			 WSDelegate delegate = new WSDelegate(new URL(url));
+			 response= delegate.invokeWS(new AddTransactionRequestDTO
+					 (rqUID,channel,clientDt,ipAddr,idType,idNum,agreementId,portalURL,null,null,null,null,trnType));
+			 
+			 
+			}
+		catch (MalformedURLException ex) {
+			
+				Logger.getLogger(WSClient.class.getName()).log(Level.SEVERE, null, ex);
+				
+				//Enviar NTF-06 ERROR TRANSACCIÓN RECARGA AVAL
+											
+				Map<String,Object> tags = new HashMap<String,Object>();
+				Date date = Calendar.getInstance().getTime();
+				RESPONCE_TYPE_COD ="Error AddTransaction WSservices";
+				//RESPONCE_TYPE_COD =Long.toString(response.getStatusCode());		
+				//codeError=this.process.getResponseDescByCode(Long.valueOf(RESPONCE_TYPE_COD), 2L);
+				tags.put(EEmailParam.NOMB_CLI.getTag(),userId );
+				tags.put(EEmailParam.CUENTA_FACIL_PASS.getTag(), accountId);
+				tags.put(EEmailParam.TIPO_ID.getTag(), userId);
+				tags.put(EEmailParam.NUM_ID.getTag(), userId);
+				tags.put(EEmailParam.NOMB_CONVENIO.getTag(),agreementId);
+				tags.put(EEmailParam.ERRAVALC.getTag(), RESPONCE_TYPE_COD +" - "+ codeError);
+				tags.put(EEmailParam.VAL_RECARG.getTag(), fee.getAmt());
+				tags.put(EEmailParam.FECHA_ACCION.getTag(), date);
+				tags.put(EEmailParam.HORA_ACCION.getTag(), date);
+				tags.put(EEmailParam.EMAIL_USU.getTag(), userId);
+				MessageParser mp = new SimpleTagMessageParser(tags);
+				outbox.insertMessageOutbox2(userId, EmailProcess.AVAL_ERROR_CR, true, mp);
+				
+				
+			}
+	
+		
+		return response;
+	}
+	
+/**
+ * Método encargado de consultar el estado de las transacciones pendientes Aval 
+ * Prepago para procesarlas y acutalizarlas en el sistema.
+ * @author nathaly.ramirez
+ * @return respuesta
+ */
+	@Override
+	public GetTransactionResponseDTO  getTransaction(Long rqUID, String channel, Date clientDt, String ipAddr, String idType, String idNum, String agreementId, String pmtId,Long userId,Long accountId,String bankName,String valuerecharge,String radId ) {
+		
+		String url=null;
+		GetTransactionResponseDTO  response=null;
+		String RESPONCE_TYPE_COD = null;
+		String codeError=null;
+		url=this.getWebServicesUrl(3L);
+		
+		try {
+			WSDelegate delegate = new WSDelegate(new URL(url));
+			response = delegate.invokeWS(new GetTransactionRequestDTO(rqUID,channel,clientDt,ipAddr,idType,idNum,agreementId,pmtId));
+			
+			
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(WSClient.class.getName()).log(Level.SEVERE, null, ex);
+			
+			//Enviar NTF-11 ERROR TRANSACCIÓN RECARGA AVAL
+			Map<String,Object> tags = new HashMap<String,Object>();
+			
+			
+			RESPONCE_TYPE_COD ="Error GetTransaction WSservices";
+			//RESPONCE_TYPE_COD =Long.toString(response.getStatusCode());		
+			//codeError=this.process.getResponseDescByCode(Long.valueOf(RESPONCE_TYPE_COD), 2L);
+			
+			tags.put(EEmailParam.NOMB_CLI.getTag(), userId);
+			tags.put(EEmailParam.CUENTA_FACIL_PASS.getTag(), accountId);
+			tags.put(EEmailParam.ENTAVALC.getTag(), radId);
+			tags.put(EEmailParam.ENTAVALN.getTag(), bankName);
+			tags.put(EEmailParam.ERRAVALC.getTag(), RESPONCE_TYPE_COD + " "+codeError);
+			tags.put(EEmailParam.VAL_RECARG.getTag(), valuerecharge);
+			MessageParser mp = new SimpleTagMessageParser(tags);
+			outbox.insertMessageOutbox2(userId, EmailProcess.AVAL_ERROR_TR, true, mp);
+		
+		
+		}
+		
+		
+		return response;
+	}
+
+	/**
+	 * Meotodo encargado de obtener la ruta del webService
+	 * @param id
+	 * @return
+	 */
+	public String getWebServicesUrl(Long id){
+		String url=null;
+		TbWebServices web=null;
+		try{
+			web=em.find(TbWebServices.class, id);
+			url=web.getUrl();			 
+			return url;
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Se presento un problema al obtener la URL de la tabla tb_web_services => clase -WSgpmntcommerce- ");
+		}
+		return url;
+	}
+}

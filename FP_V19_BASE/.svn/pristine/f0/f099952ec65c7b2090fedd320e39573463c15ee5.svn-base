@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root name="table_definition" schema="portal">
+	<table name="SystemUser">
+		<field name="userCodeType">
+			<attribute id="Cedula de Ciudadania">1</attribute>
+			<attribute id="Cedula de Extranjeria">2</attribute>
+			<attribute id="NIT">3</attribute>
+			<attribute id="RUT">4</attribute>
+		</field>
+	</table>
+	
+	<table name="Account">
+		<field name="accountState">
+			<attribute id="Activa">1</attribute>
+			<attribute id="Inactiva">2</attribute>
+			<attribute id="Cancelada">3</attribute>
+		</field>
+	</table>
+	
+	<table name="PaymentDevice">
+		<field name="paymentDeviceType">
+			<attribute id="Ti">1</attribute>
+			<attribute id="Tag">2</attribute>
+		</field>
+	</table>
+	
+	<table name="DeviceTransaction">
+		<field name="operationType">
+			<attribute id="Debito">1</attribute>
+			<attribute id="Credito">2</attribute>
+			<attribute id="Devolucion">3</attribute>
+		</field>
+	</table>
+</root>

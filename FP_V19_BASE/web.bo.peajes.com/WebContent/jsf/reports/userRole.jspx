@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Reporte de Roles de Usuario</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<a4j:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Reporte de Roles de Usuario" styleClass="bold"/>
+							</f:facet>
+							<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+								<h:outputText value="#{msg.TipDoc}: " styleClass="bold"/>
+								<h:selectOneMenu value="#{userPermReportBean.codeTypeId}">
+									<f:selectItems value="#{userPermReportBean.codeTypeList}"/> 
+								</h:selectOneMenu>
+								<h:panelGroup>
+									<h:outputText value="#{msg.NumDoc}: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</h:panelGroup>
+								<h:inputText value="#{userPermReportBean.userCode}" onkeypress="return numOnly(event)" maxlength="15"/>
+		           				<h:panelGroup>
+		           					<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+		           				</h:panelGroup>
+		           				<h:commandButton value="Consultar" action="#{userPermReportBean.search}">
+		             				<a4j:support event="oncomplete" reRender="panelData"/>
+		             			</h:commandButton>
+							</h:panelGrid>
+							<rich:spacer height="5"/>
+							<a4j:outputPanel id="panelData">
+								<rich:panel rendered="#{userPermReportBean.showData}">
+									<h:panelGrid style="width: 172px; margin: auto; padding:10px;" columns="2">									
+										<h:commandLink id="clinkpdf" target="_blank" value="" 
+											action="#{userPermReportBean.execute}">
+											<img title="Imprimir PDF" src="/web.bo.peajes.com/img/generar_btn.gif" alt="Imprimir PDF"
+												style="cursor: pointer; border: 0px solid blue;" />
+											<f:setPropertyActionListener target="#{userPermReportBean.exportOption}" value="PDF"/>
+				           				</h:commandLink>
+				           				<h:commandLink id="clinkexcel" target="_blank" value="" action="#{userPermReportBean.execute}"  >
+											<img title="Imprimir Excel" src="/web.bo.peajes.com/img/generar_xls_btn.gif" alt="Imprimir Excel"
+												style="cursor: pointer; border: 0px solid blue;" />
+                        					<f:setPropertyActionListener target="#{userPermReportBean.exportOption}" value="EXCEL"/>
+		         						</h:commandLink>
+									</h:panelGrid>					
+								</rich:panel>
+							</a4j:outputPanel>
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>	
+				</div>
+				<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{userPermReportBean.showMessageError}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{userPermReportBean.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{userPermReportBean.messageError}" styleClass="normal"/>
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+					     	<h:panelGroup>
+					     		<h:commandButton value="Aceptar" action="#{userPermReportBean.hideModal}"  />
+					     	</h:panelGroup>	     	
+					    </h:panelGrid>
+					</h:form>
+					<br />
+				</rich:modalPanel>				
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

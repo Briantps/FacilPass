@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administración de Entidades</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>			
+				<div class="bkContents span-18 prepend-1">           		
+					<f:loadBundle basename="staticText.messages" var="msg" />  
+			  		<rich:spacer height="5"/>	
+			  		<rich:messages styleClass="bold" style="color: red;"/>
+					<h:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Administración de Entidades" styleClass="bold"/>
+							</f:facet>						
+							<rich:panel>
+								<h:panelGrid styleClass="tableBO" columns="2" style="size:300px; margin: auto; padding:10px; ">
+									<h:commandButton value="Agregar Entidad" action="#{bankBean.initAddBank}"/>
+								</h:panelGrid>
+							</rich:panel>	
+							
+							<rich:spacer height="20"/>						
+							<a4j:outputPanel id="panelData" layout="inline">
+								<rich:panel id="pd">
+									<f:facet name="header">
+										<h:outputText styleClass="bold" value="Entidades"/>   
+									</f:facet>	
+									
+									<rich:spacer height="10"/>	
+									<div id="scroll_horizontal">						
+										<rich:dataTable id="datalist" value="#{bankBean.bankList}" var="list" rows="15" 
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'" onRowMouseOut="this.style.backgroundColor='#FFFFFF'" rowClasses="white,grey">>
+											<rich:column width="260px" style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Código"/>
+												</f:facet>
+												<h:outputText value="#{list.bankId}" styleClass="normal"/>
+											</rich:column>
+											<rich:column width="260px" style="text-align:lefth;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Entidad"/>
+												</f:facet>
+												<h:outputText value="#{list.bankName}" styleClass="normal"/>
+											</rich:column>
+											<rich:column width="260px" style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Grupo Aval"/>
+												</f:facet>
+												<h:outputText value="SI" rendered="#{list.bankAval==1}"  styleClass="normal"/>
+												<h:outputText value="NO" rendered="#{list.bankAval==0}"  styleClass="normal"/>
+											</rich:column>
+											<rich:column width="60px" style="text-align:center;">
+												<f:facet name="header">
+													<h:outputText styleClass="bold" value="Editar"/>
+												</f:facet>
+												<h:commandLink value="Editar" action="#{bankBean.initEditBank}" styleClass="bold">
+													<f:setPropertyActionListener value="#{list.bankId}" target="#{bankBean.bankId}"/>
+												</h:commandLink>
+											</rich:column>
+										</rich:dataTable>
+										<rich:datascroller align="center" for="datalist" />
+									</div>
+								</rich:panel>
+							</a4j:outputPanel>											
+						</rich:panel>
+					</h:form>
+
+
+					<rich:modalPanel id="panel" width="435" showWhenRendered="#{bankBean.showInsert}" 
+									 autosized = "true" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Crear Entidad" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{bankBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+							<h:form id="Insertar">
+								<rich:panel style="width:415px;">
+									<h:panelGrid styleClass="tableBO" columns="2" style="size:100%; padding:10px;">
+										<h:panelGroup>
+											<h:outputText value="Digite el Código de la Entidad: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+										<h:inputText value="#{bankBean.bankId}" maxlength="3" onkeypress="return numOnly(event)" style="width: 155px"/>
+										<h:panelGroup>
+											<h:outputText value="Digite la Letra de la Entidad: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+										<h:inputText value="#{bankBean.bankLetter}" maxlength="1" onkeypress="return alphaOnly(event)" 
+													 style="text-transform: uppercase; width: 155px"/>
+										<h:panelGroup>
+											<h:outputText value="Digite el Nombre de la Entidad: " styleClass="bold"/>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										</h:panelGroup>
+								      <h:inputText value="#{bankBean.bankName}" maxlength="50" onkeypress="return especialBankName(event)" 
+								      			  style="width: 155px"/>
+										<h:panelGroup>
+											<h:outputText value="Pertenece al grupo Aval? " styleClass="bold"/>
+										</h:panelGroup>
+										<h:selectBooleanCheckbox value="#{bankBean.active}"/>
+										<h:panelGroup>
+											<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+											<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+										</h:panelGroup>
+										<h:panelGroup>
+											<a4j:commandButton value="Crear"  style="width: 75px" action="#{bankBean.validationAddBank}"
+											onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelModalInsert,confirmacionInsert"/>
+											<rich:spacer width="10"/>	
+											<h:commandButton value="Cancelar"  style="width: 75px" action="#{bankBean.hideModal}"/>
+										</h:panelGroup>
+									</h:panelGrid>
+								</rich:panel>
+							</h:form>
+					</rich:modalPanel>	
+					
+					
+					<rich:modalPanel id="panelu" width="320" showWhenRendered="#{bankBean.showEdit}" 
+                    				 autosized = "true" onresize="return false;" moveable="false">
+                      	<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Editar Entidad" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{bankBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+							<h:form id="Editar">
+								<rich:panel style="width:300px;">
+							        <h:panelGrid styleClass="tableBO" columns="2" style="size: 100%; padding:10px;">
+								      <h:panelGroup>
+									      <h:outputText value="Código: " styleClass="bold"/>
+								      </h:panelGroup>
+										 <h:inputText value="#{bankBean.bankId}" disabled= "true" maxlength="1" id="Codigo" />							
+								      <h:panelGroup>
+									      <h:outputText value="Entidad: " styleClass="bold"/>
+									      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								      </h:panelGroup>
+								      <h:inputText value="#{bankBean.bankName}" maxlength="50" onkeypress="return especialBankName(event)" id="Nombre" />
+								  	</h:panelGrid>
+								  	<h:panelGroup>
+										<rich:spacer width="15"/>	
+										<h:outputText value="La entidad pertenece al grupo Aval." rendered="#{bankBean.bankAvalCheck==0}" styleClass="bold"/>
+										<h:outputText value="Pertenece al grupo Aval? " rendered="#{bankBean.bankAvalCheck==1}" styleClass="bold"/>
+										<h:selectBooleanCheckbox value="#{bankBean.active}" rendered="#{bankBean.bankAvalCheck==1}"/>
+									</h:panelGroup>       	
+							      	<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+						     		 <h:panelGroup>  
+								      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+								     </h:panelGroup>
+										<a4j:commandButton value="Editar"  style="width: 80px" action="#{bankBean.validationEditBank}"
+										onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelModalEdit,confirmacion"/>
+							    	</h:panelGrid>  
+								</rich:panel>
+							</h:form>
+					</rich:modalPanel>
+								
+								
+					<rich:modalPanel id="panelm" width="370" height="115" showWhenRendered="#{bankBean.showModal}" 
+									 onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Entidad" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{bankBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{bankBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{bankBean.hideModal}" style="width:75px"/>
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+				    	</h:form>		
+						<br />
+					</rich:modalPanel>	
+
+
+					<rich:modalPanel id="panelModalInsert" width="350" height="115" 
+					showWhenRendered="#{bankBean.showModalValidateI}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Entidad" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{bankBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{bankBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{bankBean.hideModal3}" style="width:75px"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="panelModalEdit" width="350" height="115" 
+					showWhenRendered="#{bankBean.showModalValidateE}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Entidad" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{bankBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{bankBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding-left:8px; ">
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{bankBean.hideModal2}"  style="width:75px"/>
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="confirmacion" width="350" height="115" 
+					showWhenRendered="#{bankBean.showConfirmationE}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{bankBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{bankBean.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+						    <h:panelGroup><div class="span-1"></div></h:panelGroup>
+					     	<h:panelGroup>
+					     		<a4j:commandButton value="Aceptar" action="#{bankBean.editBank}" style="width: 80px"
+					     			 onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelm"/>
+					     	</h:panelGroup>   	
+					     	<h:panelGroup><h:commandButton value="Cancelar" action="#{bankBean.hideModal}" style="width: 80px"/></h:panelGroup>	     	
+					    </h:panelGrid>
+						</h:form>
+					</rich:modalPanel>	
+					
+					
+					<rich:modalPanel id="confirmacionInsert" width="350" height="115" 
+					showWhenRendered="#{bankBean.showConfirmationI}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{bankBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{bankBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO" style="width:200px;margin:auto;padding-right:53px;">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup>
+					     	<h:panelGroup>
+					     		<a4j:commandButton value="Aceptar" action="#{bankBean.insertBank}" style="width: 80px"
+					     		onclick="this.disabled=true" oncomplete="this.disabled=false" reRender="panelm"/>
+					     	</h:panelGroup>   	
+					     	<h:panelGroup><h:commandButton value="Cancelar" action="#{bankBean.hideModal}" style="width: 80px"/></h:panelGroup>	     	
+					    </h:panelGrid>
+						</h:form>
+					</rich:modalPanel>	
+					
+					
+				  </div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

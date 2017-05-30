@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Ver Documentos</title>
+		<style>
+			.top {
+			    vertical-align: top;  
+			}
+			.info {
+			    height: 600px;
+			    overflow: auto;
+			    border: 1px solid #c3c3c3; border-collapse: collapse;    
+			}
+		</style>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="10"/>
+					<rich:panel style="width: 700px;">	
+						<f:facet name="header">
+							<h:outputText value="Ver Documentos" styleClass="bold"/>
+						</f:facet>
+						<h:form>
+							<rich:panel>
+								<h:panelGrid columns="2">
+									<h:panelGroup>
+										<h:outputText value="#{msg.TipDoc}: " styleClass="bold"/>
+										<h:selectOneMenu value="#{fileViewerBean.typePath}" onchange="submit()"
+											 valueChangeListener="#{fileViewerBean.loadList}" id="tyfile">
+											<f:selectItems value="#{fileViewerBean.typePathList}"/>
+											<a4j:support event="onchange" reRender="suggestionBoxId,codeLabel,showbot,code"></a4j:support>
+										</h:selectOneMenu>
+									</h:panelGroup>
+									<h:panelGroup>
+										<h:outputText rendered="#{fileViewerBean.show}" id="codeLabel" value="#{msg.NumDoc} #{fileViewerBean.typePath}: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField" rendered="#{fileViewerBean.show }"/>
+										<h:inputText id="code" value="#{fileViewerBean.code}" styleClass="normal" style="width:140px" 
+											rendered="#{fileViewerBean.show}" onkeypress="return alphaNumOnly(event)"
+											required="true" requiredMessage="El Número de identificación es requerido.">
+										</h:inputText>											 			
+										<rich:suggestionbox rendered="#{fileViewerBean.show}" id="suggestionBoxId" for="code" shadowOpacity="4"
+											suggestionAction="#{fileViewerBean.autocomplete}" immediate="true"
+					                    	var="result" tokens="," height="150" width="160" cellpadding="2" cellspacing="2"   
+					                        shadowDepth="4" minChars="1" rules="none" nothingLabel="No se encontró nada.">
+				                        	<h:column>
+				                        		<h:outputText value="#{result}" styleClass="bold" />
+				                        	</h:column>
+				                   		</rich:suggestionbox>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{fileViewerBean.show}">
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<a4j:commandButton rendered="#{fileViewerBean.show}" id="showbot" 
+											value="Ver" action="#{fileViewerBean.viewFiles}" reRender="info,messInfo"/>
+										<a4j:commandButton action="#{fileViewerBean.clearData}" reRender="info" value="Limpiar"
+								           	rendered="#{fileViewerBean.size>0}" />	
+									</h:panelGroup>
+								</h:panelGrid>
+							</rich:panel>
+							<rich:spacer height="10"/>
+							<rich:panel id="messInfo" rendered="#{fileViewerBean.showMessage}">
+								<h:outputText value="#{fileViewerBean.messageInfo}" styleClass="bold"/>	
+							</rich:panel>
+							<h:panelGroup id="info" rendered="#{fileViewerBean.showInfo}">
+								<rich:panel bodyClass="info" style="width: 650px;">
+				                    <f:facet name="header">
+				                        <h:outputText value="Documentos Cargados" styleClass="bold"/>
+				                    </f:facet>
+									<h:outputText value="No se han subido Documentos."
+				                        rendered="#{fileViewerBean.size==0}" styleClass="bold"/>				                    
+									<rich:dataGrid columns="1" value="#{fileViewerBean.files}"
+				                       	var="file" rowKeyVar="row" elements="1" rendered="#{fileViewerBean.size>0}">
+										<f:facet name="header">
+				                			<rich:datascroller align="center"/>
+				           				</f:facet>	
+										<rich:panel bodyClass="rich-laguna-panel-no-header">
+											<h:panelGrid columns="1">
+												<a4j:mediaOutput element="img" mimeType="#{file.mime}"
+				                                    createContent="#{fileViewerBean.paint}" value="#{row}"
+				                                    style="width:500px; height:500px;" cacheable="false"
+				                                    session="true">
+				                                </a4j:mediaOutput>
+												<h:panelGrid columns="2">
+				                                    <h:outputText value="Nombre Documento:" />
+				                                    <h:outputText value="#{file.name}" />
+				                                    <h:outputText value="Tamaño del Documento(bytes):" />
+				                                    <h:outputText value="#{file.length}" />
+				                                </h:panelGrid>
+											</h:panelGrid>
+										</rich:panel>										 
+									</rich:dataGrid>
+								</rich:panel>
+								<rich:spacer height="3"/>
+				                <br />								
+							</h:panelGroup>
+						</h:form>	
+					</rich:panel>
+					<rich:spacer height="20"/>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

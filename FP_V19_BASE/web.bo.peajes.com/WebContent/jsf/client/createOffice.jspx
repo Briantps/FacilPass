@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+	  xmlns:jsp = "http://java.sun.com/JSP/Page"
+	  xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+	  xmlns:ui  = "http://java.sun.com/jsf/facelets"
+	  xmlns:rich= "http://richfaces.org/rich"
+	  xmlns:a4j = "http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administrar Dependencias</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="/jsf/content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="headerMenu">
+						<ui:include src="/jsf/menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="/jsf/menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>
+					<a4j:form>
+						<rich:panel styleClass="richPanel">
+							<f:facet name="header">
+								<h:outputText value="Administrar Dependencias de Cliente" styleClass="bold"/>
+							</f:facet>
+							<rich:messages styleClass="bold" style="color: red;" />
+							<rich:panel>				
+								<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+									<h:panelGroup>
+										<h:outputText value="#{msg.TipDoc}: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:selectOneMenu value="#{clientBean.codeTypeId}">
+										<f:selectItems value="#{clientBean.codeTypeList}"/> 
+									</h:selectOneMenu>
+			    					<h:panelGroup>
+										<h:outputText value="#{msg.NumDoc}: " styleClass="bold"/>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									</h:panelGroup>
+									<h:inputText value="#{clientBean.userCode}" onkeypress="return numOnly(event)"/>
+									<h:panelGroup>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+									</h:panelGroup>
+									<h:panelGroup>
+										<a4j:commandButton value="Cargar Datos" action="#{clientBean.search}">
+											<a4j:support event="oncomplete" reRender="panelData, panelMessage"/>
+										</a4j:commandButton>
+									</h:panelGroup>					
+			    				</h:panelGrid>
+							</rich:panel>		
+							<rich:spacer height="20"/>		
+							<a4j:outputPanel id="panelData" layout="inline">
+			 					<rich:panel id="pd" rendered="#{clientBean.showData}">
+									<f:facet name="header">
+										<h:outputText styleClass="bold" value="Cliente"/>
+									</f:facet>
+									<rich:spacer height="10"/>		
+									<h:panelGrid styleClass="tableBO" columns="2" style="margin: auto; size: 300px; padding:10px;">
+			                			<h:outputText value="Cliente:" styleClass="bold"/>
+			                			<h:outputText value="#{clientBean.client.userNames} #{clientBean.client.userSecondNames}" styleClass="normal" 
+			  								rendered="#{clientBean.client.tbCodeType.codeTypeId!=3}"/>
+			  							<h:outputText value="#{clientBean.client.userNames} Rept. #{clientBean.client.userSecondNames}" styleClass="normal" 
+			  								rendered="#{clientBean.client.tbCodeType.codeTypeId==3}"/>
+			  							<h:outputText value="#{msg.NumDoc}:" styleClass="bold"/>
+			  							<h:outputText value="#{clientBean.client.userCode} - #{clientBean.client.tbCodeType.codeTypeDescription}" styleClass="normal"/>
+										<h:outputText value=""/>
+										<h:commandButton value="Crear Nueva Dependencia" action="#{clientBean.initClientBean}"/>
+									</h:panelGrid>	
+                                    <div id="scroll_horizontal">		
+									<rich:dataTable id="datalist" value="#{clientBean.clientData}" 
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+										var="list" rows="20" width="650px" rowClasses="grey,">
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Dependencia"/>
+											</f:facet>
+											<h:outputText value="#{list.userDataOfficeName}" styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Ciudad"/>
+											</f:facet>
+											<h:outputText value="#{list.tbMunicipality.municipalityName}" styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Dirección"/>
+											</f:facet>
+											<h:outputText value="#{list.userDataAddress}"  styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Teléfono"/>
+											</f:facet>
+											<h:outputText value="#{list.userDataPhone}" styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Teléfono Opc."/>
+											</f:facet>
+											<h:outputText value="#{list.userDataOptionalPhone}"  styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value="Contacto"/>
+											</f:facet>
+											<h:outputText value="#{list.userDataContact}"  styleClass="normal"/>
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText styleClass="bold" value=""/>
+											</f:facet>
+											<h:commandLink value="Modificar" styleClass="bold" action="#{clientBean.initMod}">
+												<f:setPropertyActionListener value="#{list.userDataId}" target="#{clientBean.dataId}"/>
+											</h:commandLink>
+										</rich:column>
+										<f:facet name="footer">
+											<rich:datascroller/>
+										</f:facet>
+									</rich:dataTable>	
+                                    </div>					
+									<rich:spacer height="10"/>
+								</rich:panel>								
+							</a4j:outputPanel>
+						</rich:panel>
+					</a4j:form>
+					<rich:spacer height="20"/>
+					<rich:modalPanel id="panel" width="365" height="350" showWhenRendered="#{clientBean.showCreate}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Crear Dependencia" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{clientBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="newo">
+							<ui:include src="/jsf/client/newOffice.jspx"/>
+						</f:subview>
+						<br />
+					</rich:modalPanel>		
+					<rich:modalPanel id="panelm" width="365" height="350" showWhenRendered="#{clientBean.showModificate}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Modificar Dependencia" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{clientBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<f:subview id="dm">
+							<ui:include src="/jsf/client/modOffice.jspx"/>
+						</f:subview>
+						<br />
+					</rich:modalPanel>					
+					<rich:modalPanel id="panelMessage" width="350" height="115" showWhenRendered="#{clientBean.showMessage}"  onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administrar Dependencias de Cliente" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{clientBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						
+						<h:form>
+                            <h:outputText value="#{clientBean.message}" styleClass="normal"/>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{clientBean.hideModal}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>
+				</div>
+				<f:subview id="footer">
+					<ui:include src="/jsf/content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

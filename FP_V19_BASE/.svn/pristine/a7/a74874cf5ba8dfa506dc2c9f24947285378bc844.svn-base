@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 
+  Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<rich:modalPanel id="#{dlgId}" autosized="true" rendered="#{rendered}">
+		<f:facet name="header">
+			<h:outputText value="#{title}" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<a4j:commandLink actionListener="#{userBean[actionClosePanel]}"
+						onclick="#{rich:component(dlgId)}.hide()">
+						<h:graphicImage value="/img/close.png" id="#{dlgId}_hidelink" />
+					</a4j:commandLink>
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<a4j:form id="form#{dlgId}">
+			<rich:messages style="color:red;" />
+			<h:panelGrid columns="1">
+				<h:outputText value="Estado inicial"/>
+				<rich:inputNumberSpinner value="#{initialState}" minValue="0" maxValue="100"/>
+
+				<h:outputText value="Parametros" />
+				<a4j:commandLink oncomplete="#{rich:component(newParamDlg)}.show()" value="Agregar" />
+
+				<rich:spacer height="10" />
+				<a4j:outputPanel id="tableParams">
+					<rich:dataTable var="item" value="#{availableParams}">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Nombre" />
+							</f:facet>
+							<h:outputText value="#{item.name}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Valor" />
+							</f:facet>
+							<h:outputText value="#{item.value}" />
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Accion" />
+							</f:facet>
+							<a4j:commandLink value="Editar"
+								actionListener="#{userBean[actionEditParam]}"
+								oncomplete="#{rich:component(editParamDlg)}.show()"
+								reRender="#{editParamDlg}">
+								<a4j:actionparam name="itemName" value="#{item.name}" />
+							</a4j:commandLink>
+	
+							<rich:spacer width="10" />
+							<a4j:commandLink value="Borrar"
+								actionListener="#{userBean[actionDeleteParam]}"
+								oncomplete="#{rich:component(confirmDlg)}.show();"
+								reRender="#{reRender}">
+								<a4j:actionparam name="itemName" value="#{item.name}" />
+							</a4j:commandLink>
+						</rich:column>
+					</rich:dataTable>
+				</a4j:outputPanel>
+			</h:panelGrid>
+			
+			<a4j:commandButton action="#{userBean[actionForButtonLabel]}"
+				oncomplete="#{rich:component(dlgId)}.hide()"
+				value="#{btnLabel}">
+			</a4j:commandButton>
+		</a4j:form>
+	</rich:modalPanel>
+</ui:component>

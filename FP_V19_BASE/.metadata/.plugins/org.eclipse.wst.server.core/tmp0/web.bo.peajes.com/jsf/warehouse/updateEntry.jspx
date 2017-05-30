@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Modificación Orden de Entrada</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5"><ui:include src="../menu/sideMenu.jsp"/></div>
+<div class="bkContents span-18 prepend-1">
+
+	<rich:spacer height="5"/>	
+	<rich:messages styleClass="bold" style="color: red;"/>
+	<rich:panel styleClass="richPanel">
+		<f:facet name="header">
+			<h:outputText value="Modificación Orden de Entrada" styleClass="bold"/>
+		</f:facet>	
+		<h:form>
+		
+		<rich:panel rendered="#{!updateEntryOrderBean.showPanelEntry}">
+			<h:outputText styleClass="bold" style="color: red;" 
+				value="No puede acceder a la opción desde la IP actual."/>
+		</rich:panel>
+				
+		<rich:panel rendered="#{updateEntryOrderBean.showPanelEntry}">
+			<rich:panel>
+				<a4j:outputPanel id="initPanel">
+					<rich:extendedDataTable id="dtw" var="ware" value="#{updateEntryOrderBean.orders}"
+						onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+						onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+						rows="5" width="600px" rowClasses="white,white"
+						noDataLabel="No Hay Registros Pendientes." height="200px"
+						enableContextMenu="false">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="No. Orden" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value="#{ware.warehouse.orderNumber}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Estado" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value="Preliminar" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Dispositivos Restantes" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value="#{ware.left}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Tipo" styleClass="bold"/>
+							</f:facet>
+							<h:outputText value="Tarjeta" rendered="#{ware.warehouse.warehouseIsCard}" styleClass="normal"/>
+							<h:outputText value="Tag" rendered="#{!ware.warehouse.warehouseIsCard}" styleClass="normal"/>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Acción" styleClass="bold"/>
+							</f:facet>
+							<h:commandLink value="Modificar" action="#{updateEntryOrderBean.initUpdate}"
+								styleClass="bold">
+								<f:setPropertyActionListener value="#{ware.warehouse.warehouseId}" 
+									target="#{updateEntryOrderBean.warehouseId}"/>
+							</h:commandLink>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Acción" styleClass="bold"/>
+							</f:facet>
+							<h:commandLink value="Eliminar" action="#{updateEntryOrderBean.initDelete}"
+								styleClass="bold">
+								<f:setPropertyActionListener value="#{ware.warehouse.warehouseId}" 
+									target="#{updateEntryOrderBean.warehouseId}"/>
+							</h:commandLink>
+						</rich:column>
+						<f:facet name="footer">
+							<rich:datascroller align="left" for="dtla" />							
+						</f:facet>
+					</rich:extendedDataTable>
+				</a4j:outputPanel>	
+			</rich:panel>
+			
+			<rich:spacer height="10px"/>
+			
+			<a4j:outputPanel id="detailPanel">
+				<rich:panel rendered="#{updateEntryOrderBean.showEntryDetailPanel}">
+					<h:panelGrid style="width: 700px; margin: auto; padding:10px; " 
+						styleClass="tableBO" columns="2">
+						<h:outputText value="Nro. Orden de Entrada: " styleClass="bold"/>
+						<h:inputText id="eentry" value="#{updateEntryOrderBean.warehouseObject.orderNumber}" 
+							style="width: 150px" disabled="true"/>
+						<h:outputText value="Cantidad Dispositivos: " styleClass="bold"/>
+						<h:inputText value="#{updateEntryOrderBean.warehouseObject.deviceQuantity}" maxlength="20" 
+							styleClass="normal"  style="width: 150px" disabled="true">
+							<f:validator validatorId="blank"/>
+						</h:inputText>
+						<h:outputText value="Tipo: " styleClass="bold"/>
+						<h:panelGroup>
+							<h:inputText value="Tarjeta" rendered="#{updateEntryOrderBean.warehouseObject.warehouseIsCard}" 
+								styleClass="normal" style="width: 150px" disabled="true"/>
+							<h:inputText value="Tag" rendered="#{!updateEntryOrderBean.warehouseObject.warehouseIsCard}" 
+								styleClass="normal" style="width: 150px" disabled="true"/>
+						</h:panelGroup>
+					</h:panelGrid>
+				</rich:panel>
+				<rich:spacer height="5"/>
+				<rich:panel rendered="#{updateEntryOrderBean.showEntryDetailPanel}">
+					
+					<a4j:outputPanel id="buttpanel">
+						<h:panelGroup style="width: 145px" rendered="#{!updateEntryOrderBean.showEntryDetailPanelTag}">
+							<rich:panel>
+								<a4j:outputPanel id="butAdd" style="width: 133px">
+									<h:commandButton value="Leer Tarjeta" action="#{updateEntryOrderBean.saveCard}" 
+										styleClass="bold" rendered="#{updateEntryOrderBean.left != 0}">
+										<a4j:support event="oncomplete" reRender="panelLeft,butAdd,dataDevPanel"/>
+									</h:commandButton>
+								</a4j:outputPanel>
+							</rich:panel>
+						</h:panelGroup>
+					</a4j:outputPanel>
+					
+					<a4j:outputPanel id="detailPanelTag" rendered="#{updateEntryOrderBean.showEntryDetailPanelTag}" 
+						style="width: 471px">
+						<h:panelGrid style="width: 408px; margin: auto; padding:10px; " 
+							styleClass="tableBO" columns="2">
+							<h:outputText value="Tipo Dispositivo - (Fabricante):" styleClass="bold"
+								rendered="#{!updateEntryOrderBean.compareToPrechargeFile}"/>
+							<h:selectOneMenu value="#{updateEntryOrderBean.tagTypeId}" 
+								rendered="#{!updateEntryOrderBean.compareToPrechargeFile}" style="width: 147px">
+								<f:selectItems value="#{updateEntryOrderBean.typeList}"/>
+							</h:selectOneMenu>
+							<h:outputText value="Serial Dispositivo:" styleClass="bold"/>
+							<h:inputText id="eentryts" value="#{updateEntryOrderBean.tagSerial}" 
+								required="true" maxlength="13" requiredMessage="El Número Serial es Necesario." 
+								style="width: 145px" onkeypress="return alphaNumOnly(event)">
+								<f:validator validatorId="blank"/>
+							</h:inputText>
+							<h:outputText/>
+							<h:commandButton value="Guardar" action="#{updateEntryOrderBean.saveTag}" styleClass="bold"
+								rendered="#{updateEntryOrderBean.left != 0}">
+								<a4j:support event="oncomplete" reRender="panelLeft,butAdd,dataDevPanel,detailPanelTag"/>
+							</h:commandButton>
+						</h:panelGrid>	
+					</a4j:outputPanel>
+					
+					<rich:spacer height="10px"/>				
+					<rich:separator lineType="doble"/>
+					
+					<rich:panel style="width: 625px">
+						<h:panelGrid style="width: 625px; margin: auto; padding:10px; " 
+							styleClass="tableBO" columns="2">
+							<h:outputText/>
+							<h:outputText value="RESTANTES" styleClass="bold"/>
+							<h:outputText/>
+							<a4j:outputPanel id="panelLeft" style="width: 193px">
+								<h:inputText value="#{updateEntryOrderBean.left}" styleClass="bold" 
+									style="font-size: medium; width: 67px" disabled="true"/>
+							</a4j:outputPanel>
+							
+							<a4j:outputPanel id="dataDevPanel" style="width: 389px">
+								<rich:dataTable id="datadev" var="dev" value="#{updateEntryOrderBean.deviceList}"
+									onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+									onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+									rows="10" width="350px" rowClasses="white,white" style="width: 318px">
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="ID. Dispositivo" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{dev.deviceCode}" styleClass="normal"/>
+									</rich:column>
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Hora de Entrada" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{dev.deviceEntryDate}" styleClass="normal"
+											converter="TimeStampToStringDateConverter"/>
+									</rich:column>
+									<f:facet name="footer">
+										<rich:datascroller align="left" for="datadev" />							
+									</f:facet>
+								</rich:dataTable>
+							</a4j:outputPanel>
+						</h:panelGrid>
+					</rich:panel>
+					
+				</rich:panel>
+				
+			</a4j:outputPanel>
+
+			<rich:spacer height="20px"/>
+		
+			<a4j:outputPanel id="plog">
+				<h:panelGrid style="width: 650px; margin: auto; padding:10px; " 
+					styleClass="tableBO" columns="2">
+					<rich:panel styleClass="panelGray" style="width:300px;margin:auto;">
+							<h:outputText value="VISOR LOG APLICACIÓN" styleClass="bold"/>
+							<rich:dataTable id="dtla" var="log" value="#{updateEntryOrderBean.loga}"
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+								rows="5" width="1700px" rowClasses="white,white">
+								<rich:column>
+									<h:outputText value="#{log}" styleClass="normal"/>
+								</rich:column>
+								<f:facet name="footer">
+									<rich:datascroller align="left" for="dtla" />							
+								</f:facet>
+							</rich:dataTable>
+							<h:commandButton value="Limpiar Visor Aplicación" action="#{updateEntryOrderBean.clearLogA}" 
+								styleClass="bold"/>
+					</rich:panel>
+					<rich:panel styleClass="panelGray" style="width:300px;margin:auto;">
+							<h:outputText value="VISOR LOG COMUNICACIONES" styleClass="bold"/>
+							<rich:dataTable id="dtlc" var="log" value="#{updateEntryOrderBean.logc}"
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+								rows="5" width="1700px" rowClasses="white,white">
+								<rich:column>
+									<h:outputText value="#{log}" styleClass="normal"/>
+								</rich:column>
+								<f:facet name="footer">
+									<rich:datascroller align="left" for="dtlc" />							
+								</f:facet>
+							</rich:dataTable>
+							<h:commandButton value="Limpiar Visor Comunicaciones" action="#{updateEntryOrderBean.clearLogC}" 
+								styleClass="bold"/>
+					</rich:panel>
+				</h:panelGrid>
+			</a4j:outputPanel>	
+		</rich:panel>
+		</h:form>			
+	</rich:panel>
+	<rich:spacer height="20px"/>
+	
+	<rich:modalPanel id="confirmacion" width="350" height="150" showWhenRendered="#{updateEntryOrderBean.confirmationShow}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Confirmación - Modificación Orden de Entrada" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{updateEntryOrderBean.hideModal}" image="/img/close.png" />
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{updateEntryOrderBean.corfirmMessage}" styleClass="normal"/>
+		<rich:spacer height="10"/>
+		<h:form>
+		<h:panelGrid columns="3" styleClass="tableBO">
+			<h:panelGroup><div class="span-1"></div></h:panelGroup>
+	     	<h:panelGroup><h:commandButton value="Aceptar" action="#{updateEntryOrderBean.delete}"/></h:panelGroup>   	
+	     	<h:panelGroup><h:commandButton value="Cancelar" action="#{updateEntryOrderBean.hideModal}"  /></h:panelGroup>	     	
+	    </h:panelGrid>
+	    </h:form>
+		<br />
+	</rich:modalPanel>
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

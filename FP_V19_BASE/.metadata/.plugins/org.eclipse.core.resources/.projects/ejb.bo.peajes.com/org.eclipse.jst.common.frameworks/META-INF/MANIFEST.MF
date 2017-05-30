@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: org.thomas.taskEngDTOs.jar jpa.bo.peajes.com.jar commons-l
+ ang-2.6.jar hibernate3.jar jdom.jar json.jar
+

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+	<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+   
+<title>Crear Objeciones</title>
+<script type="text/javascript">
+	function validarSize (campo, limite) {
+		if (campo.value.length > limite){
+			campo.value = campo.value.substring(0, limite);
+		} 
+	} 
+	</script> 
+</head>
+<body>
+<div class="container">
+<f:view>
+ <f:subview id="header"><ui:include src="../content/header.jsp"/></f:subview>
+ <div class="span-24">
+  <f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+ </div>
+ <div class="span-5">
+  <ui:include src="/jsf/menu/sideMenu.jsp"/>
+ </div>
+ <div class="bkContents span-18 prepend-1">
+ 	<f:loadBundle basename="staticText.messages" var="msg" />
+  <a4j:form>
+   <rich:panel styleClass="richPanel">
+    <f:facet name="header">
+       <h:outputText value="Crear Objeciones de Tarifas y Cargos"/>
+    </f:facet>
+    <h:panelGrid columns="2" styleClass="tableBO" style="size 300px; margin: auto; padding:10px; ">
+      <h:panelGroup>
+	      <h:outputText value="Fecha Transacción: " styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <rich:calendar id="fecha" value="#{createObjection.dateTransaction}" 
+                        datePattern="dd/MM/yyyy hh:mm a"
+                        popup="true"
+                       	cellWidth="24px"
+                       	cellHeight="22px"
+                       	style="width:200px"
+                        enableManualInput="false"/>
+
+      <h:panelGroup>
+        <h:outputText value="Tipo Doc:" styleClass="bold"/>
+        <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+
+      <h:panelGroup>
+		    <h:selectOneMenu id="tyd" value="#{createObjection.codeType}" styleClass="normal">
+		      <f:selectItems value="#{createObjection.codeTypesList}"/>
+			    <a4j:support event="onchange" action="#{createObjection.changeTypeDoc}" reRender="cod,name,account" />
+			</h:selectOneMenu>
+	  </h:panelGroup>
+
+      <h:panelGroup>
+	      <h:outputText value="No. de Identificación + DV: " styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:panelGroup>
+       <h:inputText id="cod" value="#{createObjection.userCode}" disabled="#{createObjection.disable}" onkeypress="return numOnly(event)">
+       </h:inputText>
+         <rich:spacer width="10"/>
+         <h:commandButton value="Buscar Cuentas" action="#{createObjection.getInf2}" rendered="#{createObjection.showBotton}">
+         </h:commandButton>
+       </h:panelGroup>
+
+      <h:panelGroup>
+	      <h:outputText value="Nombre Cliente: " styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:inputText id="name" value="#{createObjection.userName}" disabled="true" size="50">
+      </h:inputText>
+
+      <h:panelGroup>
+	      <h:outputText value="Cuenta Asociada: " styleClass="bold"/>
+	      <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:selectOneMenu id="account" value="#{createObjection.accountId}" style="width: 150px;" styleClass="normal">
+		<f:selectItems value="#{createObjection.accounts}"/>
+	  </h:selectOneMenu>
+
+      <h:panelGroup>
+      	<h:outputText value="Tipo Cargo: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:selectOneMenu id="tc" value="#{createObjection.chargeId}" style="width: 170px;" styleClass="normal">
+		<f:selectItems value="#{createObjection.charges}"/>
+         <a4j:support event="onchange" reRender="conce,station,lane" action="#{createObjection.validate}" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Concesión: " styleClass="bold"/>
+      <h:selectOneMenu id="conce" value="#{createObjection.companyId}" style="width: 170px;" styleClass="normal" disabled="#{createObjection.render1}">
+		<f:selectItems value="#{createObjection.companys}"/>
+        <a4j:support event="onchange" reRender="station,lane" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Estación: " styleClass="bold"/>
+      <h:selectOneMenu id="station" value="#{createObjection.stationId}" style="width: 170px;" styleClass="normal" disabled="#{createObjection.render1}">
+		<f:selectItems value="#{createObjection.stations}"/>
+        <a4j:support event="onchange" reRender="lane" ajaxSingle="true"/>
+	  </h:selectOneMenu>
+
+      <h:outputText value="Carril: " styleClass="bold"/>
+      <h:selectOneMenu id="lane" value="#{createObjection.laneId}" style="width: 170px;" styleClass="normal" disabled="#{createObjection.render1}">
+		<f:selectItems value="#{createObjection.lanes}"/>
+	  </h:selectOneMenu>
+
+      <h:panelGroup>
+      	<h:outputText value="Objeción: " styleClass="bold"/>
+      	<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+      </h:panelGroup>
+      <h:inputTextarea id="obj" value="#{createObjection.objection}"  onkeyup="validarSize(this,800);"  onkeydown="validarSize(this,800);"  onkeypress="return noEspecialobjection(event);" style="resize:none;">
+      </h:inputTextarea>
+    
+      <h:commandButton value="Crear Objeción A Cuenta" action="#{createObjection.saveObjection}" ></h:commandButton>
+    </h:panelGrid>
+    <h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+	<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+   </rich:panel>
+   <rich:spacer height="30"/>
+  </a4j:form>
+
+     <rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{createObjection.showMessage}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Crear Objeción" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createObjection.hideModal}" image="/img/close.png" >
+                    </h:commandButton>
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{createObjection.message}" styleClass="normal"/>
+        <h:form>
+        <h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding:8px; ">
+          <h:panelGroup>
+		    <h:commandButton value="Aceptar" action="#{createObjection.hideModal}">
+            </h:commandButton>
+          </h:panelGroup>
+        </h:panelGrid>
+        </h:form>
+         <br />
+	</rich:modalPanel>
+
+     <rich:modalPanel id="panel2" width="350" height="115"  showWhenRendered="#{createObjection.showMessage2}" onresize="return false;" moveable="false">
+		<f:facet name="header">
+			<h:panelGroup><h:outputText value="Mensaje - Crear Objeción" styleClass="bold"/></h:panelGroup>
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:form>
+					<h:commandButton action="#{createObjection.hideModal2}" image="/img/close.png" >
+                    </h:commandButton>
+				</a4j:form>
+			</h:panelGroup>
+		</f:facet>
+		<h:outputText value="#{createObjection.message2}" styleClass="normal"/>
+        <h:form>
+        <h:panelGrid columns="1" styleClass="tableBO" style="width: 100px; margin: auto; padding:8px; ">
+          <h:panelGroup>
+		    <h:commandButton value="Aceptar" action="#{createObjection.hideModal2}">
+            </h:commandButton>
+          </h:panelGroup>   
+        </h:panelGrid>
+        </h:form>
+        <br />
+	</rich:modalPanel>
+
+ </div>
+<f:subview id="footer">
+  <ui:include src="/jsf/content/footer.jsp"/>
+</f:subview>
+</f:view>
+
+</div>
+</body>
+</html>

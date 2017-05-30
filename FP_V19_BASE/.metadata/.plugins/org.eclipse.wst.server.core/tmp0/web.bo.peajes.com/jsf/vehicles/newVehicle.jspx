@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+	</head>	
+	<body>
+		<f:view>		
+			<div>
+				<a4j:form>
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<h:panelGrid columnClasses="paddingCol" columns="4" style="size 350px; margin: auto; padding:10px; ">
+							<h:panelGroup>
+								<h:outputText value="Placa: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</h:panelGroup>
+							<h:inputText id="vehiclePlate" value="#{adminVehicle.vehiclePlate}" 
+											styleClass="normal" style="width:160px; text-transform:uppercase" 
+											onkeypress="return alphaNumOnly2(event)" maxlength="#{adminVehicle.plateLength}"/>
+							<h:panelGroup>
+								<h:outputText value="Categoría: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</h:panelGroup>
+							<h:selectOneMenu value="#{adminVehicle.newCategoryId}" styleClass="normal"
+								converter="RowIdToNameConverter" style="width:168px;">
+								<f:selectItems value="#{adminCat.listCategories}"/>
+							</h:selectOneMenu>
+							<h:outputText value="Chasis: " styleClass="bold" />
+							<h:inputText value="#{adminVehicle.vehicleChassis}" maxlength="50" styleClass="normal" style="width:158px"/>
+							<h:outputText value="Modelo de Vehículo: " styleClass="bold" />
+							<rich:calendar value="#{adminVehicle.vehicleBeginingDate}"
+								converter="TimestampConverterVehicles"
+								datePattern="dd/MM/yy"
+								cellWidth="24px"
+								cellHeight="22px"
+								style="width:200px"
+								inputStyle="width:143px"/>
+							<h:outputText value="Marca: " styleClass="bold" />
+							<h:panelGroup>
+								<h:inputText id="brandText" value="#{adminVehicle.newBrand1}" maxlength="50" styleClass="normal" style="width:160px;">
+								</h:inputText>
+								<rich:suggestionbox for="brandText" var="brand1" id="suggestionBoxId"
+									tokens="," height="150" width="160" cellpadding="2" cellspacing="2"
+									shadowOpacity="4" shadowDepth="4" minChars="1" rules="none"
+									nothingLabel="No se encontró nada."
+									suggestionAction="#{adminBrand.autocomplete2}">
+									<h:column>
+										<h:outputText value="#{brand1}" />
+									</h:column>
+								</rich:suggestionbox>
+							</h:panelGroup>
+							<h:outputText value="Color: " styleClass="bold" />
+							<h:selectOneMenu value="#{adminVehicle.newColorId}" styleClass="normal"
+								converter="RowIdToNameConverter" style="width:168px;">
+								<f:selectItems value="#{adminColor.listColors}"/>
+							</h:selectOneMenu>
+							<h:outputText value="Código Interno: " styleClass="bold" />
+							<h:inputText value="#{adminVehicle.vehicleInternalCode}" maxlength="50" styleClass="normal" style="width:160px"/>
+							<h:panelGroup>
+								<h:outputText value="Línea: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+							</h:panelGroup>
+							<h:inputText value="#{adminVehicle.line}" onkeypress="return alphaNumSpaceSimple(event)" maxlength="100" styleClass="normal" style="width:160px"/>
+							<h:outputText value="Adicional 1: " styleClass="bold" />
+							<h:inputText value="#{adminVehicle.aditional1}" onkeypress="return alphaNumSpaceSimple(event)" maxlength="100" styleClass="normal" style="width:160px"/>
+							<h:outputText value="Adicional 2: " styleClass="bold" />
+							<h:inputText value="#{adminVehicle.aditional2}" onkeypress="return alphaNumSpaceSimple(event)" maxlength="100" styleClass="normal" style="width:160px"/>
+							<h:outputText value="Adicional 3: " styleClass="bold" />
+							<h:inputText value="#{adminVehicle.aditional3}" onkeypress="return alphaNumSpaceSimple(event)" maxlength="100" styleClass="normal" style="width:160px"/>
+							<h:outputText value="Especial: " styleClass="bold" />
+							<h:selectBooleanCheckbox id="especial" valueChangeListener="#{adminVehicle.changeEspecial}" immediate="true" 
+							value="#{adminVehicle.especialForm}" onclick="submit()">
+								<a4j:support event="onclick" reRender="ob,askob,obt" immediate="true" />
+							</h:selectBooleanCheckbox>
+							<h:panelGroup>
+								<h:outputText id="ob" value="Observación: " styleClass="bold" rendered="#{adminVehicle.showObservation}" />
+								<h:outputLabel id="askob" value="#{msg.Asterisk}" styleClass="asteriskMandatoryField" rendered="#{adminVehicle.showObservation}"/>
+							</h:panelGroup>
+							<h:inputTextarea id="obt" value="#{adminVehicle.observation}"
+							 style="width:153px; height:35px;resize: none;" rendered="#{adminVehicle.showObservation}"
+							  onkeypress="return alphaNumSpaceSimple(event)">
+							 </h:inputTextarea>
+							 <h:outputText value=""  styleClass="bold"/>
+						</h:panelGrid>
+						<table>
+							<tr>
+								<td width="39%">
+									<h:panelGroup>
+										<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+										<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+									</h:panelGroup>
+								</td>
+								<td width="50%">
+									<a4j:commandButton value="Guardar" action="#{adminVehicle.showStoreNew}" onclick="this.disabled=true" oncomplete="this.disabled=false"
+									reRender="vehicleTable,panel5,panelInfo,panel" style="width: 80px">	
+									</a4j:commandButton>
+								</td>
+							</tr>
+						</table>
+				</a4j:form>
+				<rich:spacer height="20"/>	
+			
+				<rich:modalPanel id="panel5" width="350" height="115" showWhenRendered="#{adminVehicle.showModalConC}" onresize="return false;" moveable="false"
+				zindex="3000">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Mensaje - Administrar Vehículos" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form id="frmX3">
+								<h:commandButton id="closeX3" action="#{adminVehicle.hideModalAll}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>   
+					</f:facet>
+					<h:outputText value="#{adminVehicle.msg}" styleClass="normal"/>
+					<a4j:form id="form3">
+					<h:message for="send3"/>
+					<rich:spacer height="10"/>
+					  <div align="center">
+						<a4j:region id="editando3">
+					     		<a4j:commandButton id="send3" value="Aceptar" action="#{adminVehicle.storeNew}"
+						     		 oncomplete="#{rich:component('wait')}.hide()" style="width: 80px">
+					                  <a4j:support event="onclick"  
+					                 onsubmit="this.disabled=true" />
+					                  <a4j:support event="oncomplete" reRender="panel" 
+					                 oncomplete="this.disabled=false"/>
+					                </a4j:commandButton>
+					                <a4j:status onstart="#{rich:component('wait')}.show()" for="editando3">
+									</a4j:status>
+			                </a4j:region>
+				     	 <rich:spacer width="20"/>  	
+				     	<h:commandButton id="cancel3" value="Cancelar" action="#{adminVehicle.hideModalAll}" style="width: 80px"/>
+				      </div>
+				    </a4j:form>
+				</rich:modalPanel>
+				
+					<rich:modalPanel id="panelInfo" width="400" height="165" showWhenRendered="#{adminVehicle.showModalInfo}" onresize="return false;" moveable="false" 
+				zindex="4000">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Administrar Vehículos" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{adminVehicle.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{adminVehicle.msg}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+				     		<h:panelGroup>
+				     			<h:commandButton value="Aceptar" action="#{adminVehicle.hideModal}" style="width: 80px"/>
+				     		</h:panelGroup>	     	
+				    	</h:panelGrid>
+				    </h:form>
+				    <br/>
+				</rich:modalPanel>
+				<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{adminVehicle.showModal}" onresize="return false;" moveable="false"
+					zindex="5000">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Administrar Vehículos" styleClass="bold"/>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{adminVehicle.hideModal}" image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{adminVehicle.msg}" styleClass="normal"/>
+					<rich:spacer height="10"/>
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+				     		<h:panelGroup>
+				     			<h:commandButton value="Aceptar" action="#{adminVehicle.hideModal}" style="width: 80px"/>
+				     		</h:panelGroup>	     	
+				    	</h:panelGrid>
+				    </h:form>
+				    <br/>
+				</rich:modalPanel>
+				<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false" zindex="5000">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+				  	<h:outputText value="Transacción en proceso..."  style="font-size:12px;"/>
+				</rich:modalPanel>		
+			</div>
+		</f:view>
+	</body>
+</html>

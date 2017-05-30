@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+	<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+<title>Ingresar Tarjeta Colombia</title>
+</head>
+
+<body>
+<div class="container">
+<f:view>
+<f:subview id="header">
+	<ui:include src="../content/header.jsp"/>
+</f:subview>
+<div class="span-24">
+	<f:subview id="headerMenu"><ui:include src="../menu/menu.jsp"/></f:subview>
+</div>
+<div class="span-5"><ui:include src="../menu/sideMenu.jsp"/></div>
+<div class="bkContents span-18 prepend-1">
+
+	<f:loadBundle basename="staticText.messages" var="msg" />
+	<rich:spacer height="5"/>	
+	<rich:panel styleClass="richPanel">
+		<f:facet name="header">
+			<h:outputText value="Ingresar Tarjeta" styleClass="bold"/>
+		</f:facet>	
+		<a4j:form>
+		
+		<rich:panel rendered="#{!addCard.showPanelEntryCard}">
+			<h:outputText styleClass="bold" style="color: red;" 
+				value="No puede acceder a la opción desde la IP actual."/>
+		</rich:panel>
+		
+		<rich:panel rendered="#{addCard.showPanelEntryCard}">
+		
+		<rich:panel>
+		<h:panelGrid style="width: 630px; margin: auto; padding:10px; " styleClass="tableBO" 
+				columns="3">
+			<h:panelGroup>
+				<h:outputText value="Id Tarjeta: " styleClass="bold"/>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			</h:panelGroup>
+			<h:inputText id="tisc" value="#{addCard.deviceCode}" disabled="true" styleClass="bold"
+				required="true" requiredMessage="Debe leer la tarjeta."/>
+			<h:commandButton value="Consultar" action="#{addCard.getBalanceDevice}">
+				<a4j:support event="oncomplete" reRender="plog"/>
+			</h:commandButton>
+			
+			<h:panelGroup>
+				<h:outputText value="Saldo: " styleClass="bold"/>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			</h:panelGroup>
+			<h:inputText value="#{addCard.balance}" disabled="true" styleClass="bold"
+				required="true" requiredMessage="Debe leer el saldo de la tarjeta.">
+				<f:convertNumber pattern="$#,##0.00"/>
+			</h:inputText>
+			<h:outputText/>
+			<h:outputText value="Seleccione el Tipo Tarjeta: " styleClass="bold"/>
+			<h:selectOneMenu id="tyd" value="#{addCard.typeDevId}" styleClass="normal">
+				<f:selectItems value="#{addCard.devicesTypes}"/>
+			</h:selectOneMenu>
+			<h:outputText/>
+			<h:outputText value="Seleccione el Estado de La Tarjeta: " styleClass="bold"/>
+			<h:selectOneMenu value="#{addCard.deviceStateId}" styleClass="normal">
+				<f:selectItems value="#{addCard.deviceStates}"/>
+			</h:selectOneMenu>						
+			<h:outputText/>
+			<h:panelGroup>
+				<h:outputText value="Digite el Facial: " styleClass="bold"/>
+				<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+			</h:panelGroup>
+			<h:inputText value="#{addCard.facial}" maxlength="20" styleClass="normal"/>
+			<h:outputText/><h:outputText/>
+			<h:commandButton value="Guardar" action="#{addCard.save}">
+				<a4j:support event="oncomplete" reRender="ploa"/>
+			</h:commandButton>
+		</h:panelGrid>
+		<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+		<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>	
+		</rich:panel>
+
+		<rich:spacer height="20px"/>
+
+		<a4j:outputPanel id="plog">
+			<h:panelGrid style="width: 700px; margin: auto; padding:10px; " styleClass="tableBO" 
+				columns="2">
+				<rich:panel styleClass="panelGray" style="width:300px;margin:auto;">
+						<h:outputText value="VISOR LOG APLICACIÓN" styleClass="bold"/>
+						<rich:dataTable id="dtla" var="log" value="#{addCard.loga}"
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+							rows="10" width="1700px" rowClasses="white,white">
+							<rich:column>
+								<h:outputText value="#{log}" styleClass="normal"/>
+							</rich:column>
+							<f:facet name="footer">
+								<rich:datascroller align="left" for="dtla" />							
+							</f:facet>
+						</rich:dataTable>
+						<h:commandButton value="Limpiar Visor Aplicación" action="#{addCard.clearLogA}" styleClass="bold"/>
+				</rich:panel>
+				<rich:panel styleClass="panelGray" style="width:300px;margin:auto;">
+						<h:outputText value="VISOR LOG COMUNICACIONES" styleClass="bold"/>
+						<rich:dataTable id="dtlc" var="log" value="#{addCard.logc}"
+							onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+							rows="10" width="1700px" rowClasses="white,white">
+							<rich:column>
+								<h:outputText value="#{log}" styleClass="normal"/>
+							</rich:column>
+							<f:facet name="footer">
+								<rich:datascroller align="left" for="dtlc" />							
+							</f:facet>
+						</rich:dataTable>
+						<h:commandButton value="Limpiar Visor Comunicaciones" action="#{addCard.clearLogC}" styleClass="bold"/>
+				</rich:panel>
+			</h:panelGrid>
+		</a4j:outputPanel>
+		</rich:panel>
+		</a4j:form>			
+	</rich:panel>
+
+</div>
+<f:subview id="footer"><ui:include src="../content/footer.jsp"/></f:subview>
+</f:view>
+</div>
+</body>
+</html>

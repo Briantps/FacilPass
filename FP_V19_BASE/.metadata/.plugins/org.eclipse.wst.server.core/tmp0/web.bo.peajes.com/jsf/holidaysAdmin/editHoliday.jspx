@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />    
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<div>
+					<h:form id="Formulario">
+						<f:loadBundle basename="staticText.messages" var="msg" />
+						<rich:panel style="width:350px;">
+						<table width="100%">
+							<tr>
+								<td width="40%">
+									<h:outputText value="Fecha:" styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</td>
+								<td width="60%">						
+								    <rich:calendar id="beg_date" value="#{adminHolidaysBean.holidayDate}"                 		
+											   cellWidth="24px" cellHeight="8px" style="width:100px" inputStyle="width:155px"
+											   datePattern="dd/MM/yyyy" popup="true" styleClass="normal">  	
+									</rich:calendar>	  							
+								</td>
+							</tr>
+							<tr>
+								<td width="40%">
+									<h:outputText value="Descripción: " styleClass="bold"/>
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+								</td>
+								<td width="50%">
+								   	<h:inputText id="holidayName" value="#{adminHolidaysBean.holidayName}" 
+								    style="width:155px; text-transform: uppercase"
+									onkeypress="return alphaSpaceOnly(event)" maxlength="45"/>
+								</td>
+							</tr>
+							<tr>
+								<td width="20%">
+									<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+									<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+								</td>
+								<td width="30%">
+									<h:commandButton value="Guardar"  action="#{adminHolidaysBean.editHoliday}"/>
+									<rich:spacer width="20" />	
+									<h:commandButton value="Cancelar" action="#{adminHolidaysBean.hideModal2}"/>
+								</td>
+						  </tr>
+						</table>
+						</rich:panel>
+					</h:form>
+				</div>
+			</f:view>
+		</div>
+	</body>
+</html>

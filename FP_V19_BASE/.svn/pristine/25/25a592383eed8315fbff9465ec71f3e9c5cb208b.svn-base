@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet"
+	href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css"
+	media="screen, projection" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css"
+	type="text/css" media="print" />
+<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css"
+	type="text/css" media="screen, projection" />
+<script language="javascript" type="text/javascript"
+	src="/web.bo.peajes.com/js/validation.js"></script>
+<title>Asignar Recursos Programadamente</title>
+</head>
+
+<body>
+	<div class="container">
+		<f:view>
+			<f:subview id="header">
+				<ui:include src="/jsf/content/header.jsp" />
+			</f:subview>
+			<div class="span-24">
+				<f:subview id="headerMenu">
+					<ui:include src="/jsf/menu/menu.jsp" />
+				</f:subview>
+			</div>
+			<div class="span-5">
+				<ui:include src="/jsf/menu/sideMenu.jsp" />
+			</div>
+
+			<div class="bkContents span-18 prepend-1">
+				<rich:spacer height="5" />
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<h:form>
+					<rich:panel styleClass="richPanel">
+						<f:facet name="header">
+							<h:outputText value="Asignar Recursos Programadamente"
+								styleClass="bold" />
+						</f:facet>
+
+						<h:panelGrid styleClass="tableBO" columns="2"
+							style="size 300px; margin: auto; padding:10px; ">
+
+							<h:panelGroup>
+								<h:outputLabel value="#{msg.CtaFP}: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+							</h:panelGroup>
+							<h:selectOneMenu id="types1"
+								value="#{electronicRechargeBean.idClientAccount}"
+								style="width: 175px;">
+								<f:selectItems value="#{electronicRechargeBean.clientAccounts}"/>
+							</h:selectOneMenu>
+							<h:panelGroup>
+								<h:outputLabel value="#{msg.VrRecarga}: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+							</h:panelGroup>
+							<h:inputText id="valueRecharge"
+								value="#{electronicRechargeBean.valueRechText}"
+								style="width:173px" onkeypress="return solonumeros(event)"
+								maxlength="15"
+								onkeyup="separador(this,this.value.charAt(this.value.length-1),event)">
+							</h:inputText>
+							<h:panelGroup>
+								<h:outputText value="#{msg.FrecVrRec}: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+							</h:panelGroup>
+							<h:selectOneMenu
+								value="#{electronicRechargeBean.frecuencySelect}" style="width: 175px;">
+								<f:selectItems value="#{electronicRechargeBean.frecuecyList}" />
+							</h:selectOneMenu>
+							<h:panelGroup>
+								<h:outputText value="#{msg.FechaI}: " styleClass="bold" />
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+							</h:panelGroup>
+							<rich:calendar id="end_date"
+								value="#{electronicRechargeBean.dateRecharge}" cellWidth="26px"
+								cellHeight="22px" style="width:155px" datePattern="dd/MM/yyyy"
+								popup="true" styleClass="normal">
+							</rich:calendar>
+							<h:panelGroup>
+								<h:outputLabel value="#{msg.Asterisk}"
+									styleClass="asteriskMandatoryField" />
+								<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput" />
+							</h:panelGroup>
+							<h:commandButton value="#{msg.Crear}"
+								action="#{electronicRechargeBean.addElectronicRecharge}"
+								styleClass="normal" style="width: 80px">
+								<a4j:support event="oncomplete" reRender="panelData1" />
+							</h:commandButton>
+
+						</h:panelGrid>
+						<rich:spacer height="10" />
+
+						<a4j:outputPanel id="panelData" layout="inline">
+							<rich:panel id="pd">
+								<f:facet name="header">
+									<h:outputText styleClass="bold"
+										value="Lista de Asignación de Recursos Programados" />
+								</f:facet>
+
+								<rich:spacer height="10" />
+								<div id="scroll_horizontal">
+									<rich:dataTable id="dtable" width="800"
+										value="#{electronicRechargeBean.automaticRechargeList}"
+										var="list" rows="20"
+										onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+										onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
+										rowClasses="white,grey">
+
+										<rich:column width="160px" style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Fecha Inicial" />
+											</f:facet>
+											<h:outputText value="#{list.automaticRechargeDate}"
+												styleClass="normal" />
+										</rich:column>
+										<rich:column width="160px" style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Banco" />
+											</f:facet>
+											<h:outputText value="#{list.bankName}" styleClass="normal" />
+										</rich:column>
+										<rich:column width="160px" style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Producto Bancario" />
+											</f:facet>
+											<h:outputText value="#{list.bankAccountNumber}"
+												styleClass="normal" />
+										</rich:column>
+										<rich:column width="160px" style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Valor a Asignar" />
+											</f:facet>
+											<h:outputText value="#{list.automaticRechargeValue}"
+												styleClass="normal">
+												<f:convertNumber currencySymbol="$" groupingUsed="true"
+													maxFractionDigits="0" type="currency" />
+											</h:outputText>
+										</rich:column>
+										<rich:column style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Frecuencia" />
+											</f:facet>
+											<h:outputText value="#{list.frequencyDescript}"
+												styleClass="normal" />
+										</rich:column>
+										<rich:column width="160px" style="text-align:center;">
+											<f:facet name="header">
+												<h:outputText value="Cuenta FacilPass" />
+											</f:facet>
+											<h:outputText value="#{list.accountId}" styleClass="normal" />
+										</rich:column>
+									</rich:dataTable>
+									<rich:datascroller align="center" for="dtable" />
+								</div>
+							</rich:panel>
+						</a4j:outputPanel>
+					</rich:panel>
+				</h:form>
+				<rich:spacer height="20" />
+
+
+				<rich:modalPanel id="panel" width="350" height="115"
+					showWhenRendered="#{electronicRechargeBean.showModal}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Mensaje - Asignar Recursos Programadamente"
+								styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<a4j:form>
+								<h:commandButton action="#{electronicRechargeBean.hideModal}"
+									image="/img/close.png" />
+							</a4j:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{electronicRechargeBean.modalMessage}"
+						styleClass="normal" />
+					<h:form>
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup>
+								<div class="span-1"></div>
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:commandButton value="Aceptar" action="#{electronicRechargeBean.hideModal}" style="width: 80px" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:form>
+					<br />
+				</rich:modalPanel>
+
+
+				<rich:modalPanel id="confirmacion" width="350" height="115"
+					showWhenRendered="#{electronicRechargeBean.showConfirmation}"
+					onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Confirmación" styleClass="bold" />
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton action="#{electronicRechargeBean.hideModal}"
+									image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{electronicRechargeBean.modalMessage}"
+						styleClass="normal" />
+					<a4j:form id="form">
+						<h:message for="send" />
+						<rich:spacer height="10" />
+						<div align="center">
+							<a4j:region id="editando">
+								<a4j:commandButton id="send" value="Aceptar"
+									action="#{electronicRechargeBean.saveElectronicRecharge}"
+									oncomplete="#{rich:component('wait')}.hide()" style="width: 80px">
+									<a4j:support event="onclick"
+										onsubmit="document.getElementById('form:send').disabled=true;document.getElementById('form:cancel').disabled=true" />
+									<a4j:support event="oncomplete" reRender="panel"
+										oncomplete="document.getElementById('form:send').disabled=false;document.getElementById('form:cancel').disabled=false" />
+								</a4j:commandButton>
+								<a4j:status onstart="#{rich:component('wait')}.show()" for="editando"/>
+							</a4j:region>
+							<rich:spacer width="20" />
+							<h:commandButton id="cancel" value="Cancelar" action="#{electronicRechargeBean.hideModal}" style="width: 80px"/>
+						</div>
+					</a4j:form>
+				</rich:modalPanel>
+				<rich:modalPanel id="wait" autosized="true" width="350" height="110"
+					moveable="false" resizeable="false">
+					<f:facet name="header">
+						<h:outputText value="Procesando" />
+					</f:facet>
+					<h:outputText value="Por favor espere..." style="font-size:12px;" />
+					<h:form>
+						<h:commandLink disabled="true">
+							<h:graphicImage value="/img/procesando.gif" />
+						</h:commandLink>
+					</h:form>
+				</rich:modalPanel>
+
+			</div>
+			<f:subview id="footer">
+				<ui:include src="/jsf/content/footer.jsp" />
+			</f:subview>
+		</f:view>
+	</div>
+</body>
+</html>

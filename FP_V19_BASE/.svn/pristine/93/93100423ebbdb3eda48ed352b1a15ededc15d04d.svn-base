@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<design version="2.0" id="03B2B3EB-B984-A522-CE53-4C5E80B71FB5" defaultRDBMSSite="32076570-2523-435C-2E92-BF29817DFF70">
+	<ref>
+		<objectid role="contains" type="Table" oid="830EC579-DC6D-8105-09A5-60C5D6E0DD33" marked_generate="true" />
+		<objectid role="contains" type="Table" oid="9ADCD944-8D87-F53F-95FD-607AEEEDEE2B" marked_generate="true" />
+		<objectid role="contains" type="Table" oid="5F17F3BD-3C88-B2D8-882A-C9F298B87758" marked_generate="true" />
+		<objectid role="contains" type="Table" oid="E12A7E21-1078-ABCF-040A-ECE838654706" marked_generate="true" />
+		<objectid role="contains" type="Table" oid="0509C2AB-741A-A779-0BB7-CABAA8A61DFC" marked_generate="true" />
+		<objectid role="contains" type="Table" oid="A3C7E632-220C-B54B-6958-F113B6F0B0D8" marked_generate="true" />
+		<objectid role="contains" type="Table" oid="954EE0F7-4631-ED5A-4731-351A2DA54C01" marked_generate="true" />
+		<objectid role="contains" type="FKIndexAssociation" oid="829740BB-1396-833B-921A-E6B32C83B251" marked_generate="true" />
+		<objectid role="contains" type="FKIndexAssociation" oid="1B77405B-A76A-3808-0599-B6C544FA15CA" marked_generate="true" />
+		<objectid role="contains" type="FKIndexAssociation" oid="CE7544AA-70BC-C581-4B47-972418BC5DAF" marked_generate="true" />
+		<objectid role="contains" type="FKIndexAssociation" oid="BCFDDB9D-007D-BCBB-4030-A55A0BB08B9C" marked_generate="true" />
+		<objectid role="contains" type="FKIndexAssociation" oid="C3DC88EE-14BE-E918-2F77-47BCDBCFD4D9" marked_generate="true" />
+		<objectid role="contains" type="FKIndexAssociation" oid="DDD3B0D5-F6CC-D834-86AB-D637E06789B3" marked_generate="true" />
+		<objectid role="contains" type="FKIndexAssociation" oid="F96BAF27-E38B-955B-B1B0-A8003DDD48F2" marked_generate="true" />
+		<objectid role="contains" type="FKIndexAssociation" oid="511D13C9-51CB-719F-12BA-AEC6433FC5E0" marked_generate="true" />
+	</ref>
+	<type_substitutions />
+	<marked_generate_for_indexes>
+		<objectid oid="858AA45F-0E56-0C1B-D796-782711F3BBD8" marked_generate="true" />
+		<objectid oid="953ABC8D-F042-7F45-29F9-89831596450F" marked_generate="true" />
+		<objectid oid="02B876D6-437C-9B95-919C-562F232A70E0" marked_generate="true" />
+		<objectid oid="0573FD0E-C621-4F69-6DA7-C0B1E646638E" marked_generate="true" />
+		<objectid oid="FA1C2C70-235C-72EF-DB2D-2BE3E36672A5" marked_generate="true" />
+		<objectid oid="C5624A69-120D-ECC0-332B-B6CE05A594FA" marked_generate="true" />
+		<objectid oid="CF69AA65-3EBA-825A-973F-A86F131C0FCB" marked_generate="true" />
+		<objectid oid="005D91FE-7D84-D17E-2AD6-A7F6C2A6555C" marked_generate="true" />
+		<objectid oid="D763E599-CF60-6B71-AB67-E75BE159BC83" marked_generate="true" />
+		<objectid oid="88E48429-C235-4B9E-A2C8-49F85880E750" marked_generate="true" />
+		<objectid oid="3246DAF0-1DD6-6D60-B7D4-7C92225B5792" marked_generate="true" />
+		<objectid oid="4BD00F5D-14EE-53AC-C707-70EC43B12D89" marked_generate="true" />
+		<objectid oid="453F4EAB-8965-8E7D-9402-01C1A6D28B59" marked_generate="true" />
+		<objectid oid="016015C4-D2A5-9A14-A2AA-1E8E9099C60B" marked_generate="true" />
+		<objectid oid="4088B8B3-C860-26ED-570C-5DBF1F5C176D" marked_generate="true" />
+	</marked_generate_for_indexes>
+	<ext_sub_views_collection>
+		<sub_view subview_name="Relational" id="31D75517-325A-9C95-0146-75E8E7343FAD" sv_type="main_view" visible="true" rep_oid="null" rep_ovid="null" is_checkedout="false" checkedout_by="" />
+	</ext_sub_views_collection>
+	<documents />
+	<parties />
+	<naming_options>
+		<naming_option class_name="oracle.dbtools.crest.model.design.relational.Table" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+		<naming_option class_name="oracle.dbtools.crest.model.design.relational.Column" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+		<naming_option class_name="oracle.dbtools.crest.model.design.relational.TableView" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+	</naming_options>
+</design>

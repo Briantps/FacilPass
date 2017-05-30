@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:a4j="http://richfaces.org/a4j">
+<head/>
+<body>
+<div class="container">
+<f:view>
+<div>
+		<h:form>		
+			<rich:panel>
+				<table width="100%" border="1">
+					<tr>
+						<td width="5%"></td>
+						<td width="20%"><h:outputText value="Tipo E-Mail" styleClass="bold" /></td>
+						<td width="75%"><h:outputText value="#{emailMBean.def.typeMail}" styleClass="normal" /></td>
+					</tr>
+					<tr>
+						<td width="5%"></td>
+						<td width="20%"><h:outputText value="Nombre" styleClass="bold" /></td>
+						<td width="75%"><h:outputText value="#{emailMBean.def.nameTypeMail}" styleClass="normal" /></td>
+					</tr>
+					<tr>
+						<td width="5%"></td>
+						<td width="20%"><h:outputText value="From Address" styleClass="bold" /></td>
+						<td width="75%"><h:outputText value="#{emailMBean.def.addressFrom}" styleClass="normal" /></td>
+					</tr>
+					<tr>
+						<td width="5%"></td>
+						<td width="20%"><h:outputText value="Nombre From Address" styleClass="bold" /></td>
+						<td width="75%"><h:outputText value="#{emailMBean.def.nameFrom}" styleClass="normal" /></td>
+					</tr>
+					<tr>
+						<td width="5%"></td>
+						<td width="20%"><h:outputText value="To Address" styleClass="bold" /></td>
+						<td width="75%"><h:outputText value="#{emailMBean.def.addressTo}" styleClass="normal" /></td>
+					</tr>
+					<tr>
+						<td width="5%"></td>
+						<td width="20%"><h:outputText value="Prioridad" styleClass="bold" /></td>
+						<td width="75%"><h:outputText value="#{emailMBean.def.priority}" styleClass="normal" /></td>
+					</tr>
+					<tr>
+						<td width="5%"></td>
+						<td width="20%"><h:outputText value="Asunto" styleClass="bold" /></td>
+						<td width="75%"><h:outputText value="#{emailMBean.def.subject}" styleClass="normal" /></td>
+					</tr>
+				</table>
+				<rich:spacer height="20" />
+				
+				<rich:dataTable id="messageList" value="#{emailMBean.def.message}" var="item" cellpadding="10" 
+								border="1" style="width:640px;margin:auto;">
+					<f:facet name="header">
+		                <rich:columnGroup>
+		                    <rich:column><h:outputText value="Id Mensaje" styleClass="bold"/></rich:column>
+		                    <rich:column><h:outputText value="Nombre Mensaje" styleClass="bold"/></rich:column>
+		                    <rich:column><h:outputText value="Contenido Mensaje" styleClass="bold"/></rich:column>
+						</rich:columnGroup>
+		            </f:facet>
+					<rich:column><h:outputText value="#{item.id}" styleClass="normal"/></rich:column>
+		            <rich:column><h:outputText value="#{item.name}" styleClass="normal"/></rich:column>
+		            <rich:column><h:outputText value="#{item.content}" styleClass="normal"/></rich:column>
+				</rich:dataTable>
+			</rich:panel>
+		</h:form>
+		<rich:spacer height="20" />
+</div>
+</f:view>
+</div>
+</body>
+</html>

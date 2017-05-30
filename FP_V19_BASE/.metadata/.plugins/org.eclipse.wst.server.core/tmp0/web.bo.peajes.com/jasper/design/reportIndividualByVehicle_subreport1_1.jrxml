@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReciboIndividualPlaca" language="groovy" pageWidth="1070" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="1070" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="accountId" class="java.lang.Long"/>
+	<parameter name="dateIni" class="java.sql.Timestamp"/>
+	<parameter name="dateEnd" class="java.sql.Timestamp"/>
+	<parameter name="userId" class="java.lang.Long"/>
+	<parameter name="vehicleId" class="java.lang.Long"/>
+	<parameter name="placa" class="java.lang.String"/>
+	<parameter name="facial" class="java.lang.String"/>
+	<parameter name="deviceId" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[select tt.transaction_id, tt.transaction_time, tt.transaction_type_id
+from tb_transaction tt
+inner join tb_lane tl on tt.lane_id= tl.lane_id
+inner join tb_station_bo tsb on tl.station_id= tsb.station_bo_id
+inner join tb_company tc on tsb.company_id= tc.company_id
+where tt.account_id=$P{accountId}
+and tt.vehicle_id=$P{vehicleId}
+and tt.transaction_type_id in (2,5,6)
+and tt.user_id=$P{userId}
+and tt.device_id= $P{deviceId}
+and tt.transaction_time between $P{dateIni} and $P{dateEnd}
+order by 2,3]]>
+	</queryString>
+	<field name="TRANSACTION_ID" class="java.lang.Long"/>
+	<detail>
+		<band height="55" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="1070" height="50" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="accountId">
+					<subreportParameterExpression><![CDATA[$P{accountId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="transactionId">
+					<subreportParameterExpression><![CDATA[$F{TRANSACTION_ID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="vehicleId">
+					<subreportParameterExpression><![CDATA[$P{vehicleId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="dateIni">
+					<subreportParameterExpression><![CDATA[$P{dateIni}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="facial">
+					<subreportParameterExpression><![CDATA[$P{facial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="userId">
+					<subreportParameterExpression><![CDATA[$P{userId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="placa">
+					<subreportParameterExpression><![CDATA[$P{placa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="dateEnd">
+					<subreportParameterExpression><![CDATA[$P{dateEnd}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["reportIndividualByVehicle_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

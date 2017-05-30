@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">  
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Cambio Contraseña Certificado</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:loadBundle basename="staticText.messages" var="msg" />
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">		
+					<rich:spacer height="5"/>	
+					<rich:panel style="width:600 px;margin:auto;">
+						<f:facet name="header">
+							<h:outputText value="Gestión contraseña certificado digital" styleClass="bold"/>
+						</f:facet>
+							<rich:messages style="color:red;" styleClass="bold"/>		
+								<h:form id="Formulario">
+									<rich:panel id="panelP" style="width:100%;">
+										<table width="100%">
+											<h:panelGroup rendered="#{!adminPassCrlBean.firstTime}">
+											<tr>
+												<td width="20%"></td>
+												<td width="20%">
+													<h:outputText value="Contraseña Actual: " styleClass="bold"/>
+													<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+												</td>
+												<td width="60%">
+													<h:inputSecret id="oldPass" value="#{adminPassCrlBean.oldPass}" maxlength="50" style="width:163px">
+													</h:inputSecret>
+												</td>
+											</tr>
+											</h:panelGroup>
+											<tr>
+												<td width="20%"></td>
+												<td width="20%">
+													<h:outputText value="Contraseña Nueva: " styleClass="bold"/>
+													<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+												</td>
+												<td width="60%">
+													<h:inputSecret id="newPass" value="#{adminPassCrlBean.newPass}" maxlength="50" style="width:163px">
+													</h:inputSecret>
+												</td>
+											</tr>
+											
+											<tr>
+												<td width="20%"></td>
+												<td width="20%">
+													<h:outputText value="Confirmar Contraseña Nueva: " styleClass="bold"/>
+													<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+												</td>
+												<td width="60%">
+													<h:inputSecret id="conPass" value="#{adminPassCrlBean.conPass}" maxlength="50" style="width:163px">
+													</h:inputSecret>
+												</td>
+											</tr>
+											
+											<tr>
+												<td width="20%">
+													<h:outputLabel value="#{msg.Asterisk}" styleClass="asteriskMandatoryField"/>
+													<h:outputLabel value="#{msg.MandFields}" styleClass="loginInput"/>
+												</td>
+												<td width="20%"></td>
+												<td width="60%">
+													<h:commandButton value="Guardar"  styleClass="normal" action="#{adminPassCrlBean.savePass}">
+													</h:commandButton>
+												</td>
+											</tr>
+										</table>
+									</rich:panel>
+								</h:form>
+					</rich:panel>			
+					<rich:spacer height="20"/>	
+					
+					<rich:modalPanel id="panelm" width="350" height="115" 
+					showWhenRendered="#{adminPassCrlBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Gestión Contraseña Certificado Digital" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminPassCrlBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{adminPassCrlBean.modalMessage}" styleClass="normal"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+						     	<h:panelGroup>
+						     		<h:commandButton value="Aceptar" action="#{adminPassCrlBean.hideModal}"  />
+						     	</h:panelGroup>	     	
+						    </h:panelGrid>
+						</h:form>		
+						<br />
+					</rich:modalPanel>	
+					
+					
+					<rich:modalPanel id="panelV" width="350" height="115" 
+					showWhenRendered="#{adminPassCrlBean.showModalValidate}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Gestión Contraseña Certificado Digital" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup> 
+								<a4j:form>
+									<h:commandButton action="#{adminPassCrlBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{adminPassCrlBean.modalMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:commandButton value="Aceptar" action="#{adminPassCrlBean.hideModal}"  />
+								</h:panelGroup>	     	
+							</h:panelGrid>
+						</h:form>
+						<br/>
+					</rich:modalPanel>	
+
+					<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{adminPassCrlBean.showConfirmation}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup><h:outputText value="Confirmación" styleClass="bold"/></h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{adminPassCrlBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{adminPassCrlBean.corfirmMessage}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form> 
+						<h:panelGrid columns="3" styleClass="tableBO">
+							<h:panelGroup><div class="span-1"></div></h:panelGroup> 
+							<h:panelGroup><h:commandButton value="Aceptar" action="#{adminPassCrlBean.changePass}"/></h:panelGroup>   	
+							<h:panelGroup><h:commandButton value="Cancelar" action="#{adminPassCrlBean.hideModal}"  /></h:panelGroup>	      	 
+						</h:panelGrid>
+						</h:form>
+						<br />
+					</rich:modalPanel>						
+								
+				</div>			
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

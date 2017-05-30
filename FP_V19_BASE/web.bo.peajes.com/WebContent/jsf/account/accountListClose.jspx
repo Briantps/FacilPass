@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<title>Lista de Cuentas Pendientes de Cierre</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+					<f:loadBundle basename="staticText.messages" var="msg" />
+					<rich:spacer height="5"/>	
+					<rich:panel style="width:600 px;margin:auto;">
+						<f:facet name="header">
+							<h:outputText value="Listado de Cuentas Pendientes de Cierre" styleClass="bold"/>
+						</f:facet>
+						<h:form>
+							<div id="scroll_horizontal">
+								<rich:dataTable id="dtable" value="#{listAccountCloseBean.accountCloseList}" var="item" rows="15" width="800px"
+									style="vertical-align: middle;">
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="#{msg.NumDoc}" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.userCodeU}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;min-width: 150px;">
+										<f:facet name="header">
+											<h:outputText value="Nombre Cliente" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.userNameU}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Número de Cuenta" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.accountIdU}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Observaciones" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.observationU}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Tipo Solicitud" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="Cierre"  rendered="#{item.accountStateTypeU==2}" styleClass="normal"/>
+										<h:outputText value="Disociación" rendered="#{item.accountStateTypeU!=2 and item.stateAccountBankU==4 and item.tipBank == 0}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;min-width: 150px;">
+										<f:facet name="header">
+											<h:outputText value="Entidad" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.bankNameU}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Fecha de Solicitud" styleClass="bold"/>
+										</f:facet>
+										<h:outputText value="#{item.accountCloseLogDateU}" rendered="#{item.accountStateTypeU==2}" styleClass="normal"/>
+										<h:outputText value="#{item.dateDissociationU}" rendered="#{item.accountStateTypeU!=2 and item.stateAccountBankU==4}" styleClass="normal"/>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Cancelar" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink value="Cerrar Cuenta " action="#{listAccountCloseBean.panelCloseAccount}" rendered="#{item.accountStateTypeU==2 or (item.accountStateTypeU!=2 and item.stateAccountBankU==4)}" styleClass="normal">
+									    	<f:setPropertyActionListener target="#{listAccountCloseBean.accountBankId}" value="#{item.accountBankIdU}"/>
+									    	<f:setPropertyActionListener target="#{listAccountCloseBean.account}" value="#{item.accountIdU}"/>
+									    	<f:setPropertyActionListener target="#{listAccountCloseBean.accountStateType}" value="#{item.accountStateTypeU}"/>	
+									    	<f:setPropertyActionListener target="#{listAccountCloseBean.stateAccountBank}" value="#{item.stateAccountBankU}"/>					
+									    	<f:setPropertyActionListener target="#{listAccountCloseBean.bankId}" value="#{item.bankIdU}"/>	
+									    	<f:setPropertyActionListener target="#{listAccountCloseBean.bankName}" value="#{item.bankNameU}"/>
+									    	<f:setPropertyActionListener target="#{listAccountCloseBean.bankAvalPSE}" value="#{item.tipBank}"/>			
+										</h:commandLink>
+									</rich:column>
+									<rich:column style="text-align:center;">
+										<f:facet name="header">
+											<h:outputText value="Reactivar" styleClass="bold"/>
+										</f:facet>
+										<h:commandLink value=" Reactivar Cuenta" action="#{listAccountCloseBean.panelNoCloseAccount}" rendered="#{item.accountStateTypeU==2}" styleClass="normal">
+											<f:setPropertyActionListener target="#{listAccountCloseBean.account}" value="#{item.accountIdU}"/>
+										</h:commandLink>
+									</rich:column>
+									<f:facet name="footer">
+			            	             <rich:datascroller for="dtable"/>
+			           	            </f:facet>
+								</rich:dataTable>
+							</div>
+						</h:form>
+					</rich:panel>	
+					
+									
+					<rich:modalPanel id="closeAcc" width="580" height="440" showWhenRendered="#{listAccountCloseBean.modalClose}" onresize="return false;" moveable="false">
+					   <f:facet name="header">
+							<h:outputText value="Cierre de Cuenta" styleClass="bold"/>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listAccountCloseBean.cancelClose}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:form>
+							<rich:panel style="width:420 px;"> 
+							    	<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px;">
+							    		<h:outputText value="Cuenta: #{listAccountCloseBean.account}"  styleClass="bold"/>
+							    		<rich:spacer height="10"/>	
+							    	    <h:outputText value="Observaciones: "  styleClass="bold"/>	
+								    	<h:inputTextarea id="note" value="#{listAccountCloseBean.observ}" style="width:300px; height:250px; resize: none;"
+								     		onkeyup="return checkMaxLength(event, this, 2000);">						        		
+								      	</h:inputTextarea>
+								    </h:panelGrid>	
+							      	<h:panelGroup>
+							      		<div align="center">
+							    		<h:commandButton value="Aceptar" action="#{listAccountCloseBean.msgSave}" style="width: 80px">
+								       		<a4j:support event="oncomplete" reRender="panelData"/>
+								 		</h:commandButton>
+								 		<rich:spacer width="10"/>	
+								 		<h:commandButton value="Cancelar" action="#{listAccountCloseBean.cancelClose}" style="width: 80px">
+									       	<a4j:support event="oncomplete" reRender="panelData"/>
+										</h:commandButton>  
+										</div> 
+							    	</h:panelGroup>					      
+							</rich:panel>
+						</h:form>
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="closeReac" width="580" height="440" showWhenRendered="#{listAccountCloseBean.modalReactivation}" onresize="return false;" moveable="false">
+							<f:facet name="header">
+								<h:outputText value="Reactivación de Cuenta" styleClass="bold"/>
+							</f:facet>
+						   		<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listAccountCloseBean.cancelReactivation}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:form>
+							<rich:panel style="width:420 px;"> 
+						    	<h:panelGrid styleClass="tableBO" columns="2" style="size 300px; margin: auto; padding:10px; ">
+						    		<h:outputText value="Cuenta: #{listAccountCloseBean.account}"  styleClass="bold"/>
+						    		<rich:spacer height="10"/>
+						     		<h:outputText value="Observaciones: "  styleClass="bold"/>
+						     		<h:inputTextarea id="note" value="#{listAccountCloseBean.observ}" style="width:300px; height:250px; resize: none;"
+						     		 onkeyup="return checkMaxLength(event, this, 2000);">						        		
+						      		</h:inputTextarea>
+						      	</h:panelGrid>
+						      	<h:panelGroup>
+							      	<div align="center">	
+							     		<h:commandButton value="Aceptar" action="#{listAccountCloseBean.msgNoCancel}" style="width: 80px">
+								       		<a4j:support event="oncomplete" reRender="panelData"/>
+								 		</h:commandButton>
+								 		<rich:spacer width="10"/>	
+								 		<h:commandButton value="Cancelar" action="#{listAccountCloseBean.cancelReactivation}" style="width: 80px">
+									       	<a4j:support event="oncomplete" reRender="panelData"/>
+										</h:commandButton> 
+									</div> 
+							    </h:panelGroup>	
+							</rich:panel>
+						</h:form>
+					</rich:modalPanel>
+					
+										
+					<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{listAccountCloseBean.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Cierre de Cuenta" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listAccountCloseBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listAccountCloseBean.modalMessage}" styleClass="normal"/>
+						<a4j:form id="form">
+						<rich:spacer height="10"/>
+						<div align="center">	
+					     	 <a4j:region id="editando">	     	  
+					     		<a4j:commandButton id="acept" value="Aceptar" action="#{listAccountCloseBean.apply}" oncomplete="#{rich:component('wait')}.hide()">
+					     		   <a4j:support event="onclick"  
+					                  onsubmit="document.getElementById('form:acept').disabled=true;document.getElementById('form:cancel').disabled=true" />
+					                  <a4j:support event="oncomplete" reRender="panel" 
+					                  oncomplete="document.getElementById('form:acept').disabled=false;document.getElementById('form:cancel').disabled=false"/>
+					     		</a4j:commandButton>
+					     		<a4j:status onstart="#{rich:component('wait')}.show()" for="editando">
+								</a4j:status>
+					     	 </a4j:region>	
+					     	 <rich:spacer width="20"/>
+				     		<h:commandButton id="cancel" value="Cancelar" action="#{listAccountCloseBean.hideModal}"  />
+				    	</div>	
+					   </a4j:form>						
+					</rich:modalPanel>
+					
+					
+					<rich:modalPanel id="confirmacionReac" width="350" height="115" showWhenRendered="#{listAccountCloseBean.showModalReactivation}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Reactivación de Cuenta" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listAccountCloseBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listAccountCloseBean.modalMessageReactivation}" styleClass="normal"/>
+						<a4j:form id="formReac">
+						<rich:spacer height="10"/>
+						<div align="center">	
+					     	 <a4j:region id="editandoReac">	     	  
+					     		<a4j:commandButton id="aceptReac" value="Aceptar" action="#{listAccountCloseBean.reactivation}" oncomplete="#{rich:component('wait')}.hide()">
+					     		   <a4j:support event="onclick"  
+					                  onsubmit="document.getElementById('formReac:aceptReac').disabled=true;document.getElementById('formReac:cancelReac').disabled=true" />
+					                  <a4j:support event="oncomplete" reRender="panel" 
+					                  oncomplete="document.getElementById('formReac:aceptReac').disabled=false;document.getElementById('formReac:cancelReac').disabled=false"/>
+					     		</a4j:commandButton>
+					     		<a4j:status onstart="#{rich:component('wait')}.show()" for="editandoReac">
+								</a4j:status>
+					     	 </a4j:region>	
+					     	 <rich:spacer width="20"/>
+				     		<h:commandButton id="cancelReac" value="Cancelar" action="#{listAccountCloseBean.hideModalReac}"  />
+				    	</div>	
+					   </a4j:form>
+					</rich:modalPanel>
+								
+					<rich:modalPanel id="panel" width="350" height="115" showWhenRendered="#{listAccountCloseBean.showError}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Cierre de cuenta" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listAccountCloseBean.hideError}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listAccountCloseBean.msgError}" styleClass="normal"/>
+						<rich:spacer height="10"/>
+						<h:form>
+							<h:panelGrid columns="3" styleClass="tableBO">
+								<h:panelGroup>
+									<div class="span-1"></div>
+								</h:panelGroup>
+					     		<h:panelGroup>
+					     			<h:commandButton value="Aceptar" action="#{listAccountCloseBean.hideError}"  />
+					     		</h:panelGroup>	     	
+					    	</h:panelGrid>
+					    </h:form>
+					    <br/>
+					</rich:modalPanel> 
+					
+					<rich:modalPanel id="confirmacionClose" width="350" height="115" showWhenRendered="#{listAccountCloseBean.showModalClose}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Confirmación - Cierre de Cuenta" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<a4j:form>
+									<h:commandButton action="#{listAccountCloseBean.hideModal}" image="/img/close.png" />
+								</a4j:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:outputText value="#{listAccountCloseBean.modalMessageClose}" styleClass="normal"/>
+						<a4j:form id="formCancel">
+						<rich:spacer height="10"/>
+						<div align="center">	
+					     	 <a4j:region id="editandoReac">	     	  
+					     		<a4j:commandButton id="aceptClose" value="Aceptar" action="#{listAccountCloseBean.accountClose}" oncomplete="#{rich:component('wait')}.hide()">
+					     		   <a4j:support event="onclick"  
+					                  onsubmit="document.getElementById('formCancel:aceptClose').disabled=true;document.getElementById('formCancel:cancelClose').disabled=true" />
+					                  <a4j:support event="oncomplete" reRender="panel" 
+					                  oncomplete="document.getElementById('formCancel:aceptClose').disabled=false;document.getElementById('formCancel:cancelClose').disabled=false"/>
+					     		</a4j:commandButton>
+					     		<a4j:status onstart="#{rich:component('wait')}.show()" for="editandoReac">
+								</a4j:status>
+					     	 </a4j:region>	
+					     	 <rich:spacer width="20"/>
+				     		<h:commandButton id="cancelClose" value="Cancelar" action="#{listAccountCloseBean.hideModal}"  />
+				    	</div>	
+					   </a4j:form>
+					</rich:modalPanel>
+					
+					<rich:modalPanel id="wait" autosized="true" width="350" 
+						height="110" moveable="false" resizeable="false">
+						<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+	  						<h:outputText value="Por favor espere ..."  style="font-size:12px;"/>
+					</rich:modalPanel> 
+				</div>
+				<f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>

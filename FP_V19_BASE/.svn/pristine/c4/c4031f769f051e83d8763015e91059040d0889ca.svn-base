@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta http-equiv ="Cache-Control" content ="no-cache"/>
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/screen.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/blueprint/print.css" type="text/css" media="print" />
+		<link rel="stylesheet" href="/web.bo.peajes.com/css/styles.css" type="text/css" media="screen, projection" />
+		<script language="javascript" type="text/javascript" src="/web.bo.peajes.com/js/validation.js"></script>
+		<title>Administración de Notificaciones</title>
+	</head>	
+	<body>
+		<div class="container">
+			<f:view>
+				<f:subview id="header">
+					<ui:include src="../content/header.jsp"/>
+				</f:subview>
+				<div class="span-24">
+					<f:subview id="menuheader">
+						<ui:include src="../menu/menu.jsp"/>
+					</f:subview>
+				</div>
+				<div class="span-5">
+					<ui:include src="../menu/sideMenu.jsp"/>
+				</div>
+				<div class="bkContents span-18 prepend-1">
+				
+				<rich:panel id="formulario" style="width:700px;margin:auto;">
+					<f:facet name="header">
+						<h:outputText value="Administración de Notificaciones" styleClass="bold"/>
+					</f:facet>
+				    <h:form>
+				      <h:panelGrid columns="7" style="width: 700px">
+				        <h:outputText value="Tipo ID: "  styleClass="bold"/>
+				        <rich:spacer width="5" />
+				        <h:selectOneMenu value="#{managementNotificationsAdmin.codeTypeDocument}" 
+							styleClass="normal">
+							<f:selectItems value="#{managementNotificationsAdmin.listTypeDocument}"/>		
+						</h:selectOneMenu>
+						<rich:spacer width="10" />
+						<h:outputText value="No. Identificación: "  styleClass="bold"/>
+						<rich:spacer width="5" />
+						<h:inputText id="doc" value="#{managementNotificationsAdmin.documentClient}" label="No. Identificación:" maxlength="15" styleClass="normal" 
+						   onkeypress="return numOnly(event)" autocomplete="off"/>
+						   
+						<h:outputText value="Nombre: "  styleClass="bold"/>
+						<rich:spacer width="5" />
+						<h:inputText id="nom" maxlength="100" value="#{managementNotificationsAdmin.nameClient}" label="Nombre:" 
+							onkeypress="return alphaSpaceWithoutPoint(event)" styleClass="normal" autocomplete="off">
+						</h:inputText>
+						<rich:spacer width="10" />
+						<h:outputText value="Apellidos: "  styleClass="bold"/>
+						<rich:spacer width="5" />
+						<h:inputText id="ape" maxlength="100" value="#{managementNotificationsAdmin.lastNameClient}" label="Apellidos:" 
+							onkeypress="return alphaSpaceWithoutPoint(event)" styleClass="normal" autocomplete="off">
+						</h:inputText>
+						
+						<h:outputText value="Usuario: "  styleClass="bold"/>
+						<rich:spacer width="5" />
+						<h:inputText id="mail" maxlength="100" value="#{managementNotificationsAdmin.emailClient}" label="Usuario:" 
+							styleClass="normal" onkeypress="return emailValidation(event)" autocomplete="off">
+						</h:inputText>
+						<rich:spacer width="10" />
+						<h:outputText value="Cuenta FacilPass: "  styleClass="bold"/>
+						<rich:spacer width="5" />
+						<h:inputText id="ctafp" value="#{managementNotificationsAdmin.accountClient}" label="Cuenta FacilPass:" maxlength="15" styleClass="normal" 
+						   onkeypress="return numOnly(event)" autocomplete="off"/>						
+				      </h:panelGrid>
+				      <rich:spacer height="10" />	
+				      <h:form> 
+				       <div align="center"> 
+				        <h:commandButton value="Buscar" action="#{managementNotificationsAdmin.searchClient}" style="width: 140px"/>
+						<rich:spacer width="30" />						
+						<h:commandButton value="Limpiar" action="#{managementNotificationsAdmin.clean}" style="width: 140px"/>
+						</div>
+					  </h:form>	
+				    </h:form>
+				</rich:panel>
+				
+				
+				<rich:panel id="datosCliente" style="width:700px;margin:auto;" rendered="#{managementNotificationsAdmin.showNotifications}">
+					<f:facet name="header">
+						<h:outputText value="Datos del Cliente Seleccionado" styleClass="bold" />
+					</f:facet>
+					<h:form>
+					  <h:panelGrid columns="2" style="width: 700px">
+					   	<h:outputText value="No. de Identificación: "  styleClass="bold"/>
+					   	<h:outputText value="#{managementNotificationsAdmin.client.userCode} - #{managementNotificationsAdmin.client.tbCodeType.codeTypeAbbreviation}"  styleClass="normal"/>
+					    	
+					   	<h:outputText value="Nombre: "  styleClass="bold" rendered="#{managementNotificationsAdmin.client.tbCodeType.codeTypeId!=3}"/>
+					   	<h:outputText value="Razón Social: "  styleClass="bold" rendered="#{managementNotificationsAdmin.client.tbCodeType.codeTypeId==3}"/>
+					   	<h:outputText value="#{managementNotificationsAdmin.client.userNames}"  styleClass="normal"/>
+					   	
+					   	<h:outputText value="Apellidos: "  styleClass="bold" rendered="#{managementNotificationsAdmin.client.tbCodeType.codeTypeId!=3}"/>
+					   	<h:outputText value="#{managementNotificationsAdmin.client.userSecondNames}"  styleClass="normal" rendered="#{managementNotificationsAdmin.client.tbCodeType.codeTypeId!=3}"/>
+					   	
+					   	<h:outputText value="Cuenta FacilPass: "  styleClass="bold"/>
+					   	<h:outputText value="#{managementNotificationsAdmin.listAccountsClient}"  styleClass="normal"/>
+					 </h:panelGrid>
+					</h:form>
+				</rich:panel>
+				
+				<h:form id="adminNot">
+				<rich:panel id="panel" style="width:700px;margin:auto;" rendered="#{managementNotificationsAdmin.showNotifications}">					
+				     <h:outputText value="A continuación encontrará las notificaciones existentes en el sistema, para activar la recepción de una notificación por favor active la casilla de verificación que se encuentra en la misma fila de la notificación, para dejar de recibir la notificación desactive la casilla de verificación." styleClass="normal"/>
+				     <rich:spacer height="10"></rich:spacer>					
+				      <rich:dataTable id="listaN" value="#{managementNotificationsAdmin.notificationsClient}" rows="20" var="item" width="600px" >				        
+				    	<rich:column>
+				     		<f:facet name="header">
+				     			<h:outputText value="Nombre Notificación" styleClass="bold"/>
+				     		</f:facet>
+							<h:outputText value="#{item.userEmail.tbEmailProcess.emailProcessName}" styleClass="normal"/>
+				     	</rich:column>
+				     	<rich:column width="210">
+				     		<f:facet name="header">
+				     			<h:outputText value="Descripción" styleClass="bold"/>
+				     		</f:facet>
+							<h:outputText value="#{item.userEmail.tbEmailProcess.emailProcessDescription}" styleClass="normal"/>
+				     	</rich:column>
+				     	<rich:column width="215">
+				     		<f:facet name="header">
+				     			<h:outputText value="Ejecución Notificación" styleClass="bold"/>
+				     		</f:facet>
+							<h:outputText value="#{item.userEmail.tbEmailProcess.emailProcessExecutedWhen}" styleClass="normal"/>
+				     	</rich:column>
+				     	<rich:column>
+				     		<f:facet name="header">
+				     			<h:outputText value="Activar / Desactivar" styleClass="bold"/>
+				     		</f:facet>
+				     		<h:commandLink action="#{managementNotificationsAdmin.changeNotification}">					     		
+					     		<f:setPropertyActionListener value="#{item.userEmail.userEmailProcessId}" target="#{managementNotificationsAdmin.userEmailProcessId}" />
+					     		<h:selectBooleanCheckbox value="#{item.active}" />
+				     		</h:commandLink>
+							
+				     	</rich:column>
+				     	<f:facet name="footer">
+				           	<rich:datascroller id="datascroller" for="listaN" />
+				        </f:facet>
+				      </rich:dataTable> 
+				       <div align="right">
+				      	<h:commandButton id="savebutton" action="#{managementNotificationsAdmin.saveNotifications}" value="Guardar" styleClass="normal"/>
+				       </div>	
+				   </rich:panel>
+				</h:form>
+				
+				<rich:modalPanel id="msgemer" width="385" height="115" showWhenRendered="#{managementNotificationsAdmin.showModal}" onresize="return false;" moveable="false">
+						<f:facet name="header">
+							<h:panelGroup>
+								<h:outputText value="Mensaje - Administración de Notificaciones" styleClass="bold"/>
+							</h:panelGroup>
+						</f:facet>
+						<f:facet name="controls">
+							<h:panelGroup>
+								<h:form>
+									<h:commandButton action="#{managementNotificationsAdmin.hideModal}" image="/img/close.png" />
+								</h:form>
+							</h:panelGroup>
+						</f:facet>
+						<h:form>		
+							<h:outputText value="#{managementNotificationsAdmin.msgModal}" styleClass="normal"/>
+							<br />
+							<div align="center">
+				  				<h:commandButton value="Aceptar" action="#{managementNotificationsAdmin.hideModal}" />
+							</div>  
+						</h:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="confirmacion" width="350" height="115" showWhenRendered="#{managementNotificationsAdmin.showConfirm}" onresize="return false;" moveable="false">
+					<f:facet name="header">
+						<h:panelGroup><h:outputText value="Confirmación - Administración de Notificaciones" styleClass="bold"/></h:panelGroup>
+					</f:facet>
+					<f:facet name="controls">
+						<h:panelGroup>
+							<h:form>
+								<h:commandButton disabled="true" action="#{managementNotificationsAdmin.noActiveCheck}" image="/img/close.png" />
+							</h:form>
+						</h:panelGroup>
+					</f:facet>
+					<h:outputText value="#{managementNotificationsAdmin.msgConfirm}" styleClass="normal"/>
+					<a4j:form id="form">					
+					<h:panelGrid columns="3" styleClass="tableBO">
+						<h:panelGroup><div class="span-1"></div></h:panelGroup>
+				     	<h:panelGroup>
+				     		<h:commandButton id="acept" value="Aceptar" action="#{managementNotificationsAdmin.activeCheck}" >
+				     		  <a4j:support event="oncomplete" reRender="panel"/>
+				     		</h:commandButton>
+				     	</h:panelGroup>   	
+				     	<h:panelGroup>
+				     		<h:commandButton id="cancel" value="Cancelar" action="#{managementNotificationsAdmin.noActiveCheck}" >
+				     		  <a4j:support event="oncomplete" reRender="panel"/>
+				     		</h:commandButton>
+				     	</h:panelGroup>	   	
+				    </h:panelGrid>
+				    </a4j:form>
+				</rich:modalPanel>
+				
+				<rich:modalPanel id="wait" autosized="true" width="350" 
+					height="110" moveable="false" resizeable="false">
+					<f:facet name="header"><h:outputText value="Procesando" /></f:facet>
+				  	<h:outputText value="Transacción en proceso..."  style="font-size:12px;"/>
+				</rich:modalPanel> 
+				</div>
+				<rich:spacer height="20"></rich:spacer>	
+               <f:subview id="footer">
+					<ui:include src="../content/footer.jsp"/>
+				</f:subview>
+			</f:view>
+		</div>
+	</body>
+</html>
